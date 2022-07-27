@@ -1,0 +1,68 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IAFAS|SISGEFIN</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Sistema de Gestión Financiera de IAFAS de la Marina de Guerra del Perú">
+    <meta name="keywords" content="IAFAS FOSMAR">
+    <meta name="author" content="DAYMEVA TECHNOLOGIES EIRL">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="robots" content="index,follow" />
+    <link rel="icon" type="image/x-icon" href="~/Riztie/Images/logoEmpresa.png">
+    <link href="~/Riztie/Css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Riztie/Css/all.min.css" rel="stylesheet" />
+    <link href="~/Riztie/Css/coming-soon.css" rel="stylesheet" />
+    <link href="~/Riztie/Css/Login.css" rel="stylesheet" />
+    <link href="~/Riztie/Css/toastr.min.css" rel="stylesheet" />
+</head>
+<body>
+    <img class="logoLogin" src="~/Riztie/Images/login.png" />
+    <div class="masthead">
+        <div class="masthead-bg" style="background-color:white;"></div>
+        <div class="container h-100">
+            <div class="row h-100">
+                <div class="col-12 my-auto">
+                    <div class="masthead-content text-white py-5 py-md-0">
+                        <div class="input-group input-group-newsletter">
+
+                            <div class="container">
+                                <div class="container">
+                                    <div class="text-center">
+                                        <img src="~/Riztie/Images/logoiafas.png" class="img-fluid" />
+                                    </div>
+                                    <br>
+                                    <div class="form">
+                                        <div class="form-group">
+                                            <input class="form-control form-control-user textbox single-line" id="txtUsuario" placeholder="Ingrese su usuario" required="required" type="text" value="ADMIN" autocomplete="off">
+                                        </div>
+                                        <div class="form-group">
+                                            <input class="form-control form-control-user textbox single-line" id="txtClave" placeholder="Ingrese su contraseña" required="required" type="password" value="Pa$$w0rd**" autocomplete="off">
+                                        </div>
+                                        <button id="btnAceptar" class="btn btn-naranja btn-user btn-block" style="font-size:130%;font-weight: bold;">Iniciar Sesión</button>
+                                        <hr>
+                                        <div class="form-group">
+                                            <span id="spnValida" class="Valida"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <input id="hdfRaiz" type="hidden" value="@Url.Content("~")" />
+    </div>
+
+    <script src="~/Riztie/Js/Design/jquery.min.js"></script>
+    <script src="~/Riztie/Js/Design/bootstrap.min.js"></script>
+    <script src="~/Riztie/Js/Design/toastr.min.js"></script>
+    <script src="~/Riztie/Js/Design/coming-soon.min.js"></script>
+    <script src="~/Riztie/Js/App/sha256.js"></script>
+    <script src="~/Riztie/Js/App/General.js?v=1.0"></script>
+    <script src="~/Riztie/Js/App/Login.js?v=1.0"></script>
+</body>
+</html>
+

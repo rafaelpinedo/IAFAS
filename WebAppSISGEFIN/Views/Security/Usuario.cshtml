@@ -1,0 +1,90 @@
+﻿@{
+    ViewBag.Title = "Usuario";
+    Layout = "~/Views/_LayoutPage.cshtml";
+}
+<div class="pcoded-content">
+    <div class="pcoded-inner-content">
+        <div class="main-body">
+            <div class="card">
+                <div class="card-header bg-primary">
+                    <h3><i class="fa fa-calendar" aria-hidden="true"></i> Lista de Usuario</h3>
+                    @*<div class="f-right">
+                        <i class="fa fa-question-circle-o fa-2x" id="btnAyuda" data-toggle="tooltip" data-placement="bottom" title="Ayuda usuario" style="color:white;cursor:pointer"></i>
+                    </div>*@
+                </div>
+                <div class="card-block">
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <div class="table-responsive" id="lista"></div>
+                        </div>
+                    </div>
+                    <div class="modal custom-modal" tabindex="-1" role="dialog" aria-hidden="true" id="divPopupContainerUsuario" style="overflow-y:auto;">
+                        <div class="modal-dialog bg-customer" id="divPopupWindowUsuario">
+                            <div class="modal-content">
+                                <div class="modal-header bg-customer" id="divBarraUsuario" style="cursor:move">
+                                    <h5 class="modal-title" id="tituloVentanaUsuario">Agregar Usuario</h5>
+                                    <button type="button" id="btnCerrarUsuario" class="close"><span aria-hidden="true">&times;</span><span class="sr-only"></span></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div id="divCuerpoUsuario">
+                                        <div id="divValidaUsuario" style="display:none" class="alert background">
+                                            <span id="btncloseUsuario" class="closebtn">&times;</span>
+                                            <strong>Advertencia!</strong><br />Los campos remarcados en rojo son obligatorios.
+                                        </div>
+                                        <fieldset>
+                                            <div class="row">
+                                                <div class="col-sm-12">
+                                                    <label for="txtCodigo" class="control-label">Código</label>
+                                                    <input type="text" id="txtCodigo" class="control-form Popup" readonly="readonly" style="background-color:#FBEC88" autocomplete="off">
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-sm-12">
+                                                    <label for="cboPersona" class="control-label">Personal</label>
+                                                    <select id="cboPersona" class="SelectSearch control-form Popup Requerido"></select>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-sm-8">
+                                                    <label for="txtUsuario" class="control-label">Usuario</label>
+                                                    <input type="text" id="txtUsuario" class="control-form Popup Requerido" autocomplete="off">
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-sm-8">
+                                                    <label for="txtClave" class="control-label">Clave</label>
+                                                    <input type="text" id="txtClave" class="control-form Popup Requerido" readonly="readonly" style="background-color:#FBEC88" autocomplete="off" disabled="">
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-sm-12">
+                                                    <label for="txtCorreo" class="control-label">Correo</label>
+                                                    <input type="text" id="txtCorreo" class="control-form Popup" autocomplete="off">
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-sm-12">
+                                                    <label for="cboPerfil" class="control-label">Perfil</label>
+                                                    <select id="cboPerfil" class="control-form Popup Requerido"></select>
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button class="btnCancelarForm" id="btnCancelarUsuario" title="Cancelar"><i class="fa fa-undo" aria-hidden="true"></i>&nbsp;Cancelar</button>
+                                    <button class="btnGuardarForm bg-customer" id="btnGrabar" title="Agregar"><span class="fa fa-save"></span>&nbsp;Grabar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="styleSelector">
+    </div>
+</div>
+<iframe name="print_frame" width="0" height="0" frameborder="0" src="about:blank"></iframe>
+<script src="~/Daymeva/Js/App/AppSecurity.js"></script>
+

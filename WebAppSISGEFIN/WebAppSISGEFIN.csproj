@@ -1,0 +1,345 @@
+﻿<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{3B0A624B-5F81-4219-B979-B45C11D46163}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>WebAppSISGEFIN</RootNamespace>
+    <AssemblyName>WebAppSISGEFIN</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <UseIISExpress>true</UseIISExpress>
+    <Use64BitIISExpress />
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="BouncyCastle.Crypto, Version=1.8.9.0, Culture=neutral, PublicKeyToken=0e99375e54769942, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\DLL\BouncyCastle.Crypto.dll</HintPath>
+    </Reference>
+    <Reference Include="EPPlus, Version=5.8.7.0, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\DLL\EPPlus.dll</HintPath>
+    </Reference>
+    <Reference Include="General.Librerias.AccesoDatos, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Librerias\General.Librerias.AccesoDatos\bin\Debug\General.Librerias.AccesoDatos.dll</HintPath>
+    </Reference>
+    <Reference Include="General.Librerias.CodigoUsuario, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Librerias\General.Librerias.CodigoUsuario\bin\Debug\General.Librerias.CodigoUsuario.dll</HintPath>
+    </Reference>
+    <Reference Include="itext.barcodes">
+      <HintPath>..\DLL\itext.barcodes.dll</HintPath>
+    </Reference>
+    <Reference Include="itext.commons, Version=7.2.1.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\DLL\itext.commons.dll</HintPath>
+    </Reference>
+    <Reference Include="itext.forms">
+      <HintPath>..\DLL\itext.forms.dll</HintPath>
+    </Reference>
+    <Reference Include="itext.html2pdf">
+      <HintPath>..\DLL\itext.html2pdf.dll</HintPath>
+    </Reference>
+    <Reference Include="itext.io, Version=7.2.1.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\DLL\itext.io.dll</HintPath>
+    </Reference>
+    <Reference Include="itext.kernel, Version=7.2.1.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\DLL\itext.kernel.dll</HintPath>
+    </Reference>
+    <Reference Include="itext.layout, Version=7.2.1.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\DLL\itext.layout.dll</HintPath>
+    </Reference>
+    <Reference Include="itext.pdfa">
+      <HintPath>..\DLL\itext.pdfa.dll</HintPath>
+    </Reference>
+    <Reference Include="itext.sign">
+      <HintPath>..\DLL\itext.sign.dll</HintPath>
+    </Reference>
+    <Reference Include="itext.styledxmlparser">
+      <HintPath>..\DLL\itext.styledxmlparser.dll</HintPath>
+    </Reference>
+    <Reference Include="itext.svg">
+      <HintPath>..\DLL\itext.svg.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Net" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="zxing, Version=0.14.0.0, Culture=neutral, PublicKeyToken=4e88037ac681fe60, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\DLL\zxing.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System.Web.Razor">
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.7\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Webpages">
+      <HintPath>..\packages\Microsoft.AspNet.Webpages.3.2.7\lib\net45\System.Web.Webpages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Webpages.Deployment">
+      <HintPath>..\packages\Microsoft.AspNet.Webpages.3.2.7\lib\net45\System.Web.Webpages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Webpages.Razor">
+      <HintPath>..\packages\Microsoft.AspNet.Webpages.3.2.7\lib\net45\System.Web.Webpages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Helpers">
+      <HintPath>..\packages\Microsoft.AspNet.Webpages.3.2.7\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.Infrastructure">
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc">
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.7\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform">
+      <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Global.asax" />
+    <Content Include="Riztie\Css\all.min.css" />
+    <Content Include="Riztie\Css\bootstrap-toggle.min.css" />
+    <Content Include="Riztie\Css\bootstrap.min.css" />
+    <Content Include="Riztie\Css\coming-soon.css" />
+    <Content Include="Riztie\Css\daymevatech.css" />
+    <Content Include="Riztie\Css\font-awesome.min.css" />
+    <Content Include="Riztie\Css\jquery.mCustomScrollbar.css" />
+    <Content Include="Riztie\Css\Login.css" />
+    <Content Include="Riztie\Css\main.css" />
+    <Content Include="Riztie\Css\morris.css" />
+    <Content Include="Riztie\Css\perfect-scrollbar.css" />
+    <Content Include="Riztie\Css\select2.min.css" />
+    <Content Include="Riztie\Css\style.css" />
+    <Content Include="Riztie\Css\themify-icons.css" />
+    <Content Include="Riztie\Css\toastr.min.css" />
+    <Content Include="Riztie\Css\waves.min.css" />
+    <Content Include="Riztie\fonts\fontawesome-webfont.svg" />
+    <Content Include="Riztie\fonts\themify.svg" />
+    <Content Include="Riztie\Images\arrow-refresh.png" />
+    <Content Include="Riztie\Images\avatar-blank.jpg" />
+    <Content Include="Riztie\Images\bcp.png" />
+    <Content Include="Riztie\Images\bg-img1.jpg" />
+    <Content Include="Riztie\Images\bg-mobile-fallback.jpg" />
+    <Content Include="Riztie\Images\bn.png" />
+    <Content Include="Riztie\Images\capcha.png" />
+    <Content Include="Riztie\Images\login.png" />
+    <Content Include="Riztie\Images\logo.png" />
+    <Content Include="Riztie\Images\logoEmpresa.png" />
+    <Content Include="Riztie\Images\logoiafas.png" />
+    <Content Include="Riztie\Images\navbar-img-1.jpg" />
+    <Content Include="Riztie\Images\navbar-img-2.jpg" />
+    <Content Include="Riztie\Images\navbar-img-3.jpg" />
+    <Content Include="Riztie\Images\navbar-img-4.jpg" />
+    <Content Include="Riztie\Images\navbar-img-5.jpg" />
+    <Content Include="Riztie\Images\navbar-img-6.jpg" />
+    <Content Include="Riztie\Images\NOFOTO.jpg" />
+    <Content Include="Riztie\Images\user-bg.jpg" />
+    <Content Include="Riztie\Js\App\AppLogistica.js" />
+    <Content Include="Riztie\Js\App\AppPlane.js" />
+    <Content Include="Riztie\Js\App\AppSecurity.js" />
+    <Content Include="Riztie\Js\App\General.js" />
+    <Content Include="Riztie\Js\App\Login.js" />
+    <Content Include="Riztie\Js\App\MontoLetras.js" />
+    <Content Include="Riztie\Js\App\sha256.js" />
+    <Content Include="Riztie\Js\App\xlsx.full.min.js" />
+    <Content Include="Riztie\Js\Design\bootstrap-toggle.min.js" />
+    <Content Include="Riztie\Js\Design\bootstrap.min.js" />
+    <Content Include="Riztie\Js\Design\html2canvas.min.js" />
+    <Content Include="Riztie\Js\Design\html2pdf.js" />
+    <Content Include="Riztie\Js\Design\jquery.backstretch_2.1.15.min.js" />
+    <Content Include="Riztie\Js\Design\jquery.mCustomScrollbar.concat.min.js" />
+    <Content Include="Riztie\Js\Design\jquery.min.js" />
+    <Content Include="Riztie\Js\Design\jquery.slimscroll.js" />
+    <Content Include="Riztie\Js\Design\jspdf\d3.js" />
+    <Content Include="Riztie\Js\Design\jspdf\faker.min.js" />
+    <Content Include="Riztie\Js\Design\jspdf\grids-responsive-min.css" />
+    <Content Include="Riztie\Js\Design\jspdf\jquery.js" />
+    <Content Include="Riztie\Js\Design\jspdf\jspdf.1.5.3.js" />
+    <Content Include="Riztie\Js\Design\jspdf\jspdf.debug.js" />
+    <Content Include="Riztie\Js\Design\jspdf\jspdf.plugin.autotable.js" />
+    <Content Include="Riztie\Js\Design\jspdf\jspdf.umd.js" />
+    <Content Include="Riztie\Js\Design\jspdf\mitubachi-normal.js" />
+    <Content Include="Riztie\Js\Design\jspdf\moment.js" />
+    <Content Include="Riztie\Js\Design\jspdf\pure-min.css" />
+    <Content Include="Riztie\Js\Design\jspdf\require.js" />
+    <Content Include="Riztie\Js\Design\modernizr.js" />
+    <Content Include="Riztie\Js\Design\morris.js" />
+    <Content Include="Riztie\Js\Design\pcoded.min.js" />
+    <Content Include="Riztie\Js\Design\popper.min.js" />
+    <Content Include="Riztie\Js\Design\raphael-min.js" />
+    <Content Include="Riztie\Js\Design\script.js" />
+    <Content Include="Riztie\Js\Design\select2-custom.js" />
+    <Content Include="Riztie\Js\Design\select2.full.min.js" />
+    <Content Include="Riztie\Js\Design\sweetalert.min.js" />
+    <Content Include="Riztie\Js\Design\task-board.js" />
+    <Content Include="Riztie\Js\Design\toastr.min.js" />
+    <Content Include="Riztie\Js\Design\vertical-layout.min.js" />
+    <Content Include="Riztie\Js\Design\waves.min.js" />
+    <Content Include="Web.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\AdmonController.cs" />
+    <Compile Include="Controllers\GeneralController.cs" />
+    <Compile Include="Controllers\LogisticaController.cs" />
+    <Compile Include="Controllers\PlaneamientoController.cs" />
+    <Compile Include="Controllers\SecurityController.cs" />
+    <Compile Include="Filtros\FiltroAuditoria.cs" />
+    <Compile Include="Filtros\FiltroAutenticacion.cs" />
+    <Compile Include="Filtros\FiltroCifrado.cs" />
+    <Compile Include="Filtros\FiltroMinificacion.cs" />
+    <Compile Include="Filtros\FiltroToken.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Menu.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\web.config" />
+    <None Include="packages.config" />
+    <Content Include="Riztie\fonts\fontawesome-webfont.eot" />
+    <Content Include="Riztie\fonts\fontawesome-webfont.ttf" />
+    <Content Include="Riztie\fonts\fontawesome-webfont.woff" />
+    <Content Include="Riztie\fonts\fontawesome-webfont.woff2" />
+    <Content Include="Riztie\fonts\themify.eot" />
+    <Content Include="Riztie\fonts\themify.ttf" />
+    <Content Include="Riztie\fonts\themify.woff" />
+    <Content Include="Riztie\Images\logo.psd" />
+    <Content Include="Riztie\Js\Design\jspdf\mitubachi.ttf" />
+    <Content Include="Views\Security\AccesoSistema.cshtml" />
+    <Content Include="Views\Security\Aplicacion.cshtml" />
+    <Content Include="Views\Security\Control.cshtml" />
+    <Content Include="Views\Security\Error.cshtml" />
+    <Content Include="Views\Security\Formulario.cshtml" />
+    <Content Include="Views\Security\Login.cshtml" />
+    <Content Include="Views\Security\Menu.cshtml" />
+    <Content Include="Views\Security\Perfil.cshtml" />
+    <Content Include="Views\Security\Permisos.cshtml" />
+    <Content Include="Views\Security\UserPerfil.cshtml" />
+    <Content Include="Views\Security\Usuario.cshtml" />
+    <Content Include="Views\Logistica\DashCompras.cshtml" />
+    <Content Include="Views\Logistica\Proveedor.cshtml" />
+    <Content Include="Views\Logistica\Oficina.cshtml" />
+    <Content Include="Views\Logistica\OrdenCompra.cshtml" />
+    <Content Include="Riztie\Js\Design\coming-soon.min.js" />
+    <Content Include="Views\Security\Login - Copia.cshtml" />
+    <Content Include="Views\Logistica\CondicionCompra.cshtml" />
+    <Content Include="Views\Logistica\Formato.cshtml" />
+    <Content Include="Views\Logistica\Grupo.cshtml" />
+    <Content Include="Views\Logistica\Clase.cshtml" />
+    <Content Include="Views\Logistica\Familia.cshtml" />
+    <Content Include="Views\Logistica\Articulo.cshtml" />
+    <Content Include="Views\Logistica\UniMed.cshtml" />
+    <Content Include="Views\Logistica\PedidoCompra.cshtml" />
+    <Content Include="Views\Logistica\SolicitudCompra.cshtml" />
+    <Content Include="Views\Logistica\Cotizacion.cshtml" />
+    <Content Include="Views\Logistica\CuadroCompara.cshtml" />
+    <Content Include="Views\Logistica\Contrato.cshtml" />
+    <Content Include="Views\Logistica\Reportes.cshtml" />
+    <Content Include="Views\Planeamiento\DashPlane.cshtml" />
+    <Content Include="Views\Planeamiento\Tipoproceso.cshtml" />
+    <Content Include="Views\Planeamiento\RegistroCN.cshtml" />
+    <Content Include="Views\Planeamiento\PAC.cshtml" />
+    <None Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <None Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <Content Include="Views\_LayoutPage.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+    <Folder Include="Riztie\Manual\" />
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>57469</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:57469/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>Este proyecto hace referencia a los paquetes NuGet que faltan en este equipo. Use la restauración de paquetes NuGet para descargarlos. Para obtener más información, consulte http://go.microsoft.com/fwlink/?LinkID=322105. El archivo que falta es {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
+  </Target>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

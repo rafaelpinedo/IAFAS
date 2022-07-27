@@ -1,0 +1,324 @@
+﻿<!DOCTYPE html>
+<html lang="es-pe">
+<head>
+    <title>IAFAS|SISGEFIN</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Sistema de gestión financiera de la IAFAS de la Marina de Guerra del Perú">
+    <meta name="keywords" content="IAFAS FOSMAR">
+    <meta name="author" content="DAYMEVA TECHNOLOGIES EIRL">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="robots" content="index,follow" />
+
+    <link rel="icon" type="image/x-icon" href="~/Riztie/Images/logoEmpresa.png">
+
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="~/Riztie/Images/logoEmpresa.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="~/Riztie/Images/logoEmpresa.png">
+    <link rel="apple-touch-icon-precomposed" href="~/Riztie/Images/logoEmpresa.png">
+    <!-- Google font-->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700" rel="stylesheet">
+    <!-- waves.css -->
+    <link href="~/Riztie/Css/waves.min.css" rel="stylesheet" />
+    <link href="~/Riztie/Css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Riztie/Css/themify-icons.css" rel="stylesheet" />
+    <link href="~/Riztie/Css/font-awesome.min.css" rel="stylesheet" />
+    <link href="~/Riztie/Css/jquery.mCustomScrollbar.css" rel="stylesheet" />
+    <link href="~/Riztie/Css/bootstrap-toggle.min.css" rel="stylesheet" />
+    <link href="~/Riztie/Css/morris.css" rel="stylesheet" />
+    <link href="~/Riztie/Css/toastr.min.css" rel="stylesheet" />
+    <link href="~/Riztie/Css/select2.min.css" rel="stylesheet" />
+    <link href="~/Riztie/Css/style.css" rel="stylesheet" />
+    <link href="~/Riztie/Css/daymevatech.css" rel="stylesheet" />
+
+    <!--JSPDF -->
+    <link href="~/Riztie/Js/Design/jspdf/grids-responsive-min.css" rel="stylesheet" />
+    <link href="~/Riztie/Js/Design/jspdf/pure-min.css" rel="stylesheet" />
+
+    <!--Tabla.css -->
+    <link href="~/Riztie/Css/perfect-scrollbar.css" rel="stylesheet" />
+    <link href="~/Riztie/Css/main.css" rel="stylesheet" />
+</head>
+<body>
+    <!-- Pre-loader start -->
+    <div class="theme-loader">
+        <div class="loader-track">
+            <div class="preloader-wrapper">
+                <div class="spinner-layer spinner-blue">
+                    <div class="circle-clipper left">
+                        <div class="circle"></div>
+                    </div>
+                    <div class="gap-patch">
+                        <div class="circle"></div>
+                    </div>
+                    <div class="circle-clipper right">
+                        <div class="circle"></div>
+                    </div>
+                </div>
+                <div class="spinner-layer spinner-red">
+                    <div class="circle-clipper left">
+                        <div class="circle"></div>
+                    </div>
+                    <div class="gap-patch">
+                        <div class="circle"></div>
+                    </div>
+                    <div class="circle-clipper right">
+                        <div class="circle"></div>
+                    </div>
+                </div>
+
+                <div class="spinner-layer spinner-yellow">
+                    <div class="circle-clipper left">
+                        <div class="circle"></div>
+                    </div>
+                    <div class="gap-patch">
+                        <div class="circle"></div>
+                    </div>
+                    <div class="circle-clipper right">
+                        <div class="circle"></div>
+                    </div>
+                </div>
+
+                <div class="spinner-layer spinner-green">
+                    <div class="circle-clipper left">
+                        <div class="circle"></div>
+                    </div>
+                    <div class="gap-patch">
+                        <div class="circle"></div>
+                    </div>
+                    <div class="circle-clipper right">
+                        <div class="circle"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Pre-loader end -->
+    <div id="pcoded" class="pcoded">
+        <div class="pcoded-overlay-box"></div>
+        <div class="pcoded-container navbar-wrapper">
+            <nav class="navbar header-navbar pcoded-header">
+                <div class="navbar-wrapper">
+                    <div class="navbar-logo">
+                        <a class="mobile-menu waves-effect waves-light" id="mobile-collapse" href="#!">
+                            <i class="fa fa-bars" aria-hidden="true"></i>
+                        </a>
+                        <div class="mobile-search waves-effect waves-light">
+                            <div class="header-search">
+                                <div class="main-search morphsearch-search">
+                                    <div class="input-group">
+                                        <span class="input-group-prepend search-close"><i class="ti-close input-group-text"></i></span>
+                                        <input type="text" class="form-control" placeholder="Enter Keyword">
+
+                                        <span class="input-group-append search-btn"><i class="ti-search input-group-text"></i></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <a href="#">
+                            <h1></h1>
+                            <img class="img-fluid" src="~/Riztie/Images/logo.png" alt="Theme-Logo" />
+                        </a>
+                        <a class="mobile-options waves-effect waves-light">
+                            <i class="ti-more"></i>
+                        </a>
+                    </div>
+                    <div class="navbar-container container-fluid">
+                        <ul class="nav-left">
+                            <li>
+                                <div class="sidebar_toggle"><a href="javascript:void(0)"><i class="fa fa-bars" aria-hidden="true"></i></a></div>
+                            </li>
+                            <li class="header-search">
+                                <div class="main-search morphsearch-search">
+                                    <div class="input-group">
+                                        @*<span class="input-group-prepend search-close"><i class="ti-close input-group-text"></i></span>
+                                            <input type="text" class="form-control" placeholder="Enter Keyword">
+                                            <span class="input-group-append search-btn"><i class="ti-search input-group-text"></i></span>*@
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <a href="#!" onclick="javascript:toggleFullScreen()" class="waves-effect waves-light">
+                                    <i class="fa fa-arrows-alt" aria-hidden="true"></i>
+                                </a>
+                            </li>
+                        </ul>
+                        <ul class="nav-right">
+                            @*<li class="header-notification">
+                                    <a href="#!" class="waves-effect waves-light">
+                                        <i class="fa fa-bell" aria-hidden="true"></i>
+                                        <span class="badge bg-c-red"></span>
+                                    </a>
+                                    <ul class="show-notification">
+                                        <li>
+                                            <h6>Notifiaciones</h6>
+                                            <label class="label label-danger">Nuevos</label>
+                                        </li>
+                                    </ul>
+                                </li>*@
+                            <li class="header-notification">
+                                <a href="#" class="waves-effect waves-light">
+                                    <i class="fa fa-question-circle-o fa-2x text-c-yellow" aria-hidden="true" data-toggle="tooltip" data-placement="left" title="Manual usuario SISGEFIN"></i>
+                                </a>
+                                @*<a href="~/Riztie/Manual/Manual-usuario-SIGEA-CAJA.pdf" class="waves-effect waves-light" target="_blank">
+                                        <i class="fa fa-question-circle-o fa-2x text-c-yellow" aria-hidden="true" data-toggle="tooltip" data-placement="left" title="Manual usuario SIGEA-CAJA"></i>
+                                    </a>*@
+                            </li>
+                            <li class="user-profile header-notification">
+                                <a href="#!" class="waves-effect waves-light">
+                                    <img id="imgFoto" class="img-radius" src="~/Riztie/Images/avatar-blank.jpg" alt="User-Profile-Image">
+                                    <span id="spnUsuario"></span>
+                                    <i class="fa fa-angle-down" aria-hidden="true"></i>
+                                </a>
+                                <ul class="show-notification profile-notification">
+                                    <li class="waves-effect waves-light">
+                                        <a id="btnUserPerfil" href="javascript:;">
+                                            <i class="fa fa-user"></i> Perfil
+                                        </a>
+                                    </li>
+                                    <li class="waves-effect waves-light">
+                                        <a id="btnCerrarSesion" href="javascript:;">
+                                            <i class="fa fa-power-off" aria-hidden="true"></i> Cerrar Sesión
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+            <!-- Sidebar inner chat end-->
+            <div class="pcoded-main-container">
+                <div class="pcoded-wrapper">
+                    <nav class="pcoded-navbar">
+                        <div class="sidebar_toggle"><a href="#"><i class="icon-close icons"></i></a></div>
+                        <div class="pcoded-inner-navbar main-menu">
+                            <div class="">
+                                <div class="main-menu-header">
+                                    <div class="user-details">
+                                        <span>&nbsp;</span>
+                                        <br /><br /><br />
+                                        <br />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="p-15 p-b-0">
+                                <div class="form-material">
+                                    <div class="form-group form-primary">
+                                        <input type="hidden" name="footer-email" class="form-control">
+                                        <span class="form-bar"></span>
+                                        <label class="float-label"><i class="fa fa-search m-r-10"></i>&nbsp; </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>@Html.Raw(ViewBag.Menu)</div>
+                        </div>
+                    </nav>
+                    @RenderBody()
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal custom-modal" tabindex="-1" role="dialog" aria-hidden="true" id="divPopupContainerPDF" style="overflow-y:auto;">
+        <div class="modal-dialog bg-customer" id="divPopupWindowPDF">
+            <div class="modal-content">
+                <div class="modal-header bg-customer" id="divBarraPDF" style="cursor:move">
+                    <h5 class="modal-title" id="tituloVentanaPDF">Configuración PDF</h5>
+                    <button type="button" id="btnCerrarPDF" class="close"><span aria-hidden="true">&times;</span><span class="sr-only"></span></button>
+                </div>
+                <div class="modal-body">
+                    <div id="divCuerpoPDF">
+                        <fieldset>
+                            <legend>Orientación</legend>
+                            <div class="form-check">
+                                <label class="form-check-label">
+                                    <input type="radio" id="optVertical" checked class="form-check-input" name="optradio">Vertical
+                                </label>
+                            </div><br />
+                            <div class="form-check">
+                                <label class="form-check-label">
+                                    <input type="radio" id="optHorizontal" class="form-check-input" name="optradio">Horizontal
+                                </label>
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btnCancelarForm" id="btnCancelarPDF" title="Cancelar"><i class="fa fa-undo" aria-hidden="true"></i>&nbsp;Cancelar</button>
+                    <button class="btnGuardarForm bg-customer" id="btnAceptarPDF" title="Guardar"><span class="fa fa-download"></span>&nbsp;Descargar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <input id="hdfRaiz" type="hidden" value="@Url.Content("~")" />
+
+    <script src="~/Riztie/Js/Design/jquery.min.js"></script>
+    <script src="~/Riztie/Js/Design/popper.min.js"></script>
+    <script src="~/Riztie/Js/Design/bootstrap.min.js"></script>
+    <script src="~/Riztie/Js/Design/waves.min.js"></script>
+    <script src="~/Riztie/Js/Design/jquery.slimscroll.js"></script>
+    <script src="~/Riztie/Js/Design/modernizr.js"></script>
+    <script src="~/Riztie/Js/Design/task-board.js"></script>
+    <script src="~/Riztie/Js/Design/toastr.min.js"></script>
+    <script src="@Url.Content("~/Riztie/Js/Design/html2canvas.min.js")"></script>
+
+    <script src="~/Riztie/Js/Design/script.js"></script>
+    <script src="~/Riztie/Js/Design/pcoded.min.js"></script>
+    <script src="~/Riztie/Js/Design/jquery.mCustomScrollbar.concat.min.js"></script>
+    <script src="~/Riztie/Js/Design/vertical-layout.min.js"></script>
+    <script src="~/Riztie/Js/Design/sweetalert.min.js"></script>
+    <script src="~/Riztie/Js/Design/raphael-min.js"></script>
+    <script src="~/Riztie/Js/Design/morris.js"></script>
+    <script src="~/Riztie/Js/Design/select2.full.min.js"></script>
+    <script src="~/Riztie/Js/Design/select2-custom.js"></script>
+    <script src="~/Riztie/Js/Design/bootstrap-toggle.min.js"></script>
+    <!--JSPDF -->
+    <script>if (!window.Promise) window.Promise = { prototype: null };</script>
+    <script src="~/Riztie/Js/Design/jspdf/jspdf.umd.js"></script>
+    <script>if (!window.jsPDF) window.jsPDF = window.jspdf.jsPDF</script>
+    <script src="~/Riztie/Js/Design/jspdf/mitubachi-normal.js"></script>
+    <script src="~/Riztie/Js/Design/jspdf/faker.min.js"></script>
+    <script src="~/Riztie/Js/Design/jspdf/jspdf.plugin.autotable.js"></script>
+
+    <script src="~/Riztie/Js/App/sha256.js"></script>
+    <script src="~/Riztie/Js/App/General.js?v=1.6"></script>
+    <script src="~/Riztie/Js/App/MontoLetras.js"></script>
+    <script>
+        $('.select2').select2();
+    </script>
+    <script>
+        var foto = localStorage.getItem("Foto");
+        var Nombre = localStorage.getItem("Cliente");
+        spnUsuario.innerHTML = Nombre;
+        //var loginName = document.getElementById("more-details");
+        //loginName.innerHTML = Nombre;
+        //var imgFoto = document.getElementById("imgFoto");
+        //if (imgFoto != null && foto != null && foto != "") {
+        //    imgFoto.src = "data:image/jpg;base64," + foto;
+        //}
+        //else {
+        //    imgFoto.src = "/Desing/Images/nofoto.jpg";
+        //}
+
+        //var imgFotoInfo = document.getElementById("imgFotoInfo");
+        //if (imgFotoInfo != null && imgFotoInfo != null && imgFotoInfo != "") {
+        //    imgFotoInfo.src = "data:image/jpg;base64," + foto;
+        //}
+        // else {
+        //    imgFotoInfo.src = "/Desing/Images/nofoto.jpg";
+        //}
+
+        document.getElementById("btnUserPerfil").onclick = function () {
+            navegar('Security/UserPerfil');
+            window.sessionStorage.setItem("Form", "UserPerfil");
+        }
+
+        document.getElementById("btnCerrarSesion").onclick = function () {
+            cerrarSesion();
+        }
+
+        function cerrarSesion() {
+            navegar("Security/LogOff");
+        }
+    </script>
+</body>
+</html>

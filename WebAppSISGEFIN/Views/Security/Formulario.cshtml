@@ -1,0 +1,65 @@
+﻿@{
+    ViewBag.Title = "Formulario";
+    Layout = "~/Views/_LayoutPage.cshtml";
+}
+
+<div class="pcoded-content">
+    <div class="pcoded-inner-content">
+        <div class="main-body">
+            <div class="col-xl-12 col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Formulario</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="custom-btn_filter" class="dataTables_filter">
+                            <div class="form-row">
+                                <div class="form-group col-md-3">
+                                    <label class="control-label" for="cboSistema">Sistema</label>
+                                    <select id="cboSistema" class="control-form"></select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xl-7 col-md-12">
+                                <div class="card table-card">
+                                    <div class="card-header">
+                                        <h5>Formulario</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="table-responsive">
+                                            <div id="divContenido"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-4 col-md-12" id="divControl" style="display:none;">
+                                <div class="card table-card">
+                                    <div class="card-header">
+                                        <h5>Acciones</h5>
+                                        <button class="btn btn-sm btn-success f-right" id="btnGrabarAcciones" title="Agregar Acciones"><span class="fa fa-plus"></span></button>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="table-responsive">
+                                            <div id="divControles"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="styleSelector"></div>
+</div>
+<iframe name="print_frame" width="0" height="0" frameborder="0" src="about:blank"></iframe>
+<script src="~/Daymeva/Js/App/AppSecurity.js"></script>
+
+
+
+
+
+
+

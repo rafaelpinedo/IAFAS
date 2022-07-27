@@ -1,0 +1,139 @@
+﻿
+@{
+    ViewBag.Title = "CondicionCompra";
+    Layout = "~/Views/_LayoutPage.cshtml";
+}
+<div class="pcoded-content">
+    <div class="pcoded-inner-content">
+        <div class="main-body">
+            <div class="card">
+                <div class="card-header bg-primary">
+                    <h3><i class="fa fa-users" aria-hidden="true"></i> CONDICION COMPRA</h3>
+                </div>
+                <div class="card-block">
+                    <div class="form-row">
+                        <div class="form-group col-sm-2">
+                            <button class="input-group-inverse btn btn-primary" id="btnNuevo">Nuevo <i class="fa fa-plus-circle fa-lg" aria-hidden="true"></i></button>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <div class="table-responsive" id="divLista"></div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="modal custom-modal" tabindex="-1" role="dialog" aria-hidden="true" id="divPopupContainer" style="overflow-y:auto;">
+                            <div class="modal-dialog modal-lg bg-personalizado" id="divPopupWindow" style="margin-top:30px;">
+                                <div class="modal-content">
+                                    <div id="divBarra" class="modal-header bg-personalizado" style="cursor:move">
+                                        <h5 class="modal-title">Nuevo Registro</h5>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div id="divValidaInterno" style="display:none" class="alert background">
+                                            <span id="btncloseVal" class="closebtn">&times;</span>
+                                            <strong>Advertencia!</strong><br />Los campos remarcados en rojo son obligatorios.
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-group col-sm-6">
+                                                <input type="hidden" class="control-form Popup" id="txtIdRegistro">
+                                                <label class="control-label">Tipo Documento</label>
+                                                <select id="cboTipoDocumento" class="control-form Reque Popup"></select>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-group col-sm-3">
+                                                <label class="control-label">RUC</label>
+                                                <input type="number" autocomplete="off" maxlength="11" class="control-form Reque Popup" id="txtRUC" title="Ingrese RUC y presione ENTER">
+                                                <span id="spnDocumento"></span>
+                                            </div>
+                                            <div class="col-lg-4">
+                                                <div class="form-group">
+                                                    <label class="control-label">&nbsp;</label>
+                                                    <div class="input-group">
+                                                        <span id="spnLoad" style="color: rgb(33, 67, 253); border-color: black; font-weight: bold; display:none;">
+                                                            <b>Sunat..</b>
+                                                            <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-group col-sm-12">
+                                                <label class="control-label">Razón Social</label>
+                                                <input type="text" autocomplete="off" class="control-form Reque Popup" id="txtNombre">
+                                            </div>
+                                        </div>
+                                        <div id="divEstadoSunat" style="display:none">
+                                            <div class="row">
+                                                <div class="form-group col-sm-4">
+                                                    <label class="control-label">Estado Sunat</label>
+                                                    <label class="control-lectura" id="lblEstadoSunat"></label>
+                                                </div>
+                                                <div class="form-group col-sm-4">
+                                                    <label class="control-label">Condición Sunat</label>
+                                                    <label class="control-lectura" id="lblCondicionSunat"></label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-group col-sm-12">
+                                                <label class="control-label">Dirección</label>
+                                                <textarea class="control-form Reque Popup" rows="2" id="ttaDireccion"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-group col-sm-5">
+                                                <label class="control-label">Contacto</label>
+                                                <input type="text" autocomplete="off" id="txtContacto" class="control-form Popup" />
+                                            </div>
+                                            <div class="form-group col-sm-3">
+                                                <label class="control-label">Teléfono</label>
+                                                <input type="number" id="txtTelefono" autocomplete="off" class="control-form Reque Popup" />
+                                            </div>
+                                            <div class="form-group col-sm-4">
+                                                <label class="control-label">Correo Electrónico</label>
+                                                <input type="email" id="txtCorreo" autocomplete="off" class="control-form Reque Popup" />
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-group col-sm-5">
+                                                <label class="control-label">Banco</label>
+                                                <select id="cboBanco" class="control-form Reque Popup"></select>
+                                            </div>
+                                            <div class="form-group col-sm-3">
+                                                <label class="control-label">Nro. Cuenta</label>
+                                                <input type="number" autocomplete="off" maxlength="20" id="txtNroCuenta" class="control-form Popup" />
+                                            </div>
+                                            <div class="form-group col-sm-4">
+                                                <label class="control-label">CCI</label>
+                                                <input type="number" autocomplete="off" maxlength="20" id="txtCCI" class="control-form Popup" />
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-group col-sm-6">
+                                                <label class="control-label" for="dtgEsAgenteRetencion">Es agente retención:</label>
+                                                <input type="checkbox" id="dtgEsAgenteRetencion" class="Popup" data-toggle="toggle" data-width="160px" data-on="SI" data-off="NO" data-onstyle="success" data-offstyle="danger">
+                                            </div>
+                                            <div class="form-group col-sm-6">
+                                                <label class="control-label">Estado</label>
+                                                <select id="cboEstado" class="control-lectura Reque Popup"></select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button id="btnCancelar" class="btnCancelarForm" title="Cancelar"><i class="fa fa-undo" aria-hidden="true"></i>&nbsp;Cancelar</button>
+                                        <button id="btnGuardar" class="btnGuardarForm bg-customer" title="Guardar datos"><span class="fa fa-save"></span>&nbsp;Grabar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<iframe name="print_frame" width="0" height="0" frameborder="0" src="about:blank"></iframe>
+<script src="~/Riztie/Js/App/AppLogistica.js"></script>
+

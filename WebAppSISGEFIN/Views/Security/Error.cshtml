@@ -1,0 +1,20 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>AccesoDenegado</title>
+</head>
+<body>
+    <div>
+        <h1>@ViewBag.Titulo</h1>
+        <h2>@ViewBag.Mensaje</h2>
+        <a href='@Url.Content("~")Security/LogOff'>Reiniciar Sesión</a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,113 @@
+﻿
+@{
+    ViewBag.Title = "DashCompras";
+    Layout = "~/Views/_LayoutPage.cshtml";
+}
+
+<div class="pcoded-content">
+    <div class="pcoded-inner-content">
+        <div class="main-body">
+            <div class="page-wrapper">
+                <div class="page-body">
+                    <div class="form-group row">
+                        <label for="cboAnioLectivo" class="col-sm-3 col-form-label" style="font-size:18px;color:#0D88E6;font-weight:bold">
+                            <i class="fa fa-bar-chart" aria-hidden="true"></i> Tablero de control Año Fiscal:
+                        </label>
+                        <div class="col-sm-2">
+                            <h3><span id="spnAniLectivo">@ViewBag.Anio</span></h3>
+                        </div>
+                        <div class="col-sm-7" style="text-align:right">
+                            <span style="font-size:18px;color:#0D88E6;font-weight:bold">Fecha: </span> <span id="spnFecha" style="font-weight:bold">@ViewBag.Fecha</span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-3 col-6" style="cursor:pointer">
+                            <div class="small-box bg-success">
+                                <div class="inner">
+                                    <h3>S/ <span id="spnTotalProyectado">0</span></h3>
+                                    <p>Proyectado</p>
+                                </div>
+                                <div class="icon">
+                                    <i class="fa fa-money" aria-hidden="true"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-6" style="cursor:pointer">
+                            <div class="small-box bg-warning">
+                                <div class="inner">
+                                    <h3>S/ <span id="spnTotalEjecutadoIAFAS">0</span></h3>
+                                    <p>Ejecutado: <span style="font-weight:bold;font-size:16px">IAFAS</span></p>
+                                </div>
+                                <div class="icon">
+                                    <i class="fa fa-hospital-o" aria-hidden="true"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="divDetalleIngresos">
+                        <hr />
+                        <h2 style="color:blue"><i class="fa fa-cart-plus" aria-hidden="true"></i> Adquisiciones</h2>
+                        <hr />
+                        <div class="row">
+                            <div class="col-xl-7 col-md-12">
+                                <div class="card ">
+                                    <div class="card-block ">
+                                        <div class="card-block ">
+                                            <h4 class="text-center" style="color:#3DB9DC;font-weight:bold;">Resumen por periodo</h4>
+                                            <div id="monthlyprofit-2" style="height:30px;"></div>
+                                            <div class="row ">
+                                                <div class="table-responsive" id="listaResumenPeriodo"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-5 col-md-12">
+                                <div class="card ">
+                                    <div class="card-block ">
+                                        <div class="card-block ">
+                                            <h4 class="text-center" style="color:#3DB9DC;font-weight:bold">Resumen por Fuente Financiamiento</h4>
+                                            <div id="monthlyprofit-2" style="height:30px;"></div>
+                                            <div class="row ">
+                                                <h4>IAFAS</h4>
+                                            </div>
+                                            <div class="row ">
+                                                <div class="table-responsive" id="listaFteFtoIAFAS"></div>
+                                            </div>
+                                            <br />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal custom-modal" tabindex="-1" role="dialog" aria-hidden="true" id="divPopupContainerFormato" style="overflow-y:auto;">
+                        <div class="modal-dialog modal-xl bg-personalizado" id="divPopupWindowFormato" style="margin-top:1px">
+                            <div class="modal-content">
+                                <div id="divBarraFormato" class="modal-header bg-personalizado" style="cursor:move">
+                                    <h5 class="modal-title">Vista Previa</h5>
+                                    <button type="button" id="btnCerrarFormato" class="close"><span aria-hidden="true">&times;</span><span class="sr-only"></span></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="row">
+                                        <div class="table-responsive dt-responsive" id="listaVista"></div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer" style="text-align:left">
+                                    <button class="btnGuardarForm bg-customer" id="btnExportarExcel" title="Exportar Excel"><span class="fa fa-file-excel-o"></span>&nbsp;Excel</button>
+                                    <button class="btnCancelarForm" id="btnCancelarFormato" title="Cancelar"><i class="fa fa-undo" aria-hidden="true"></i>&nbsp;Cancelar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <input id="hdfRaiz" type="hidden" value="@Url.Content("~")" />
+            <div id="styleSelector"> </div>
+        </div>
+    </div>
+</div>
+
+<iframe name="print_frame" width="0" height="0" frameborder="0" src="about:blank"></iframe>
+

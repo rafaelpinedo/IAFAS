@@ -1,0 +1,48 @@
+﻿
+@{
+    ViewBag.Title = "PAC";
+    Layout = "~/Views/_LayoutPage.cshtml";
+}
+<div class="pcoded-content">
+    <div class="pcoded-inner-content">
+        <div class="main-body">
+            <div class="card">
+                <div class="card-header bg-primary">
+                    <h3><i class="fa fa-file-o" aria-hidden="true"></i> PLAN DE ANUAL DE CONTRATACIONES</h3>
+                    <div class="card-header-right">
+                        <ul class="list-unstyled card-option">
+                            <li><i class="fa fa-window-maximize full-card" style="color:white"></i></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card-block">
+                    <div class="form-row">
+                        <div class="form-group col-sm-2">
+                            <label class="control-label">Fecha Inicio</label>
+                            <input type="date" id="txtFechaInicio" class="control-form" value="@ViewBag.FechaInicial">
+                        </div>
+                        <div class="form-group col-sm-2">
+                            <label class="control-label">Fecha Final</label>
+                            <input type="date" id="txtFechaFinal" class="control-form" value="@ViewBag.Fecha">
+                        </div>
+                        <div class="form-group col-md-4 m-3">
+                            <button class="input-group-inverse btn btn-inverse" id="btnConsultar" data-toggle="tooltip" data-placement="bottom" title="Consultar"><i class="fa fa-search fa-lg" aria-hidden="true"></i></button>
+                            <button class="btn btn-out waves-effect waves-light btn-info btn-square" id="btnImprimir" data-toggle="tooltip" data-placement="bottom" title="Imprimir Orden con Formato"><i class="fa fa-print fa-lg" aria-hidden="true"></i></button>
+                            <button class="btn btn-out waves-effect waves-light btn-success btn-square" id="btnImprimirPreImpreso" data-toggle="tooltip" data-placement="bottom" title="Imprimir Orden pre impreso"><i class="fa fa-newspaper-o fa-lg" aria-hidden="true"></i></button>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <div class="table-responsive" id="divLista"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="styleSelector">
+        </div>
+    </div>
+</div>
+
+<iframe name="print_frame" width="0" height="0" frameborder="0" src="about:blank"></iframe>
+<script src="~/Riztie/Js/App/AppPlane.js"></script>

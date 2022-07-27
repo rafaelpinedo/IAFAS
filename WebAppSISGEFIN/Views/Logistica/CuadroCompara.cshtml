@@ -1,0 +1,148 @@
+﻿
+@{
+    ViewBag.Title = "CuadroCompara";
+    Layout = "~/Views/_LayoutPage.cshtml";
+}
+<div class="pcoded-content">
+    <div class="pcoded-inner-content">
+        <div class="main-body">
+            <div class="card">
+                <div class="card-header bg-primary">
+                    <h3><i class="fa fa-file-o" aria-hidden="true"></i> CUADRO COMPARATIVO</h3>
+                    <div class="card-header-right">
+                        <ul class="list-unstyled card-option">
+                            <li><i class="fa fa-window-maximize full-card" style="color:white"></i></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card-block">
+                    <div class="form-row">
+                        <div class="form-group col-sm-2">
+                            <label class="control-label">Fecha Inicio</label>
+                            <input type="date" id="txtFechaInicio" class="control-form" value="@ViewBag.FechaInicial">
+                        </div>
+                        <div class="form-group col-sm-2">
+                            <label class="control-label">Fecha Final</label>
+                            <input type="date" id="txtFechaFinal" class="control-form" value="@ViewBag.Fecha">
+                        </div>
+                        <div class="form-group col-md-4 m-3">
+                            <button class="input-group-inverse btn btn-inverse" id="btnConsultar" data-toggle="tooltip" data-placement="bottom" title="Consultar"><i class="fa fa-search fa-lg" aria-hidden="true"></i></button>
+                            <button class="btn btn-out waves-effect waves-light btn-info btn-square" id="btnImprimir" data-toggle="tooltip" data-placement="bottom" title="Imprimir Orden con Formato"><i class="fa fa-print fa-lg" aria-hidden="true"></i></button>
+                            <button class="btn btn-out waves-effect waves-light btn-success btn-square" id="btnImprimirPreImpreso" data-toggle="tooltip" data-placement="bottom" title="Imprimir Orden pre impreso"><i class="fa fa-newspaper-o fa-lg" aria-hidden="true"></i></button>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <div class="table-responsive" id="divLista"></div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="modal custom-modal" tabindex="-1" role="dialog" aria-hidden="true" id="divPopupContainerFormato" style="overflow-y:auto;">
+                            <div class="modal-dialog modal-lg bg-personalizado" id="divPopupWindowFormato" style="margin-top:1px;">
+                                <div class="modal-content">
+                                    <div id="divBarraFormato" class="modal-header bg-personalizado" style="cursor:move">
+                                        <h5 class="modal-title">Nuevo Registro</h5>
+                                        <button type="button" id="btnCerrarFormato" class="close"><span aria-hidden="true">&times;</span><span class="sr-only"></span></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div id="divValidaInterno" style="display:none" class="alert background">
+                                            <span id="btncloseVal" class="closebtn">&times;</span>
+                                            <strong>Advertencia!</strong><br />Los campos remarcados en rojo son obligatorios.
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-group col-sm-3">
+                                                <label class="control-label">RUC</label>
+                                                <input type="hidden" class="control-form Popup" id="txtIdRegistro">
+                                                <input type="number" autocomplete="off" maxlength="11" class="control-form Reque Popup" id="txtRUC" title="Ingrese RUC y presione ENTER">
+                                                <span id="spnDocumento"></span>
+                                            </div>
+                                            @*<div class="col-lg-4">
+                                                    <div class="form-group">
+                                                        <label class="control-label">&nbsp;</label>
+                                                        <div class="input-group">
+                                                            <span id="spnLoad" style="color: rgb(33, 67, 253); border-color: black; font-weight: bold; display:none;">
+                                                                <b>Sunat..</b>
+                                                                <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>*@
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-group col-sm-12">
+                                                <label class="control-label">Razón Social</label>
+                                                <input type="text" autocomplete="off" class="control-form Reque Popup" id="txtNombre">
+                                            </div>
+                                        </div>
+                                        @*<div class="row">
+                                                <div class="form-group col-sm-4">
+                                                    <label class="control-label">Estado Sunat</label>
+                                                    <label class="control-lectura" id="lblEstadoSunat"></label>
+                                                </div>
+                                                <div class="form-group col-sm-4">
+                                                    <label class="control-label">Condición Sunat</label>
+                                                    <label class="control-lectura" id="lblCondicionSunat"></label>
+                                                </div>
+                                            </div>*@
+                                        <div class="row">
+                                            <div class="form-group col-sm-12">
+                                                <label class="control-label">Dirección</label>
+                                                <textarea class="control-form Reque Popup" rows="2" id="ttaDireccion"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-group col-sm-10">
+                                                <label class="control-label">Contacto</label>
+                                                <input type="text" autocomplete="off" id="txtContacto" class="control-form Reque Popup" />
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-group col-sm-6">
+                                                <label class="control-label">Teléfono</label>
+                                                <input type="number" id="txtTelefono" autocomplete="off" class="control-form Reque Popup" />
+                                            </div>
+                                            <div class="form-group col-sm-6">
+                                                <label class="control-label">Correo Electrónico</label>
+                                                <input type="email" id="txtCorreo" autocomplete="off" class="control-form Reque Popup" />
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-group col-sm-6">
+                                                <label class="control-label">Banco</label>
+                                                <input type="text" autocomplete="off" id="txtBanco" class="control-form Reque Popup" />
+                                            </div>
+                                            <div class="form-group col-sm-6">
+                                                <label class="control-label">CCI</label>
+                                                <input type="number" autocomplete="off" maxlength="20" id="txtCCI" class="control-form Reque Popup" />
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input Popup" name="inlineRadioOptions" type="radio" checked id="optActivo">
+                                                <label class="form-check-label" for="optActivo">Activo</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" name="inlineRadioOptions" type="radio" id="optInactivo">
+                                                <label class="form-check-label" for="optInactivo">Inactivo</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button class="btnGuardarForm bg-customer" id="btnGuardar" title="Guardar datos"><span class="fa fa-save"></span>&nbsp;Grabar</button>
+                                        <button class="btnCancelarForm" id="btnCancelarFormato" title="Cancelar"><i class="fa fa-undo" aria-hidden="true"></i>&nbsp;Cancelar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="styleSelector">
+        </div>
+    </div>
+</div>
+
+<iframe name="print_frame" width="0" height="0" frameborder="0" src="about:blank"></iframe>
+<script src="~/Riztie/Js/App/AppLogistica.js"></script>
+

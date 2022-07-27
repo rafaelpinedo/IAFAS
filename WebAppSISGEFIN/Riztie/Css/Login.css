@@ -1,0 +1,78 @@
+﻿
+.masthead {
+    width: 40%;
+}
+
+.flotante {
+    position: fixed;
+    z-index: 1000;
+    overflow: hidden;
+    width: 30%;
+    margin-left: 35%;
+    border: 1px solid black;
+    background-color: white;
+    transition: all .8s ease;
+}
+
+.efecto {
+    transition: all .8s ease;
+    opacity: 0;
+}
+
+.card-header {
+    background-color: #FFA00E;
+    color: white;
+}
+
+.card-footer {
+    overflow: hidden;
+}
+
+.logoLogin {
+    position: fixed;
+    width: 90%;
+    height: 100%;
+    z-index: 0;
+    margin-left: 10%;
+}
+
+.btn-naranja {
+    color: #fff;
+    background-color: #f88616;
+    border-color: #f88616;
+}
+
+    .btn-naranja:hover {
+        background-color: #E67A17;
+        color: white;
+    }
+
+.textbox {
+    border-radius: 10px;
+    border-color: #24233B;
+    color: #24233B;
+}
+
+    @media screen and (max-width: 900px) {
+        .logoLogin {
+            display: none;
+        }
+
+        .masthead {
+            width: 100%;
+            height: 100%;
+        }
+
+        .flotante {
+            width: 100%;
+            margin: auto;
+        }
+
+        .masthead-bg {
+            height: 100%;
+        }
+
+        body {
+            background: white;
+        }
+    }
