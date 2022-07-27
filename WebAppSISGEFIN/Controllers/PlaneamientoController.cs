@@ -59,6 +59,7 @@ namespace WebAppSISGEFIN.Controllers
             ViewBag.FechaAprobacion = Convert.ToDateTime(nuevaFecha).ToString("yyyy-MM-dd");
             int Anio = DateTime.Now.Year;
             ViewBag.Anio = Anio;
+            ViewBag.AnioCN = Anio+1;
             return View();
         }
 
