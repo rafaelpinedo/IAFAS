@@ -53,11 +53,11 @@
     </Reference>
     <Reference Include="General.Librerias.AccesoDatos, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Librerias\General.Librerias.AccesoDatos\bin\Debug\General.Librerias.AccesoDatos.dll</HintPath>
+      <HintPath>..\DLL\General.Librerias.AccesoDatos.dll</HintPath>
     </Reference>
     <Reference Include="General.Librerias.CodigoUsuario, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Librerias\General.Librerias.CodigoUsuario\bin\Debug\General.Librerias.CodigoUsuario.dll</HintPath>
+      <HintPath>..\DLL\General.Librerias.CodigoUsuario.dll</HintPath>
     </Reference>
     <Reference Include="itext.barcodes">
       <HintPath>..\DLL\itext.barcodes.dll</HintPath>

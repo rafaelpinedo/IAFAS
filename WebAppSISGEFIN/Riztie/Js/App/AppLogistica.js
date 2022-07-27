@@ -52,8 +52,19 @@ function mostrarlistas(rpta) {
             ];
             grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
             crearCombo(listaEntidad, "cboEntidad", "Seleccione");
-            crearCombo(listaOficinaPadre, "cboOficinaPadre", "Seleccione");
+            crearCombo(listaOficinaPadre, "cboOficinaPadre", "Ninguno");
             crearCombo(listaEstado, "cboEstado", "Seleccione");
+        }
+        else if (vista == "CondicionCompra") {
+            var listaEntidad = listas[1].split("¬");
+            
+
+            var botones = [
+                { "cabecera": "Editar", "clase": "fa fa-pencil-square-o btn btn-info btnCirculo", "id": "Editar" },
+                { "cabecera": "Eliminar", "clase": "fa fa-trash btn btn-danger btnCirculo", "id": "Eliminar" },
+            ];
+            grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
+            crearCombo(listaEntidad, "cboTipoCC", "Seleccione");
         }
         else {
             var botones = [
@@ -71,6 +82,12 @@ function configurarBotones() {
     if (btnNuevo != null) btnNuevo.onclick = function () {
         divPopupContainer.style.display = 'block';
         limpiarForm("Popup");
+
+        let tituloModal = document.getElementById("tituloModal");
+        if (tituloModal != null) {
+            tituloModal.innerText = "Nuevo Registro";
+        }
+        //document.getElementById("tituloModal").innerText = "Nuevo Registro";
 
         var dtgEsAgenteRetencion = document.getElementById("dtgEsAgenteRetencion");
         if (dtgEsAgenteRetencion != null) {
@@ -156,6 +173,10 @@ function seleccionarFila(fila, id, prefijo) {
 function seleccionarBoton(idGrilla, idRegistro, idBoton) {
     if (idGrilla == "divLista") {
         if (idBoton == "Editar") {
+            let tituloModal = document.getElementById("tituloModal");
+            if (tituloModal != null) {
+                tituloModal.innerText = "Actualizar Registro";
+            }
             editarRegistro(idRegistro);
         }
         if (idBoton == "Eliminar") {
