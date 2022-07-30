@@ -88,6 +88,7 @@ function mostrarListadoItems(rpta) {
         grillaItems = new GrillaScroll(lista, "listaItem", 1000, 6, "listaItems", "Admon", null, null, null, null, 25, false, true);
     }
 }
+
 function mostrarAyudas(rpta) {
     if (rpta) {
         var listas = rpta.split('¯');
