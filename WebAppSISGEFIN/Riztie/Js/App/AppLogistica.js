@@ -257,6 +257,13 @@ function configurarBotones() {
             tituloModal.innerText = "Nuevo Registro";
         }
 
+        var cboEntidad = document.getElementById("cboEntidad");
+        if (cboEntidad != null) {
+            cboEntidad.value = 1;
+            cboEntidad.disabled = true;
+        }
+
+        
         var dtgEsAgenteRetencion = document.getElementById("dtgEsAgenteRetencion");
         if (dtgEsAgenteRetencion != null) {
             $('#dtgEsAgenteRetencion').bootstrapToggle('off')

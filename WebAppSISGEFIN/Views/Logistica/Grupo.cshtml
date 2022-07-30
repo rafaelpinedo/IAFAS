@@ -8,7 +8,7 @@
         <div class="main-body">
             <div class="card">
                 <div class="card-header bg-primary">
-                    <h3><i class="fa fa-file" aria-hidden="true"></i> GRUPO</h3>
+                    <h3><i class="fa fa-users" aria-hidden="true"></i> GRUPO</h3>
                 </div>
                 <div class="card-block">
                     <div class="form-row">
@@ -18,7 +18,7 @@
                     </div>
                     <div class="form-row">
                         <div class="form-group col-md-12">
-                            <div class="table-responsive" id="lista"></div>
+                            <div class="table-responsive" id="divLista"></div>
                         </div>
                     </div>
                     <div class="form-row">
@@ -26,30 +26,33 @@
                             <div class="modal-dialog modal-lg bg-personalizado" id="divPopupWindow" style="margin-top:30px;">
                                 <div class="modal-content">
                                     <div id="divBarra" class="modal-header bg-personalizado" style="cursor:move">
-                                        <h5 class="modal-title" id="tituloModal"></h5>
+                                        <h5 class="modal-title">Nuevo Registro</h5>
                                     </div>
                                     <div class="modal-body">
+                                        <div id="divValidaInterno" style="display:none" class="alert background">
+                                            <span id="btncloseVal" class="closebtn">&times;</span>
+                                            <strong>Advertencia!</strong><br />Los campos remarcados en rojo son obligatorios.
+                                        </div>
                                         <div class="row">
-                                            <div class="form-group col-sm-4">
+                                            <div class="form-group col-sm-6">
                                                 <input type="hidden" class="control-form Popup" id="txtIdRegistro">
-                                                <label class="control-label">Tipo de Bien</label>
+                                                <label class="control-label">Tipo Bien</label>
                                                 <select id="cboTipoBien" class="control-form Reque Popup"></select>
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="form-group col-sm-3">
-                                                <label class="control-label">Código</label>
-                                                <input type="number" autocomplete="off" maxlength="20" id="txtCodigo" readonly class="control-lectura Popup" />
+                                            <div class="form-group col-sm-6">
+                                                <label class="control-label">Codigo Grupo</label>
+                                                <input type="text" autocomplete="off" class="control-form Reque Popup" maxlength="5" id="txtCodigoGrupo">
+                                            </div>
+                                            <div class="form-group col-sm-6">
+                                                <label class="control-label">Grupo</label>
+                                                <input type="text" autocomplete="off" class="control-form Reque Popup" max="150" id="txtGrupo">
                                             </div>
                                         </div>
+                                       
                                         <div class="row">
-                                            <div class="form-group col-sm-10">
-                                                <label class="control-label">Nombre</label>
-                                                <input type="text" autocomplete="off" id="txtNombre" class="control-form Popup" />
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="form-group col-sm-4">
+                                            <div class="form-group col-sm-6">
                                                 <label class="control-label">Estado</label>
                                                 <select id="cboEstado" class="control-lectura Reque Popup"></select>
                                             </div>
@@ -65,8 +68,6 @@
                     </div>
                 </div>
             </div>
-        </div>
-        <div id="styleSelector">
         </div>
     </div>
 </div>
