@@ -80,6 +80,20 @@ function mostrarlistas(rpta) {
             crearCombo(listaEstado, "cboEstado", "Seleccione");
 
         }
+        else if (vista == "Grupo") {
+            var listaTipoBien = listas[1].split("¬");
+            var listaEstado = listas[2].split("¬");
+
+
+            var botones = [
+                { "cabecera": "Editar", "clase": "fa fa-pencil-square-o btn btn-info btnCirculo", "id": "Editar" },
+                { "cabecera": "Eliminar", "clase": "fa fa-trash btn btn-danger btnCirculo", "id": "Eliminar" },
+            ];
+            grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
+            crearCombo(listaTipoBien, "cboTipoBien", "Seleccione");
+            crearCombo(listaEstado, "cboEstado", "Seleccione");
+
+        }
         else {
             var botones = [
                 { "cabecera": "Editar", "clase": "fa fa-pencil-square-o btn btn-info btnCirculo", "id": "Editar" },
@@ -101,6 +115,13 @@ function configurarBotones() {
         if (tituloModal != null) {
             tituloModal.innerText = "Nuevo Registro";
         }
+
+        var cboEntidad = document.getElementById("cboEntidad");
+        if (cboEntidad != null) {
+            cboEntidad.value = 1;
+            cboEntidad.disabled = true;
+        }
+
         
         var dtgEsAgenteRetencion = document.getElementById("dtgEsAgenteRetencion");
         if (dtgEsAgenteRetencion != null) {
