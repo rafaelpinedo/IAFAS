@@ -18,7 +18,7 @@
                     </div>
                     <div class="form-row">
                         <div class="form-group col-md-12">
-                            <div class="table-responsive" id="lista"></div>
+                            <div class="table-responsive" id="divLista"></div>
                         </div>
                     </div>
                     <div class="form-row">
@@ -30,30 +30,23 @@
                                     </div>
                                     <div class="modal-body">
                                         <div class="row">
-                                            <div class="form-group col-sm-3">
+                                            <div class="form-group col-sm-12">
                                                 <input type="hidden" class="control-form Popup" id="txtIdRegistro">
-                                                <label class="control-label">Código</label>
-                                                <input type="number" autocomplete="off" maxlength="20" id="txtCodigo" readonly class="control-lectura Popup" />
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="form-group col-sm-10">
                                                 <label class="control-label">Nombre</label>
-                                                <input type="text" autocomplete="off" id="txtNombre" class="control-form Popup" />
+                                                <input type="text" autocomplete="off" id="txtNombre" maxlength="150" class="control-form Reque Popup" />
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="form-group col-sm-10">
+                                            <div class="form-group col-sm-6">
                                                 <label class="control-label">Abreviatura</label>
-                                                <input type="text" autocomplete="off" id="txtAbreviatura" class="control-form Popup" />
+                                                <input type="text" autocomplete="off" id="txtAbreviatura" maxlength="5" class="control-form Popup" />
                                             </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="form-group col-sm-4">
+                                            <div class="form-group col-sm-6">
                                                 <label class="control-label">Estado</label>
                                                 <select id="cboEstado" class="control-lectura Reque Popup"></select>
                                             </div>
                                         </div>
+                                        
                                     </div>
                                     <div class="modal-footer">
                                         <button id="btnCancelar" class="btnCancelarForm" title="Cancelar"><i class="fa fa-undo" aria-hidden="true"></i>&nbsp;Cancelar</button>
