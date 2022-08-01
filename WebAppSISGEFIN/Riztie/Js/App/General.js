@@ -1123,7 +1123,9 @@ function GrillaScroll(lista, divGrilla, registrosPagina, paginasBloque, tabla, c
         return tipoMime;
     }
 
+    /************************** Funciones de impresion *********************/
     function imprimir(contenido) {
+        alert('aqui imprime');
         pagina = document.body;
         var ventana = window.frames["print_frame"];
         ventana.document.body.innerHTML = "";

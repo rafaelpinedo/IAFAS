@@ -58,6 +58,14 @@ namespace WebAppTurnera.Controllers
             return rpta;
         }
 
+        public string obtenerReporteId(string tbl, string id)
+        {
+            string rpta = "";
+            daSQL odaSQL = new daSQL("conSISGEFIN");
+            rpta = odaSQL.EjecutarComando("usp" + tbl + "ReporteCsv", "@Data", id);
+            return rpta;
+        }
+
         public string eliminar(string tbl)
         {
             string rpta = "";
