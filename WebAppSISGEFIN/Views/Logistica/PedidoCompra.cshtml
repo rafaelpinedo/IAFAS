@@ -26,10 +26,10 @@
                             <input type="date" id="txtFechaFinal" class="control-form" value="@ViewBag.Fecha">
                         </div>
                         <div class="form-group col-md-6">
-                            <button class="input-group-inverse btn btn-primary" id="btnNuevo" data-toggle="tooltip" data-placement="bottom" title="Nuevo"><i class="fa fa-plus-circle fa-lg" aria-hidden="true"></i></button>
                             <button class="input-group-inverse btn btn-inverse" id="btnConsultar" data-toggle="tooltip" data-placement="bottom" title="Consultar"><i class="fa fa-search fa-lg" aria-hidden="true"></i></button>
-                            <button class="btn btn-out waves-effect waves-light btn-info btn-square" id="btnImprimir" data-toggle="tooltip" data-placement="bottom" title="Imprimir Orden con Formato"><i class="fa fa-print fa-lg" aria-hidden="true"></i></button>
-                            @*<button class="btn btn-out waves-effect waves-light btn-success btn-square" id="btnImprimirPreImpreso" data-toggle="tooltip" data-placement="bottom" title="Imprimir Orden pre impreso"><i class="fa fa-newspaper-o fa-lg" aria-hidden="true"></i></button>*@
+                            <button class="input-group-inverse btn btn-primary" id="btnNuevo" data-toggle="tooltip" data-placement="bottom" title="Nuevo"><i class="fa fa-plus-circle fa-lg" aria-hidden="true"></i></button>
+                            <button class="btn btn-out waves-effect waves-light btn-success btn-square" id="btnAprobar" disabled="disabled" data-toggle="tooltip" data-placement="bottom" title="Aprobar Pedido"><i class="fa fa-thumbs-up fa-lg" aria-hidden="true"></i></button>
+                            <button class="btn btn-out waves-effect waves-light btn-info btn-square" id="btnImprimir" data-toggle="tooltip" data-placement="bottom" title="Imprimir Pedido"><i class="fa fa-print fa-lg" aria-hidden="true"></i></button>
                         </div>
                     </div>
                     <div class="form-row">
@@ -166,19 +166,18 @@
                                                     <tr>
                                                         <td width="50%"></td>
                                                         <td style="font-size: 10px;text-align:right;font-weight: bold;vertical-align: top; padding:5px">
-                                                            SISLOG-MÓDULO DE COMPRAS
+                                                            SISGESFIN-MÓDULO DE LOGISTICA
                                                         </td>
                                                     </tr>
                                                     <tr height="130px">
                                                         <td width="50%" style="font-size: 10px;text-align: left;font-weight: bold;vertical-align: top;">
-                                                            MARINA DE GUERRA EL PERU<br>
-                                                            DIRECCION DE SALUD DE LA MARINA<br>
+                                                            IAFAS DE LA MARINA DE GUERRA EL PERU<br>
                                                             OFICINA DE LOGÍSTICA
                                                         </td>
                                                         <td width="33%" style="vertical-align: top">
                                                             <table style="border: 1px solid black">
                                                                 <tr>
-                                                                    <td style="font-size: 14px;text-align: center;font-weight: bold">SOLICITUD DE BIENES Y SERVICIOS (BB y SS)</td>
+                                                                    <td style="font-size: 14px;text-align: center;font-weight: bold">PEDIDO DE BIENES Y SERVICIOS (BB y SS)</td>
                                                                 </tr>
                                                                 <tr>
                                                                     <td style="font-size: 14px;text-align: center" id="tdNroSolicitud"></td>
