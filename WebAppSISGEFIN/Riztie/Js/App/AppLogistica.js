@@ -101,17 +101,6 @@ function mostrarlistas(rpta) {
             crearCombo(listaEstado, "cboEstado", "Seleccione");
 
         }
-        else if (vista == "Formato") {
-            var listaDocumentos = listas[1].split("¬");
-            var listaEstado = listas[2].split("¬");
-            var botones = [
-                { "cabecera": "Editar", "clase": "fa fa-pencil-square-o btn btn-info btnCirculo", "id": "Editar" },
-                { "cabecera": "Eliminar", "clase": "fa fa-trash btn btn-danger btnCirculo", "id": "Eliminar" },
-            ];
-            grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
-            crearCombo(listaDocumentos, "cboFormato", "Seleccione");
-            crearCombo(listaEstado, "cboEstado", "Seleccione");
-        }
         else if (vista == "PedidoCompra") {
             var listaTipo = listas[1].split("¬");
             var listaOficina = listas[2].split("¬");
@@ -135,7 +124,7 @@ function mostrarlistas(rpta) {
             grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
             crearCombo(listaTipo, "cboTipoSolicitud", "Seleccione");
         }
-        else if (vista == "Articulo"){
+        else if (vista == "Articulo") {
             var botones = [
                 { "cabecera": "Editar", "clase": "fa fa-pencil-square-o btn btn-info btnCirculo", "id": "Editar" },
                 { "cabecera": "Eliminar", "clase": "fa fa-trash btn btn-danger btnCirculo", "id": "Eliminar" },
@@ -153,18 +142,15 @@ function mostrarlistas(rpta) {
             crearCombo(listaTipoItem, "cboTipoItem", "Seleccione");
             crearCombo(listaEstado, "cboEstado", "Seleccione");
             crearCombo(listaUniMed, "cboUniMed", "Seleccione");
-          
-            //crearCombo(listaOficina, "cboOficina", "Seleccione");
-            //crearCombo(listaOficina, "cboOficina", "Seleccione");
         }
 
-        else if (vista == "Grupo" ) {
+        else if (vista == "Grupo") {
             var botones = [
                 { "cabecera": "Editar", "clase": "fa fa-pencil-square-o btn btn-info btnCirculo", "id": "Editar" },
                 { "cabecera": "Eliminar", "clase": "fa fa-trash btn btn-danger btnCirculo", "id": "Eliminar" },
             ];
             grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
-            var listaTipoBien = listas[1].split("¬"); 
+            var listaTipoBien = listas[1].split("¬");
             var listaEstado = listas[2].split("¬");
             crearCombo(listaTipoBien, "cboTipoBien", "Seleccione");
             crearCombo(listaEstado, "cboEstado", "Seleccione");
@@ -187,9 +173,8 @@ function mostrarlistas(rpta) {
             var listaTipoBien = listas[1].split("¬");
             listaGrupoItem = listas[2].split("¬");
             var listaEstado = listas[3].split("¬");
-            crearCombo(listaTipoBien, "cboTipoBien", "Seleccione");
             listarGrupoItem();
-            //crearCombo(listaTipoBien, "cboTipoBien", "Seleccione");
+            crearCombo(listaTipoBien, "cboTipoBien", "Seleccione");
             crearCombo(listaEstado, "cboEstado", "Seleccione");
         }
 
@@ -241,7 +226,7 @@ function listarGrupoItem() {
     if (cbo != null) {
         cbo.innerHTML = contenido;
         listarClaseItem();
-    }   
+    }
 }
 
 function listarClaseItem() {
@@ -269,7 +254,7 @@ function listarClaseItem() {
         cbo.innerHTML = contenido;
         listarFamiliaItem();
     }
-    
+
 }
 
 
@@ -346,7 +331,7 @@ function configurarBotones() {
             cboEntidad.value = 1;
             cboEntidad.disabled = true;
         }
-        
+
         var dtgEsAgenteRetencion = document.getElementById("dtgEsAgenteRetencion");
         if (dtgEsAgenteRetencion != null) {
             $('#dtgEsAgenteRetencion').bootstrapToggle('off')
@@ -369,9 +354,9 @@ function configurarBotones() {
         var txtFechaPedido = document.getElementById("txtFechaPedido");
         if (txtFechaPedido != null) txtFechaPedido.value = txtFechaPedido.getAttribute("data-fecha");
 
-        var select2cboOficina= document.getElementById("select2-cboOficina-container");
+        var select2cboOficina = document.getElementById("select2-cboOficina-container");
         if (select2cboOficina != null) select2cboOficina.innerHTML = "Seleccione";
-        
+
         var tbDetallePedido = document.getElementById("tbDetallePedido");
         if (tbDetallePedido != null) tbDetallePedido.innerHTML = "";
 
@@ -410,6 +395,15 @@ function configurarBotones() {
             if (divTotal != null) divTotal.innerHTML = "";
 
         }
+
+        var select2cboGrupo = document.getElementById("select2-cboGrupo-container");
+        if (select2cboGrupo != null) select2cboGrupo.innerHTML = "Seleccione";
+        var select2cboOClase = document.getElementById("select2-cboClase-container");
+        if (select2cboOClase != null) select2cboOClase.innerHTML = "Seleccione";
+
+        var select2cboFamilia = document.getElementById("select2-cboFamilia-container");
+        if (select2cboFamilia != null) select2cboFamilia.innerHTML = "Seleccione";
+
     }
 
     var btnActualizar = document.getElementById("btnActualizar");
@@ -451,7 +445,7 @@ function configurarBotones() {
 
     var btnGuardar = document.getElementById("btnGuardar");
 
-  
+
     if (btnGuardar != null) btnGuardar.onclick = function () {
         var validar = false;
 
@@ -470,7 +464,7 @@ function configurarBotones() {
         //else if (vista == "OrdenCompra" && validarOrdenCompra()) {
         //    validar = true;
         //}
-       else if (validarInformacion("Reque")==true){
+        else if (validarInformacion("Reque") == true) {
             validar = true;
         }
         if (validar == true) {
@@ -514,7 +508,7 @@ function configurarBotones() {
             })
         }
     }
-   
+
 
     var btnCancelar = document.getElementById("btnCancelar");
     if (btnCancelar != null) btnCancelar.onclick = function () {
@@ -673,8 +667,7 @@ function validarPedido() {
             }
         }
 
-        if (fechaRequerida < fechaPedido)
-        { mostrarMensaje("La fecha requerida no puede ser menor a la fecha de pedido", "error"); return false; }
+        if (fechaRequerida < fechaPedido) { mostrarMensaje("La fecha requerida no puede ser menor a la fecha de pedido", "error"); return false; }
         else if (nfilas == 0) {
             mostrarMensaje("Debe agregar items al Pedido", "error");
             return false;
@@ -683,7 +676,7 @@ function validarPedido() {
             mostrarMensaje("Debe ingresar cantidad solicitada a todos los items", "error");
             return false;
         }
-        else { 
+        else {
             return true;
         }
     }
@@ -734,7 +727,7 @@ function grabarPedido() {
     var txtFechaFinal = dFechaFinal[2] + "-" + dFechaFinal[1] + "-" + dFechaFinal[0];
 
     data = data + '¯' + txtFechaInicio + '|' + txtFechaFinal
-    
+
     var frm = new FormData();
     frm.append("data", data);
     Http.post("General/guardar?tbl=" + controller + vista, mostrarGrabar, frm);
@@ -985,6 +978,7 @@ function mostrarDetalleItem(rpta) {
     }
 }
 
+
 function mostrarRegistro(rpta) {
     if (rpta) {
         var campos = rpta.split("|");
@@ -1112,9 +1106,52 @@ function mostrarRegistro(rpta) {
             totalCotizacion();
 
         }
-        else {
-            var divPopupContainer = document.getElementById("divPopupContainer");
-            if (divPopupContainer != null) { divPopupContainer.style.display = 'block'; };
+
+        else if (vista == "Articulo") {
+
+            txtIdRegistro.value = campos[0];
+            cboTipoBien.value = campos[1];
+            listarGrupoItem();
+            cboGrupo.value = campos[2];
+            document.getElementById('select2-cboGrupo-container').innerHTML = cboGrupo.options[cboGrupo.selectedIndex].text;
+            listarClaseItem();
+            cboClase.value = campos[3];
+            document.getElementById('select2-cboClase-container').innerHTML = cboClase.options[cboClase.selectedIndex].text;
+            listarFamiliaItem();
+            document.getElementById('select2-cboFamilia-container').innerHTML = cboClase.options[cboClase.selectedIndex].text;
+            cboFamilia.value = campos[4];
+            txtCodigo.value = campos[5];
+            cboTipoItem.value = campos[6];
+            cboUniMed.value = campos[7];
+            txtNombre.value = campos[8];
+            cboEstado.value = campos[9];
+
+        }
+        else if (vista == "Clase") {
+            cboTipoBien.value = campos[0];
+            listarGrupoItem();
+            cboGrupo.value = campos[1];
+            document.getElementById('select2-cboGrupo-container').innerHTML = cboGrupo.options[cboGrupo.selectedIndex].text;
+            txtIdRegistro.value = campos[2];
+            txtNombre.value = campos[3];
+            cboEstado.value = campos[4];
+        }
+        else if (vista == "Familia") {
+
+            txtIdRegistro.value = campos[3];
+            cboTipoBien.value = campos[0];
+            listarGrupoItem();
+            cboGrupo.value = campos[1];
+            document.getElementById('select2-cboGrupo-container').innerHTML = cboGrupo.options[cboGrupo.selectedIndex].text;
+            listarClaseItem();
+            cboClase.value = campos[2];
+            document.getElementById('select2-cboClase-container').innerHTML = cboClase.options[cboClase.selectedIndex].text;
+            txtNombre.value = campos[4];
+            cboEstado.value = campos[5];
+        }
+
+        var divPopupContainer = document.getElementById("divPopupContainer");
+        if (divPopupContainer != null) { divPopupContainer.style.display = 'block'; };
         var controles = document.getElementsByClassName("Popup");
         var nControles = controles.length;
         var control;
@@ -1165,9 +1202,10 @@ function mostrarRegistro(rpta) {
                 }
             }
         }
-        }
+
     }
 }
+
 
 function grabarDatos() {
     var data = ""
@@ -1697,7 +1735,7 @@ function mostrarReporte(rpta) {
                 tblDetalleReporte.innerHTML = contenido;
             }
         }
-        
+
         imprimir(divReporte.innerHTML);
     }
 }
@@ -2161,7 +2199,7 @@ function validarCotizacion() {
     if (idRegistro == "") { mostrarMensaje("Seleccione una Solicitud de la lista", "error"); return false; }
     else if (idProveedor == "") { mostrarMensaje("Seleccione Proveedor", "error"); return false; }
     else if (idCondicionCompra == "") { mostrarMensaje("Seleccione Condición de compra", "error"); return false; }
-    else if (idMoneda== "") { mostrarMensaje("Seleccione Moneda", "error"); return false; }
+    else if (idMoneda == "") { mostrarMensaje("Seleccione Moneda", "error"); return false; }
 
     //var fila;
     //for (var i = 0; i < nfilas; i++) {
