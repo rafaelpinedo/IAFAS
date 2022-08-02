@@ -159,52 +159,52 @@ function adicionarItem(datos) {
         filaDetalle += "</td> ";
 
         filaDetalle += "<td style='white-space:pre-wrap;width:70px;vertical-align:top;padding:0px'>";
-        filaDetalle += "<input type='number' style='text-align:right;width:100%;border:1px solid blue;height:25px;padding:0px' min=1>";
+        filaDetalle += "<input type='number' style='text-align:right;width:100%;border:1px solid blue;height:25px;padding:0px' min=1 onkeyup='importes(this)'>";
         filaDetalle += "</td> ";
         filaDetalle += "<td style='white-space:pre-wrap;width:70px;vertical-align:top;padding:0px'>";
-        filaDetalle += "<input type='number' style='text-align:right;width:100%;border:1px solid blue;height:25px;padding:0px' min=1>";
+        filaDetalle += "<input type='number' style='text-align:right;width:100%;border:1px solid blue;height:25px;padding:0px' min=1 onkeyup='importes(this)'>";
         filaDetalle += "</td> ";
         filaDetalle += "<td style='white-space:pre-wrap;width:70px;vertical-align:top;padding:0px'>";
-        filaDetalle += "<input type='number' style='text-align:right;width:100%;border:1px solid blue;height:25px;padding:0px' min=1>";
-        filaDetalle += "</td> ";
-        filaDetalle += "<td style='white-space:pre-wrap;width:70px;vertical-align:top;padding:0px'>";
-        filaDetalle += '';
-        filaDetalle += "</td> ";
-
-        filaDetalle += "<td style='white-space:pre-wrap;width:70px;vertical-align:top;padding:0px'>";
-        filaDetalle += "<input type='number' style='text-align:right;width:100%;border:1px solid blue;height:25px;padding:0px' min=1>";
-        filaDetalle += "</td> ";
-        filaDetalle += "<td style='white-space:pre-wrap;width:70px;vertical-align:top;padding:0px'>";
-        filaDetalle += "<input type='number' style='text-align:right;width:100%;border:1px solid blue;height:25px;padding:0px' min=1>";
-        filaDetalle += "</td> ";
-        filaDetalle += "<td style='white-space:pre-wrap;width:70px;vertical-align:top;padding:0px'>";
-        filaDetalle += "<input type='number' style='text-align:right;width:100%;border:1px solid blue;height:25px;padding:0px' min=1>";
+        filaDetalle += "<input type='number' style='text-align:right;width:100%;border:1px solid blue;height:25px;padding:0px' min=1 onkeyup='importes(this)'>";
         filaDetalle += "</td> ";
         filaDetalle += "<td style='white-space:pre-wrap;width:70px;vertical-align:top;padding:0px'>";
         filaDetalle += '';
         filaDetalle += "</td> ";
 
         filaDetalle += "<td style='white-space:pre-wrap;width:70px;vertical-align:top;padding:0px'>";
-        filaDetalle += "<input type='number' style='text-align:right;width:100%;border:1px solid blue;height:25px;padding:0px' min=1>";
+        filaDetalle += "<input type='number' style='text-align:right;width:100%;border:1px solid blue;height:25px;padding:0px' min=1 onkeyup='importes(this)'>";
         filaDetalle += "</td> ";
         filaDetalle += "<td style='white-space:pre-wrap;width:70px;vertical-align:top;padding:0px'>";
-        filaDetalle += "<input type='number' style='text-align:right;width:100%;border:1px solid blue;height:25px;padding:0px' min=1>";
+        filaDetalle += "<input type='number' style='text-align:right;width:100%;border:1px solid blue;height:25px;padding:0px' min=1 onkeyup='importes(this)'>";
         filaDetalle += "</td> ";
         filaDetalle += "<td style='white-space:pre-wrap;width:70px;vertical-align:top;padding:0px'>";
-        filaDetalle += "<input type='number' style='text-align:right;width:100%;border:1px solid blue;height:25px;padding:0px' min=1>";
+        filaDetalle += "<input type='number' style='text-align:right;width:100%;border:1px solid blue;height:25px;padding:0px' min=1 onkeyup='importes(this)'>";
         filaDetalle += "</td> ";
         filaDetalle += "<td style='white-space:pre-wrap;width:70px;vertical-align:top;padding:0px'>";
         filaDetalle += '';
         filaDetalle += "</td> ";
 
         filaDetalle += "<td style='white-space:pre-wrap;width:70px;vertical-align:top;padding:0px'>";
-        filaDetalle += "<input type='number' style='text-align:right;width:100%;border:1px solid blue;height:25px;padding:0px' min=1>";
+        filaDetalle += "<input type='number' style='text-align:right;width:100%;border:1px solid blue;height:25px;padding:0px' min=1 onkeyup='importes(this)'>";
         filaDetalle += "</td> ";
         filaDetalle += "<td style='white-space:pre-wrap;width:70px;vertical-align:top;padding:0px'>";
-        filaDetalle += "<input type='number' style='text-align:right;width:100%;border:1px solid blue;height:25px;padding:0px' min=1>";
+        filaDetalle += "<input type='number' style='text-align:right;width:100%;border:1px solid blue;height:25px;padding:0px' min=1 onkeyup='importes(this)'>";
         filaDetalle += "</td> ";
         filaDetalle += "<td style='white-space:pre-wrap;width:70px;vertical-align:top;padding:0px'>";
-        filaDetalle += "<input type='number' style='text-align:right;width:100%;border:1px solid blue;height:25px;padding:0px' min=1>";
+        filaDetalle += "<input type='number' style='text-align:right;width:100%;border:1px solid blue;height:25px;padding:0px' min=1 onkeyup='importes(this)'>";
+        filaDetalle += "</td> ";
+        filaDetalle += "<td style='white-space:pre-wrap;width:70px;vertical-align:top;padding:0px'>";
+        filaDetalle += '';
+        filaDetalle += "</td> ";
+
+        filaDetalle += "<td style='white-space:pre-wrap;width:70px;vertical-align:top;padding:0px'>";
+        filaDetalle += "<input type='number' style='text-align:right;width:100%;border:1px solid blue;height:25px;padding:0px' min=1 onkeyup='importes(this)'>";
+        filaDetalle += "</td> ";
+        filaDetalle += "<td style='white-space:pre-wrap;width:70px;vertical-align:top;padding:0px'>";
+        filaDetalle += "<input type='number' style='text-align:right;width:100%;border:1px solid blue;height:25px;padding:0px' min=1 onkeyup='importes(this)'>";
+        filaDetalle += "</td> ";
+        filaDetalle += "<td style='white-space:pre-wrap;width:70px;vertical-align:top;padding:0px'>";
+        filaDetalle += "<input type='number' style='text-align:right;width:100%;border:1px solid blue;height:25px;padding:0px' min=1 onkeyup='importes(this)'>";
         filaDetalle += "</td> ";
         filaDetalle += "<td style='white-space:pre-wrap;width:70px;vertical-align:top;padding:0px'>";
         filaDetalle += '';
@@ -213,7 +213,7 @@ function adicionarItem(datos) {
         filaDetalle += '';
         filaDetalle += "</td> ";
         filaDetalle += "<td style='white-space:pre-wrap;width:70px;vertical-align:top;padding:0px'>";
-        filaDetalle += "<input type='number' style='text-align:right;width:100%;border:1px solid blue;height:25px;padding:0px' min=1>";
+        filaDetalle += "<input type='number' style='text-align:right;width:100%;border:1px solid blue;height:25px;padding:0px' min=1 onkeyup='importes(this)'>";
         filaDetalle += "</td> ";
         filaDetalle += "<td style='white-space:pre-wrap;width:70px;vertical-align:top;padding:0px'>";
         filaDetalle += '';
@@ -238,6 +238,37 @@ function retirarItem(col, id) {
     var nFilas = 0;
     nFilas = tbDetalleCN.rows.length;
     spnNroItems.innerHTML = "Items: " + (nFilas);
+}
+
+function importes(col) {
+    var fila = col.parentNode.parentNode;
+    fila.childNodes[14].style.textAlign = "center";
+    fila.childNodes[14].style.fontWeight = "bold";
+    fila.childNodes[22].style.textAlign = "center";
+    fila.childNodes[22].style.fontWeight = "bold";
+    fila.childNodes[30].style.textAlign = "center";
+    fila.childNodes[30].style.fontWeight = "bold";
+    fila.childNodes[38].style.textAlign = "center";
+    fila.childNodes[38].style.fontWeight = "bold";
+    fila.childNodes[40].style.textAlign = "center";
+    fila.childNodes[40].style.fontWeight = "bold";
+    fila.childNodes[44].style.textAlign = "center";
+    fila.childNodes[44].style.fontWeight = "bold";
+    var elemento = fila.getElementsByTagName('input');
+    var nroElemento = elemento.length;
+    var valor = 0;
+    var subTot = 0;
+    for (var i = 0; i < nroElemento-1; i++) {
+        valor += elemento[i].value * 1;
+        subTot += elemento[i].value * 1;
+        if (i == 2) fila.childNodes[14].innerText = valor.toString();
+        if (i == 5) fila.childNodes[22].innerText = valor.toString();
+        if (i == 8) fila.childNodes[30].innerText = valor.toString();
+        if (i == 11) fila.childNodes[38].innerText = valor.toString();
+        fila.childNodes[40].innerText = subTot.toString();
+        if (i == 2 || i == 5 || i == 8 || i == 11) valor = 0;
+    }
+    fila.childNodes[44].innerText = ((elemento[12].value * 1)*(fila.childNodes[40].innerText*1)).toFixed(2).toString();
 }
 
 function validarCN() {
