@@ -52,6 +52,7 @@ function validarObligatorio(clase) {
         if (control.value == "") {
            // fila = control.parentNode.parentNode;
             control.style.borderColor = "red";
+            //$('.select2-selection').css('border-color', 'blue');
             nObligatorio = nObligatorio + 1;
         }
         else {
