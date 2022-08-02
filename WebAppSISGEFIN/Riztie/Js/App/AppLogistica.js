@@ -29,6 +29,7 @@ window.onload = function () {
 }
 
 function getListarPedido() {
+
     var data = "";
     var txtFechaInicio = document.getElementById("txtFechaInicio").value;
     var txtFechaFinal = document.getElementById("txtFechaFinal").value;
