@@ -101,17 +101,6 @@ function mostrarlistas(rpta) {
             crearCombo(listaEstado, "cboEstado", "Seleccione");
 
         }
-        else if (vista == "Formato") {
-            var listaDocumentos = listas[1].split("¬");
-            var listaEstado = listas[2].split("¬");
-            var botones = [
-                { "cabecera": "Editar", "clase": "fa fa-pencil-square-o btn btn-info btnCirculo", "id": "Editar" },
-                { "cabecera": "Eliminar", "clase": "fa fa-trash btn btn-danger btnCirculo", "id": "Eliminar" },
-            ];
-            grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
-            crearCombo(listaDocumentos, "cboFormato", "Seleccione");
-            crearCombo(listaEstado, "cboEstado", "Seleccione");
-        }
         else if (vista == "PedidoCompra") {
             var listaTipo = listas[1].split("¬");
             var listaOficina = listas[2].split("¬");
@@ -120,9 +109,20 @@ function mostrarlistas(rpta) {
                 { "cabecera": "Editar", "clase": "fa fa-pencil-square-o btn btn-info btnCirculo", "id": "Editar" },
                 { "cabecera": "Eliminar", "clase": "fa fa-trash btn btn-danger btnCirculo", "id": "Eliminar" },
             ];
+
             grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
             crearCombo(listaTipo, "cboTipoSolicitud", "Seleccione");
             crearCombo(listaOficina, "cboOficina", "Seleccione");
+        }
+        else if (vista == "SolicitudCompra" || vista == "Cotizacion") {
+            var listaTipo = listas[1].split("¬");
+
+            var botones = [
+                { "cabecera": "Editar", "clase": "fa fa-pencil-square-o btn btn-info btnCirculo", "id": "Editar" },
+                { "cabecera": "Eliminar", "clase": "fa fa-trash btn btn-danger btnCirculo", "id": "Eliminar" },
+            ];
+            grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
+            crearCombo(listaTipo, "cboTipoSolicitud", "Seleccione");
         }
         else if (vista == "Articulo"){
             var botones = [
@@ -142,9 +142,6 @@ function mostrarlistas(rpta) {
             crearCombo(listaTipoItem, "cboTipoItem", "Seleccione");
             crearCombo(listaEstado, "cboEstado", "Seleccione");
             crearCombo(listaUniMed, "cboUniMed", "Seleccione");
-          
-            //crearCombo(listaOficina, "cboOficina", "Seleccione");
-            //crearCombo(listaOficina, "cboOficina", "Seleccione");
         }
 
         else if (vista == "Grupo" ) {
@@ -176,9 +173,8 @@ function mostrarlistas(rpta) {
             var listaTipoBien = listas[1].split("¬");
             listaGrupoItem = listas[2].split("¬");
             var listaEstado = listas[3].split("¬");
-            crearCombo(listaTipoBien, "cboTipoBien", "Seleccione");
             listarGrupoItem();
-            //crearCombo(listaTipoBien, "cboTipoBien", "Seleccione");
+            crearCombo(listaTipoBien, "cboTipoBien", "Seleccione");
             crearCombo(listaEstado, "cboEstado", "Seleccione");
         }
 
@@ -303,6 +299,21 @@ function configurarCombos() {
     if (cboClase != null) cboClase.onchange = function () {
         listarFamiliaItem();
     }
+
+    var cboTipoSolicitud = document.getElementById("cboTipoSolicitud")
+    if (cboTipoSolicitud != null) cboTipoSolicitud.onchange = function () {
+        var idTipoSolicitud = cboTipoSolicitud.value;
+        var anio = numAnioPendiente.value;
+        var data = ""
+        data = idTipoSolicitud + '|' + anio;
+        if (vista == "SolicitudCompra") {
+            Http.get("General/listarTabla/?tbl=" + controller + vista + "Pedidos&data=" + data, mostrarListadoItem);
+            tbDetallePedido.innerHTML = "";
+        }
+        else {
+            tbDetallePedido.innerHTML = "";
+        }
+    }
 }
 function configurarBotones() {
     var btnNuevo = document.getElementById("btnNuevo");
@@ -320,7 +331,6 @@ function configurarBotones() {
             cboEntidad.value = 1;
             cboEntidad.disabled = true;
         }
-
         
         var dtgEsAgenteRetencion = document.getElementById("dtgEsAgenteRetencion");
         if (dtgEsAgenteRetencion != null) {
@@ -346,9 +356,71 @@ function configurarBotones() {
 
         var select2cboOficina= document.getElementById("select2-cboOficina-container");
         if (select2cboOficina != null) select2cboOficina.innerHTML = "Seleccione";
-
+        
         var tbDetallePedido = document.getElementById("tbDetallePedido");
         if (tbDetallePedido != null) tbDetallePedido.innerHTML = "";
+
+        var tBodytblItem = document.getElementById("tBodytblItem");
+        if (tBodytblItem != null) tBodytblItem.innerHTML = "";
+
+        var spnNroItems = document.getElementById("spnNroItems");
+        if (spnNroItems != null) spnNroItems.innerHTML = "";
+
+        if (vista == "Cotizacion" || vista == "CuadroCompara" || vista == "OrdenCompra") {
+            var data = "";
+            Http.get("General/listarTabla/?tbl=" + controller + vista + "Pendientes&data=" + data, mostrarListadoItem);
+
+            var listaDetalle = document.getElementById("listaDetalle");
+            if (listaDetalle != null) listaDetalle.innerHTML = "";
+
+            var divBuenaPro = document.getElementById("divBuenaPro");
+            if (divBuenaPro != null) divBuenaPro.style.display = 'none';
+
+            var listaCC = document.getElementById("listaCC");
+            if (listaCC != null) listaCC.innerHTML = "";
+
+            var listaProveedor = document.getElementById("listaProveedor");
+            if (listaProveedor != null) listaProveedor.innerHTML = "";
+
+            var listaProductos = document.getElementById("listaProductos");
+            if (listaProductos != null) listaProductos.innerHTML = "";
+
+            var divItems = document.getElementById("divItems");
+            if (divItems != null) divItems.innerHTML = "";
+
+            var divSeleccionado = document.getElementById("divSeleccionado");
+            if (divSeleccionado != null) divSeleccionado.innerHTML = "";
+
+            var divTotal = document.getElementById("divTotal");
+            if (divTotal != null) divTotal.innerHTML = "";
+
+        }
+
+        var select2cboGrupo = document.getElementById("select2-cboGrupo-container");
+        if (select2cboGrupo != null) select2cboGrupo.innerHTML = "Seleccione";
+        var select2cboOClase = document.getElementById("select2-cboClase-container");
+        if (select2cboOClase != null) select2cboOClase.innerHTML = "Seleccione";
+
+        var select2cboFamilia = document.getElementById("select2-cboFamilia-container");
+        if (select2cboFamilia != null) select2cboFamilia.innerHTML = "Seleccione";
+        
+    }
+
+    var btnActualizar = document.getElementById("btnActualizar");
+    if (btnActualizar != null) btnActualizar.onclick = function () {
+        Swal.fire({
+            title: '¿Desea grabar la información de la proforma?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Si',
+            cancelButtonText: 'No'
+        }).then((result) => {
+            if (result.value) {
+                grabarProforma();
+            }
+        })
     }
 
     var btnAprobar = document.getElementById("btnAprobar");
@@ -380,12 +452,12 @@ function configurarBotones() {
         if (vista == "PedidoCompra" && validarPedido() == true) {
             validar = true;
         }
-        //else if (vista == "SolicitudCompra" && validarSoliCompra()) {
-        //    validar = true;
-        //}
-        //else if (vista == "Cotizacion" && validarCotizacion()) {
-        //    validar = true;
-        //}
+        else if (vista == "SolicitudCompra" && validarSoliCompra()) {
+            validar = true;
+        }
+        else if (vista == "Cotizacion" && validarCotizacion()) {
+            validar = true;
+        }
         //else if (vista == "CuadroCompara" && validarCuadroCompara()) {
         //    validar = true;
         //}
@@ -409,12 +481,12 @@ function configurarBotones() {
                     if (vista == "PedidoCompra") {
                         grabarPedido();
                     }
-                    //else if (vista == "SolicitudCompra") {
-                    //    grabarSolicitud();
-                    //}
-                    //else if (vista == "Cotizacion") {
-                    //    grabarCotizacion();
-                    //}
+                    else if (vista == "SolicitudCompra") {
+                        grabarSolicitud();
+                    }
+                    else if (vista == "Cotizacion") {
+                        grabarCotizacion();
+                    }
                     //else if (vista == "CuadroCompara") {
                     //    grabarCuadroCompara();
                     //}
@@ -735,6 +807,15 @@ function seleccionarFila(fila, id, prefijo) {
             btnAprobar.disabled = false
         }
     }
+    else if (vista == "Cotizacion") {
+        if (prefijo == "lista") {
+            txtProveedorCorreo.value = fila.childNodes[4].innerHTML;
+            txtEmail.value = fila.childNodes[8].innerHTML;
+        }
+        else if (prefijo == "listaPendientes") {
+            Http.get("General/listarTabla/?tbl=" + controller + vista + "DetalleItem&data=" + id, mostrarSolicitudDetalle);
+        }
+    }
 }
 
 function seleccionarBoton(idGrilla, idRegistro, idBoton) {
@@ -757,6 +838,8 @@ function editarRegistro(id) {
 }
 
 function editarPedidoCompra(rpta) {
+    var divPopupContainer = document.getElementById("divPopupContainer");
+    if (divPopupContainer != null) { divPopupContainer.style.display = 'block'; };
     var listas = rpta.split('¯');
     var cabecera = listas[0].split('|');
     var detalle = listas[1].split('¬');
@@ -896,12 +979,10 @@ function mostrarDetalleItem(rpta) {
     }
 }
 
+
 function mostrarRegistro(rpta) {
     if (rpta) {
         var campos = rpta.split("|");
-        var divPopupContainer = document.getElementById("divPopupContainer");
-        if (divPopupContainer != null) { divPopupContainer.style.display = 'block'; };
-
         var controlesSelectSearch = document.getElementsByClassName("SelectSearch");
         var nControlesSelectSearch = controlesSelectSearch.length;
         var cboEstado = document.getElementById("cboEstado");
@@ -910,23 +991,125 @@ function mostrarRegistro(rpta) {
         if (vista == "PedidoCompra") {
             editarPedidoCompra(rpta);
         }
+        else if (vista == "SolicitudCompra") {
+            divPopupContainerForm1.style.display = 'block';
+            var listas = rpta.split('¯');
+            var cabecera = listas[0].split('|');
+            var detalle = listas[1].split('¬');
+            lblNumero.innerHTML = cabecera[0];
+            lblFechaEmision.innerHTML = cabecera[1];
+            lblTipo.innerHTML = cabecera[2];
+            lblEstado.innerHTML = cabecera[3];
 
-        else if (vista == "Familia") {
-       
-            txtIdRegistro.value = campos[3];
-            cboTipoBien.value = campos[0];
-            listarGrupoItem();
-            cboGrupo.value = campos[1];
-            document.getElementById('select2-cboGrupo-container').innerHTML = cboGrupo.options[cboGrupo.selectedIndex].text;
-            listarClaseItem();
-            cboClase.value = campos[2];
-            document.getElementById('select2-cboClase-container').innerHTML = cboClase.options[cboClase.selectedIndex].text;
-            txtNombre.value = campos[4];
-            cboEstado.value = campos[5];
+            generarTablaItem(detalle, "listaDetalle", "tblDetalle", null);
+        }
+        else if (vista == "Cotizacion") {
+            divPopupContainerForm1.style.display = 'block';
+            var listas = rpta.split('¯');
+            var cabecera = listas[0].split('|');
+            var detalle = listas[1].split('¬');
+            txtIdRegistro.value = cabecera[0];
+            lblNumero.innerHTML = cabecera[1];
+            lblFechaEmision.innerHTML = cabecera[2];
+            lblProveedor.innerHTML = cabecera[3];
+            lblCondicionCompra.innerHTML = cabecera[4];
+            lblNroSolicitud.innerHTML = cabecera[5];
+            ttaComentarioCoti.value = cabecera[6];
+            lblEstado.innerHTML = cabecera[10];
+            txtProforma.value = cabecera[7];
+            var dFecha = cabecera[8].split("/");
+            txtFechaProforma.value = dFecha[2] + "-" + dFecha[1] + "-" + dFecha[0];
+            ttaComentarioProveedor.value = cabecera[9];
+            txtDiasEntrega.value = cabecera[11];
+            txtGarantia.value = cabecera[12];
+            txtTipoSolicitud.value = cabecera[13];
+            if (cabecera[10] == "PENDIENTE" || cabecera[10] == "PROFORMADA") {
+                btnActualizar.style.display = 'inline';
+            }
+            else {
+                btnActualizar.style.display = 'none';
+            }
+
+            var campos = detalle[0].split("|");
+            var anchos = detalle[1].split("|");
+            var nRegistros = detalle.length;
+            var nCampos = campos.length;
+            var contenido = "<table cellpadding='0' cellspacing='0' class='grilla bordered Tabla table-fija'><thead><tr class='FilaHead'>";
+            for (var z = 0; z < nCampos; z++) {
+
+                if (z == 0) {
+                    contenido += "<th style='display:none;width:";
+                    contenido += anchos[z];
+                    contenido += "px'>";
+                    contenido += campos[z];
+                    contenido += "</th>";
+                }
+                else {
+                    contenido += "<th style='white-space:pre-wrap;width:";
+                    contenido += anchos[z];
+                    contenido += "px'>";
+                    contenido += campos[z];
+                    contenido += "</th>";
+                }
+            }
+            contenido += "</tr></thead><tbody id='tbDetalleItem'>";
+            for (var i = 3; i < nRegistros; i++) {
+                campos = detalle[i].split("|");
+                contenido += "<tr>";
+                for (var j = 0; j < nCampos; j++) {
+                    if (j == 0) {
+                        contenido += "<td style='vertical-align:top;display:none;width:";
+                        contenido += anchos[j];
+                        contenido += "px'>";
+                        contenido += campos[j];
+                        contenido += "</td>";
+                    }
+                    else if (j == 5) {
+                        if (cabecera[10] == "PENDIENTE" || cabecera[10] == "PROFORMADA") {
+                            contenido += "<td style='vertical-align:top; padding:2px;width:";
+                            contenido += anchos[j];
+                            contenido += "px'>";
+                            contenido += "<input type='number' min='1' style='text-align:right;width:100%;border:1px solid blue;height:25px;' onkeyup='totalCotizacion(\"I\");' value='"
+                            contenido += formatoNumeroDecimal(campos[j]);
+                            contenido += "'>";
+                            contenido += "</td>";
+                        }
+                        else {
+                            contenido += "<td style='vertical-align:top;text-align:right;width:";
+                            contenido += anchos[j];
+                            contenido += "px'>";
+                            contenido += formatoNumeroDecimal(campos[j]);
+                            contenido += "</td>";
+                        }
+                    }
+                    else if (j == 4) {
+                        contenido += "<td style='vertical-align:top;text-align:right;white-space:pre-wrap;width:";
+                        contenido += anchos[j];
+                        contenido += "px'>";
+                        contenido += formatoNumeroDecimal(campos[j]);
+                        contenido += "</td>";
+                    }
+                    else {
+                        contenido += "<td style='vertical-align:top;text-align:left;white-space:pre-wrap;width:";
+                        contenido += anchos[j];
+                        contenido += "px'>";
+                        contenido += campos[j];
+                        contenido += "</td>";
+                    }
+                }
+            }
+            contenido += "</tr>";
+            contenido += "</tbody>";
+            contenido += "</table>";
+            var div = document.getElementById("listaDetalle");
+            div.innerHTML = contenido;
+            configurarEnterCantidad(tbDetalleItem, 5);
+            totalCotizacion();
+
         }
 
         else if (vista == "Articulo") {
-    
+
             txtIdRegistro.value = campos[0];
             cboTipoBien.value = campos[1];
             listarGrupoItem();
@@ -954,61 +1137,76 @@ function mostrarRegistro(rpta) {
             txtNombre.value = campos[3];
             cboEstado.value = campos[4];
         }
+        else if (vista == "Familia") {
 
-        else { 
-        var controles = document.getElementsByClassName("Popup");
-        var nControles = controles.length;
-        var control;
-        var tipo;
-        var subCampos;
-        for (var j = 0; j < nControles; j++) {
-            control = controles[j];
-            control.style.borderColor = ""
-            tipo = control.id.substr(0, 3);
-            if (tipo == "txt" || tipo == "num" || tipo == "tta" || tipo == "tim") { control.value = campos[j]; }
-            else if (tipo == "dtt") {
-                if (campos[j] == '01/01/1900') {
-                    control.value = "";
-                } else {
-                    var dFecha = campos[j].split("/");
-                    control.value = dFecha[2] + "-" + dFecha[1] + "-" + dFecha[0];
+            txtIdRegistro.value = campos[3];
+            cboTipoBien.value = campos[0];
+            listarGrupoItem();
+            cboGrupo.value = campos[1];
+            document.getElementById('select2-cboGrupo-container').innerHTML = cboGrupo.options[cboGrupo.selectedIndex].text;
+            listarClaseItem();
+            cboClase.value = campos[2];
+            document.getElementById('select2-cboClase-container').innerHTML = cboClase.options[cboClase.selectedIndex].text;
+            txtNombre.value = campos[4];
+            cboEstado.value = campos[5];
+        }
+       
+            var divPopupContainer = document.getElementById("divPopupContainer");
+            if (divPopupContainer != null) { divPopupContainer.style.display = 'block'; };
+            var controles = document.getElementsByClassName("Popup");
+            var nControles = controles.length;
+            var control;
+            var tipo;
+            var subCampos;
+            for (var j = 0; j < nControles; j++) {
+                control = controles[j];
+                control.style.borderColor = ""
+                tipo = control.id.substr(0, 3);
+                if (tipo == "txt" || tipo == "num" || tipo == "tta" || tipo == "tim") { control.value = campos[j]; }
+                else if (tipo == "dtt") {
+                    if (campos[j] == '01/01/1900') {
+                        control.value = "";
+                    } else {
+                        var dFecha = campos[j].split("/");
+                        control.value = dFecha[2] + "-" + dFecha[1] + "-" + dFecha[0];
+                    }
                 }
-            }
-            else if (tipo == "cbo") {
-                subCampos = campos[j].split("-");
-                if (subCampos[0] == 0) {
-                    control.value = '';
-                }
-                else {
-                    control.value = subCampos[0];
-                    if (nControlesSelectSearch > 0) {
-                        var controlSelect = 'select2-' + control.id + '-container';
-                        var cboControlSelect = document.getElementById(controlSelect);
-                        if (cboControlSelect != null) {
-                            var selected = control.options[control.selectedIndex].text;
-                            cboControlSelect.innerHTML = selected;
+                else if (tipo == "cbo") {
+                    subCampos = campos[j].split("-");
+                    if (subCampos[0] == 0) {
+                        control.value = '';
+                    }
+                    else {
+                        control.value = subCampos[0];
+                        if (nControlesSelectSearch > 0) {
+                            var controlSelect = 'select2-' + control.id + '-container';
+                            var cboControlSelect = document.getElementById(controlSelect);
+                            if (cboControlSelect != null) {
+                                var selected = control.options[control.selectedIndex].text;
+                                cboControlSelect.innerHTML = selected;
+                            }
                         }
                     }
                 }
-            }
-            else if (tipo == "img") {
-                control.src = "data:image/jpeg;base64," + campos[j];
-            }
-            else if (tipo == "chk" || tipo == "opt") {
-                control.checked = (campos[j] == "1")
-            }
-            else if (tipo == "dtg") {
-                if (campos[j] == 1) {
-                    $('#' + control.id).bootstrapToggle('on')
+                else if (tipo == "img") {
+                    control.src = "data:image/jpeg;base64," + campos[j];
                 }
-                else {
-                    $('#' + control.id).bootstrapToggle('off')
+                else if (tipo == "chk" || tipo == "opt") {
+                    control.checked = (campos[j] == "1")
+                }
+                else if (tipo == "dtg") {
+                    if (campos[j] == 1) {
+                        $('#' + control.id).bootstrapToggle('on')
+                    }
+                    else {
+                        $('#' + control.id).bootstrapToggle('off')
+                    }
                 }
             }
-        }
-        }
+        
     }
 }
+
 
 function grabarDatos() {
     var data = ""
@@ -1133,6 +1331,9 @@ function mostrarGrabar(rpta) {
     else {
         mostrarMensaje("No se realizó el registro", "error")
     }
+
+    btnGuardar.innerHTML = "<i class='fa fa-save'></i> Grabar";
+    btnGuardar.disabled = false;
 }
 
 function aprobarPedido() {
@@ -1167,7 +1368,7 @@ function aprobarPedido() {
 
 function eliminarRegistro(id) {
     var data = "";
-    if (vista == "PedidoCompra") {
+    if (vista == "PedidoCompra" || vista == "SolicitudCompra" || vista == "Cotizacion") {
         var fechaInicio = txtFechaInicio.value;
         var fechaFinal = txtFechaFinal.value;
         data = id + '|' + fechaInicio + '|' + fechaFinal;
@@ -1272,7 +1473,7 @@ function mostrarReporte(rpta) {
             tdJustificacion.innerHTML = Cabecera[4];
             tdDocumento.innerHTML = Cabecera[7];
             tdEstado.innerHTML = Cabecera[6];
-          //  spnPromotor.innerHTML = "DEL: " + Cabecera[8] + "<br />";
+            spnPromotor.innerHTML = "SOLICITANTE: " + Cabecera[8] + "<br />";
             if (Cabecera[5] != 1) {
                 tdEtiquetaEstado.innerHTML = "";
             }
@@ -1549,4 +1750,619 @@ function imprimir(contenido) {
     ventana.print();
     ventana.close();
     document.body = pagina;
+}
+
+function mostrarListadoItem(rpta) {
+    if (rpta) {
+        var listas = rpta.split('¯');
+        lista = listas[0].split("¬");
+        if (vista == "Cotizacion") {
+            var listaProveedores = listas[1].split("¬");
+            var listaCondicionCompra = listas[2].split("¬");
+            var listaMoneda = listas[3].split("¬");
+            generarTablaItem(lista, "listaPendientes", "tblSolicitud", null, true);
+            crearCombo(listaProveedores, "cboProveedor", "Seleccione");
+            crearCombo(listaCondicionCompra, "cboCondicionCompra", "Seleccione");
+            crearCombo(listaMoneda, "cboMoneda", "Seleccione");
+        }
+        else if (vista == "CuadroCompara" || vista == "OrdenCompra") {
+            listaPendientes.innerHTML = "";
+            generarTablaItem(lista, "listaPendientes", "tblSolicitud", null, true);
+        }
+        else if (vista == "PedidoCompra") {
+            listaItem.innerHTML = "";
+            listaProducto = listas[0].split("¬");
+            grillaItem = new GrillaScroll(listaProducto, "listaItem", 1000, 6, tabla, "Admon", null, null, null, null, 25, false, true);
+            var listaTipoBien = listas[1].split("¬");
+            listaGrupoItem = listas[2].split("¬");
+            listaClaseItem = listas[3].split("¬");
+            listaFamiliaItem = listas[4].split("¬");
+            var listaUnidadMedida = listas[5].split("¬");
+            crearCombo(listaTipoBien, "cboTipoItem", "Seleccionar");
+            listarGrupoItem();
+            crearCombo(listaUnidadMedida, "cboUniMedItem", "Seleccionar");
+        }
+        else {
+            listaItem.innerHTML = "";
+            generarTablaItem(lista, "listaItem", "tblItem", true, null, null);
+        }
+    }
+}
+
+function generarTablaItem(lista, nombreDiv, idTabla, ischeck, isSeleccionar, isFiltro) {
+    var campos = lista[0].split("|");
+    var anchos = lista[1].split("|");
+    var tipos = lista[2].split("|");
+    var nRegistros = lista.length;
+    var nCampos = campos.length;
+    var nombreProducto = "";
+    if (isFiltro == true) {
+        var txtBuscarItem = document.getElementById("txtBuscarItem");
+        if (txtBuscarItem != null) nombreProducto = txtBuscarItem.value
+    }
+
+    var contenido = "<table class='grilla bordered Tabla' id='";
+    contenido += idTabla;
+    contenido += "'><thead><tr class='FilaHead'>";
+    for (var z = 0; z < nCampos; z++) {
+        contenido += "<th style='white-space:pre-wrap;width:";
+        contenido += anchos[z];
+        contenido += "px'>";
+        contenido += campos[z];
+        contenido += "</th>";
+    }
+    contenido += "</tr></thead>"
+    contenido += "<tbody id='tBody";
+    contenido += idTabla
+    contenido += "'>";
+    if (lista[3].length > 0) {
+        if (isFiltro == true) {
+            for (var i = 3; i < nRegistros; i++) {
+                campos = lista[i].split("|");
+                if (campos[2] == "" || campos[2].toLowerCase().indexOf(nombreProducto.toLowerCase()) > -1) {
+                    if (isSeleccionar == true) {
+                        contenido += "<tr class='FilaDatos' onclick='seleccionarFila(this, \"";
+                        contenido += campos[1];
+                        contenido += "\",\"";
+                        contenido += nombreDiv;
+                        contenido += "\"); '>";
+                    } else {
+                        contenido += "<tr>";
+                    }
+                    for (var j = 0; j < nCampos; j++) {
+                        if (j == 0 && ischeck == true) {
+                            contenido += "<td>";
+                            contenido += "<div class='chk-option'>";
+                            contenido += "<div class='checkbox-fade fade-in-primary'>";
+                            contenido += "<label class='check-task'>";
+                            contenido += "<input type='checkbox' class='chkPopup' id='chk";
+                            contenido += campos[j];
+                            contenido += "' value='";
+                            contenido += campos[j];
+                            if (vista == "PedidoCompra") {
+                                contenido += "' onclick='adicionarItem(\"";
+                                contenido += campos[0] + '|' + campos[1] + '|' + campos[2] + '|' + campos[3];
+                            }
+                            else {
+                                contenido += "' onclick='seleccionarItem(\"";
+                                contenido += campos[0];
+                            }
+
+                            contenido += "\");'> <span class='cr'>";
+                            contenido += "<i class='cr-icon fa fa-check txt-default'></i>";
+                            contenido += "</span>";
+                            contenido += "</label>";
+                            contenido += "</div>";
+                            contenido += "</div>";
+                            contenido += "</td>";
+                        }
+                        else {
+                            contenido += "<td style='text-align:left;white-space:pre-wrap;width:";
+                            contenido += anchos[j];
+                            contenido += "px'>";
+                            contenido += campos[j];
+                            contenido += "</td>";
+                        }
+                    }
+                    contenido += "</tr>";
+                }
+            }
+        }
+        else {
+            for (var i = 3; i < nRegistros; i++) {
+                campos = lista[i].split("|");
+                if (isSeleccionar == true) {
+                    contenido += "<tr class='FilaDatos' onclick='seleccionarFila(this, \"";
+                    contenido += campos[1];
+                    contenido += "\",\"";
+                    contenido += nombreDiv;
+                    contenido += "\"); '>";
+                } else {
+                    contenido += "<tr>";
+                }
+                for (var j = 0; j < nCampos; j++) {
+                    if (j == 0 && ischeck == true) {
+                        contenido += "<td>";
+                        contenido += "<div class='chk-option'>";
+                        contenido += "<div class='checkbox-fade fade-in-primary'>";
+                        contenido += "<label class='check-task'>";
+                        contenido += "<input type='checkbox' class='chkPopup' id='chk";
+                        contenido += campos[j];
+                        contenido += "' value='";
+                        contenido += campos[j];
+                        if (vista == "PedidoCompra") {
+                            contenido += "' onclick='adicionarItem(\"";
+                            contenido += campos[0] + '|' + campos[1] + '|' + campos[2] + '|' + campos[3];
+                        }
+                        else {
+                            contenido += "' onclick='seleccionarItem(\"";
+                            contenido += campos[0];
+                        }
+
+                        contenido += "\");'> <span class='cr'>";
+                        contenido += "<i class='cr-icon fa fa-check txt-default'></i>";
+                        contenido += "</span>";
+                        contenido += "</label>";
+                        contenido += "</div>";
+                        contenido += "</div>";
+                        contenido += "</td>";
+                    }
+                    else {
+                        contenido += "<td style='text-align:left;white-space:pre-wrap;width:";
+                        contenido += anchos[j];
+                        contenido += "px'>";
+                        contenido += campos[j];
+                        contenido += "</td>";
+                    }
+                }
+                contenido += "</tr>";
+            }
+        }
+    }
+    else {
+        contenido += "<tr>";
+        contenido += "<td Colspan='";
+        contenido += nCampos;
+        contenido += "' style='text-align:center'>No se encuentran registros";
+        contenido += "</td>";
+        contenido += "</tr>";
+    }
+    contenido += "</tbody>";
+    contenido += "</table>";
+
+    var div = document.getElementById(nombreDiv);
+    div.innerHTML = contenido;
+
+    var nFilas = document.getElementById("tBody" + idTabla).rows.length;
+    var spnNPedidos = document.getElementById("spnNPedidos");
+    if (spnNPedidos != null) spnNPedidos.innerHTML = "Pendientes: " + nFilas;
+}
+
+
+function seleccionarItem(item) {
+    if (vista == "SolicitudCompra") {
+        var data = "";
+        var controles = document.getElementsByClassName("chkPopup");
+        var nControles = controles.length;
+        var control;
+        for (var i = 0; i < nControles; i++) {
+            control = controles[i];
+            if (control.checked == true) {
+                data += control.value;
+                data += '|';
+            }
+        }
+        data = data.substr(0, data.length - 1);
+        Http.get("General/listarTabla/?tbl=" + controller + vista + "Items&data=" + data, mostrarSolicitudItem);
+    }
+    else {
+        var codigo = "";
+        var nombre = "";
+        var unimed = "";
+
+        var control = 'chk' + item;
+        if (control != null) document.getElementById(control).checked = true;
+        var cantidad = 0;
+        var nFilas = tbDetallePedido.rows.length;
+        var existe = false;
+        for (var i = 0; i < nFilas; i++) {
+            if (tbDetallePedido.rows[i].cells[0].innerHTML == item) {
+                existe = true;
+                break;
+            }
+        }
+
+        if (!existe) {
+            var filaDetalle = "<tr>";
+            filaDetalle += "<td style='white-space:pre-wrap;width:50px;display:none'>";
+            filaDetalle += item;
+            filaDetalle += "</td> ";
+            filaDetalle += "<td style='white-space:pre-wrap;width:50px;vertical-align:top;'>";
+            filaDetalle += codigo;
+            filaDetalle += "</td> ";
+            filaDetalle += "<td style='white-space:pre-wrap;width:500px;white-space: pre-wrap;white-space: -moz-pre-wrap;white-space: -o-pre-wrap;'>";
+            filaDetalle += nombre;
+            filaDetalle += "</td> ";
+            filaDetalle += "<td style='white-space:pre-wrap;width:80px;vertical-align:top;'>";
+            filaDetalle += unimed;
+            filaDetalle += "</td> ";
+            filaDetalle += "<td style='white-space:pre-wrap;width:70px;vertical-align:top;'>";
+            filaDetalle += "<input type='number' style='text-align:right' min=1>";
+            filaDetalle += "</td> ";
+            filaDetalle += "<td style='white-space:pre-wrap;width:70px;vertical-align:top;text-align:right'>";
+            filaDetalle += '';
+            filaDetalle += "</td> ";
+            filaDetalle += "<td style='white-space:pre-wrap;width:70px;vertical-align:top;text-align:right'>";
+            filaDetalle += '';
+            filaDetalle += "</td> ";
+            filaDetalle += "<td style='white-space:pre-wrap;width:10px;vertical-align:top;'>";
+            filaDetalle += "<i class='fa fa-trash f-16 text-c-red' title='Quitar Item' onclick='retirarItem(this,\"";
+            filaDetalle += item;
+            filaDetalle += "\");'></i>";
+            filaDetalle += "</td> ";
+            filaDetalle += "</tr>";
+            tbDetallePedido.insertAdjacentHTML("beforeend", filaDetalle);
+        }
+        else mostrarMensaje("El Item ya se encuentra agregado", "error");
+    }
+
+    spnNroItems.innerHTML = "Items: " + (nFilas + 1);
+}
+
+
+function mostrarSolicitudItem(rpta) {
+    var contenido = "";
+    tbDetallePedido.innerHTML = "";
+    var lista = rpta.split('¬');
+    var nRegistros = lista.length;
+    var campos = [];
+    for (var i = 0; i < nRegistros; i++) {
+        campos = lista[i].split("|");
+        contenido += "<tr>";
+        contenido += "<td style='display:none'>";
+        contenido += campos[0];
+        contenido += "</td> ";
+        contenido += "<td style='display:none'>";
+        contenido += campos[1];
+        contenido += "</td> ";
+        contenido += "<td style='vertical-align:top'>";
+        contenido += campos[2];
+        contenido += "</td> ";
+        contenido += "<td style='max-width:600px;white-space: pre-wrap;white-space: -moz-pre-wrap;white-space: -o-pre-wrap;'>";
+        if (campos[5].length != 0) {
+            contenido += "<h6>";
+            contenido += campos[3];
+            contenido += "</h6>";
+            contenido += "<p style='white-space:pre-line;'>";
+            contenido += campos[5];
+            contenido += "</p>";
+        }
+        else {
+            contenido += campos[3];
+        }
+        contenido += "</td> ";
+        contenido += "<td style='vertical-align:top'>";
+        contenido += campos[4];
+        contenido += "</td> ";
+        contenido += "<td style='vertical-align:top;'>";
+        contenido += "<input type='number' style='text-align:right' onkeyup='validarCantidad(this,\"";
+        contenido += campos[7]
+        contenido += "\",\"";
+        contenido += campos[8];
+        contenido += "\");' min=1 value=";
+        contenido += campos[6];
+        contenido += "></td> ";
+        contenido += "<td style='vertical-align:top;text-align:right'>";
+        contenido += campos[7];
+        contenido += "</td> ";
+        contenido += "<td style='vertical-align:top;text-align:right'>";
+        contenido += campos[8];
+        contenido += "</td> ";
+        contenido += "<td style='display:none'>";
+        contenido += campos[9];
+        contenido += "</td> ";
+        contenido += "</tr>";
+    }
+    tbDetallePedido.innerHTML = contenido;
+    spnNroItems.innerHTML = 'Items: ' + nRegistros;
+    configurarEnterCantidad(tbDetallePedido, 8);
+}
+
+function validarSoliCompra() {
+    var tipoSolicitud = cboTipoSolicitud.value;
+    var nFilas = 0;
+
+    var tBodytblItem = document.getElementById("tBodytblItem")
+    if (tBodytblItem != null) {
+        nFilas = tBodytblItem.rows.length;
+        var existe = false;
+        for (var i = 0; i < nFilas; i++) {
+            if (tBodytblItem.rows[i].cells[0].childNodes[0].childNodes[0].childNodes[0].childNodes[0].checked) {
+                existe = true;
+                break;
+            }
+        }
+    }
+
+    if (tipoSolicitud == "") {
+        mostrarMensaje("Seleccione Tipo de solicitud", "error");
+        return false;
+        cboTipoSolicitud.focus();
+    }
+    else if (existe != true) {
+        mostrarMensaje("Seleccione Solicitud de la lista", "error");
+    }
+    //else if (existetb != true) {
+    //    mostrarMensaje("Es necesario ingresar cantidad pedida para generar la solicitud", "error");
+    //}
+
+    return true;
+}
+
+
+function grabarSolicitud() {
+    var data = "";
+    var idTipoSolicitud = cboTipoSolicitud.value;
+
+    data = idTipoSolicitud;
+    data += '¯';
+    var nfilas = tbDetallePedido.rows.length;
+    var fila;
+    for (var i = 0; i < nfilas; i++) {
+        fila = tbDetallePedido.rows[i];
+        data += fila.cells[0].innerHTML; //Pedido
+        data += "|";
+        data += fila.cells[1].innerHTML; //Item
+        data += "|";
+        data += fila.cells[8].innerHTML; //unidad medida
+        data += "|";
+        data += fila.cells[5].childNodes[0].value; //Cantidad
+        data += "¬";
+    }
+    data = data.substr(0, data.length - 1);
+
+    var txtFechaInicio = document.getElementById("txtFechaInicio").value;
+    var txtFechaFinal = document.getElementById("txtFechaFinal").value;
+
+    data = data + '¯' + txtFechaInicio + '|' + txtFechaFinal
+    var frm = new FormData();
+    frm.append("data", data);
+    Http.post("General/guardar?tbl=" + controller + vista, mostrarGrabar, frm);
+
+    btnGuardar.innerHTML = "Guardando <i class='fa fa-circle-o-notch fa-spin' style='color:white'></i>";
+    btnGuardar.disabled = true;
+}
+
+function mostrarSolicitudDetalle(rpta) {
+    if (rpta) {
+        if (vista == 'CuadroCompara') {
+            var listas = rpta.split('¯');
+            var lista = listas[0].split('¬');
+            generarPivot(lista, "listaDetalle");
+            var listaProveedores = listas[1].split("¬");
+            crearCombo(listaProveedores, "cboProveedor", "Seleccionar")
+            divBuenaPro.style.display = 'inline';
+        }
+        else {
+            var contenido = "";
+            tbDetallePedido.innerHTML = "";
+            var lista = rpta.split('¬');
+            var nRegistros = lista.length;
+            var campos = [];
+            for (var i = 0; i < nRegistros; i++) {
+                campos = lista[i].split("|");
+                contenido += "<tr>";
+                contenido += "<td style='display:none'>";
+                contenido += campos[0];
+                contenido += "</td> ";
+                contenido += "<td style='display:none'>";
+                contenido += campos[1];
+                contenido += "</td> ";
+                contenido += "<td style='vertical-align:top'>";
+                contenido += campos[2];
+                contenido += "</td> ";
+                contenido += "<td style='max-width:600px;white-space: pre-line;white-space: -moz-pre-wrap;white-space: -o-pre-wrap;'>";
+                if (campos[4].length != 0) {
+                    contenido += "<h6>";
+                    contenido += campos[3];
+                    contenido += "</h6>";
+                    contenido += "<p style='white-space:pre-line;'>";
+                    contenido += campos[4];
+                    contenido += "</p>";
+                }
+                else {
+                    contenido += "<h6>";
+                    contenido += campos[3];
+                    contenido += "</h6>";
+                }
+                contenido += "</td>";
+                contenido += "<td style='vertical-align:top;'>";
+                contenido += campos[5];
+                contenido += "</td> ";
+                contenido += "<td style='vertical-align:top;text-align:right'>";
+                contenido += campos[6];
+                contenido += "</td> ";
+                contenido += "</tr>";
+            }
+            tbDetallePedido.innerHTML = contenido;
+
+            var spnNroItems = document.getElementById("spnNroItems");
+            if (spnNroItems != null) spnNroItems.innerHTML = 'Items: ' + nRegistros;
+        }
+    }
+}
+
+function validarCotizacion() {
+    var idProveedor = cboProveedor.value;
+    var idCondicionCompra = cboCondicionCompra.value;
+    var idMoneda = cboMoneda.value;
+
+    if (idRegistro == "") { mostrarMensaje("Seleccione una Solicitud de la lista", "error"); return false; }
+    else if (idProveedor == "") { mostrarMensaje("Seleccione Proveedor", "error"); return false; }
+    else if (idCondicionCompra == "") { mostrarMensaje("Seleccione Condición de compra", "error"); return false; }
+    else if (idMoneda== "") { mostrarMensaje("Seleccione Moneda", "error"); return false; }
+
+    //var fila;
+    //for (var i = 0; i < nfilas; i++) {
+    //    fila = tbDetallePedido.rows[i];
+    //    if (fila.cells[4].childNodes[0].value == 0 || fila.cells[4].childNodes[0].value == "") {
+    //        mostrarMensaje("Debe ingresar cantidad solicitada a todos los items", "error");
+    //        return false;
+    //    }
+    //}
+    return true;
+}
+
+
+function grabarCotizacion() {
+    var idSolicitud = idRegistro;
+    var idProveedor = cboProveedor.value;
+    var idCondicionCompra = cboCondicionCompra.value;
+    var comentario = ttaComentario.value;
+    var idMoneda = cboMoneda.value;
+
+    var data = "";
+    data = idSolicitud;
+    data += "|";
+    data += idProveedor
+    data += "|";
+    data += idCondicionCompra
+    data += "|";
+    data += idMoneda
+    data += "|";
+    data += comentario
+    data += '¯';
+    var nfilas = tbDetallePedido.rows.length;
+    var fila;
+    for (var i = 0; i < nfilas; i++) {
+        fila = tbDetallePedido.rows[i];
+        data += fila.cells[0].innerHTML; //Item
+        data += "|";
+        data += fila.cells[1].innerHTML; //unidad medida
+        data += "|";
+        data += fila.cells[2].innerHTML; //Correlativo
+        data += "|";
+        data += fila.cells[3].childNodes[0].innerHTML; //descripcion
+        data += "|";
+        data += fila.cells[5].innerHTML; //Cantidad
+        data += "¬";
+    }
+    data = data.substr(0, data.length - 1);
+
+    var txtFechaInicio = document.getElementById("txtFechaInicio").value;
+    var txtFechaFinal = document.getElementById("txtFechaFinal").value;
+
+    data = data + '¯' + txtFechaInicio + '|' + txtFechaFinal
+
+    var frm = new FormData();
+    frm.append("data", data);
+    Http.post("General/guardar?tbl=" + controller + vista, mostrarGrabar, frm);
+
+    btnGuardar.innerHTML = "Guardando <i class='fa fa-circle-o-notch fa-spin' style='color:white'></i>";
+    btnGuardar.disabled = true;
+}
+
+
+function totalCotizacion(id) {
+    var tbDetalleItem = document.getElementById("tbDetalleItem");
+    if (tbDetalleItem != null) {
+        var nFilas = tbDetalleItem.rows.length
+        var fila
+        var total = 0
+        var precio, cantidad, subtotal
+        if (id == 'I') {
+            for (var i = 0; i < nFilas; i++) {
+                fila = tbDetalleItem.rows[i];
+                cantidad = fila.cells[4].innerHTML * 1;
+                precio = fila.cells[5].childNodes[0].value * 1;
+                subtotal = cantidad * precio;
+                total = total + subtotal;
+            }
+        }
+        else {
+            for (var i = 0; i < nFilas; i++) {
+                fila = tbDetalleItem.rows[i];
+                cantidad = fila.cells[4].innerHTML * 1;
+                precio = fila.cells[5].innerHTML * 1;
+                subtotal = cantidad * precio;
+                total = total + subtotal;
+            }
+        }
+        htTotal.innerHTML = "TOTAL: " + formatoNumeroDecimal(total);
+    }
+}
+
+
+function grabarProforma() {
+    var data = "";
+    var idCotizacion = txtIdRegistro.value;
+    var numeroProforma = txtProforma.value;
+    var fechaProforma = txtFechaProforma.value;
+    var comentario = ttaComentarioProveedor.value;
+    var diasEntrega = txtDiasEntrega.value;
+    var garantia = txtGarantia.value;
+    var tipoSolicitud = txtTipoSolicitud.value;
+
+    var nFilas = tbDetalleItem.rows.length;
+    var existe = false;
+    for (var i = 0; i < nFilas; i++) {
+        if (tbDetalleItem.rows[i].cells[5].childNodes[0].value == 0) {
+            existe = true;
+            break;
+        }
+    }
+
+    if (numeroProforma === "") {
+        mostrarMensaje("Ingrese el número de proforma", "error");
+        return false;
+    }
+    else if (fechaProforma === "") {
+        mostrarMensaje("Seleccione la fecha de la proforma", "error");
+        return false;
+    } else if (diasEntrega === "" && tipoSolicitud === 2) {
+        mostrarMensaje("Ingrese el tiempo de entrega en días", "error");
+        return false;
+    }
+    else if (existe) {
+        mostrarMensaje("Debe ingresar el precio a todos los Items", "error");
+        return false;
+    }
+    else {
+        data = idCotizacion;
+        data += "|";
+        data += numeroProforma;
+        data += "|";
+        data += fechaProforma;
+        data += "|";
+        data += diasEntrega;
+        data += "|";
+        data += comentario;
+        data += "|";
+        data += garantia;
+        data += '¯';
+        var nfilas = tbDetalleItem.rows.length;
+        var fila;
+        for (var i = 0; i < nfilas; i++) {
+            fila = tbDetalleItem.rows[i];
+            data += fila.cells[0].innerHTML; //Item
+            data += "|";
+            data += fila.cells[4].innerHTML.replace(',', ''); //Cantidad
+            data += "|";
+            data += fila.cells[5].childNodes[0].value; //Precio
+            data += "¬";
+        }
+        data = data.substr(0, data.length - 1);
+
+        var txtFechaInicio = document.getElementById("txtFechaInicio").value;
+        var txtFechaFinal = document.getElementById("txtFechaFinal").value;
+
+        data = data + '¯' + txtFechaInicio + '|' + txtFechaFinal
+
+        var frm = new FormData();
+        frm.append("data", data);
+        Http.post("General/guardar?tbl=" + controller + vista + "Actualizar", mostrarGrabar, frm);
+
+        btnActualizar.innerHTML = "Guardando <i class='fa fa-circle-o-notch fa-spin' style='color:white'></i>";
+        btnActualizar.disabled = true;
+    }
 }
