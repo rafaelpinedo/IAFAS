@@ -76,12 +76,14 @@ function mostrarlistas(rpta) {
         }
         else if (vista == "CondicionCompra") {
             var listaEntidad = listas[1].split("¬");
+            var listaEstado = listas[2].split("¬");
             var botones = [
                 { "cabecera": "Editar", "clase": "fa fa-pencil-square-o btn btn-info btnCirculo", "id": "Editar" },
                 { "cabecera": "Eliminar", "clase": "fa fa-trash btn btn-danger btnCirculo", "id": "Eliminar" },
             ];
             grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
             crearCombo(listaEntidad, "cboTipoCC", "Seleccione");
+            crearCombo(listaEstado, "cboEstado", "Seleccione");
         }
         else if (vista == "Formato") {
             var listaEntidad = listas[1].split("¬");
@@ -155,7 +157,58 @@ function mostrarlistas(rpta) {
             //crearCombo(listaOficina, "cboOficina", "Seleccione");
             //crearCombo(listaOficina, "cboOficina", "Seleccione");
         }
-          else {
+
+        else if (vista == "Grupo" ) {
+            var botones = [
+                { "cabecera": "Editar", "clase": "fa fa-pencil-square-o btn btn-info btnCirculo", "id": "Editar" },
+                { "cabecera": "Eliminar", "clase": "fa fa-trash btn btn-danger btnCirculo", "id": "Eliminar" },
+            ];
+            grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
+            var listaTipoBien = listas[1].split("¬"); 
+            var listaEstado = listas[2].split("¬");
+            crearCombo(listaTipoBien, "cboTipoBien", "Seleccione");
+            crearCombo(listaEstado, "cboEstado", "Seleccione");
+        }
+        else if (vista == "UniMed") {
+            var botones = [
+                { "cabecera": "Editar", "clase": "fa fa-pencil-square-o btn btn-info btnCirculo", "id": "Editar" },
+                { "cabecera": "Eliminar", "clase": "fa fa-trash btn btn-danger btnCirculo", "id": "Eliminar" },
+            ];
+            grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
+            var listaEstado = listas[1].split("¬");
+            crearCombo(listaEstado, "cboEstado", "Seleccione");
+        }
+        else if (vista == "Clase") {
+            var botones = [
+                { "cabecera": "Editar", "clase": "fa fa-pencil-square-o btn btn-info btnCirculo", "id": "Editar" },
+                { "cabecera": "Eliminar", "clase": "fa fa-trash btn btn-danger btnCirculo", "id": "Eliminar" },
+            ];
+            grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
+            var listaTipoBien = listas[1].split("¬");
+            listaGrupoItem = listas[2].split("¬");
+            var listaEstado = listas[3].split("¬");
+            crearCombo(listaTipoBien, "cboTipoBien", "Seleccione");
+            listarGrupoItem();
+            //crearCombo(listaTipoBien, "cboTipoBien", "Seleccione");
+            crearCombo(listaEstado, "cboEstado", "Seleccione");
+        }
+
+        else if (vista == "Familia") {
+            var botones = [
+                { "cabecera": "Editar", "clase": "fa fa-pencil-square-o btn btn-info btnCirculo", "id": "Editar" },
+                { "cabecera": "Eliminar", "clase": "fa fa-trash btn btn-danger btnCirculo", "id": "Eliminar" },
+            ];
+            grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
+            var listaTipo = listas[1].split("¬");
+            listaGrupoItem = listas[2].split("¬");
+            listaClaseItem = listas[3].split("¬");
+            var listaEstado = listas[4].split("¬");
+            crearCombo(listaTipo, "cboTipoBien", "Seleccione");
+            listarGrupoItem();
+            crearCombo(listaEstado, "cboEstado", "Seleccione");
+        }
+
+        else {
             var botones = [
                 { "cabecera": "Editar", "clase": "fa fa-pencil-square-o btn btn-info btnCirculo", "id": "Editar" },
                 { "cabecera": "Eliminar", "clase": "fa fa-trash btn btn-danger btnCirculo", "id": "Eliminar" },
@@ -185,9 +238,10 @@ function listarGrupoItem() {
         }
     }
     var cbo = document.getElementById("cboGrupo");
-    if (cbo != null) cbo.innerHTML = contenido;
-
-    listarClaseItem();
+    if (cbo != null) {
+        cbo.innerHTML = contenido;
+        listarClaseItem();
+    }   
 }
 
 function listarClaseItem() {
@@ -211,8 +265,11 @@ function listarClaseItem() {
         }
     }
     var cbo = document.getElementById("cboClase");
-    if (cbo != null) cbo.innerHTML = contenido;
-    listarFamiliaItem();
+    if (cbo != null) {
+        cbo.innerHTML = contenido;
+        listarFamiliaItem();
+    }
+    
 }
 
 
@@ -393,6 +450,8 @@ function configurarBotones() {
     }
 
     var btnGuardar = document.getElementById("btnGuardar");
+
+  
     if (btnGuardar != null) btnGuardar.onclick = function () {
         var validar = false;
 
@@ -456,6 +515,7 @@ function configurarBotones() {
         }
     }
    
+
     var btnCancelar = document.getElementById("btnCancelar");
     if (btnCancelar != null) btnCancelar.onclick = function () {
         divPopupContainer.style.display = 'none';
@@ -1204,6 +1264,11 @@ function mostrarGrabar(rpta) {
         ];
         grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
 
+        if (vista == "Oficina") {
+            var listaOficinaPadre = listas[2].split("¬");
+            crearCombo(listaOficinaPadre, "cboOficinaPadre", "Ninguno");
+        }
+
         if (tipo == 'A') {
             Swal.fire({
                 title: 'Finalizado!',
@@ -1304,6 +1369,12 @@ function mostrarEliminar(rpta) {
             { "cabecera": "Eliminar", "clase": "fa fa-trash btn btn-danger btnCirculo", "id": "Eliminar" },
         ];
         grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, null, botones, 38, false, null);
+
+        if (vista == "Oficina") {
+            var listaOficinaPadre = listas[2].split("¬");
+            crearCombo(listaOficinaPadre, "cboOficinaPadre", "Ninguno");
+        }
+
 
         if (tipo == 'A') {
             Swal.fire({
