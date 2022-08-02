@@ -185,8 +185,10 @@
     <Content Include="Riztie\Images\navbar-img-6.jpg" />
     <Content Include="Riztie\Images\NOFOTO.jpg" />
     <Content Include="Riztie\Images\user-bg.jpg" />
+    <Content Include="Riztie\Js\App\AppInventario.js" />
     <Content Include="Riztie\Js\App\AppLogistica.js" />
     <Content Include="Riztie\Js\App\AppPlane.js" />
+    <Content Include="Riztie\Js\App\AppPresu.js" />
     <Content Include="Riztie\Js\App\AppSecurity.js" />
     <Content Include="Riztie\Js\App\General.js" />
     <Content Include="Riztie\Js\App\Login.js" />
@@ -232,8 +234,12 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AdmonController.cs" />
     <Compile Include="Controllers\GeneralController.cs" />
+    <Compile Include="Controllers\IngresosController.cs" />
+    <Compile Include="Controllers\InventarioController.cs" />
     <Compile Include="Controllers\LogisticaController.cs" />
+    <Compile Include="Controllers\PatrimonioController.cs" />
     <Compile Include="Controllers\PlaneamientoController.cs" />
+    <Compile Include="Controllers\PresupuestoController.cs" />
     <Compile Include="Controllers\SecurityController.cs" />
     <Compile Include="Filtros\FiltroAuditoria.cs" />
     <Compile Include="Filtros\FiltroAutenticacion.cs" />
@@ -292,6 +298,16 @@
     <Content Include="Views\Planeamiento\Tipoproceso.cshtml" />
     <Content Include="Views\Planeamiento\RegistroCN.cshtml" />
     <Content Include="Views\Planeamiento\PAC.cshtml" />
+    <Content Include="Views\Presupuesto\CentroGasto.cshtml" />
+    <Content Include="Views\Presupuesto\FuenteFto.cshtml" />
+    <Content Include="Views\Presupuesto\Meta.cshtml" />
+    <Content Include="Views\Presupuesto\SubMeta.cshtml" />
+    <Content Include="Views\Presupuesto\ClasiGasto.cshtml" />
+    <Content Include="Views\Presupuesto\ClasiIngreso.cshtml" />
+    <Content Include="Views\Inventario\Almacen.cshtml" />
+    <Content Include="Views\Inventario\InventarioInicial.cshtml" />
+    <Content Include="Views\General\Inicio.cshtml" />
+    <Content Include="Views\Logistica\Configuracion.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -303,6 +319,8 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Riztie\Manual\" />
+    <Folder Include="Views\Ingresos\" />
+    <Folder Include="Views\Patrimonio\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

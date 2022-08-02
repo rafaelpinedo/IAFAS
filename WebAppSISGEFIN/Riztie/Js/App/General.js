@@ -278,6 +278,9 @@ function moverVentana(divContainer, divWindow, divBarra) {
 var divPopupContainer = document.getElementById("divPopupContainer");
 if (divPopupContainer != null) moverVentana("divPopupContainer", "divPopupWindow", "divBarra");
 
+var divPopupContainerForm1 = document.getElementById("divPopupContainerForm1");
+if (divPopupContainerForm1 != null) moverVentana("divPopupContainerForm1", "divPopupWindowForm1", "divBarraForm1");
+
 
 function formatoNumeroDecimal(num) {
     if (!num || num == 'NaN') return '-';
