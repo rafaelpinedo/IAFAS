@@ -76,12 +76,14 @@ function mostrarlistas(rpta) {
         }
         else if (vista == "CondicionCompra") {
             var listaEntidad = listas[1].split("¬");
+            var listaEstado = listas[2].split("¬");
             var botones = [
                 { "cabecera": "Editar", "clase": "fa fa-pencil-square-o btn btn-info btnCirculo", "id": "Editar" },
                 { "cabecera": "Eliminar", "clase": "fa fa-trash btn btn-danger btnCirculo", "id": "Eliminar" },
             ];
             grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
             crearCombo(listaEntidad, "cboTipoCC", "Seleccione");
+            crearCombo(listaEstado, "cboEstado", "Seleccione");
         }
         else if (vista == "Formato") {
             var listaEntidad = listas[1].split("¬");
@@ -371,7 +373,7 @@ function configurarBotones() {
 
     var btnGuardar = document.getElementById("btnGuardar");
 
-    /*
+  
     if (btnGuardar != null) btnGuardar.onclick = function () {
         var validar = false;
 
@@ -434,13 +436,8 @@ function configurarBotones() {
             })
         }
     }
-    */
-    // se Omitio codigo de Guardar cascada
-    var btnGuardar = document.getElementById("btnGuardar");
-    if (btnGuardar != null) btnGuardar.onclick = function () {
-        if (validarInformacion("Reque")) grabarDatos();
-    }
    
+
     var btnCancelar = document.getElementById("btnCancelar");
     if (btnCancelar != null) btnCancelar.onclick = function () {
         divPopupContainer.style.display = 'none';
@@ -915,7 +912,6 @@ function mostrarRegistro(rpta) {
         }
 
         else if (vista == "Familia") {
-            //B | 74 | 7408 | 74089557 | PRUEBA TEST FAMILIA | 1
        
             txtIdRegistro.value = campos[3];
             cboTipoBien.value = campos[0];
@@ -925,7 +921,37 @@ function mostrarRegistro(rpta) {
             listarClaseItem();
             cboClase.value = campos[2];
             document.getElementById('select2-cboClase-container').innerHTML = cboClase.options[cboClase.selectedIndex].text;
-            
+            txtNombre.value = campos[4];
+            cboEstado.value = campos[5];
+        }
+
+        else if (vista == "Articulo") {
+    
+            txtIdRegistro.value = campos[0];
+            cboTipoBien.value = campos[1];
+            listarGrupoItem();
+            cboGrupo.value = campos[2];
+            document.getElementById('select2-cboGrupo-container').innerHTML = cboGrupo.options[cboGrupo.selectedIndex].text;
+            listarClaseItem();
+            cboClase.value = campos[3];
+            document.getElementById('select2-cboClase-container').innerHTML = cboClase.options[cboClase.selectedIndex].text;
+            listarFamiliaItem();
+            document.getElementById('select2-cboFamilia-container').innerHTML = cboClase.options[cboClase.selectedIndex].text;
+            cboFamilia.value = campos[4];
+            txtCodigo.value = campos[5];
+            cboTipoItem.value = campos[6];
+            cboUniMed.value = campos[7];
+            txtNombre.value = campos[8];
+            cboEstado.value = campos[9];
+        }
+        else if (vista == "Clase") {
+            cboTipoBien.value = campos[0];
+            listarGrupoItem();
+            cboGrupo.value = campos[1];
+            document.getElementById('select2-cboGrupo-container').innerHTML = cboGrupo.options[cboGrupo.selectedIndex].text;
+            txtIdRegistro.value = campos[2];
+            txtNombre.value = campos[3];
+            cboEstado.value = campos[4];
         }
 
         else { 
@@ -1078,6 +1104,11 @@ function mostrarGrabar(rpta) {
         ];
         grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
 
+        if (vista == "Oficina") {
+            var listaOficinaPadre = listas[2].split("¬");
+            crearCombo(listaOficinaPadre, "cboOficinaPadre", "Ninguno");
+        }
+
         if (tipo == 'A') {
             Swal.fire({
                 title: 'Finalizado!',
@@ -1175,6 +1206,12 @@ function mostrarEliminar(rpta) {
             { "cabecera": "Eliminar", "clase": "fa fa-trash btn btn-danger btnCirculo", "id": "Eliminar" },
         ];
         grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, null, botones, 38, false, null);
+
+        if (vista == "Oficina") {
+            var listaOficinaPadre = listas[2].split("¬");
+            crearCombo(listaOficinaPadre, "cboOficinaPadre", "Ninguno");
+        }
+
 
         if (tipo == 'A') {
             Swal.fire({
