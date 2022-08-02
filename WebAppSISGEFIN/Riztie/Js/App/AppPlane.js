@@ -239,6 +239,7 @@ function retirarItem(col, id) {
     nFilas = tbDetalleCN.rows.length;
     spnNroItems.innerHTML = "Items: " + (nFilas);
 }
+
 function importes(col) {
     var fila = col.parentNode.parentNode;
     fila.childNodes[14].style.textAlign = "center";
