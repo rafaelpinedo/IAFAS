@@ -12,11 +12,22 @@ using System.Threading.Tasks;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net;
+using WebAppSISGEFIN.Filtros;
+using WebAppSISGEFIN.Models;
 
 namespace WebAppTurnera.Controllers
 {
     public class GeneralController : Controller
     {
+        [FiltroAutenticacion]
+        public ActionResult Inicio()
+        {
+            string[] Data = Session["DataUsuario"].ToString().Split('|');
+            string IdPerfil = Data[3];
+            ViewBag.Menu = new Menu().Listar(IdPerfil);
+            return View();
+        }
+
         // GET: General
         public string guardar(string tbl)
         {

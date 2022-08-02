@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "SolicitudCompra";
     Layout = "~/Views/_LayoutPage.cshtml";
 }
@@ -8,7 +7,7 @@
         <div class="main-body">
             <div class="card">
                 <div class="card-header bg-primary">
-                    <h3><i class="fa fa-file-o" aria-hidden="true"></i> SOLICITUD DE COMPRA</h3>
+                    <h3><i class="fa fa-money" aria-hidden="true"></i> Solicitud de Compra</h3>
                     <div class="card-header-right">
                         <ul class="list-unstyled card-option">
                             <li><i class="fa fa-window-maximize full-card" style="color:white"></i></li>
@@ -27,109 +26,150 @@
                         </div>
                         <div class="form-group col-md-4 m-3">
                             <button class="input-group-inverse btn btn-inverse" id="btnConsultar" data-toggle="tooltip" data-placement="bottom" title="Consultar"><i class="fa fa-search fa-lg" aria-hidden="true"></i></button>
-                            <button class="btn btn-out waves-effect waves-light btn-info btn-square" id="btnImprimir" data-toggle="tooltip" data-placement="bottom" title="Imprimir Orden con Formato"><i class="fa fa-print fa-lg" aria-hidden="true"></i></button>
-                            <button class="btn btn-out waves-effect waves-light btn-success btn-square" id="btnImprimirPreImpreso" data-toggle="tooltip" data-placement="bottom" title="Imprimir Orden pre impreso"><i class="fa fa-newspaper-o fa-lg" aria-hidden="true"></i></button>
+                            <button class="input-group-inverse btn btn-primary" id="btnNuevo" data-toggle="tooltip" data-placement="bottom" title="Nuevo"><i class="fa fa-plus-circle fa-lg" aria-hidden="true"></i></button>
+                            <button class="btn btn-out waves-effect waves-light btn-info btn-square" id="btnImprimir" data-toggle="tooltip" data-placement="bottom" title="Imprimir Pedido" style="display:none"><i class="fa fa-print fa-lg" aria-hidden="true"></i></button>
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group col-md-12">
-                            <div class="table-responsive" id="divLista"></div>
+                            <div class="table-responsive dt-responsive" id="divLista"></div>
                         </div>
                     </div>
+
                     <div class="form-row">
-                        <div class="modal custom-modal" tabindex="-1" role="dialog" aria-hidden="true" id="divPopupContainerFormato" style="overflow-y:auto;">
-                            <div class="modal-dialog modal-lg bg-personalizado" id="divPopupWindowFormato" style="margin-top:1px;">
+                        <div class="modal custom-modal" tabindex="-1" role="dialog" aria-hidden="true" id="divPopupContainer" style="overflow-y:auto;">
+                            <div class="modal-dialog modal-xl bg-personalizado" id="divPopupWindow" style="margin-top:1px;max-width:100%">
                                 <div class="modal-content">
-                                    <div id="divBarraFormato" class="modal-header bg-personalizado" style="cursor:move">
-                                        <h5 class="modal-title">Nuevo Registro</h5>
-                                        <button type="button" id="btnCerrarFormato" class="close"><span aria-hidden="true">&times;</span><span class="sr-only"></span></button>
+                                    <div id="divBarra" class="modal-header bg-personalizado" style="cursor:move">
+                                        <h5 class="modal-title" id="tituloModal"></h5>
                                     </div>
                                     <div class="modal-body">
-                                        <div id="divValidaInterno" style="display:none" class="alert background">
-                                            <span id="btncloseVal" class="closebtn">&times;</span>
-                                            <strong>Advertencia!</strong><br />Los campos remarcados en rojo son obligatorios.
-                                        </div>
                                         <div class="row">
-                                            <div class="form-group col-sm-3">
-                                                <label class="control-label">RUC</label>
-                                                <input type="hidden" class="control-form Popup" id="txtIdRegistro">
-                                                <input type="number" autocomplete="off" maxlength="11" class="control-form Reque Popup" id="txtRUC" title="Ingrese RUC y presione ENTER">
-                                                <span id="spnDocumento"></span>
+                                            <label class="control-label">Año</label>
+                                            <div class="col-sm-1">
+                                                <input type="hidden" class="control-form Popup" id="txtIdSolicitud">
+                                                <input type="number" id="numAnioPendiente" class="control-form" value="@ViewBag.Anio" />
                                             </div>
-                                            @*<div class="col-lg-4">
-                                                    <div class="form-group">
-                                                        <label class="control-label">&nbsp;</label>
-                                                        <div class="input-group">
-                                                            <span id="spnLoad" style="color: rgb(33, 67, 253); border-color: black; font-weight: bold; display:none;">
-                                                                <b>Sunat..</b>
-                                                                <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
-                                                            </span>
+                                            <label class="control-label">Tipo Solicitud</label>
+                                            <div class="col-sm-3">
+                                                <select class="control-form Reque Popup" id="cboTipoSolicitud"></select>
+                                            </div>
+                                        </div>
+                                        <div class="row m-2">
+                                            <div class="col-xl-6 col-md-12">
+                                                <div class="card table-card">
+                                                    <div class="card-header">
+                                                        <h5>Pedidos pendientes</h5>
+                                                    </div>
+                                                    <div class="card-block">
+                                                        <div class="form-group col-sm-12">
+                                                            <div class="table-responsive" id="listaItem" style="height:430px;">
+                                                                <table class='grilla bordered'>
+                                                                    <thead>
+                                                                        <tr class='FilaHead'>
+                                                                            <th style="width:10px;"></th>
+                                                                            <th style="width:50px;">Nº Solicitud BB&SS</th>
+                                                                            <th style="width:50px;">Fecha Solicitud</th>
+                                                                            <th style="width:50px;">Fecha Requerida</th>
+                                                                            <th style="width:180px;">Area</th>
+                                                                            <th style="width:500px;">Justificación</th>
+                                                                            <th style="width:50px;">Estado</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        <tr>
+                                                                            <td></td>
+                                                                            <td></td>
+                                                                            <td></td>
+                                                                            <td></td>
+                                                                            <td></td>
+                                                                            <td></td>
+                                                                            <td></td>
+                                                                        </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                        <div class="m-r-20">
+                                                            <span class="b-b-primary text-primary" id="spnNPedidos">Pendientes:0</span>
                                                         </div>
                                                     </div>
-                                                </div>*@
-                                        </div>
-                                        <div class="row">
-                                            <div class="form-group col-sm-12">
-                                                <label class="control-label">Razón Social</label>
-                                                <input type="text" autocomplete="off" class="control-form Reque Popup" id="txtNombre">
-                                            </div>
-                                        </div>
-                                        @*<div class="row">
-                                                <div class="form-group col-sm-4">
-                                                    <label class="control-label">Estado Sunat</label>
-                                                    <label class="control-lectura" id="lblEstadoSunat"></label>
                                                 </div>
-                                                <div class="form-group col-sm-4">
-                                                    <label class="control-label">Condición Sunat</label>
-                                                    <label class="control-lectura" id="lblCondicionSunat"></label>
+                                            </div>
+                                            <div class="col-xl-6 col-md-12">
+                                                <div class="card table-card review-card">
+                                                    <div class="card-header">
+                                                        <h5>Items pendientes</h5>
+                                                    </div>
+                                                    <div class="card-block">
+                                                        <div class="form-group col-sm-12">
+                                                            <div class="table-responsive" style="height:430px;">
+                                                                <table class='grilla bordered'>
+                                                                    <thead>
+                                                                        <tr class='FilaHead'>
+                                                                            <th rowspan="2" style="width:50px;">Item</th>
+                                                                            <th rowspan="2" style="width:600px;">Descripción</th>
+                                                                            <th rowspan="2" style="width:50px;">Unidad Medida</th>
+                                                                            <th colspan="3">Cantidad</th>
+                                                                        </tr>
+                                                                        <tr class='FilaHead'>
+                                                                            <th style="width:50px;">Pendiente</th>
+                                                                            <th style="width:70px;">Solicitada</th>
+                                                                            <th style="width:70px;">Atendida</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody id="tbDetallePedido"></tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                        <div class="m-r-20">
+                                                            <span id="spnNroItems" class="control-label">Items: 0</span>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                            </div>*@
-                                        <div class="row">
-                                            <div class="form-group col-sm-12">
-                                                <label class="control-label">Dirección</label>
-                                                <textarea class="control-form Reque Popup" rows="2" id="ttaDireccion"></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="form-group col-sm-10">
-                                                <label class="control-label">Contacto</label>
-                                                <input type="text" autocomplete="off" id="txtContacto" class="control-form Reque Popup" />
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="form-group col-sm-6">
-                                                <label class="control-label">Teléfono</label>
-                                                <input type="number" id="txtTelefono" autocomplete="off" class="control-form Reque Popup" />
-                                            </div>
-                                            <div class="form-group col-sm-6">
-                                                <label class="control-label">Correo Electrónico</label>
-                                                <input type="email" id="txtCorreo" autocomplete="off" class="control-form Reque Popup" />
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="form-group col-sm-6">
-                                                <label class="control-label">Banco</label>
-                                                <input type="text" autocomplete="off" id="txtBanco" class="control-form Reque Popup" />
-                                            </div>
-                                            <div class="form-group col-sm-6">
-                                                <label class="control-label">CCI</label>
-                                                <input type="number" autocomplete="off" maxlength="20" id="txtCCI" class="control-form Reque Popup" />
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input Popup" name="inlineRadioOptions" type="radio" checked id="optActivo">
-                                                <label class="form-check-label" for="optActivo">Activo</label>
-                                            </div>
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" name="inlineRadioOptions" type="radio" id="optInactivo">
-                                                <label class="form-check-label" for="optInactivo">Inactivo</label>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="modal-footer">
+                                        <button class="btnCancelarForm" id="btnCancelar" title="Cancelar"><i class="fa fa-undo" aria-hidden="true"></i>&nbsp;Cancelar</button>
                                         <button class="btnGuardarForm bg-customer" id="btnGuardar" title="Guardar datos"><span class="fa fa-save"></span>&nbsp;Grabar</button>
-                                        <button class="btnCancelarForm" id="btnCancelarFormato" title="Cancelar"><i class="fa fa-undo" aria-hidden="true"></i>&nbsp;Cancelar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal custom-modal" tabindex="-1" role="dialog" aria-hidden="true" id="divPopupContainerForm1" style="overflow-y:auto;">
+                            <div class="modal-dialog modal-lg bg-personalizado" id="divPopupWindowForm1">
+                                <div class="modal-content">
+                                    <div id="divBarraForm1" class="modal-header bg-personalizado" style="cursor:move">
+                                        <h5 class="modal-title">Solicitud de compra</h5>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="row">
+                                            <div class="col-sm-4">
+                                                <label class="control-label">Solicitud Número</label>
+                                                <label class="control-lectura" id="lblNumero"></label>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-4">
+                                                <label class="control-label">Tipo</label>
+                                                <label class="control-lectura" id="lblTipo"></label>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <label class="control-label">Fecha Emisión</label>
+                                                <label class="control-lectura" id="lblFechaEmision"></label>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <label class="control-label">Estado</label>
+                                                <label class="control-lectura" id="lblEstado"></label>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="table-responsive" id="listaDetalle"></div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button class="btnCancelarForm" id="btnCancelarForm1" title="Cancelar"><i class="fa fa-undo" aria-hidden="true"></i>&nbsp;Cancelar</button>
                                     </div>
                                 </div>
                             </div>
@@ -142,7 +182,6 @@
         </div>
     </div>
 </div>
-
 <iframe name="print_frame" width="0" height="0" frameborder="0" src="about:blank"></iframe>
 <script src="~/Riztie/Js/App/AppLogistica.js"></script>
 
