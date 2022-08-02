@@ -943,6 +943,7 @@ function mostrarRegistro(rpta) {
             cboUniMed.value = campos[7];
             txtNombre.value = campos[8];
             cboEstado.value = campos[9];
+
         }
         else if (vista == "Clase") {
             cboTipoBien.value = campos[0];
