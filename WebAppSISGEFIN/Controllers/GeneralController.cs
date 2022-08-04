@@ -197,7 +197,27 @@ namespace WebAppTurnera.Controllers
             }
             return rpta;
         }
-   
+
+        public string enviarCorreo()
+        {
+            string rpta = "";
+            string contenidoMail = "datos de prueba";
+            string correo = Request.Form["correo"];
+            string data = Request.Form["data"];
+            byte[] buffer = io.File.ReadAllBytes(data);
+            
+            if (Request.Files.Count > 0)
+            {
+                //string ruta = Server.MapPath("~/Reporte");
+                //string archivo = io.Path.Combine(ruta, "cotizacion.pdf");
+                //Request.Files[0].SaveAs(archivo);
+                //byte[] buffer = io.File.ReadAllBytes(archivo);
+                Correo.EnviarCorreo(correo, "adminsigea@enamm.edu.pe", "IAFAS: solicitud de cotización", contenidoMail, true, "SolicitudCotizacion", buffer);
+                rpta = "Se envio el correo con el archivo adjunto";
+            }
+            return rpta;
+        }
+
         public string grabarUpdate()
         {
             string rpta = "";

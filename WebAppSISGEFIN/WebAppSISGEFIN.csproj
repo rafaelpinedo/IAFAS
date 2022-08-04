@@ -186,6 +186,7 @@
     <Content Include="Riztie\Images\NOFOTO.jpg" />
     <Content Include="Riztie\Images\user-bg.jpg" />
     <Content Include="Riztie\Js\App\AppInventario.js" />
+    <Content Include="Riztie\Js\App\AppLogistica.js" />
     <Content Include="Riztie\Js\App\AppPlane.js" />
     <Content Include="Riztie\Js\App\AppPresu.js" />
     <Content Include="Riztie\Js\App\AppSecurity.js" />
