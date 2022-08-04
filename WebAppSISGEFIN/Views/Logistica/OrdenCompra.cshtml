@@ -1,14 +1,75 @@
-﻿
-@{
-    ViewBag.Title = "OrdenCompra";
+﻿@{
+    ViewBag.Title = "Orden de Compra";
     Layout = "~/Views/_LayoutPage.cshtml";
 }
+<style>
+    .switchBtn {
+        position: relative;
+        display: inline-block;
+        width: 110px;
+        height: 34px;
+    }
+
+        .switchBtn input {
+            display: none;
+        }
+
+    .slide {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        -webkit-transition: .4s;
+        transition: .4s;
+        padding: 8px;
+        color: #fff;
+    }
+
+        .slide:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 78px;
+            bottom: 4px;
+            background-color: white;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+
+    input:checked + .slide {
+        background-color: #8CE196;
+        padding-left: 40px;
+    }
+
+    input:focus + .slide {
+        box-shadow: 0 0 1px #01aeed;
+    }
+
+    input:checked + .slide:before {
+        -webkit-transform: translateX(26px);
+        -ms-transform: translateX(26px);
+        transform: translateX(26px);
+        left: -20px;
+    }
+
+    .slide.round {
+        border-radius: 34px;
+    }
+
+        .slide.round:before {
+            border-radius: 50%;
+        }
+</style>
 <div class="pcoded-content">
     <div class="pcoded-inner-content">
         <div class="main-body">
             <div class="card">
                 <div class="card-header bg-primary">
-                    <h3><i class="fa fa-file-o" aria-hidden="true"></i> ORDEN DE COMPRA</h3>
+                    <h3><i class="fa fa-file" aria-hidden="true"></i> Ordenes de Compra</h3>
                     <div class="card-header-right">
                         <ul class="list-unstyled card-option">
                             <li><i class="fa fa-window-maximize full-card" style="color:white"></i></li>
@@ -27,109 +88,1135 @@
                         </div>
                         <div class="form-group col-md-4 m-3">
                             <button class="input-group-inverse btn btn-inverse" id="btnConsultar" data-toggle="tooltip" data-placement="bottom" title="Consultar"><i class="fa fa-search fa-lg" aria-hidden="true"></i></button>
+                            <button class="input-group-inverse btn btn-primary" id="btnNuevo" data-toggle="tooltip" data-placement="bottom" title="Nuevo"><i class="fa fa-plus-circle fa-lg" aria-hidden="true"></i></button>
                             <button class="btn btn-out waves-effect waves-light btn-info btn-square" id="btnImprimir" data-toggle="tooltip" data-placement="bottom" title="Imprimir Orden con Formato"><i class="fa fa-print fa-lg" aria-hidden="true"></i></button>
                             <button class="btn btn-out waves-effect waves-light btn-success btn-square" id="btnImprimirPreImpreso" data-toggle="tooltip" data-placement="bottom" title="Imprimir Orden pre impreso"><i class="fa fa-newspaper-o fa-lg" aria-hidden="true"></i></button>
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group col-md-12">
-                            <div class="table-responsive" id="divLista"></div>
+                            <div class="table-responsive dt-responsive" id="divLista"></div>
                         </div>
                     </div>
                     <div class="form-row">
-                        <div class="modal custom-modal" tabindex="-1" role="dialog" aria-hidden="true" id="divPopupContainerFormato" style="overflow-y:auto;">
-                            <div class="modal-dialog modal-lg bg-personalizado" id="divPopupWindowFormato" style="margin-top:1px;">
+                        <div class="modal custom-modal" tabindex="-1" role="dialog" aria-hidden="true" id="divPopupContainer" style="overflow-y:auto;">
+                            <div class="modal-dialog modal-xl bg-personalizado" id="divPopupWindow" style="margin-top:1px;">
                                 <div class="modal-content">
-                                    <div id="divBarraFormato" class="modal-header bg-personalizado" style="cursor:move">
-                                        <h5 class="modal-title">Nuevo Registro</h5>
-                                        <button type="button" id="btnCerrarFormato" class="close"><span aria-hidden="true">&times;</span><span class="sr-only"></span></button>
+                                    <div id="divBarra" class="modal-header bg-personalizado" style="cursor:move">
+                                        <h5 class="modal-title">Generar Orden de Compra</h5>
                                     </div>
                                     <div class="modal-body">
-                                        <div id="divValidaInterno" style="display:none" class="alert background">
-                                            <span id="btncloseVal" class="closebtn">&times;</span>
-                                            <strong>Advertencia!</strong><br />Los campos remarcados en rojo son obligatorios.
-                                        </div>
-                                        <div class="row">
-                                            <div class="form-group col-sm-3">
-                                                <label class="control-label">RUC</label>
-                                                <input type="hidden" class="control-form Popup" id="txtIdRegistro">
-                                                <input type="number" autocomplete="off" maxlength="11" class="control-form Reque Popup" id="txtRUC" title="Ingrese RUC y presione ENTER">
-                                                <span id="spnDocumento"></span>
-                                            </div>
-                                            @*<div class="col-lg-4">
-                                                    <div class="form-group">
-                                                        <label class="control-label">&nbsp;</label>
-                                                        <div class="input-group">
-                                                            <span id="spnLoad" style="color: rgb(33, 67, 253); border-color: black; font-weight: bold; display:none;">
-                                                                <b>Sunat..</b>
-                                                                <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
-                                                            </span>
-                                                        </div>
+                                        <div class="row m-2">
+                                            <div class="col-sm-6">
+                                                <fieldset class="fieldset">
+                                                    <legend class="legend">Solicitud pendiente</legend>
+                                                    <div class="table-responsive" id="listaPendientes" style="height:180px;">
                                                     </div>
-                                                </div>*@
-                                        </div>
-                                        <div class="row">
-                                            <div class="form-group col-sm-12">
-                                                <label class="control-label">Razón Social</label>
-                                                <input type="text" autocomplete="off" class="control-form Reque Popup" id="txtNombre">
+                                                </fieldset>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <fieldset class="fieldset">
+                                                    <legend class="legend">Proveedores</legend>
+                                                    <div class="table-responsive" id="listaProveedor" style="height:180px;">
+                                                    </div>
+                                                </fieldset>
                                             </div>
                                         </div>
-                                        @*<div class="row">
-                                                <div class="form-group col-sm-4">
-                                                    <label class="control-label">Estado Sunat</label>
-                                                    <label class="control-lectura" id="lblEstadoSunat"></label>
-                                                </div>
-                                                <div class="form-group col-sm-4">
-                                                    <label class="control-label">Condición Sunat</label>
-                                                    <label class="control-lectura" id="lblCondicionSunat"></label>
-                                                </div>
-                                            </div>*@
-                                        <div class="row">
-                                            <div class="form-group col-sm-12">
-                                                <label class="control-label">Dirección</label>
-                                                <textarea class="control-form Reque Popup" rows="2" id="ttaDireccion"></textarea>
+                                        <div class="row m-2">
+                                            <div class="col-sm-12 text-right">
+                                                <button class="btnCancelarForm" id="btnCancelar" title="Cancelar"><i class="fa fa-undo" aria-hidden="true"></i>&nbsp;Cancelar</button>
+                                                <button class="btnGuardarForm bg-customer" id="btnGenerar" title="Generar"><span class="fa fa-life-ring"></span>&nbsp;Generar</button>
+                                            </div>
+                                        </div>
+                                        <div class="row m-2">
+                                            <div class="col-sm-12">
+                                                <div class="table-responsive" id="listaProductos" style="height:320px;"></div>
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="form-group col-sm-10">
-                                                <label class="control-label">Contacto</label>
-                                                <input type="text" autocomplete="off" id="txtContacto" class="control-form Reque Popup" />
+                                            <div class="col-sm-4">
+                                                <h4 id="divItems"> Items: 0</h4>
                                             </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="form-group col-sm-6">
-                                                <label class="control-label">Teléfono</label>
-                                                <input type="number" id="txtTelefono" autocomplete="off" class="control-form Reque Popup" />
+                                            <div class="col-sm-4">
+                                                <h4 id="divSeleccionado" class="text-c-red"> Seleccionados: 0</h4>
                                             </div>
-                                            <div class="form-group col-sm-6">
-                                                <label class="control-label">Correo Electrónico</label>
-                                                <input type="email" id="txtCorreo" autocomplete="off" class="control-form Reque Popup" />
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="form-group col-sm-6">
-                                                <label class="control-label">Banco</label>
-                                                <input type="text" autocomplete="off" id="txtBanco" class="control-form Reque Popup" />
-                                            </div>
-                                            <div class="form-group col-sm-6">
-                                                <label class="control-label">CCI</label>
-                                                <input type="number" autocomplete="off" maxlength="20" id="txtCCI" class="control-form Reque Popup" />
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input Popup" name="inlineRadioOptions" type="radio" checked id="optActivo">
-                                                <label class="form-check-label" for="optActivo">Activo</label>
-                                            </div>
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" name="inlineRadioOptions" type="radio" id="optInactivo">
-                                                <label class="form-check-label" for="optInactivo">Inactivo</label>
+                                            <div class="col-sm-4">
+                                                <h4 id="divTotal"> Total cotización: 0.00</h4>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="modal-footer">
-                                        <button class="btnGuardarForm bg-customer" id="btnGuardar" title="Guardar datos"><span class="fa fa-save"></span>&nbsp;Grabar</button>
-                                        <button class="btnCancelarForm" id="btnCancelarFormato" title="Cancelar"><i class="fa fa-undo" aria-hidden="true"></i>&nbsp;Cancelar</button>
+                                </div>
+                            </div>
+                            <div id="divReportePreIAFAS" style="overflow:hidden;width:auto;display:none">
+                                <table style="        width: 100%;
+        font-size: 11px;
+        font-family: Arial
+" cellpadding="0" cellspacing="0">
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <table cellpadding="0" cellspacing="0" style="        font-size: 11px;
+        font-family:Arial
+    ">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td style="width:340px">&nbsp;</td>
+                                                            <td style="height:50px">&nbsp;</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="width: 395px">&nbsp;</td>
+                                                            <td style="text-align:center; height:33px" id="tdDiaPreIAFAS"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="width: 395px">&nbsp;</td>
+                                                            <td style="text-align: center; height: 33px" id="tdMesPreIAFAS"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="width: 395px">&nbsp;</td>
+                                                            <td style="text-align: center; height: 33px" id="tdAnioPreIAFAS"></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+
+                                            </td>
+                                            <td rowspan="3" style="text-align: center;width: 300px;font-size: 14px;
+">
+                                                <br /><br /><br /><br /><br /><br />
+                                                <span id="spnAdmonGradoPreIAFAS"></span><br />
+                                                <span id="spnAdmonNombrePreIAFAS"></span><br />
+                                                <span id="spnAdmonCIPPreIAFAS"></span><br />
+                                                <span>________________________________</span><br />
+                                                <span>JEFE DE LA OFICINA DE LOGISTICA</span>
+                                                <br /><br /><br /><br />
+                                                <span id="spnDirectorGradoPreIAFAS"></span><br />
+                                                <span id="spnDirectorNombrePreIAFAS"></span><br />
+                                                <span id="spnDirectorCIPPreIAFAS"></span><br />
+                                                <span>________________________________</span><br />
+                                                <span>DIRECTOR DE SALUD DE LA MARINA</span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="width: 100px;">
+                                                <br /><br /><br /><br /><br /><br /><br /><br />
+                                                <table cellpadding="0" cellspacing="0" style="        font-size: 11px;
+        font-family: Arial
+    ">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td style="width:100%">
+                                                                &nbsp; &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; <span id="spnRegInternoPreIAFAS"></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                                <span id="spnCodraComparaPreIAFAS"></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                                <span id="spnReferenciaPreIAFAS"></span>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <br />
+                                                <table cellpadding="0" cellspacing="0" style="        font-size: 11px;
+        font-family: Arial
+    ">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td style="width: 110px">&nbsp;</td>
+                                                            <td style="height:20px" id="tdProveedorPreIAFAS"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="width: 110px">&nbsp;</td>
+                                                            <td style="height:20px" id="tdRUCPreIAFAS"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="width: 110px">&nbsp;</td>
+                                                            <td style="height:20px" id="tdDireccionPreIAFAS"></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <br /><br /><br /><br /><br />
+                                <table cellpadding="0" cellspacing="0">
+                                    <tr>
+                                        <td style="height: 396px;vertical-align: top">
+                                            <table style="        font-size: 11px;
+        font-family: Arial
+    " cellpadding="0" cellspacing="0">
+                                                <tbody id="tbDetallePreIAFAS"></tbody>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </table>
+
+                                <table cellpadding="0" cellspacing="0" style="    font-size: 11px;
+        font-family: Arial
+    ">
+                                    <tbody>
+                                        <tr>
+
+                                            <td colspan='2' style="height:20px" id="tdFacturarPreIAFAS">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FACTURAR A: IAFAS DE LA MARINA DE GUERRA DEL PERU  RUC:20555989912</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="width: 153px">&nbsp;</td>
+                                            <td style="height:20px" id="tdPlazoPreIAFAS"></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="width: 153px">&nbsp;</td>
+                                            <td style="height:25px" id="tdGarantiaPreIAFAS"></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                                <table cellpadding="0" cellspacing="0" style="    font-size: 11px;
+        font-family: Arial
+    ">
+                                    <tbody>
+                                        <tr>
+                                            <td style="width: 153px">&nbsp;</td>
+                                            <td style="height:15px" id="tdMontoLetraPreIAFAS"></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="width: 153px">&nbsp;</td>
+                                            <td style="height:15px" id="tdCreditoPreIAFAS"></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="width: 153px">&nbsp;</td>
+                                            <td style="height:15px" id="tdSolicitantePreIAFAS"></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="width: 153px">&nbsp;</td>
+                                            <td style="height:15px;max-width: 310px;" id="tdJustificacionPreIAFAS"></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="width: 153px">&nbsp;</td>
+                                            <td style="width: 460px;font-size: 10px;height: 15px" id="tdPartidaPreIAFAS"></td>
+                                            <td style="width: 50px">&nbsp;</td>
+                                            <td style="height: 15px; font-size: 16px; font-weight: bold" id="tdTotalPreIAFAS"></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="width: 153px">&nbsp;</td>
+                                            <td style="height:15px" id="tdCxPPreIAFAS"></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div id="divReporte" style="overflow:hidden;width:auto;display:none">
+                                <table style="max-width: 2480px;width: 100%;font-family: Arial;
+    " cellpadding="0" cellspacing="0">
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <table width="100%" cellpadding="0" cellspacing="0" style="border: 1px solid black">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td colspan="2" style="border-top: 1px solid black;border-left:1px solid black;font-size: 12px;text-align: center"><strong>DIRECCION DE SALUD DE LA MARINA</strong></td>
+                                                            <td width="84" style="border-top: 1px solid black;">&nbsp;</td>
+                                                            <td width="113" style="border-top: 1px solid black;">&nbsp;</td>
+                                                            <td width="248" style="border-top: 1px solid black;">&nbsp;</td>
+                                                            <td width="918" style="border: 1px solid black;font-size: 12px;text-align: center "><strong>AUTORIZACION DE COMPRA</strong></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="2" style="border-left: 1px solid black;font-size: 12px;text-align: center"><strong>OFICINA DE LOGISTICA</strong></td>
+                                                            <td><strong>DIA:</strong></td>
+                                                            <td style="border: 1px solid black;text-align: center" id="tdDia"></td>
+                                                            <td>&nbsp;</td>
+                                                            <td style="border-left:1px solid black;border-right: 1px solid black;">&nbsp;</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="2" style="border-left: 1px solid black;font-size: 12px;text-align: center"><strong>AV. VENEZUELA CDRA. 24 S/N</strong></td>
+                                                            <td><strong>MES:</strong></td>
+                                                            <td style="border: 1px solid black;text-align: center" id="tdMes"></td>
+                                                            <td>&nbsp;</td>
+                                                            <td style="border-right: 1px solid black;border-left: 1px solid black; text-align: center;font-size: 12px" id="tdGradoAdmon"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="2" style="border-left: 1px solid black;font-size: 12px;text-align: center"><strong>BELLAVISTA-CALLAO</strong></td>
+                                                            <td><strong>AÑO:</strong></td>
+                                                            <td style="border: 1px solid black;text-align: center" id="tdAnio"></td>
+                                                            <td>&nbsp;</td>
+                                                            <td style="border-right: 1px solid black;border-left: 1px solid black; text-align: center;font-size: 12px" id="tdAdmon"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="2" style="border-left: 1px solid black;font-size: 12px;text-align: center">Teléfono:613-7600/514-7800 Anexo:4212</td>
+                                                            <td id="tdEtiquetaIAFAS" style="color:red;font-size:20px">&nbsp;</td>
+                                                            <td>&nbsp;</td>
+                                                            <td>&nbsp;</td>
+                                                            <td style="border-right: 1px solid black;border-left: 1px solid black; text-align: center;font-size: 12px" id="tdCipAdmon"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="485" style="border-left: 1px solid black;font-size: 12px">&nbsp;</td>
+                                                            <td width="326">&nbsp;</td>
+                                                            <td>&nbsp;</td>
+                                                            <td>&nbsp;</td>
+                                                            <td>&nbsp;</td>
+                                                            <td style="border-right: 1px solid black;border-left: 1px solid black; text-align: center;font-size: 12px"><strong>JEFE DE LA OFICINA DE LOGISTICA</strong></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="2" style="border-left: 1px solid black;font-size: 16px"><strong><span id="snpTipoOrden"></span></strong></td>
+                                                            <td colspan="3" style="font-size: 16px" id="tdNroOrden"></td>
+                                                            <td style="border-right: 1px solid black;border-left: 1px solid black; text-align: center;font-size: 12px">&nbsp;</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="border: 1px solid black;text-align: center;font-size: 12px"><strong>REG. INTERNO</strong></td>
+                                                            <td style="border: 1px solid black;text-align: center;font-size: 12px"><strong>CDRO.COMPARTIVO</strong></td>
+                                                            <td colspan="3" style="border: 1px solid black;text-align: center;font-size: 12px"><strong>REFERENCIA</strong></td>
+                                                            <td style="border-right: 1px solid black;text-align: center;;font-size: 12px">&nbsp;</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="border: 1px solid black;text-align: center;font-size: 12px" id="tdRegistroInterno"></td>
+                                                            <td style="border: 1px solid black;text-align: center;font-size: 12px" id="tdCuadroC"></td>
+                                                            <td colspan="3" style="border: 1px solid black;text-align: center;font-size: 12px" id="tdRequerimiento"></td>
+                                                            <td style="border-right: 1px solid black;border-left: 1px solid black; text-align: center;font-size: 12px" id="tdGradoDirector"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="5" style="border-left: 1px solid black;border-right: 1px solid black;font-size: 12px"><strong>SEÑOR(ES):</strong><span id="spnEmpresa"> </span></td>
+                                                            <td style="border-right: 1px solid black;border-left: 1px solid black; text-align: center;font-size: 12px" id="tdDirector"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="5" style="border-left: 1px solid black;border-right: 1px solid black;font-size: 12px"><strong>RUC: </strong><span id="spnRUC"></span></td>
+                                                            <td style="border-right: 1px solid black;border-left: 1px solid black; text-align: center;font-size: 12px" id="tdCipDirector"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="5" style="border-left: 1px solid black;border-right: 1px solid black;font-size: 12px"><strong>DIRECCION</strong>: <span id="spnDireccion"></span></td>
+                                                            <td style="border-right: 1px solid black;border-left: 1px solid black; text-align: center;font-size: 12px"><strong>DIRECTOR DE SALUD DE LA MARINA</strong></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="6" style="height:25px; border: 1px solid black; font-size: 10px">
+                                                                CON RELACION A LA COTIZACION Nº
+                                                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                                AGRADECEMOS ATENDER EL SIGUIENTE REQUERIMIENTO:
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="border-collapse: collapse;
+        width: 100%;
+        vertical-align: top;
+        border: 1px solid black;
+        height: 510px">
+                                                <table width="100%" cellpadding="0" cellspacing="0" style="font-size: 12px;">
+                                                    <thead id="tblCabecera">
+                                                        <tr>
+                                                            <th style="border: black 1px solid;padding:5px">ITEM</th>
+                                                            <th style="border: black 1px solid;">DESCRIPCION DETALLA DEL SERVICIO</th>
+                                                            <th style="border: black 1px solid;padding: 5px">PRECIO(S/)</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="tblDetalleReporte"></tbody>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <table width="100%" cellpadding="0" cellspacing="0" style="font-size: 12px;">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td width="20%">FACTURAR A: </td>
+                                                            <td>IAFAS DE LA MARINA DE GUERRA DEL PERU</td>
+                                                            <td width="20%" style="text-align:right">RUC: </td>
+                                                            <td>20555989912</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <table width="100%" cellpadding="0" cellspacing="0" style="font-size: 12px;border: 1px solid black;border-collapse: collapse;">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td width="20%">PLAZO ENTREGA: </td>
+                                                            <td id="tdPlazoEntrega"></td>
+
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="20%">GARANTIA: </td>
+                                                            <td id="tdGarantiaIAFAS"></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td height="52" style="border: 1px solid black;">
+                                                <table width="100%" cellpadding="0" cellspacing="0" style="font-size: 10px;">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td width="5%" style="vertical-align: top">SON:</td>
+                                                            <td width="78%" style="vertical-align: top" id="tdMontoTexto"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="15%" style="vertical-align: top">FORMA DE PAGO:</td>
+                                                            <td width="65%" style="vertical-align: top" id="tdCredito"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="5%" style="vertical-align: top">SOLICITANTE:</td>
+                                                            <td width="65%" style="vertical-align: top"> OFICINA DE LOGISTICA</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="5%" style="vertical-align: top">JUSTIFICACION:</td>
+                                                            <td width="65%" style="vertical-align: top" id="tdJustificacion"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="15%" style="vertical-align: top">PRESUPUESTO:</td>
+                                                            <td width="65%" style="vertical-align: top" id="tdResumenPresu"></td>
+                                                            <td width="5%" style="vertical-align: top">TOTAL:</td>
+                                                            <td width="45%" style="vertical-align: top;font-size: 12px;font-weight:bold" id="tdTotal"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="25%" style="vertical-align: top">CUENTAS POR PAGAR:</td>
+                                                            <td width="65%" style="vertical-align: top" id="tdCuentasPagar"></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="border: 1px solid black;">
+                                                <table width="100%" cellpadding="0" cellspacing="0" style="font-size: 10px;">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td width="24%">NOTA:</td>
+                                                            <td width="24%" rowspan="6" style="vertical-align: top">
+                                                                <table cellpadding="5" cellspacing="0" style="font-size: 10px;">
+                                                                    <tr>
+                                                                        <td colspan="4" style="text-align: center;border: 1px solid black">RECEPCION DE LA ORDEN DE COMPRA</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td colspan="3" style="vertical-align:top;border-left:1px solid black">ANTEFIRMA:</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td colspan="3" style="vertical-align:top;border-left:1px solid black;">D.N.I.:</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td height="91" colspan="3" style="border-left:1px solid black;text-align: center">
+                                                                            <br><br>
+                                                                            ------------------------------------------<br>
+                                                                            FIRMA DEL PROVEEDOR
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td width="66" style="vertical-align:top;border:1px solid black">DIA</td>
+                                                                        <td width="95" style="vertical-align:top;border:1px solid black">MES</td>
+                                                                        <td width="109" style="vertical-align:top;border:1px solid black">AÑO</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td width="66" style="border:1px solid black;">&nbsp;&nbsp;</td>
+                                                                        <td width="95" style="border:1px solid black">&nbsp;&nbsp;</td>
+                                                                        <td width="109" style="border:1px solid black">&nbsp;&nbsp;</td>
+                                                                    </tr>
+                                                                </table>
+                                                            </td>
+                                                            <td width="24%" rowspan="6" style="vertical-align: top">
+                                                                <table cellpadding="5" cellspacing="0" style="font-size: 10px;">
+                                                                    <tr>
+                                                                        <td colspan="4" style="text-align: center;border: 1px solid black">RECIBI CONFORME</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td colspan="3" style="vertical-align:top;border-left:1px solid black">ANTEFIRMA:</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td colspan="3" style="vertical-align:top;border-left:1px solid black;">D.N.I.:</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td height="91" colspan="3" style="border-left:1px solid black;text-align: center">
+                                                                            <br><br>
+                                                                            ------------------------------------------<br>
+                                                                            JEFE DEL AREA SOLICITANTE
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td width="66" style="vertical-align:top;border:1px solid black">DIA</td>
+                                                                        <td width="95" style="vertical-align:top;border:1px solid black">MES</td>
+                                                                        <td width="109" style="vertical-align:top;border:1px solid black">AÑO</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td width="66" style="border:1px solid black;">&nbsp;</td>
+                                                                        <td width="95" style="border:1px solid black">&nbsp;</td>
+                                                                        <td width="109" style="border:1px solid black">&nbsp;</td>
+                                                                    </tr>
+                                                                </table>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="24%">1.- Esta Orden es nula sin las firmas autorizadas.</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="24%">2.- Cada Orden se debe Facturar por separado en original y dos copias y remitirlas a la Oficina de Logística.</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="24%">3.- Nos reservamos el derecho de devolver la mercancia que nos esté de acuerdo con nuestras especificaciones.</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="24%">4.- La presente queda anulada sino cumple con el pazo establecido según cotización.</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="24%" style="vertical-align:top">5.- Días de internamiento: Lunes a Viernes 8:00 a 5:00 pm.
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div id="divReporteMGP" style="overflow:hidden;width:auto;display:none">
+                                <table cellpadding="0" width="756px" cellspacing="0" style="font-family:Arial, sans-serif">
+                                    <tbody>
+                                        <tr>
+                                        <tr>
+
+                                            <td style="border: 1px solid black;">
+
+                                                <table cellpadding="0" width="100%" cellspacing="0">
+                                                    <tbody>
+
+                                                        <tr>
+                                                            <td style="border-top: solid 1px black;border-left: solid 1px black">
+                                                                @*<img src="\Daymeva/Images/escudoMGP.jpg" width="100px" /><br>*@
+                                                                <span style="font-size:8px;font-family:Arial, sans-serif">
+                                                                    MARINA DE GUERRA DEL PERU<br />
+                                                                    DIRECCION DE SALUD DE LA MARINA<span id="snpEtiquetaMGP" style="color:red;font-size:20px"></span>
+                                                                </span>
+                                                            </td>
+                                                            <td><br><br><b><span id="spnTipoOrdenMGP">ORDEN DE COMPRA</span></b></td>
+                                                            <td align="center">
+                                                                <table cellpadding="0" width="156px" cellspacing="0" style="font-size:12px">
+                                                                    <tbody>
+                                                                        <tr>
+                                                                            <td colspan="7" rowspan="2"></td>
+                                                                            <td style="border: 1px solid black;text-align:center"><b>DIA</b></td>
+                                                                            <td style="        border: 1px solid black;
+        text-align: center
+">
+                                                                                <b>MES</b>
+                                                                            </td>
+                                                                            <td style="        border: 1px solid black;
+        text-align: center
+">
+                                                                                <b>AÑO</b>
+                                                                            </td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td style="        border: 1px solid black;
+        text-align: center
+" id="tdDiaMgp">
+                                                                            </td>
+                                                                            <td style="        border: 1px solid black;
+        text-align: center
+" id="tdMesMgp">
+                                                                            </td>
+                                                                            <td style="        border: 1px solid black;
+        text-align: center
+" id="tdAnioMgp">
+                                                                            </td>
+                                                                        </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                                <br><b><span id="spnNroOrdenMGP"></span></b><br><br><br>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="3"></td>
+                                                        </tr>
+
+                                                    </tbody>
+                                                </table>
+
+                                                <table cellpadding="0" width="100%" cellspacing="0" style="font-size:12px">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td style="border-left: 1px solid black;
+        border-top: 1px solid black;
+        height: 25px
+">
+                                                                <b>SEÑOR(ES):</b>
+                                                            </td>
+                                                            <td style="        border-top: 1px solid black;" colspan="5" id="tdProveedorMgp"></td>
+                                                            <td style="border-left: 1px solid black;  border-top: 1px solid black; " width="200px"><b>R.U.C:</b></td>
+                                                            <td style=" border-right: 1px solid black; border-top: 1px solid black; " colspan="2" id="tdRUCMgp"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="border-left: 1px solid black;height:25px;"><b>DIRECCION:</b></td>
+                                                            <td colspan="5" id="tdDireccionMGP"></td>
+                                                            <td style="border-left: 1px solid black;"><b>CCI:</b></td>
+                                                            <td style=" border-right: 1px solid black;" colspan="2" id="tdCCIMGP"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="border-left: 1px solid black;height: 25px   "><b>TELEF:</b></td>
+                                                            <td colspan="2" id="tdTelefonoProvMgp"></td>
+                                                            <td><b>CORREO:</b></td>
+                                                            <td colspan="2" id="tdCorreoProvMgp"></td>
+                                                            <td style="border-left: 1px solid black;"><b>BANCO:</b></td>
+                                                            <td style=" border-right: 1px solid black;" colspan="5" id="tdBancoProvMgp"></td>
+
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="border-left: 1px solid black;height: 25px;   border-bottom: 1px solid black"><b>REFERENCIA</b></td>
+                                                            <td style="   border-bottom: 1px solid black" colspan="5"></td>
+                                                            <td style="border-left: 1px solid black; border-right: 1px solid black;  border-bottom: 1px solid black"
+                                                                colspan="3"></td>
+                                                        </tr>
+
+                                                    </tbody>
+                                                </table>
+
+                                                <table cellpadding="0" width="100%" cellspacing="0" style="font-size:12px">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td style="border-left: 1px solid black; height: 25px  "><b>FACTURA A NOMBRE:</b></td>
+                                                            <td>MARINA DE GUERRA DEL PERU</td>
+                                                            <td width="50px"><b>R.U.C.:</b></td>
+                                                            <td style=" border-right: 1px solid black;">20153408191</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="border-left: 1px solid black; height:25px"><b>CENTRO DE GASTO SOLICITANTE:</b></td>
+                                                            <td id="tdAreaMGP"></td>
+                                                            <td width="50px"><b>TELF:</b></td>
+                                                            <td style=" border-right: 1px solid black;" id="tdTelefonoMGP"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="border-left: 1px solid black; height: 25px  "><b>DIRECCION:</b></td>
+                                                            <td style=" border-right: 1px solid black;  " colspan="3">AV. VENEZUELA CDRA. 24 S/N-BELLAVISTA-CALLAO</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                                <table cellpadding="0" width="100%" cellspacing="0" style="height:320px">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td style="vertical-align:top" colspan="9">
+                                                                <table cellpadding="0" width="100%" cellspacing="0" style="font-size:12px;">
+                                                                    <thead id="tblCabeceraMgp">
+                                                                        <tr>
+                                                                            <td style="border: 1px solid black;text-align:center"><b>ITEM</b></td>
+                                                                            <td style="border: 1px solid black;
+        text-align: center
+">
+                                                                                <b>CANTIDAD</b>
+                                                                            </td>
+                                                                            <td style="border: 1px solid black;
+        text-align: center
+">
+                                                                                <b>UNIDAD</b>
+                                                                            </td>
+                                                                            <td style="border: 1px solid black;text-align: center" colspan="4" align="center">
+                                                                                <b>DESCRIPCION DETALLADA DEL PODUCTO</b>
+                                                                            </td>
+                                                                            <td style="border: 1px solid black;text-align: center" colspan="2">
+                                                                                <b>PRECIO<br>UNITARIO</b>
+                                                                            </td>
+                                                                            <td style="border: 1px solid black;
+        text-align: center
+">
+                                                                                <b>TOTAL</b>
+                                                                            </td>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody id="tblDetalleReporteMgp"></tbody>
+
+                                                                </table>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+
+                                                </table>
+                                                <table cellpadding="0" width="100%" cellspacing="0" style="font-size:12px;">
+                                                    <tfoot>
+                                                        <tr>
+                                                            <td style="border: 1px solid black;" colspan="7"><b>SON:</b><span id="spnMontoLetraMgp"></span></td>
+                                                            <td style="border: 1px solid black;" colspan="2" align="right"><b>TOTAL:</b></td>
+                                                            <td style="        border: 1px solid black;
+        text-align: right
+" id="tdTotalMgp"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="7" rowspan="2"></td>
+                                                            <td style="border: 1px solid black;" colspan="2" align="right"><b>IGV (18%)</b></td>
+                                                            <td style="border: 1px solid black;
+        text-align: right
+" id="tdIGVMgp"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="border: 1px solid black;" colspan="2" align="right"><b>SUB TOTAL</b></td>
+                                                            <td style="border: 1px solid black;text-align:right" id="tdSubTotalMgp"></td>
+                                                        </tr>
+                                                    </tfoot>
+                                                </table>
+                                                <br>
+                                                <table cellpadding="0" width="756px" cellspacing="0" style="font-size:10px">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td style="border-left: 1px solid black; border-top: 1px solid black">FORMA DE PAGO:</td>
+                                                            <td style="border-right: 1px solid black; border-top: 1px solid black" colspan="3" id="tdFormaPagoMGP"></td>
+                                                            <td rowspan="12">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                                                            <td style="border: 1px solid black;background-color: #CCC" colspan="5" align="center" id="tdRecepccion">RECEPCION ORDEN DE SERVICIO</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="border-left: 1px solid black">PLAZO DE ENTREGA:</td>
+                                                            <td style="border-right: 1px solid black" colspan="3" id="tdPlazoEntregaMgp"></td>
+                                                            <td style="border-left: 1px solid black; border-right: 1px solid black;font-size:5px;text-align:center" colspan="5">EL PROVEEDOR ACEPTA LAS CONDICIONES DESCRITAS<br />EN LA PRESENTE ORDEN.</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="border-left: 1px solid black">GARANTIA:</td>
+                                                            <td style="border-right: 1px solid black" colspan="3" id="tdGarantiaMgp"></td>
+                                                            <td style="border-left: 1px solid black; border-right: 1px solid black" colspan="5">ANTEFIRMA:____________________________</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="border-left: 1px solid black; border-bottom: 1px solid black">PENALIDAD:</td>
+                                                            <td style="border-right: 1px solid black; border-bottom: 1px solid black" colspan="3" id="tdPenalidadMgp"></td>
+                                                            <td style="border-left: 1px solid black; border-right: 1px solid black" colspan="5">DNI:___________________________________</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="4"></td>
+                                                            <td style="border-left: 1px solid black; border-right: 1px solid black" colspan="5"><br /><br /><br /></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="border-left: 1px solid black; border-top: 1px solid black">AFECTACION PRESUPUESTAL:</td>
+                                                            <td style="border-right: 1px solid black; border-top: 1px solid black" colspan="3"></td>
+                                                            <td style="        border-left: 1px solid black;
+        border-right: 1px solid black;
+        text-align: center
+" colspan="5">
+                                                                -------------------------------------------<br />FIRMA DEL PROOVEDOR
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="border-left: 1px solid black">META:</td>
+                                                            <td id="tdMetaMgp"></td>
+                                                            <td>SUB META:</td>
+                                                            <td style="border-right: 1px solid black" id="tdSubMetaMgp"></td>
+                                                            <td style="border-left: 1px solid black; border-right: 1px solid black; border-bottom: 1px solid black" rowspan="2"></td>
+                                                            <td style="border: 1px solid black;text-align:center">DIA</td>
+                                                            <td style="        border: 1px solid black;
+        text-align: center
+">
+                                                                MES
+                                                            </td>
+                                                            <td style="        border: 1px solid black;
+        text-align: center
+">
+                                                                AÑO
+                                                            </td>
+                                                            <td style="border-left: 1px solid black; border-right: 1px solid black; border-bottom: 1px solid black" rowspan="2"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="border-left: 1px solid black">PARTIDA:</td>
+                                                            <td id="tdPartidaMgp"></td>
+                                                            <td>PROCESO:</td>
+                                                            <td style="border-right: 1px solid black" id="tdProcesoMgp"></td>
+                                                            <td style="border: 1px solid black"></td>
+                                                            <td style="border: 1px solid black"></td>
+                                                            <td style="border: 1px solid black"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="border-left: 1px solid black; border-bottom: 1px solid black">F.FINANC:</td>
+                                                            <td style="border-bottom: 1px solid black" id="tdFteFtoMgp"></td>
+                                                            <td style="border-bottom: 1px solid black">Nº CERT.ECOFIN:</td>
+                                                            <td style="border-right: 1px solid black; border-bottom: 1px solid black" id="tdEcofinMgp"></td>
+                                                            <td colspan="5"><br /></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="4" rowspan="2"><br /></td>
+                                                            <td style="border: 1px solid black;text-align:center" colspan="5">RECIBI CONFORME</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="border-left: 1px solid black; border-right: 1px solid black;font-size:5px" colspan="5" id="tdRecibiMgp">EN LA FECHA SE DEJA CONSTANCIA QUE<br />SE HA CULMINADO EL TRABAJO</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="border: 1px solid black;
+        text-align: center
+" colspan="2">
+                                                                <br /><br /><br /><br /><br />------------------------------------<br />AUTORIZACION<br />JEFE DE ADMINISTRACION
+                                                            </td>
+                                                            <td style="border: 1px solid black;
+        text-align: center
+" colspan="2">
+                                                                <br /><br /><br /><br />------------------------------------<br />AUTORIZACION<br />JEFE DE LA UNIDAD/DEPENDENCIA
+                                                            </td>
+                                                            <td style="border-left: 1px solid black; border-right: 1px solid black" colspan="5"><br /><br /><br /><br /></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="5" rowspan="3" id="tdNotaMgp">
+                                                                NOTA:<br />- Sírvase remitir para su cancelación Factura o Factura Electrónica o Boleta de Venta o Recibo por Honorarios, según corresponda:a nombre de la Marina de Guerra del Perú, R.U.C.: 20153408191. Adjuntado el Acta de Conformidad y la presente Orden de Servicio.<br />
+                                                                - En caso de retraso injustificado del contratista en la ejecución de las presentación objeto del contrato, la entidad le aplica automatianmente la penalidad por mora po cada día de retraso de acuerdo a lo establecido en el Art. Nº 162 de la Ley del Estado, aprobado mediante Decreto Supremo Nº 344-2018-EF<br />
+                                                                - La Orden de Servicio es nula sin las firmas y sellos autorizados.
+                                                            </td>
+                                                            <td style="border-left: 1px solid black; border-right: 1px solid black;text-align:center" colspan="5">-----------------------------<br />FIRMA USUARIO</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="border-left: 1px solid black; border-right: 1px solid black; border-bottom: 1px solid black" rowspan="2">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                                                            <td style="        border: 1px solid black;
+        text-align: center
+">
+                                                                DIA
+                                                            </td>
+                                                            <td style="        border: 1px solid black;
+        text-align: center
+">
+                                                                MES
+                                                            </td>
+                                                            <td style="        border: 1px solid black;
+        text-align: center
+">
+                                                                AÑO
+                                                            </td>
+                                                            <td style="border-left: 1px solid black; border-right: 1px solid black; border-bottom: 1px solid black" rowspan="2">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="border: 1px solid black">&nbsp;&nbsp;</td>
+                                                            <td style="border: 1px solid black">&nbsp;&nbsp;</td>
+                                                            <td style="border: 1px solid black">&nbsp;&nbsp;</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="10"><br /></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="border: 1px solid black;
+        font-size: 10px
+">
+                                                DISTRIBUCION:<BR>
+                                                <table cellpadding="0" width="456px" cellspacing="0" align="center" style="font-size:10px">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td> Copias: </td>
+                                                            <td> Blanca:</td>
+                                                            <td> Original</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td> </td>
+                                                            <td> Verde:</td>
+                                                            <td> Usuario</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td> </td>
+                                                            <td> Celeste:</td>
+                                                            <td> Archivo</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td> </td>
+                                                            <td> Amarillo:</td>
+                                                            <td> P.P.P.</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td> </td>
+                                                            <td> Rosada:</td>
+                                                            <td> Proveedor</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div id="divReportePreMGP" style="overflow:hidden;width:auto;display:none">
+                                <table cellpadding="0" cellspacing="0" style="font-size:11px;font-family:Arial">
+                                    <tbody>
+                                        <tr>
+                                            <td style="height:68px">&nbsp;</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="width:605px">&nbsp;</td>
+                                            <td style="width: 150px;text-align:center; height: 33px">
+                                                <span id="spnDiaPreMGP"></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                <span id="spnMesPreMGP"></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                <span id="spnAnioPreMGP"></span>
+                                            </td>
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <br /><br /><br /><br /><br />
+
+                                <table cellpadding="0" cellspacing="0" style="font-size:11px;font-family:Arial">
+                                    <tbody>
+                                        <tr>
+                                            <td style="width:130px; height:20px">&nbsp;</td>
+                                            <td colspan="3" style="width: 380px;height: 20px" id="tdProveedorPreMGP"></td>
+                                            <td style="width:100px; height:20px">&nbsp;</td>
+                                            <td style="width: 100px;height: 20px" id="tdProveedorRUCPreMGP"></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="width:130px; height:20px">&nbsp;</td>
+                                            <td colspan="3" style="width: 320px;height: 20px" id="tdProveedorDireccionPreMGP"></td>
+                                            <td style="width:100px; height:20px">&nbsp;</td>
+                                            <td style="width: 100px;height: 20px" id="tdProveedorCCIPreMGP"></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="width:130px; height:20px">&nbsp;</td>
+                                            <td style="width: 100px;height: 20px" id="tdProveedorTelefonoPreMGP"></td>
+                                            <td style="width: 100px;height: 20px">&nbsp;</td>
+                                            <td style="max-width:80px;height: 20px" id="tdProveedorCorreoPreMGP"></td>
+                                            <td style="width: 100px;height: 20px">&nbsp;</td>
+                                            <td style="width: 100px;height: 20px" id="tdProveedorBancoPreMGP"></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="width:130px; height:20px">&nbsp;</td>
+                                            <td colspan="3" style="width: 320px;height: 20px" id="tdReferenciaPreMGP"></td>
+                                            <td style="width:50px; height:20px">&nbsp;</td>
+                                            <td style="width: 50px;height: 20px">&nbsp;</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                                <table cellpadding="0" cellspacing="0" style="font-size:10px;font-family:Arial">
+                                    <tbody>
+                                        <tr>
+                                            <td style="width:300px; height:20px">&nbsp;</td>
+                                            <td style="width: 520px;height: 20px" id="tdCentroGastoPreMGP"></td>
+                                            <td style="width:20px; height:20px">&nbsp;</td>
+                                            <td style="width: 180px;height: 20px" id="tdTelefonoPreMGP"></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="width:150px; height:20px">&nbsp;</td>
+                                            <td colspan="3" style="width: 400px;height: 20px" id="tdDireccionPreMGP">
+                                                AV. VENEZUELA CDRA 24 S/N,BELLAVISTA-CALLAO
+                                            </td>
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+                                <br /><br />
+                                <table cellpadding="0" cellspacing="0">
+                                    <tr>
+                                        <td style="height: 300px; vertical-align: top">
+                                            <table cellpadding="0" cellspacing="0" style="font-size:10px;font-family:Arial">
+                                                <tbody id="tbDetallePreMGP"></tbody>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </table>
+
+                                <table cellpadding="0" cellspacing="0" style="font-size:11px;font-family:Arial">
+                                    <tbody>
+                                        <tr>
+                                            <td style="width:70px; height:20px">&nbsp;</td>
+                                            <td style="width: 405px;height: 20px" id="tdMontoTextoPreMGP"></td>
+                                            <td style="width:50px; height:20px">&nbsp;</td>
+                                            <td style="width: 118px;height: 20px;text-align:right" id="tdTotalPreMGP"></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="width:60px; height:20px">&nbsp;</td>
+                                            <td colspan="3" style="width: 280px;height: 20px;text-align: right" id="tdIGVPreMGP"></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="width:60px; height:20px">&nbsp;</td>
+                                            <td style="width:60px; height:20px">
+                                                <table cellpadding="0" cellspacing="0" style="font-size:10px;font-family:Arial">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td style="width:70px; height:15px">&nbsp;</td>
+                                                            <td style="width:190px;height:15px" id="tdFormaPagoPreMGP"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="width:70px; height:15px">&nbsp;</td>
+                                                            <td style="width:190px;height:15px" id="tdPlazoPreMGP"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="width:70px; height:15px">&nbsp;</td>
+                                                            <td style="width:190px;height:15px" id="tdGarantiaPreMGP"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="width:70px; height:15px">&nbsp;</td>
+                                                            <td style="width:190px;height:15px" id="tdPenalidadPreMGP"></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </td>
+                                            <td colspan="2" style="width: 280px;height: 20px;text-align: right;vertical-align: top" id="tdSubTotalPreMGP"></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <br>
+                                <table cellpadding="0" cellspacing="0" style="font-size:10px;font-family:Arial">
+                                    <tbody>
+                                        <tr>
+                                            <td style="width:90px; height:15px">&nbsp;</td>
+                                            <td style="width:140px;height:15px" id="tdMetaPreMGP"></td>
+                                            <td style="width:60px; height:15px">&nbsp;</td>
+                                            <td style="width:150px;height:15px" id="tdSubMetaPreMGP"></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="width:90px; height:15px">&nbsp;</td>
+                                            <td style="width:140px;height:15px" id="tdPartidaPreMGP"></td>
+                                            <td style="width:60px; height:15px">&nbsp;</td>
+                                            <td style="width:150px;height:15px" id="tdProcesoPreMGP"></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="width:90px; height:15px">&nbsp;</td>
+                                            <td style="width:140px;height:15px" id="tdFteFtoPreMGP"></td>
+                                            <td style="width:60px; height:15px">&nbsp;</td>
+                                            <td style="width:150px;height:15px" id="tdCertiEcofinPreMGP"></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="modal custom-modal" tabindex="-1" role="dialog" aria-hidden="true" id="divPopupContainerForm1" style="overflow-y:auto;">
+                            <div class="modal-dialog modal-xl bg-personalizado" id="divPopupWindowForm1" style="margin-top:1px">
+                                <div class="modal-content">
+                                    <div id="divBarraForm1" class="modal-header bg-personalizado" style="cursor:move">
+                                        <h5 class="modal-title">Nueva Orden de Compra</h5>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <fieldset class="fieldset">
+                                                    <div class="row">
+                                                        <div class="col-sm-4">
+                                                            <input type="hidden" id="txtIdRegistro">
+                                                            <label class="control-label">Número</label>
+                                                            <label class="control-lectura" id="lblNumero"></label>
+                                                        </div>
+                                                        <div class="col-sm-4">
+                                                            <label class="control-label">Tipo</label>
+                                                            <label class="control-lectura" id="lblTipo"></label>
+                                                        </div>
+                                                        <div class="col-sm-4">
+                                                            <label class="control-label">Fecha Emisión</label>
+                                                            <label class="control-lectura" id="lblFechaEmision"></label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <label class="col-sm-3 control-label">Proveedor:</label>
+                                                        <div class="col-sm-9">
+                                                            <label class="control-lectura" id="lblProveedor" data-id=""></label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-sm-4">
+                                                            <label class="control-label">Nº Cotización</label>
+                                                            <label class="control-lectura" id="lblCotizacion"></label>
+                                                        </div>
+                                                        <div class="col-sm-5">
+                                                            <label class="control-label">Nº Proforma</label>
+                                                            <label class="control-lectura" id="lblProforma"></label>
+                                                        </div>
+                                                        <div class="col-sm-3">
+                                                            <label class="control-label">Días Entrega</label>
+                                                            <label class="control-lectura" id="lblDiasEntrega"></label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <label class="col-sm-3 control-label">Garantía:</label>
+                                                        <div class="col-sm-9">
+                                                            <label class="control-lectura" id="lblGarantia"></label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-sm-8">
+                                                            <label class="control-label">Condición de Compra</label>
+                                                            <label class="control-lectura" id="lblCondicionCompra"></label>
+                                                        </div>
+                                                        <div class="col-sm-4">
+                                                            <label class="control-label">Estado</label>
+                                                            <label class="control-lectura" id="lblEstado"></label>
+                                                        </div>
+                                                    </div>
+                                                    @*<div class="row">
+                                                        <div class="col-sm-4">
+                                                            <label class="control-label">Incluye IGV</label>
+                                                            <div class="custom-control custom-switch">
+                                                                <input type="checkbox" class="custom-control-input" checked id="chkIgv">
+                                                                <label class="control-label custom-control-label " for="chkIgv" id="lblChkIgv">SI</label>
+                                                            </div>
+                                                        </div>
+                                                    </div>*@
+                                                </fieldset>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <fieldset class="fieldset">
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-3 control-label">Documento Referencia:</label>
+                                                        <div class="col-sm-9">
+                                                            <textarea class="control-lectura" style="font-size:13px" readonly id="ttaPedidos" maxlength="250" rows="2"></textarea>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-3 control-label">Fte. Fto.:</label>
+                                                        <div class="col-sm-9">
+                                                            <select class="control-form" id="cboFteFto"></select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-3 control-label">Justificación:</label>
+                                                        <div class="col-sm-9">
+                                                            <textarea class="control-form" id="ttaJustificacion" maxlength="250" rows="2"></textarea>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-sm-12 text-right">
+                                                            <button class="btnCancelarForm" id="btnCancelarForm1" title="Cancelar"><i class="fa fa-undo" aria-hidden="true"></i>&nbsp;Cancelar</button>
+                                                            <button class="btnGuardarForm bg-customer" id="btnGuardar" title="Guardar Orden"><span class="fa fa-save"></span>&nbsp;Guardar</button>
+                                                        </div>
+                                                    </div>
+                                                </fieldset>
+                                            </div>
+                                        </div>
+                                        <hr />
+                                        <div class="row">
+                                            <div class="col-sm-10">
+                                                <div class="table-responsive" style="height:330px">
+                                                    <table class='grilla bordered table-fija'>
+                                                        <thead>
+                                                            <tr class='FilaHead'>
+                                                                <th rowspan="2" style="white-space: pre-wrap; width: 50px;">Item</th>
+                                                                <th rowspan="2" style="white-space: pre-wrap; width: 400px;">Descripción</th>
+                                                                <th rowspan="2" style="white-space: pre-wrap; width: 50px;">Unidad Medida</th>
+                                                                <th rowspan="2" style="white-space: pre-wrap; width: 50px;">Cantidad</th>
+                                                                <th rowspan="2" style="white-space: pre-wrap; width: 50px;">Precio con IGV</th>
+                                                                <th rowspan="2" style="white-space: pre-wrap; width: 50px;">Total</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody id="tbDetalleOrden">
+                                                            <tr>
+                                                                <td style="width:50px;"></td>
+                                                                <td style="width:400px;"></td>
+                                                                <td style="width:50px;"></td>
+                                                                <td style="width:50px;"></td>
+                                                                <td style="width:50px;"></td>
+                                                                <td style="width:50px;"></td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <div class="row">
+                                                    <div class="col-sm-12">
+                                                        <label class="control-label">Sub Total</label>
+                                                        <label class="control-lectura text-right" id="lblSubTotal"></label>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-sm-12">
+                                                        <label class="control-label">I.G.V.</label>
+                                                        <label class="control-lectura text-right" id="lblIGV"></label>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-sm-12">
+                                                        <label class="control-label">Total</label>
+                                                        <label class="control-lectura text-right" id="lblTotal"></label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -137,12 +1224,10 @@
                     </div>
                 </div>
             </div>
-        </div>
-        <div id="styleSelector">
+            <div id="styleSelector">
+            </div>
         </div>
     </div>
 </div>
-
 <iframe name="print_frame" width="0" height="0" frameborder="0" src="about:blank"></iframe>
 <script src="~/Riztie/Js/App/AppLogistica.js"></script>
-
