@@ -35,6 +35,25 @@ function configurarBotones() {
         Http.get("General/listarTabla?tbl=" + controller + vista + "Ayudas&data=", mostrarAyudas);
 
         divPopupContainer.style.display = 'block';
+        var filas = tbDetalleCN.getElementsByTagName("tr");
+        var nroFilas = filas.length;
+        if (nroFilas != 0) {
+            for (var i = nroFilas; i > -1; i--) {
+                var fila = filas[i];
+                if(fila != undefined) tbDetalleCN.removeChild(fila);
+            }
+            var spnNroItems = document.getElementById("spnNroItems");
+            spnNroItems.innerHTML = "Items: 0";
+        }
+
+        var estilos = divPopupWindow.getElementsByClassName("Reque");
+        var nroEstilos = estilos.length;
+        for (var i = 0; i < nroEstilos; i++) {
+            var estilo = [];
+            estilo = estilos[i].getAttributeNames();
+            if (estilo.indexOf("style") > -1) estilos[i].removeAttribute("style");
+        }
+
         var cboEstado = document.getElementById("cboEstado");
         if (cboEstado != null) {
             cboEstado.value = 1;
@@ -48,7 +67,7 @@ function configurarBotones() {
         Http.get("General/listarTabla?tbl=" + controller + vista + "Items&data=" + idTipoBien, mostrarListadoItems);
 
         divPopupContainerForm1.style.display = 'block';
-
+        btnSeleccionarItems.disabled = true;
     }
 
     var btnGuardar = document.getElementById("btnGuardar");
@@ -78,6 +97,18 @@ function seleccionarFila(fila, id, prefijo) {
     if (window["fila" + prefijo] != null) window["fila" + prefijo].className = "FilaDatos";
     fila.className = "FilaSeleccionada";
     window["fila" + prefijo] = fila;
+
+    var isCheck = false;
+    var chequeo = tbllistaItem.getElementsByTagName('input');
+    var nroChequeo = chequeo.length;
+    for (var i = 0; i < nroChequeo; i++) {
+        if (chequeo[i].type == "checkbox" && chequeo[i].checked) {
+            isCheck = true;
+            break;
+        }
+    }
+    if (isCheck) btnSeleccionarItems.disabled = false;
+    else btnSeleccionarItems.disabled = true;
 }
 
 
@@ -86,6 +117,33 @@ function mostrarListadoItems(rpta) {
         var listas = rpta.split('¯');
         lista = listas[0].split("¬");
         grillaItems = new GrillaScroll(lista, "listaItem", 1000, 6, "listaItems", "Admon", null, null, null, null, 25, false, true);
+
+        var primerCheck = tbllistaItem.tHead.getElementsByTagName("input")[0];
+        primerCheck.setAttribute("id", "idFirstCheck");
+        var checkid = document.getElementById("idFirstCheck");
+        checkid.onchange = function () {
+            if (checkid.checked) btnSeleccionarItems.disabled = false;
+            else btnSeleccionarItems.disabled = true;
+        }
+
+        //ocultar ultimo Item:
+        var cabecera = tbllistaItem.tHead.getElementsByTagName("th")[5];
+        var dato = cabecera.getAttribute("style");
+        dato += ";display:none";
+        cabecera.removeAttribute("style");
+        cabecera.setAttribute("style", dato);
+        var tbDatalistaItem = document.getElementById("tbDatalistaItem");
+        var filas = tbDatalistaItem.getElementsByTagName("tr");
+        var nroFilas = filas.length;
+        var fila;
+        for (var i = 0; i < nroFilas; i++) {
+            dato = "";
+            fila = filas[i].getElementsByTagName("td")[5];
+            dato = fila.getAttribute("style");
+            dato += ";display:none";
+            fila.removeAttribute("style");
+            fila.setAttribute("style", dato);
+        }
     }
 }
 
@@ -95,9 +153,11 @@ function mostrarAyudas(rpta) {
         var listaOficina = listas[0].split("¬");
         var listaTipo = listas[1].split("¬");
         var listaEstado = listas[2].split("¬");
+        var listaPersonal = listas[3].split("¬");
         crearCombo(listaOficina, "cboOficina", "Seleccione");
         crearCombo(listaTipo, "cboTipoBien", "Seleccione");
         crearCombo(listaEstado, "cboEstado", null);
+        crearCombo(listaPersonal, "cboPersonal", "Seleccione");
     }
 }
 
@@ -112,7 +172,8 @@ if (btnSeleccionarItems != null) btnSeleccionarItems.onclick = function () {
             codigo = fila[1];
             nombre = fila[2];
             unidad = fila[3];
-            data += (id + "|" + codigo + "|" + nombre + "|" + unidad);
+            codUni = fila[4];
+            data += (id + "|" + codigo + "|" + nombre + "|" + unidad + "|" + codUni);
             if (i < ids.length - 1) data += "¬";
         }
     }
@@ -133,6 +194,7 @@ function adicionarItem(datos) {
     var codigo = campos[1];
     var nombre = campos[2];
     var unimed = campos[3];
+    var codUni = campos[4];
 
     var nFilas = tbDetalleCN.rows.length;
     var existe = false;
@@ -156,6 +218,9 @@ function adicionarItem(datos) {
         filaDetalle += "</td> ";
         filaDetalle += "<td style='white-space:pre-wrap;width:80px;vertical-align:top;'>";
         filaDetalle += unimed;
+        filaDetalle += "</td> ";
+        filaDetalle += "<td style='white-space:pre-wrap;width:80px;vertical-align:top;display:none'>";
+        filaDetalle += codUni;
         filaDetalle += "</td> ";
 
         filaDetalle += "<td style='white-space:pre-wrap;width:70px;vertical-align:top;padding:0px'>";
@@ -242,18 +307,18 @@ function retirarItem(col, id) {
 
 function importes(col) {
     var fila = col.parentNode.parentNode;
-    fila.childNodes[14].style.textAlign = "center";
-    fila.childNodes[14].style.fontWeight = "bold";
-    fila.childNodes[22].style.textAlign = "center";
-    fila.childNodes[22].style.fontWeight = "bold";
-    fila.childNodes[30].style.textAlign = "center";
-    fila.childNodes[30].style.fontWeight = "bold";
-    fila.childNodes[38].style.textAlign = "center";
-    fila.childNodes[38].style.fontWeight = "bold";
+    fila.childNodes[16].style.textAlign = "center";
+    fila.childNodes[16].style.fontWeight = "bold";
+    fila.childNodes[24].style.textAlign = "center";
+    fila.childNodes[24].style.fontWeight = "bold";
+    fila.childNodes[32].style.textAlign = "center";
+    fila.childNodes[32].style.fontWeight = "bold";
     fila.childNodes[40].style.textAlign = "center";
     fila.childNodes[40].style.fontWeight = "bold";
-    fila.childNodes[44].style.textAlign = "center";
-    fila.childNodes[44].style.fontWeight = "bold";
+    fila.childNodes[42].style.textAlign = "center";
+    fila.childNodes[42].style.fontWeight = "bold";
+    fila.childNodes[46].style.textAlign = "center";
+    fila.childNodes[46].style.fontWeight = "bold";
     var elemento = fila.getElementsByTagName('input');
     var nroElemento = elemento.length;
     var valor = 0;
@@ -261,14 +326,14 @@ function importes(col) {
     for (var i = 0; i < nroElemento-1; i++) {
         valor += elemento[i].value * 1;
         subTot += elemento[i].value * 1;
-        if (i == 2) fila.childNodes[14].innerText = valor.toString();
-        if (i == 5) fila.childNodes[22].innerText = valor.toString();
-        if (i == 8) fila.childNodes[30].innerText = valor.toString();
-        if (i == 11) fila.childNodes[38].innerText = valor.toString();
-        fila.childNodes[40].innerText = subTot.toString();
+        if (i == 2) fila.childNodes[16].innerText = valor.toString();
+        if (i == 5) fila.childNodes[24].innerText = valor.toString();
+        if (i == 8) fila.childNodes[32].innerText = valor.toString();
+        if (i == 11) fila.childNodes[40].innerText = valor.toString();
+        fila.childNodes[42].innerText = subTot.toString();
         if (i == 2 || i == 5 || i == 8 || i == 11) valor = 0;
     }
-    fila.childNodes[44].innerText = ((elemento[12].value * 1)*(fila.childNodes[40].innerText*1)).toFixed(2).toString();
+    fila.childNodes[46].innerText = ((elemento[12].value*1)*(fila.childNodes[42].innerText*1)).toFixed(2).toString();
 }
 
 function validarCN() {
@@ -294,29 +359,74 @@ function validarCN() {
 function grabarCN() {
     var data = "";
     var idRegistro = txtIdRegistro.value;
+    var idOficina = cboOficina.value;
+    var idEntidad = "1";
     var anioCN = txtAnioCN.value;
     var fechaRegistro = dttFechaRegistro.value;
-    var idOficina = cboOficina.value;
-    var idEstado = cboEstado.value;
+    var idPersonal = cboPersonal.value;
+    var idCodBien = cboTipoBien.value;
+    var dEstado = cboEstado.value;
+    var hEstado = "6";
 
     data = idRegistro;
+    data += "|";
+    data += idOficina;
+    data += "|";
+    data += idEntidad;
     data += "|";
     data += anioCN;
     data += "|";
     data += fechaRegistro;
     data += "|";
-    data += idOficina;
+    data += idPersonal;
     data += "|";
-    data += idEstado;
+    data += idCodBien;
+    data += "|";
+    data += dEstado;
+    data += "|";
+    data += hEstado;
     data += "¯";
 
     var nfilas = tbDetalleCN.rows.length;
     var fila;
     for (var i = 0; i < nfilas; i++) {
         fila = tbDetalleCN.rows[i];
+        data += "||";
         data += fila.cells[0].innerHTML; //Item
         data += "|";
-        data += fila.cells[4].childNodes[0].value; //Cantidad
+        data += fila.cells[4].innerHTML; //uniMed
+        data += "|";
+        data += fila.cells[2].innerHTML; //descripcion
+        data += "|";
+        data += fila.cells[21].innerHTML; //cant
+        data += "|";
+        data += fila.cells[22].childNodes[0].value; //precio
+        data += "|";
+        data += fila.cells[23].innerHTML; //subTot
+        data += "|";
+        data += fila.cells[5].childNodes[0].value; //ene
+        data += "|";
+        data += fila.cells[6].childNodes[0].value; //feb
+        data += "|";
+        data += fila.cells[7].childNodes[0].value; //mar
+        data += "|";
+        data += fila.cells[9].childNodes[0].value; //abr
+        data += "|";
+        data += fila.cells[10].childNodes[0].value; //may
+        data += "|";
+        data += fila.cells[11].childNodes[0].value; //jun
+        data += "|";
+        data += fila.cells[13].childNodes[0].value; //jul
+        data += "|";
+        data += fila.cells[14].childNodes[0].value; //ago
+        data += "|";
+        data += fila.cells[15].childNodes[0].value; //set
+        data += "|";
+        data += fila.cells[17].childNodes[0].value; //oct
+        data += "|";
+        data += fila.cells[18].childNodes[0].value; //nov
+        data += "|";
+        data += fila.cells[19].childNodes[0].value; //dic
         data += "¬";
     }
     data = data.substr(0, data.length - 1);
