@@ -240,6 +240,7 @@
     <Compile Include="Controllers\PatrimonioController.cs" />
     <Compile Include="Controllers\PlaneamientoController.cs" />
     <Compile Include="Controllers\PresupuestoController.cs" />
+    <Compile Include="Controllers\RRHHController.cs" />
     <Compile Include="Controllers\SecurityController.cs" />
     <Compile Include="Filtros\FiltroAuditoria.cs" />
     <Compile Include="Filtros\FiltroAutenticacion.cs" />
@@ -308,6 +309,8 @@
     <Content Include="Views\Inventario\InventarioInicial.cshtml" />
     <Content Include="Views\General\Inicio.cshtml" />
     <Content Include="Views\Logistica\Configuracion.cshtml" />
+    <Content Include="Views\RRHH\Personal.cshtml" />
+    <Content Include="Views\Presupuesto\Asignacion.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
