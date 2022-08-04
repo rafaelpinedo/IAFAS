@@ -433,6 +433,7 @@ function grabarCN() {
 
     alert(data);
 
+
     //var frm = new FormData();
     //frm.append("data", data);
     //post("Admon/grabar?Id=" + tabla, mostrarGrabar, frm);
