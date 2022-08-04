@@ -8,7 +8,7 @@
         <div class="main-body">
             <div class="card">
                 <div class="card-header bg-primary">
-                    <h3><i class="fa fa-file-o" aria-hidden="true"></i> CUADRO COMPARATIVO</h3>
+                    <h3><i class="fa fa-money" aria-hidden="true"></i> Cuadro Comparativo</h3>
                     <div class="card-header-right">
                         <ul class="list-unstyled card-option">
                             <li><i class="fa fa-window-maximize full-card" style="color:white"></i></li>
@@ -27,122 +27,204 @@
                         </div>
                         <div class="form-group col-md-4 m-3">
                             <button class="input-group-inverse btn btn-inverse" id="btnConsultar" data-toggle="tooltip" data-placement="bottom" title="Consultar"><i class="fa fa-search fa-lg" aria-hidden="true"></i></button>
-                            <button class="btn btn-out waves-effect waves-light btn-info btn-square" id="btnImprimir" data-toggle="tooltip" data-placement="bottom" title="Imprimir Orden con Formato"><i class="fa fa-print fa-lg" aria-hidden="true"></i></button>
-                            <button class="btn btn-out waves-effect waves-light btn-success btn-square" id="btnImprimirPreImpreso" data-toggle="tooltip" data-placement="bottom" title="Imprimir Orden pre impreso"><i class="fa fa-newspaper-o fa-lg" aria-hidden="true"></i></button>
+                            <button class="input-group-inverse btn btn-primary" id="btnNuevo" data-toggle="tooltip" data-placement="bottom" title="Nuevo"><i class="fa fa-plus-circle fa-lg" aria-hidden="true"></i></button>
+                            <button class="btn btn-out waves-effect waves-light btn-info btn-square" id="btnImprimir" data-toggle="tooltip" data-placement="bottom" title="Imprimir"><i class="fa fa-print fa-lg" aria-hidden="true"></i></button>
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group col-md-12">
-                            <div class="table-responsive" id="divLista"></div>
+                            <div class="table-responsive dt-responsive" id="divLista"></div>
                         </div>
                     </div>
                     <div class="form-row">
-                        <div class="modal custom-modal" tabindex="-1" role="dialog" aria-hidden="true" id="divPopupContainerFormato" style="overflow-y:auto;">
-                            <div class="modal-dialog modal-lg bg-personalizado" id="divPopupWindowFormato" style="margin-top:1px;">
+                        <div class="modal custom-modal" tabindex="-1" role="dialog" aria-hidden="true" id="divPopupContainer" style="overflow-y:auto;">
+                            <div class="modal-dialog modal-lg bg-personalizado" id="divPopupWindow" style="margin-top:1px;max-width:85%">
                                 <div class="modal-content">
-                                    <div id="divBarraFormato" class="modal-header bg-personalizado" style="cursor:move">
-                                        <h5 class="modal-title">Nuevo Registro</h5>
-                                        <button type="button" id="btnCerrarFormato" class="close"><span aria-hidden="true">&times;</span><span class="sr-only"></span></button>
+                                    <div id="divBarra" class="modal-header bg-personalizado" style="cursor:move">
+                                        <h5 class="modal-title">Generar Cuadro Comparativo</h5>
                                     </div>
                                     <div class="modal-body">
-                                        <div id="divValidaInterno" style="display:none" class="alert background">
-                                            <span id="btncloseVal" class="closebtn">&times;</span>
-                                            <strong>Advertencia!</strong><br />Los campos remarcados en rojo son obligatorios.
-                                        </div>
                                         <div class="row">
-                                            <div class="form-group col-sm-3">
-                                                <label class="control-label">RUC</label>
-                                                <input type="hidden" class="control-form Popup" id="txtIdRegistro">
-                                                <input type="number" autocomplete="off" maxlength="11" class="control-form Reque Popup" id="txtRUC" title="Ingrese RUC y presione ENTER">
-                                                <span id="spnDocumento"></span>
-                                            </div>
-                                            @*<div class="col-lg-4">
-                                                    <div class="form-group">
-                                                        <label class="control-label">&nbsp;</label>
-                                                        <div class="input-group">
-                                                            <span id="spnLoad" style="color: rgb(33, 67, 253); border-color: black; font-weight: bold; display:none;">
-                                                                <b>Sunat..</b>
-                                                                <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
-                                                            </span>
+                                            <div class="col-xl-4 col-md-12">
+                                                <div class="card table-card review-card">
+                                                    <div class="card-header">
+                                                        <h5>Solicitud Pendientes</h5>
+                                                    </div>
+                                                    <div class="card-block">
+                                                        <div class="row">
+                                                            <div class="form-group col-sm-12">
+                                                                <div class="table-responsive" id="listaPendientes" style="height:275px;">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <hr />
+                                                        <div id="divBuenaPro" style="display:none;">
+                                                            <div class="row">
+                                                                <div class="col-sm-12">
+                                                                    <label class="control-label">Proveedor con buena pro</label>
+                                                                    <select class="control-form" id="cboProveedor"></select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row m-3">
+                                                                <div class="col-sm-12">
+                                                                    <button class="btnCancelarForm" id="btnCancelar" title="Cancelar"><i class="fa fa-undo" aria-hidden="true"></i>&nbsp;Cancelar</button>
+                                                                    <button class="btnGuardarForm bg-customer" id="btnGuardar" title="Guardar datos"><span class="fa fa-save"></span>&nbsp;Grabar</button>
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>*@
-                                        </div>
-                                        <div class="row">
-                                            <div class="form-group col-sm-12">
-                                                <label class="control-label">Razón Social</label>
-                                                <input type="text" autocomplete="off" class="control-form Reque Popup" id="txtNombre">
-                                            </div>
-                                        </div>
-                                        @*<div class="row">
-                                                <div class="form-group col-sm-4">
-                                                    <label class="control-label">Estado Sunat</label>
-                                                    <label class="control-lectura" id="lblEstadoSunat"></label>
                                                 </div>
-                                                <div class="form-group col-sm-4">
-                                                    <label class="control-label">Condición Sunat</label>
-                                                    <label class="control-lectura" id="lblCondicionSunat"></label>
+                                            </div>
+                                            <div class="col-xl-8 col-md-12">
+                                                <div class="card table-card review-card">
+                                                    <div class="card-header">
+                                                        <h5>Vista Previa de Propuestas:</h5>
+                                                    </div>
+                                                    <div class="card-block">
+                                                        <div class="row m-2">
+
+                                                            <div class="form-group col-sm-12">
+                                                                <div class="table-responsive" id="listaDetalle" style="height:475px;">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="form-group col-sm-12">
+                                                                <span id="spnNroItems" class="control-label">Items: 0</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                            </div>*@
-                                        <div class="row">
-                                            <div class="form-group col-sm-12">
-                                                <label class="control-label">Dirección</label>
-                                                <textarea class="control-form Reque Popup" rows="2" id="ttaDireccion"></textarea>
                                             </div>
                                         </div>
-                                        <div class="row">
-                                            <div class="form-group col-sm-10">
-                                                <label class="control-label">Contacto</label>
-                                                <input type="text" autocomplete="off" id="txtContacto" class="control-form Reque Popup" />
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="form-group col-sm-6">
-                                                <label class="control-label">Teléfono</label>
-                                                <input type="number" id="txtTelefono" autocomplete="off" class="control-form Reque Popup" />
-                                            </div>
-                                            <div class="form-group col-sm-6">
-                                                <label class="control-label">Correo Electrónico</label>
-                                                <input type="email" id="txtCorreo" autocomplete="off" class="control-form Reque Popup" />
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="form-group col-sm-6">
-                                                <label class="control-label">Banco</label>
-                                                <input type="text" autocomplete="off" id="txtBanco" class="control-form Reque Popup" />
-                                            </div>
-                                            <div class="form-group col-sm-6">
-                                                <label class="control-label">CCI</label>
-                                                <input type="number" autocomplete="off" maxlength="20" id="txtCCI" class="control-form Reque Popup" />
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input Popup" name="inlineRadioOptions" type="radio" checked id="optActivo">
-                                                <label class="form-check-label" for="optActivo">Activo</label>
-                                            </div>
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" name="inlineRadioOptions" type="radio" id="optInactivo">
-                                                <label class="form-check-label" for="optInactivo">Inactivo</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button class="btnGuardarForm bg-customer" id="btnGuardar" title="Guardar datos"><span class="fa fa-save"></span>&nbsp;Grabar</button>
-                                        <button class="btnCancelarForm" id="btnCancelarFormato" title="Cancelar"><i class="fa fa-undo" aria-hidden="true"></i>&nbsp;Cancelar</button>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+                <div id="divReporte" style="overflow:hidden;width:auto;display:none">
+
+                    <table style="max-width: 2480px;width: 100%;font-family:  Arial;font-size:11px" cellpadding="0" cellspacing="0">
+                        <tr>
+                            <td style="text-align: center;font-weight: bold;line-height: 20px;font-size: 13px" colspan="4">CUADRO COMPARATIVO DE PRECIOS</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: center;font-weight: bold;line-height: 20px;font-size: 13px" colspan="4">INDAGACION DE MERCADO</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid black;line-height: 20px;font-weight:bold" colspan="4">1. DATOS GENERALES</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid black;width: 150px;line-height: 20px">OBJETO DEL PROCESO</td>
+                            <td style="        border: 1px solid black;
+        width: 700px;
+        max-width: 700px;
+        line-height: 20px" id="tdJustificacion"></td>
+                            <td style="border: 1px solid black;width: 70px;line-height: 20px">FECHA DE:</td>
+                            <td style="border: 1px solid black;line-height: 20px" id="tdFechaEmision"></td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid black;width: 100px;line-height: 20px">USUARIO</td>
+                            <td style="border: 1px solid black;line-height: 20px" id="tdArea"></td>
+                            <td style="border: 1px solid black;width: 50px;line-height: 20px">&nbsp;</td>
+                            <td style="border: 1px solid black;line-height: 20px">PROGRAMADO</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid black;width: 100px;line-height: 20px">RESPONSABLE</td>
+                            <td style="border: 1px solid black;line-height: 20px" id="tdEvaluadorCC"></td>
+                            <td style="border: 1px solid black;width: 50px;text-align: center;line-height: 20px">X</td>
+                            <td style="border: 1px solid black;line-height: 20px">NO PROGRAMADO</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid black;width: 100px;line-height: 20px">TIPO DE PRESUPUESTO</td>
+                            <td style="        border: 1px solid black;
+        line-height: 20px
+" colspan="3" id="tdPresupuesto">
+                            </td>
+                        </tr>
+                    </table>
+                    <br />
+                    <table style="max-width: 2480px;width: 100%;font-family:  Arial;font-size:11px" cellpadding="0" cellspacing="0" id="tblGenerarCC"></table>
+                    <table style="max-width: 2480px;width: 100%;font-family:  Arial;font-size:11px" cellpadding="4" cellspacing="0">
+                        <tr>
+                            <td style="border: 1px solid black;width:220px">OFERTA MAS CONVENIENTE</td>
+                            <td style="border: 1px solid black;text-align:justify"> LA OFERTA MAS CONVENIENTE ES LA PRESENTADA POR LA EMPRESA "<span id="spnBuenaPro" style="font-weight:bold"></span>" POR SER LA OFERTA QUE CUMPLE CON LOS TERMINOS DE REFERENCIA O ESPECIFICACIONES TECNICAS Y ES LA OFERTA MAS ECONOMICA.</td>
+                        </tr>
+                    </table>
+                    <br /> <br />
+                    <table style="max-width: 2480px;width: 100%;font-family:  Arial;font-size:11px" cellpadding="0" cellspacing="0">
+                        <tr>
+                            <td style="width:750px">&nbsp;</td>
+                            <td style="text-align:center;">
+                                <span id="spnGrado"></span><br />
+                                <span id="spnCargo"></span><br />
+                                <span id="spnNombre"></span><br />
+                                <span id="spnCIP"></span><br />
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
             </div>
-        </div>
-        <div id="styleSelector">
+            <div class="modal custom-modal" tabindex="-1" role="dialog" aria-hidden="true" id="divPopupContainerDetalleItem" style="overflow-y:auto;">
+                <div class="modal-dialog modal-xl bg-personalizado" id="divPopupWindowDetalleItem" style="margin-top:1px">
+                    <div class="modal-content">
+                        <div id="divBarraDetalleItem" class="modal-header bg-personalizado" style="cursor:move">
+                            <h5 class="modal-title"> Cuadro Comparativo</h5>
+                            <button type="button" id="btnCerrarDetalleItem" class="close"><span aria-hidden="true">&times;</span><span class="sr-only"></span></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <fieldset class="fieldset">
+                                        <div class="row">
+                                            <div class="col-sm-4">
+                                                <label class="control-label">Número</label>
+                                                <label class="control-lectura" id="lblNumero"></label>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <label class="control-label">Fecha Emisión</label>
+                                                <label class="control-lectura" id="lblFechaEmision"></label>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <label class="control-label">Nº de Solicitud Compra</label>
+                                                <label class="control-lectura" id="lblNroSolicitud"></label>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-8">
+                                                <label class="control-label">Nº de Pedido Compra</label>
+                                                <label class="control-lectura" id="lblPedido"></label>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <label class="control-label">Estado</label>
+                                                <label class="control-lectura" id="lblEstado"></label>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                            </div>
+                            <div class="row m-2">
+                                <div class="col-sm-12 text-right">
+                                    <button class="btnCancelarForm" id="btnCancelarDetalleItem" title="Cancelar"><i class="fa fa-undo" aria-hidden="true"></i>&nbsp;Cancelar</button>
+                                </div>
+                            </div>
+                            <div class="row" style="height:440px;overflow-y:auto">
+                                <fieldset class="fieldset col-12">
+                                    <div class="table-responsive" id="listaDetallePrevia" style="overflow-x:auto;overflow-y:auto"></div>
+                                </fieldset>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="styleSelector">
+            </div>
         </div>
     </div>
 </div>
-
 <iframe name="print_frame" width="0" height="0" frameborder="0" src="about:blank"></iframe>
 <script src="~/Riztie/Js/App/AppLogistica.js"></script>
 

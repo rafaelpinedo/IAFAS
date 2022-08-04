@@ -124,7 +124,7 @@ function mostrarlistas(rpta) {
             grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
             crearCombo(listaTipo, "cboTipoSolicitud", "Seleccione");
         }
-        else if (vista == "Articulo"){
+        else if (vista == "Articulo") {
             var botones = [
                 { "cabecera": "Editar", "clase": "fa fa-pencil-square-o btn btn-info btnCirculo", "id": "Editar" },
                 { "cabecera": "Eliminar", "clase": "fa fa-trash btn btn-danger btnCirculo", "id": "Eliminar" },
@@ -144,13 +144,13 @@ function mostrarlistas(rpta) {
             crearCombo(listaUniMed, "cboUniMed", "Seleccione");
         }
 
-        else if (vista == "Grupo" ) {
+        else if (vista == "Grupo") {
             var botones = [
                 { "cabecera": "Editar", "clase": "fa fa-pencil-square-o btn btn-info btnCirculo", "id": "Editar" },
                 { "cabecera": "Eliminar", "clase": "fa fa-trash btn btn-danger btnCirculo", "id": "Eliminar" },
             ];
             grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
-            var listaTipoBien = listas[1].split("¬"); 
+            var listaTipoBien = listas[1].split("¬");
             var listaEstado = listas[2].split("¬");
             crearCombo(listaTipoBien, "cboTipoBien", "Seleccione");
             crearCombo(listaEstado, "cboEstado", "Seleccione");
@@ -226,7 +226,7 @@ function listarGrupoItem() {
     if (cbo != null) {
         cbo.innerHTML = contenido;
         listarClaseItem();
-    }   
+    }
 }
 
 function listarClaseItem() {
@@ -254,7 +254,7 @@ function listarClaseItem() {
         cbo.innerHTML = contenido;
         listarFamiliaItem();
     }
-    
+
 }
 
 
@@ -331,7 +331,7 @@ function configurarBotones() {
             cboEntidad.value = 1;
             cboEntidad.disabled = true;
         }
-        
+
         var dtgEsAgenteRetencion = document.getElementById("dtgEsAgenteRetencion");
         if (dtgEsAgenteRetencion != null) {
             $('#dtgEsAgenteRetencion').bootstrapToggle('off')
@@ -354,9 +354,9 @@ function configurarBotones() {
         var txtFechaPedido = document.getElementById("txtFechaPedido");
         if (txtFechaPedido != null) txtFechaPedido.value = txtFechaPedido.getAttribute("data-fecha");
 
-        var select2cboOficina= document.getElementById("select2-cboOficina-container");
+        var select2cboOficina = document.getElementById("select2-cboOficina-container");
         if (select2cboOficina != null) select2cboOficina.innerHTML = "Seleccione";
-        
+
         var tbDetallePedido = document.getElementById("tbDetallePedido");
         if (tbDetallePedido != null) tbDetallePedido.innerHTML = "";
 
@@ -403,7 +403,7 @@ function configurarBotones() {
 
         var select2cboFamilia = document.getElementById("select2-cboFamilia-container");
         if (select2cboFamilia != null) select2cboFamilia.innerHTML = "Seleccione";
-        
+
     }
 
     var btnActualizar = document.getElementById("btnActualizar");
@@ -445,7 +445,7 @@ function configurarBotones() {
 
     var btnGuardar = document.getElementById("btnGuardar");
 
-  
+
     if (btnGuardar != null) btnGuardar.onclick = function () {
         var validar = false;
 
@@ -458,13 +458,13 @@ function configurarBotones() {
         else if (vista == "Cotizacion" && validarCotizacion()) {
             validar = true;
         }
-        //else if (vista == "CuadroCompara" && validarCuadroCompara()) {
-        //    validar = true;
-        //}
+        else if (vista == "CuadroCompara" && validarCuadroCompara()) {
+            validar = true;
+        }
         //else if (vista == "OrdenCompra" && validarOrdenCompra()) {
         //    validar = true;
         //}
-       else if (validarInformacion("Reque")==true){
+        else if (validarInformacion("Reque") == true) {
             validar = true;
         }
         if (validar == true) {
@@ -487,9 +487,9 @@ function configurarBotones() {
                     else if (vista == "Cotizacion") {
                         grabarCotizacion();
                     }
-                    //else if (vista == "CuadroCompara") {
-                    //    grabarCuadroCompara();
-                    //}
+                    else if (vista == "CuadroCompara") {
+                        grabarCuadroCompara();
+                    }
                     //else if (vista == "OrdenCompra") {
                     //    grabarOrdenCompra();
                     //}
@@ -508,7 +508,40 @@ function configurarBotones() {
             })
         }
     }
-   
+
+    var btnMostrarCorreo = document.getElementById("btnMostrarCorreo");
+    if (btnMostrarCorreo != null) btnMostrarCorreo.onclick = function () {
+        if (idRegistro == "") {
+            mostrarMensaje("Seleccione un proveedor de la lista", "error")
+        }
+        else {
+            divPopupContainerForm2.style.display = 'block';
+        }
+    }
+
+    var btnEnviarCorreo = document.getElementById("btnEnviarCorreo");
+    if (btnEnviarCorreo != null) btnEnviarCorreo.onclick = function () {
+        var correo = txtEmail.value
+        if (correo == "") {
+            mostrarMensaje("Ingrese correo electrónico del proveedor", "error")
+        }
+        else {
+            var doc = new jsPDF();
+            doc.text('IAFAS DE LA MARINA DE GUERRA DEL PERU', 14, 18)
+            doc.text('SISGEFIN', 14, 21)
+            //  doc.text('Fecha: ' + fecha, 170, 21)
+            // doc.text('Usuario: ' + spnUsuario.innerHTML, 14, 23)
+            //doc.text('Hora: ' + hora, 170, 23)
+            doc.setFontSize(16);
+            doc.text('Solicitud de cotización', 84, 33);
+
+            var blobPDF = new Blob([doc.output("blob")], { type: 'application/pdf' });
+            var frm = new FormData();
+            frm.append("correo", correo);
+            frm.append("data", blobPDF);
+            Http.post("General/enviarCorreo", mostrarEnviarCorreo, frm);
+        }
+    }
 
     var btnCancelar = document.getElementById("btnCancelar");
     if (btnCancelar != null) btnCancelar.onclick = function () {
@@ -559,6 +592,11 @@ function configurarBotones() {
         }
         obtenerItems(data);
     }
+}
+
+function mostrarEnviarCorreo(rpta) {
+    if (rpta) alert(rpta);
+    else mostrarMensaje('ocurrio un error al enviar correo','error');
 }
 
 function obtenerItems(datos) {
@@ -667,8 +705,7 @@ function validarPedido() {
             }
         }
 
-        if (fechaRequerida < fechaPedido)
-        { mostrarMensaje("La fecha requerida no puede ser menor a la fecha de pedido", "error"); return false; }
+        if (fechaRequerida < fechaPedido) { mostrarMensaje("La fecha requerida no puede ser menor a la fecha de pedido", "error"); return false; }
         else if (nfilas == 0) {
             mostrarMensaje("Debe agregar items al Pedido", "error");
             return false;
@@ -677,7 +714,7 @@ function validarPedido() {
             mostrarMensaje("Debe ingresar cantidad solicitada a todos los items", "error");
             return false;
         }
-        else { 
+        else {
             return true;
         }
     }
@@ -728,7 +765,7 @@ function grabarPedido() {
     var txtFechaFinal = dFechaFinal[2] + "-" + dFechaFinal[1] + "-" + dFechaFinal[0];
 
     data = data + '¯' + txtFechaInicio + '|' + txtFechaFinal
-    
+
     var frm = new FormData();
     frm.append("data", data);
     Http.post("General/guardar?tbl=" + controller + vista, mostrarGrabar, frm);
@@ -808,12 +845,74 @@ function seleccionarFila(fila, id, prefijo) {
         }
     }
     else if (vista == "Cotizacion") {
-        if (prefijo == "lista") {
+        if (prefijo == "divLista") {
             txtProveedorCorreo.value = fila.childNodes[4].innerHTML;
             txtEmail.value = fila.childNodes[8].innerHTML;
         }
         else if (prefijo == "listaPendientes") {
             Http.get("General/listarTabla/?tbl=" + controller + vista + "DetalleItem&data=" + id, mostrarSolicitudDetalle);
+        }
+    }
+    else if (vista == "CuadroCompara" && prefijo == "listaPendientes") {
+        Http.get("General/listarTabla/?tbl=" + controller + vista + "DetalleItem&data=" + id, mostrarSolicitudDetalle);
+    }
+}
+
+function mostrarSolicitudDetalle(rpta) {
+    if (rpta) {
+        if (vista == 'CuadroCompara') {
+            var listas = rpta.split('¯');
+            var lista = listas[0].split('¬');
+            generarPivot(lista, "listaDetalle");
+            var listaProveedores = listas[1].split("¬");
+            crearCombo(listaProveedores, "cboProveedor", "Seleccionar")
+            divBuenaPro.style.display = 'inline';
+        }
+        else {
+            var contenido = "";
+            tbDetallePedido.innerHTML = "";
+            var lista = rpta.split('¬');
+            var nRegistros = lista.length;
+            var campos = [];
+            for (var i = 0; i < nRegistros; i++) {
+                campos = lista[i].split("|");
+                contenido += "<tr>";
+                contenido += "<td style='display:none'>";
+                contenido += campos[0];
+                contenido += "</td> ";
+                contenido += "<td style='display:none'>";
+                contenido += campos[1];
+                contenido += "</td> ";
+                contenido += "<td style='vertical-align:top'>";
+                contenido += campos[2];
+                contenido += "</td> ";
+                contenido += "<td style='max-width:600px;white-space: pre-line;white-space: -moz-pre-wrap;white-space: -o-pre-wrap;'>";
+                if (campos[4].length != 0) {
+                    contenido += "<h6>";
+                    contenido += campos[3];
+                    contenido += "</h6>";
+                    contenido += "<p style='white-space:pre-line;'>";
+                    contenido += campos[4];
+                    contenido += "</p>";
+                }
+                else {
+                    contenido += "<h6>";
+                    contenido += campos[3];
+                    contenido += "</h6>";
+                }
+                contenido += "</td>";
+                contenido += "<td style='vertical-align:top;'>";
+                contenido += campos[5];
+                contenido += "</td> ";
+                contenido += "<td style='vertical-align:top;text-align:right'>";
+                contenido += campos[6];
+                contenido += "</td> ";
+                contenido += "</tr>";
+            }
+            tbDetallePedido.innerHTML = contenido;
+
+            var spnNroItems = document.getElementById("spnNroItems");
+            if (spnNroItems != null) spnNroItems.innerHTML = 'Items: ' + nRegistros;
         }
     }
 }
@@ -1150,7 +1249,7 @@ function mostrarRegistro(rpta) {
             txtNombre.value = campos[4];
             cboEstado.value = campos[5];
         }
-       
+        else {
             var divPopupContainer = document.getElementById("divPopupContainer");
             if (divPopupContainer != null) { divPopupContainer.style.display = 'block'; };
             var controles = document.getElementsByClassName("Popup");
@@ -1203,7 +1302,7 @@ function mostrarRegistro(rpta) {
                     }
                 }
             }
-        
+        }
     }
 }
 
@@ -1736,7 +1835,7 @@ function mostrarReporte(rpta) {
                 tblDetalleReporte.innerHTML = contenido;
             }
         }
-        
+
         imprimir(divReporte.innerHTML);
     }
 }
@@ -2200,7 +2299,7 @@ function validarCotizacion() {
     if (idRegistro == "") { mostrarMensaje("Seleccione una Solicitud de la lista", "error"); return false; }
     else if (idProveedor == "") { mostrarMensaje("Seleccione Proveedor", "error"); return false; }
     else if (idCondicionCompra == "") { mostrarMensaje("Seleccione Condición de compra", "error"); return false; }
-    else if (idMoneda== "") { mostrarMensaje("Seleccione Moneda", "error"); return false; }
+    else if (idMoneda == "") { mostrarMensaje("Seleccione Moneda", "error"); return false; }
 
     //var fila;
     //for (var i = 0; i < nfilas; i++) {
@@ -2365,4 +2464,140 @@ function grabarProforma() {
         btnActualizar.innerHTML = "Guardando <i class='fa fa-circle-o-notch fa-spin' style='color:white'></i>";
         btnActualizar.disabled = true;
     }
+}
+function generarPivot(detalle, div) {
+    var nDetalles = detalle.length;
+    var productos = [];
+    var proveedores = [];
+    var campos = [];
+    for (var i = 0; i < nDetalles; i++) {
+        campos = detalle[i].split('|');
+        if (proveedores.indexOf(campos[0]) == -1) {
+            proveedores.push(campos[0]);
+            window[campos[0] + "_SubTotal"] = 0;
+        }
+        if (productos.indexOf(campos[1]) == -1) {
+            productos.push(campos[1]);
+        }
+        window[campos[1] + "_Unidad"] = campos[2];
+        window[campos[1] + "_Cantidad"] = formatoNumeroDecimal(campos[3] * 1);
+        window[campos[0] + "_" + campos[1] + "_Precio"] = formatoNumeroDecimal(campos[4] * 1);
+        window[campos[0] + "_" + campos[1] + "_SubTotal"] = formatoNumeroDecimal(campos[5] * 1);
+        window[campos[0] + "_SubTotal"] += (campos[5] * 1);
+    }
+    var html = "";
+    html += "<table class='grilla bordered' style='width:100%'>";
+    html += "<thead>";
+    html += "<tr class='FilaHead'>";
+    html += "<th style='width:300px'>&nbsp;</th>";
+    html += "<th style='width:75px'>&nbsp;</th>";
+    html += "<th style='width:75px'>&nbsp;</th>";
+    var nProveedores = proveedores.length;
+    for (var i = 0; i < nProveedores; i++) {
+        html += "<th colspan='2' style='white-space: pre-wrap;width:150px'>";
+        html += proveedores[i];
+        html += "</th>";
+    }
+    html += "</tr>";
+    html += "<tr class='FilaHead'>";
+    html += "<th style='width:300px'>Descripción</th>";
+    html += "<th style='width:75px'>Unidad</th>";
+    html += "<th style='width:75px'>Cantidad</th>";
+    var nProveedores = proveedores.length;
+    for (var i = 0; i < nProveedores; i++) {
+        html += "<th style='width:75px'>";
+        html += "Precio Unitario";
+        html += "</th>";
+        html += "<th style='width:75px'>";
+        html += "Sub Total";
+        html += "</th>";
+    }
+    html += "</tr>";
+    html += "</thead>";
+    html += "<tbody>";
+    var nProductos = productos.length;
+    for (var i = 0; i < nProductos; i++) {
+        html += "<tr class='FilaDatos'>";
+        html += "<td style='background-color:#F4ED9C;white-space: pre-wrap;white-space: -moz-pre-wrap;white-space: -o-pre-wrap;text-align:left;width:300px'>";
+        html += productos[i];
+        html += "</td>";
+        html += "<td style='background-color:#F4ED9C;width:75px'>";
+        html += window[productos[i] + "_Unidad"];
+        html += "</td>";
+        html += "<td style='background-color:#F4ED9C;text-align:right;width:75px'>";
+        html += window[productos[i] + "_Cantidad"];
+        html += "</td>";
+        for (var j = 0; j < nProveedores; j++) {
+            html += "<td style='text-align:right;width:75px'>";
+            html += window[proveedores[j] + "_" + productos[i] + "_Precio"];
+            html += "</td>";
+            html += "<td style='text-align:right;font-weight:bold;width:75px'>";
+            html += window[proveedores[j] + "_" + productos[i] + "_SubTotal"];
+            html += "</td>";
+        }
+        html += "</tr>";
+    }
+    html += "<tr>";
+    html += "<td colspan='3' style='text-align:right;font-weight:bold;width:300px'>";
+    html += "TOTALES:";
+    html += "</td>";
+    for (var j = 0; j < nProveedores; j++) {
+        html += "<td style='width:75px'>";
+        html += "";
+        html += "</td>";
+        html += "<td style='text-align:right;font-weight:bold;width:75px' id='tdSubTotal";
+        html += j;
+        html += "'>";
+        html += formatoNumeroDecimal(window[proveedores[j] + "_SubTotal"]);
+        html += "</td>";
+    }
+    html += "</tr>";
+    html += "</tbody>";
+    html += "</table>";
+    var div = document.getElementById(div);
+    div.innerHTML = html;
+    var minSubTotal = 100000000;
+    var posMin = -1;
+    for (var j = 0; j < nProveedores; j++) {
+        if (window[proveedores[j] + "_SubTotal"] < minSubTotal) {
+            minSubTotal = window[proveedores[j] + "_SubTotal"];
+            posMin = j;
+        }
+    }
+    if (posMin > -1) {
+        var celda = document.getElementById("tdSubTotal" + posMin);
+        if (celda != null) celda.style.color = 'red';
+    }
+}
+
+function validarCuadroCompara() {
+    var idProveedor = cboProveedor.value;
+    if (idRegistro == "") {
+        mostrarMensaje("Seleccione una Solicitud de la fila", "error");
+        return false;
+    }
+    else if (idProveedor == "") {
+        mostrarMensaje("Otorgue la buena pro al Proveedor", "error");
+        cboProveedor.focus();
+        return false;
+    }
+
+    return true;
+}
+
+function grabarCuadroCompara() {
+    var idSolicitud = idRegistro;
+    var idProveedor = cboProveedor.value;
+    var data = "";
+    data = idSolicitud + '|' + idProveedor;
+    var txtFechaInicio = document.getElementById("txtFechaInicio").value;
+    var txtFechaFinal = document.getElementById("txtFechaFinal").value;
+    data = data + '¯' + txtFechaInicio + '|' + txtFechaFinal
+
+    var frm = new FormData();
+    frm.append("data", data);
+    Http.post("General/guardar?tbl=" + controller + vista, mostrarGrabar, frm);
+
+    btnGuardar.innerHTML = "Guardando <i class='fa fa-circle-o-notch fa-spin' style='color:white'></i>";
+    btnGuardar.disabled = true;
 }
