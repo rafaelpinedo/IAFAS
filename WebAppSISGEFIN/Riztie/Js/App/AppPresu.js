@@ -497,11 +497,6 @@ function mostrarEliminar(rpta) {
         ];
         grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, null, botones, 38, false, null);
 
-        //if (vista == "Oficina") {
-        //    var listaOficinaPadre = listas[2].split("¬");
-        //    crearCombo(listaOficinaPadre, "cboOficinaPadre", "Ninguno");
-        //}
-
         var cbo = document.getElementById("cboPadre");
         if (cbo != null) {
             var listaPadre = listas[2].split("¬");
