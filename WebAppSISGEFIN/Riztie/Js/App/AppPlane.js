@@ -18,12 +18,20 @@ window.onload = function () {
 }
 
 function getListar() {
-    var data = "";
+    var anioCN = document.getElementById("txtAnioCN").value;
+    var data = anioCN;
     Http.get("General/listarTabla?tbl=" + controller + vista + "&data=" + data, mostrarlistas);
 }
 
 function mostrarlistas(rpta) {
     if (rpta) {
+        var listas = rpta.split("¯");
+        var lista = listas[0].split("¬");
+        var botones = [
+            { "cabecera": "Editar", "clase": "fa fa-pencil-square-o btn btn-info btnCirculo", "id": "Editar" },
+            { "cabecera": "Eliminar", "clase": "fa fa-trash btn btn-danger btnCirculo", "id": "Eliminar" },
+        ];
+        grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
 
     }
 }
@@ -64,10 +72,20 @@ function configurarBotones() {
     var btnConsutarItems = document.getElementById("btnConsutarItems");
     if (btnConsutarItems != null) btnConsutarItems.onclick = function () {
         var idTipoBien = cboTipoBien.value;
-        Http.get("General/listarTabla?tbl=" + controller + vista + "Items&data=" + idTipoBien, mostrarListadoItems);
+        if (idTipoBien != "") {
+            Http.get("General/listarTabla?tbl=" + controller + vista + "Items&data=" + idTipoBien, mostrarListadoItems);
 
-        divPopupContainerForm1.style.display = 'block';
-        btnSeleccionarItems.disabled = true;
+            divPopupContainerForm1.style.display = 'block';
+            btnSeleccionarItems.disabled = true;
+        } else {
+            Swal.fire({
+                title: 'Advertencia!',
+                text: "Debe seleccionar un tipo de bien.",
+                icon: 'warning',
+                showConfirmButton: true,
+                timer: 1000
+            })
+        }
     }
 
     var btnGuardar = document.getElementById("btnGuardar");
@@ -98,17 +116,19 @@ function seleccionarFila(fila, id, prefijo) {
     fila.className = "FilaSeleccionada";
     window["fila" + prefijo] = fila;
 
-    var isCheck = false;
-    var chequeo = tbllistaItem.getElementsByTagName('input');
-    var nroChequeo = chequeo.length;
-    for (var i = 0; i < nroChequeo; i++) {
-        if (chequeo[i].type == "checkbox" && chequeo[i].checked) {
-            isCheck = true;
-            break;
+    if (prefijo.toLowerCase() == "listaitem") {
+        var isCheck = false;
+        var chequeo = tbllistaItem.getElementsByTagName('input');
+        var nroChequeo = chequeo.length;
+        for (var i = 0; i < nroChequeo; i++) {
+            if (chequeo[i].type == "checkbox" && chequeo[i].checked) {
+                isCheck = true;
+                break;
+            }
         }
+        if (isCheck) btnSeleccionarItems.disabled = false;
+        else btnSeleccionarItems.disabled = true;
     }
-    if (isCheck) btnSeleccionarItems.disabled = false;
-    else btnSeleccionarItems.disabled = true;
 }
 
 
@@ -118,31 +138,37 @@ function mostrarListadoItems(rpta) {
         lista = listas[0].split("¬");
         grillaItems = new GrillaScroll(lista, "listaItem", 1000, 6, "listaItems", "Admon", null, null, null, null, 25, false, true);
 
-        var primerCheck = tbllistaItem.tHead.getElementsByTagName("input")[0];
-        primerCheck.setAttribute("id", "idFirstCheck");
-        var checkid = document.getElementById("idFirstCheck");
-        checkid.onchange = function () {
-            if (checkid.checked) btnSeleccionarItems.disabled = false;
-            else btnSeleccionarItems.disabled = true;
-        }
+        var tbllistaItem = document.getElementById("tbllistaItem");
+        if (typeof(tbllistaItem) != undefined && tbllistaItem != null) {
 
-        //ocultar ultimo Item:
-        var cabecera = tbllistaItem.tHead.getElementsByTagName("th")[5];
-        var dato = cabecera.getAttribute("style");
-        dato += ";display:none";
-        cabecera.removeAttribute("style");
-        cabecera.setAttribute("style", dato);
-        var tbDatalistaItem = document.getElementById("tbDatalistaItem");
-        var filas = tbDatalistaItem.getElementsByTagName("tr");
-        var nroFilas = filas.length;
-        var fila;
-        for (var i = 0; i < nroFilas; i++) {
-            dato = "";
-            fila = filas[i].getElementsByTagName("td")[5];
-            dato = fila.getAttribute("style");
+            var primerCheck = tbllistaItem.tHead.getElementsByTagName("input")[0];
+            primerCheck.setAttribute("id", "idFirstCheck");
+            var checkid = document.getElementById("idFirstCheck");
+            checkid.onchange = function () {
+                if (checkid.checked) btnSeleccionarItems.disabled = false;
+                else btnSeleccionarItems.disabled = true;
+            }
+
+            //ocultar ultimo Item:
+            var cabecera = tbllistaItem.tHead.getElementsByTagName("th")[5];
+            var dato = cabecera.getAttribute("style");
             dato += ";display:none";
-            fila.removeAttribute("style");
-            fila.setAttribute("style", dato);
+            cabecera.removeAttribute("style");
+            cabecera.setAttribute("style", dato);
+            var tbDatalistaItem = document.getElementById("tbDatalistaItem");
+            var filas = tbDatalistaItem.getElementsByTagName("tr");
+            var nroFilas = filas.length;
+            var fila;
+            for (var i = 0; i < nroFilas; i++) {
+                dato = "";
+                fila = filas[i].getElementsByTagName("td")[5];
+                if (fila.hasAttribute("style")) {
+                    dato = fila.getAttribute("style");
+                    dato += ";display:none";
+                    fila.removeAttribute("style");
+                    fila.setAttribute("style", dato);
+                }
+            }
         }
     }
 }
@@ -361,7 +387,7 @@ function grabarCN() {
     var idRegistro = txtIdRegistro.value;
     var idOficina = cboOficina.value;
     var idEntidad = "1";
-    var anioCN = txtAnioCN.value;
+    var anioCN = hdfAnioCN.value;
     var fechaRegistro = dttFechaRegistro.value;
     var idPersonal = cboPersonal.value;
     var idCodBien = cboTipoBien.value;
@@ -404,42 +430,51 @@ function grabarCN() {
         data += "|";
         data += fila.cells[23].innerHTML; //subTot
         data += "|";
-        data += fila.cells[5].childNodes[0].value; //ene
+        data += fila.cells[5].childNodes[0].value == "" ? 0 : fila.cells[5].childNodes[0].value; //ene
         data += "|";
-        data += fila.cells[6].childNodes[0].value; //feb
+        data += fila.cells[6].childNodes[0].value == "" ? 0 : fila.cells[6].childNodes[0].value; //feb
         data += "|";
-        data += fila.cells[7].childNodes[0].value; //mar
+        data += fila.cells[7].childNodes[0].value == "" ? 0 : fila.cells[7].childNodes[0].value; //mar
         data += "|";
-        data += fila.cells[9].childNodes[0].value; //abr
+        data += fila.cells[9].childNodes[0].value == "" ? 0 : fila.cells[9].childNodes[0].value; //abr
         data += "|";
-        data += fila.cells[10].childNodes[0].value; //may
+        data += fila.cells[10].childNodes[0].value == "" ? 0 : fila.cells[10].childNodes[0].value; //may
         data += "|";
-        data += fila.cells[11].childNodes[0].value; //jun
+        data += fila.cells[11].childNodes[0].value == "" ? 0 : fila.cells[11].childNodes[0].value; //jun
         data += "|";
-        data += fila.cells[13].childNodes[0].value; //jul
+        data += fila.cells[13].childNodes[0].value == "" ? 0 : fila.cells[13].childNodes[0].value; //jul
         data += "|";
-        data += fila.cells[14].childNodes[0].value; //ago
+        data += fila.cells[14].childNodes[0].value == "" ? 0 : fila.cells[14].childNodes[0].value; //ago
         data += "|";
-        data += fila.cells[15].childNodes[0].value; //set
+        data += fila.cells[15].childNodes[0].value == "" ? 0 : fila.cells[15].childNodes[0].value; //set
         data += "|";
-        data += fila.cells[17].childNodes[0].value; //oct
+        data += fila.cells[17].childNodes[0].value == "" ? 0 : fila.cells[17].childNodes[0].value; //oct
         data += "|";
-        data += fila.cells[18].childNodes[0].value; //nov
+        data += fila.cells[18].childNodes[0].value == "" ? 0 : fila.cells[18].childNodes[0].value; //nov
         data += "|";
-        data += fila.cells[19].childNodes[0].value; //dic
+        data += fila.cells[19].childNodes[0].value == "" ? 0 : fila.cells[19].childNodes[0].value; //dic
         data += "¬";
+
+        if (fila.cells[23].innerHTML == "" || fila.cells[23].innerHTML * 1 < 1) {
+            Swal.fire({
+                title: 'Advertencia!',
+                text: "El subTotal debe ser mayor a cero.",
+                icon: 'warning',
+                showConfirmButton: true,
+                timer: 3000
+            })
+            return false;
+        }
     }
     data = data.substr(0, data.length - 1);
 
-    alert(data);
-
-
-    //var frm = new FormData();
-    //frm.append("data", data);
-    //post("Admon/grabar?Id=" + tabla, mostrarGrabar, frm);
+    var frm = new FormData();
+    frm.append("data", data);
+    Http.post("General/guardar?tbl=" + controller + vista, mostrarGrabar, frm);
 
     //btnGuardar.innerHTML = "Guardando <i class='fa fa-circle-o-notch fa-spin' style='color:white'></i>";
     //btnGuardar.disabled = true;
+
 }
 
 function configurarEnterCantidad(tbody, celda) {
@@ -452,5 +487,137 @@ function configurarEnterCantidad(tbody, celda) {
                 this.parentNode.parentNode.nextSibling.childNodes[celda].firstChild.focus();
             }
         }
+    }
+}
+
+function mostrarGrabar(rpta) {
+    var mensajeResul = [];
+    var mensaje = "";
+    var tipo;
+    if (rpta) {
+        listas = rpta.split("¯")
+        nroLs = listas.length;
+        lista = listas[0].split("¬");
+        if (nroLs > 1) {
+            mensajeResul = listas[1].split("|");
+            tipo = mensajeResul[0];
+            mensaje = mensajeResul[1];
+        }
+        divPopupContainer.style.display = 'none';
+
+        var botones = [
+            { "cabecera": "Editar", "clase": "fa fa-pencil-square-o btn btn-info btnCirculo", "id": "Editar" },
+            { "cabecera": "Eliminar", "clase": "fa fa-trash btn btn-danger btnCirculo", "id": "Eliminar" },
+        ];
+        grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
+        
+        if (tipo == 'A') {
+            Swal.fire({
+                title: 'Finalizado!',
+                text: mensaje,
+                icon: 'success',
+                showConfirmButton: true,
+                timer: 2000
+            })
+            alerta = 'success';
+        }
+        else {
+            Swal.fire({
+                title: 'Error!',
+                text: mensaje,
+                icon: 'error',
+                showConfirmButton: true,
+                timer: 2000
+            })
+        }
+    }
+    else {
+        mostrarMensaje("No se realizó el registro", "error")
+    }
+
+    btnGuardar.innerHTML = "<i class='fa fa-save'></i> Grabar";
+    btnGuardar.disabled = false;
+}
+
+function seleccionarBoton(idGrilla, idRegistro, idBoton) {
+    if (idGrilla == "divLista") {
+        if (idBoton == "Editar") {
+            let tituloModal = document.getElementById("tituloModal");
+            if (tituloModal != null) {
+                tituloModal.innerText = "Actualizar Registro";
+            }
+            editarRegistro(idRegistro);
+        }
+        if (idBoton == "Eliminar") {
+            eliminarRegistro(idRegistro)
+        }
+    }
+}
+
+function editarRegistro(id) {
+    Http.get("General/obtenerTabla/?tbl=" + controller + vista + '&id=' + id, mostrarRegistro);
+}
+
+function mostrarRegistro(rpta) {
+    if (rpta) {
+        var campos = rpta.split("|");
+        var controlesSelectSearch = document.getElementsByClassName("SelectSearch");
+        var nControlesSelectSearch = controlesSelectSearch.length;
+        var cboEstado = document.getElementById("cboEstado");
+        if (cboEstado != null) { cboEstado.disabled = false };
+
+        var divPopupContainer = document.getElementById("divPopupContainer");
+        if (divPopupContainer != null) { divPopupContainer.style.display = 'block'; };
+        var controles = document.getElementsByClassName("Popup");
+        var nControles = controles.length;
+        var control;
+        var tipo;
+        var subCampos;
+        for (var j = 0; j < nControles; j++) {
+            control = controles[j];
+            control.style.borderColor = ""
+            tipo = control.id.substr(0, 3);
+            if (tipo == "txt" || tipo == "num" || tipo == "tta" || tipo == "tim") { control.value = campos[j]; }
+            else if (tipo == "dtt") {
+                if (campos[j] == '01/01/1900') {
+                    control.value = "";
+                } else {
+                    var dFecha = campos[j].split("/");
+                    control.value = dFecha[2] + "-" + dFecha[1] + "-" + dFecha[0];
+                }
+            }
+            else if (tipo == "cbo") {
+                subCampos = campos[j].split("-");
+                if (subCampos[0] == 0) {
+                    control.value = '';
+                }
+                else {
+                    control.value = subCampos[0];
+                    if (nControlesSelectSearch > 0) {
+                        var controlSelect = 'select2-' + control.id + '-container';
+                        var cboControlSelect = document.getElementById(controlSelect);
+                        if (cboControlSelect != null) {
+                            var selected = control.options[control.selectedIndex].text;
+                            cboControlSelect.innerHTML = selected;
+                        }
+                    }
+                }
+            }
+            else if (tipo == "img") {
+                control.src = "data:image/jpeg;base64," + campos[j];
+            }
+            else if (tipo == "chk" || tipo == "opt") {
+                control.checked = (campos[j] == "1")
+            }
+            else if (tipo == "dtg") {
+                if (campos[j] == 1) {
+                    $('#' + control.id).bootstrapToggle('on')
+                }
+                else {
+                    $('#' + control.id).bootstrapToggle('off')
+                }
+            }
+        }
+
     }
 }
