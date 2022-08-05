@@ -143,7 +143,6 @@ function mostrarlistas(rpta) {
 }
 
 
-
 function listarMetaItem() {
     //var idTipoItem = cboTipoBien.value;
     var nRegistros = listaMetaItem_VG.length;
