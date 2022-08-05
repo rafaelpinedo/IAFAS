@@ -505,6 +505,7 @@ function mostrarGrabar(rpta) {
         }
         divPopupContainer.style.display = 'none';
 
+
         var botones = [
             { "cabecera": "Editar", "clase": "fa fa-pencil-square-o btn btn-info btnCirculo", "id": "Editar" },
             { "cabecera": "Eliminar", "clase": "fa fa-trash btn btn-danger btnCirculo", "id": "Eliminar" },
