@@ -631,7 +631,7 @@ function configurarBotones() {
 
 function mostrarEnviarCorreo(rpta) {
     if (rpta) alert(rpta);
-    else mostrarMensaje('ocurrio un error al enviar correo','error');
+    else mostrarMensaje('ocurrio un error al enviar correo', 'error');
 }
 
 function obtenerItems(datos) {
@@ -1103,7 +1103,9 @@ function mostrarSolicitudDetalle(rpta) {
             var lista = listas[0].split('¬');
             generarPivot(lista, "listaDetalle");
             var listaProveedores = listas[1].split("¬");
-            crearCombo(listaProveedores, "cboProveedor", "Seleccionar")
+            var listaTipoEjecucion = listas[2].split("¬");
+            crearCombo(listaProveedores, "cboProveedor", "Seleccionar");
+            crearCombo(listaTipoEjecucion, "cboTipoEjecucion", "Seleccionar");
             divBuenaPro.style.display = 'inline';
         }
         else {
@@ -1771,7 +1773,7 @@ function aprobarPedido() {
 
 function eliminarRegistro(id) {
     var data = "";
-    if (vista == "PedidoCompra" || vista == "SolicitudCompra" || vista == "Cotizacion") {
+    if (vista == "PedidoCompra" || vista == "SolicitudCompra" || vista == "Cotizacion" || vista == "CuadroCompara") {
         var fechaInicio = txtFechaInicio.value;
         var fechaFinal = txtFechaFinal.value;
         data = id + '|' + fechaInicio + '|' + fechaFinal;
@@ -2536,64 +2538,64 @@ function grabarSolicitud() {
     btnGuardar.disabled = true;
 }
 
-function mostrarSolicitudDetalle(rpta) {
-    if (rpta) {
-        if (vista == 'CuadroCompara') {
-            var listas = rpta.split('¯');
-            var lista = listas[0].split('¬');
-            generarPivot(lista, "listaDetalle");
-            var listaProveedores = listas[1].split("¬");
-            crearCombo(listaProveedores, "cboProveedor", "Seleccionar")
-            divBuenaPro.style.display = 'inline';
-        }
-        else {
-            var contenido = "";
-            tbDetallePedido.innerHTML = "";
-            var lista = rpta.split('¬');
-            var nRegistros = lista.length;
-            var campos = [];
-            for (var i = 0; i < nRegistros; i++) {
-                campos = lista[i].split("|");
-                contenido += "<tr>";
-                contenido += "<td style='display:none'>";
-                contenido += campos[0];
-                contenido += "</td> ";
-                contenido += "<td style='display:none'>";
-                contenido += campos[1];
-                contenido += "</td> ";
-                contenido += "<td style='vertical-align:top'>";
-                contenido += campos[2];
-                contenido += "</td> ";
-                contenido += "<td style='max-width:600px;white-space: pre-line;white-space: -moz-pre-wrap;white-space: -o-pre-wrap;'>";
-                if (campos[4].length != 0) {
-                    contenido += "<h6>";
-                    contenido += campos[3];
-                    contenido += "</h6>";
-                    contenido += "<p style='white-space:pre-line;'>";
-                    contenido += campos[4];
-                    contenido += "</p>";
-                }
-                else {
-                    contenido += "<h6>";
-                    contenido += campos[3];
-                    contenido += "</h6>";
-                }
-                contenido += "</td>";
-                contenido += "<td style='vertical-align:top;'>";
-                contenido += campos[5];
-                contenido += "</td> ";
-                contenido += "<td style='vertical-align:top;text-align:right'>";
-                contenido += campos[6];
-                contenido += "</td> ";
-                contenido += "</tr>";
-            }
-            tbDetallePedido.innerHTML = contenido;
+//function mostrarSolicitudDetalle(rpta) {
+//    if (rpta) {
+//        if (vista == 'CuadroCompara') {
+//            var listas = rpta.split('¯');
+//            var lista = listas[0].split('¬');
+//            generarPivot(lista, "listaDetalle");
+//            var listaProveedores = listas[1].split("¬");
+//            crearCombo(listaProveedores, "cboProveedor", "Seleccionar")
+//            divBuenaPro.style.display = 'inline';
+//        }
+//        else {
+//            var contenido = "";
+//            tbDetallePedido.innerHTML = "";
+//            var lista = rpta.split('¬');
+//            var nRegistros = lista.length;
+//            var campos = [];
+//            for (var i = 0; i < nRegistros; i++) {
+//                campos = lista[i].split("|");
+//                contenido += "<tr>";
+//                contenido += "<td style='display:none'>";
+//                contenido += campos[0];
+//                contenido += "</td> ";
+//                contenido += "<td style='display:none'>";
+//                contenido += campos[1];
+//                contenido += "</td> ";
+//                contenido += "<td style='vertical-align:top'>";
+//                contenido += campos[2];
+//                contenido += "</td> ";
+//                contenido += "<td style='max-width:600px;white-space: pre-line;white-space: -moz-pre-wrap;white-space: -o-pre-wrap;'>";
+//                if (campos[4].length != 0) {
+//                    contenido += "<h6>";
+//                    contenido += campos[3];
+//                    contenido += "</h6>";
+//                    contenido += "<p style='white-space:pre-line;'>";
+//                    contenido += campos[4];
+//                    contenido += "</p>";
+//                }
+//                else {
+//                    contenido += "<h6>";
+//                    contenido += campos[3];
+//                    contenido += "</h6>";
+//                }
+//                contenido += "</td>";
+//                contenido += "<td style='vertical-align:top;'>";
+//                contenido += campos[5];
+//                contenido += "</td> ";
+//                contenido += "<td style='vertical-align:top;text-align:right'>";
+//                contenido += campos[6];
+//                contenido += "</td> ";
+//                contenido += "</tr>";
+//            }
+//            tbDetallePedido.innerHTML = contenido;
 
-            var spnNroItems = document.getElementById("spnNroItems");
-            if (spnNroItems != null) spnNroItems.innerHTML = 'Items: ' + nRegistros;
-        }
-    }
-}
+//            var spnNroItems = document.getElementById("spnNroItems");
+//            if (spnNroItems != null) spnNroItems.innerHTML = 'Items: ' + nRegistros;
+//        }
+//    }
+//}
 
 function validarCotizacion() {
     var idProveedor = cboProveedor.value;
@@ -3018,7 +3020,7 @@ function grabarOrdenCompra() {
     var idFteFto = cboFteFto.value;
     var justificacion = ttaJustificacion.value;
     var idRegistro = txtIdRegistro.value;
-  
+
     data = idRegistro;
     data += "|";
     data += idSolCompra;
