@@ -8,7 +8,7 @@ var ayudas = [];
 var formulario = [];
 var idRegistro = "";
 var operacion = 0;
-var listaRespoItem_VG = [];
+var listaOficina_VG = [];
 
 window.onload = function () {
     getConfigMn();
@@ -29,15 +29,24 @@ function mostrarlistas(rpta) {
         var listas = rpta.split("¯");
         var lista = listas[0].split("¬");
 
-        if (vista == "Almacen") {
-            listaRespoItem_VG = listas[1].split("¬");
-            var listaEstado = listas[2].split("¬");
+        if (vista == "Personal") {
+            var listaTipoDocumento = listas[1].split("¬");
+            var listaPais = listas[2].split("¬");
+            var listaEntidad = listas[3].split("¬");
+            listaOficina_VG = listas[4].split("¬");
+            var listaEstado = listas[5].split("¬");
             var botones = [
                 { "cabecera": "Editar", "clase": "fa fa-pencil-square-o btn btn-info btnCirculo", "id": "Editar" },
                 { "cabecera": "Eliminar", "clase": "fa fa-trash btn btn-danger btnCirculo", "id": "Eliminar" },
             ];
             grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
-            listarResponsableItem();
+           
+
+            crearCombo(listaTipoDocumento, "cboTipoDocumento", "Seleccione");
+            listarSelect2Item(listaPais, "cboPais");
+            listarSelect2Item(listaEntidad, "cboEntidad");
+            /*listarSelect2Item(listaOficina, "cboOficina");*/
+            listarOficinaItem();
             crearCombo(listaEstado, "cboEstado", "Seleccione");
         }
 
@@ -51,21 +60,26 @@ function mostrarlistas(rpta) {
     }
 }
 
-function listarResponsableItem() {
-    var nRegistros = listaRespoItem_VG.length;
+
+function listarOficinaItem() {
+    var idEntidad = cboEntidad.value;
+    var nRegistros = listaOficina_VG.length;
     var contenido = "<option value=''>Seleccione</option>";
-    var campos, idCodigo, nombre;
+    var campos, idCodigo, nombre, idxEntidadItem;
     for (var i = 0; i < nRegistros; i++) {
-        campos = listaRespoItem_VG[i].split('|');
+        campos = listaOficina_VG[i].split('|');
         idCodigo = campos[0];
         nombre = campos[1];
-        contenido += "<option value='";
-        contenido += idCodigo;
-        contenido += "'>";
-        contenido += nombre;
-        contenido += "</option>";
+        idxEntidadItem = campos[2];
+        if (idxEntidadItem == idEntidad) {
+            contenido += "<option value='";
+            contenido += idCodigo;
+            contenido += "'>";
+            contenido += nombre;
+            contenido += "</option>";
+        }
     }
-    var cbo = document.getElementById("cboResponsable");
+    var cbo = document.getElementById("cboOficina");
     if (cbo != null) {
         cbo.innerHTML = contenido;
     }
@@ -222,15 +236,24 @@ function mostrarRegistro(rpta) {
         if (select2cboPadre != null) select2cboPadre.innerHTML = "Seleccione";
 
 
-        if (vista == "Clase") {
-            cboTipoBien.value = campos[0];
-            listarGrupoItem();
-            cboGrupo.value = campos[1];
-            document.getElementById('select2-cboGrupo-container').innerHTML = cboGrupo.options[cboGrupo.selectedIndex].text;
-            txtIdRegistro.value = campos[2];
-            txtNombre.value = campos[3];
-            cboEstado.value = campos[4];
+        if (vista == "Personal") {
+            txtIdRegistro.value = campos[0];
+            cboTipoDocumento.value = campos[1];
+            txtDocumento.value = campos[2];
+            txtApellPaterno.value = campos[3];
+            txtApellMaterno.value = campos[4];
+            txtNombres.value = campos[5];
+            cboPais.value = campos[6];
+            txtTelefono.value = campos[7];
+            txtCorreo.value = campos[8];
+            cboEntidad.value = campos[9];
+            listarOficinaItem();
+            cboOficina.value = campos[10];
+            document.getElementById('select2-cboOficina-container').innerHTML = cboOficina.options[cboOficina.selectedIndex].text;
+            cboEstado.value = campos[11];
+            
         }
+        
 
 
         var divPopupContainer = document.getElementById("divPopupContainer");
@@ -289,6 +312,26 @@ function mostrarRegistro(rpta) {
     }
 }
 
+function listarSelect2Item(lista, idCombo) {
+    var nRegistros = lista.length;
+    var contenido = "<option value=''>Seleccione</option>";
+    var campos, idCodigo, nombre;
+    for (var i = 0; i < nRegistros; i++) {
+        campos = lista[i].split('|');
+        idCodigo = campos[0];
+        nombre = campos[1];
+        contenido += "<option value='";
+        contenido += idCodigo;
+        contenido += "'>";
+        contenido += nombre;
+        contenido += "</option>";
+    }
+    var cbo = document.getElementById(idCombo);
+    if (cbo != null) {
+        cbo.innerHTML = contenido;
+    }
+}
+
 function configurarBotones() {
     var btnNuevo = document.getElementById("btnNuevo");
     if (btnNuevo != null) btnNuevo.onclick = function () {
@@ -305,13 +348,15 @@ function configurarBotones() {
             cboEstado.value = 1;
             cboEstado.disabled = true;
         }
-        var select2cboResponsable = document.getElementById("select2-cboResponsable-container");
-        if (select2cboResponsable != null) select2cboResponsable.innerHTML = "Seleccione";
 
-        var dtgFinal = document.getElementById("dtgEsFinal");
-        if (dtgFinal != null) {
-            $('#dtgEsFinal').bootstrapToggle('off')
-        }
+        var select2cboPais = document.getElementById("select2-cboPais-container");
+        if (select2cboPais != null) select2cboPais.innerHTML = "Seleccione";
+
+        var select2cboEntidad = document.getElementById("select2-cboEntidad-container");
+        if (select2cboEntidad != null) select2cboEntidad.innerHTML = "Seleccione";
+
+        var select2cboOficina = document.getElementById("select2-cboOficina-container");
+        if (select2cboOficina != null) select2cboOficina.innerHTML = "Seleccione";
 
         //var txtFechaPedido = document.getElementById("txtFechaPedido");
         //if (txtFechaPedido != null) txtFechaPedido.value = txtFechaPedido.getAttribute("data-fecha");
@@ -369,20 +414,11 @@ function configurarBotones() {
 }
 
 function configurarCombos() {
-    var cboTipoBien = document.getElementById("cboTipoBien");
-    if (cboTipoBien != null) cboTipoBien.onchange = function () {
-        listarGrupoItem();
+    var cboEntidad = document.getElementById("cboEntidad");
+    if (cboEntidad != null) cboEntidad.onchange = function () {
+        listarOficinaItem();
     }
 
-    var cboGrupo = document.getElementById("cboGrupo");
-    if (cboGrupo != null) cboGrupo.onchange = function () {
-        listarClaseItem();
-    }
-
-    var cboClase = document.getElementById("cboClase");
-    if (cboClase != null) cboClase.onchange = function () {
-        listarFamiliaItem();
-    }
 
 }
 

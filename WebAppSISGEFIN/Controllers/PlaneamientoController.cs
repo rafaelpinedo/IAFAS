@@ -48,6 +48,7 @@ namespace WebAppSISGEFIN.Controllers
         [FiltroAutenticacion]
         public ActionResult RegistroCN()
         {
+            //mensaje
             string[] Data = Session["DataUsuario"].ToString().Split('|');
             string IdPerfil = Data[3];
             ViewBag.Menu = new Menu().Listar(IdPerfil);
@@ -58,7 +59,6 @@ namespace WebAppSISGEFIN.Controllers
             nuevaFecha = nuevaFecha.AddDays(-1);
             ViewBag.FechaAprobacion = Convert.ToDateTime(nuevaFecha).ToString("yyyy-MM-dd");
             int Anio = DateTime.Now.Year;
-            ViewBag.Anio = Anio;
             ViewBag.AnioCN = Anio+1;
             return View();
         }
