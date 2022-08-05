@@ -31,13 +31,14 @@ function mostrarlistas(rpta) {
 
         if (vista == "Almacen") {
             listaRespoItem_VG = listas[1].split("¬");
-          
+            var listaEstado = listas[2].split("¬");
             var botones = [
                 { "cabecera": "Editar", "clase": "fa fa-pencil-square-o btn btn-info btnCirculo", "id": "Editar" },
-              /*  { "cabecera": "Eliminar", "clase": "fa fa-trash btn btn-danger btnCirculo", "id": "Eliminar" },*/
+                { "cabecera": "Eliminar", "clase": "fa fa-trash btn btn-danger btnCirculo", "id": "Eliminar" },
             ];
             grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
             listarResponsableItem();
+            crearCombo(listaEstado, "cboEstado", "Seleccione");
         }
 
         else {
@@ -138,12 +139,6 @@ function mostrarGrabar(rpta) {
         ];
         grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
 
-
-        var cbo = document.getElementById("cboResponsable");
-        if (cbo != null) {
-            var listaPadre = listas[2].split("¬");
-            crearCombo(listaPadre, "cboResponsable", "Ninguno");
-        }
 
         if (tipo == 'A') {
             Swal.fire({
@@ -442,4 +437,13 @@ function seleccionarFila(fila, id, prefijo) {
     if (window["fila" + prefijo] != null) window["fila" + prefijo].className = "FilaDatos";
     fila.className = "FilaSeleccionada";
     window["fila" + prefijo] = fila;
+}
+
+function ComboAnoFecha() {
+    var d = new Date();
+    var n = d.getFullYear();
+    var select = document.getElementById("ano");
+    for (var i = n; i >= 2015; i--) {
+        select.options[i] = new Option(i);
+    }
 }

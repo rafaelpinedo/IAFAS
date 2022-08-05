@@ -8,30 +8,15 @@ var ayudas = [];
 var formulario = [];
 var idRegistro = "";
 var operacion = 0;
-var listaMetaItem_VG = [];
-var listaSubMetaItem_v = [];
+var listaOficina_VG = [];
 
 window.onload = function () {
     getConfigMn();
     vista = window.sessionStorage.getItem("Vista");
     controller = window.sessionStorage.getItem("Controller");
-    //if (vista == "ClasiGasto" || vista == "ClasiIngreso") {
-    //    getListarClasificador();
-    //}
-    //else {
-    //    getListar();
-    //}
     getListar();
     configurarBotones();
-   configurarCombos();
-}
-function getListarClasificador() {
-
-    var data = "";
-    var txtFechaInicio = document.getElementById("txtFechaInicio").value;
-    var txtFechaFinal = document.getElementById("txtFechaFinal").value;
-    data = txtFechaInicio + '|' + txtFechaFinal;
-    Http.get("General/listarTabla/?tbl=" + controller + vista + "&data=" + data, mostrarlistas);
+    configurarCombos();
 }
 
 function getListar() {
@@ -44,92 +29,25 @@ function mostrarlistas(rpta) {
         var listas = rpta.split("¯");
         var lista = listas[0].split("¬");
 
-        if (vista == "CentroGasto") {
-            var listaEmpresa = listas[1].split("¬");
-            var listaEstado = listas[2].split("¬");
+        if (vista == "Personal") {
+            var listaTipoDocumento = listas[1].split("¬");
+            var listaPais = listas[2].split("¬");
+            var listaEntidad = listas[3].split("¬");
+            listaOficina_VG = listas[4].split("¬");
+            var listaEstado = listas[5].split("¬");
+            var botones = [
+                { "cabecera": "Editar", "clase": "fa fa-pencil-square-o btn btn-info btnCirculo", "id": "Editar" },
+                { "cabecera": "Eliminar", "clase": "fa fa-trash btn btn-danger btnCirculo", "id": "Eliminar" },
+            ];
+            grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
+           
 
-            var botones = [
-                { "cabecera": "Editar", "clase": "fa fa-pencil-square-o btn btn-info btnCirculo", "id": "Editar" },
-                { "cabecera": "Eliminar", "clase": "fa fa-trash btn btn-danger btnCirculo", "id": "Eliminar" },
-            ];
-            grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
-            crearCombo(listaEmpresa, "cboEmpresa", "Seleccione");
-            crearCombo(listaEstado, "cboEstado", "Seleccione");
-        }
-
-        else if (vista == "FuenteFto") { 
-            var listaEstado = listas[1].split("¬");
-            var botones = [
-                { "cabecera": "Editar", "clase": "fa fa-pencil-square-o btn btn-info btnCirculo", "id": "Editar" },
-                { "cabecera": "Eliminar", "clase": "fa fa-trash btn btn-danger btnCirculo", "id": "Eliminar" },
-            ];
-            grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
-            crearCombo(listaEstado, "cboEstado", "Seleccione");
-        }
-
-        else if (vista == "Meta") {
-            var listaEstado = listas[1].split("¬");
-            var botones = [
-                { "cabecera": "Editar", "clase": "fa fa-pencil-square-o btn btn-info btnCirculo", "id": "Editar" },
-                { "cabecera": "Eliminar", "clase": "fa fa-trash btn btn-danger btnCirculo", "id": "Eliminar" },
-            ];
-            grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
-            crearCombo(listaEstado, "cboEstado", "Seleccione");
-        }
-        else if (vista == "SubMeta") {
-            listaMetaItem_VG = listas[1].split("¬");
-            var listaEstado = listas[2].split("¬");
-            var botones = [
-                { "cabecera": "Editar", "clase": "fa fa-pencil-square-o btn btn-info btnCirculo", "id": "Editar" },
-                { "cabecera": "Eliminar", "clase": "fa fa-trash btn btn-danger btnCirculo", "id": "Eliminar" },
-            ];
-            grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
-            crearCombo(listaEstado, "cboEstado", "Seleccione");
-            listarMetaItem();
-        }
-
-        else if (vista == "ClasiIngreso") {
-            listaMetaItem_VG= listas[1].split("¬");
-            var listaEstado = listas[2].split("¬");
-            var botones = [
-                { "cabecera": "Editar", "clase": "fa fa-pencil-square-o btn btn-info btnCirculo", "id": "Editar" },
-                { "cabecera": "Eliminar", "clase": "fa fa-trash btn btn-danger btnCirculo", "id": "Eliminar" },
-            ];
-            grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
-            crearCombo(listaEstado, "cboEstado", "Seleccione");
-            listarMetaItem();
-        }
-        else if (vista == "ClasiGasto") {
-            listaMetaItem_VG = listas[1].split("¬");
-            var listaEstado = listas[2].split("¬");
-            var botones = [
-                { "cabecera": "Editar", "clase": "fa fa-pencil-square-o btn btn-info btnCirculo", "id": "Editar" },
-                { "cabecera": "Eliminar", "clase": "fa fa-trash btn btn-danger btnCirculo", "id": "Eliminar" },
-            ];
-            grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
-            crearCombo(listaEstado, "cboEstado", "Seleccione");
-            listarMetaItem();
-        }
-        else if (vista == "Asignacion") {
-            //listaMetaItem_VG = listas[1].split("¬");
-            var listaEntidad = listas[1].split("¬");
-            var listaFinanciamiento = listas[2].split("¬");
-            var listaMeta = listas[3].split("¬");
-            listaSubMetaItem_v = listas[4].split("¬");
-            var listaOficina = listas[5].split("¬");
-            
-            var botones = [
-                { "cabecera": "Editar", "clase": "fa fa-pencil-square-o btn btn-info btnCirculo", "id": "Editar" },
-                { "cabecera": "Eliminar", "clase": "fa fa-trash btn btn-danger btnCirculo", "id": "Eliminar" },
-            ];
-            grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
-            
+            crearCombo(listaTipoDocumento, "cboTipoDocumento", "Seleccione");
+            listarSelect2Item(listaPais, "cboPais");
             listarSelect2Item(listaEntidad, "cboEntidad");
-            listarSelect2Item(listaFinanciamiento, "cboFuenteFto");
-            listarSelect2Item(listaMeta, "cboMeta");
-            listarSelect2Item(listaOficina, "cboOficina");
-            listarSubMetaItem()
-           // listarMetaItem();
+            /*listarSelect2Item(listaOficina, "cboOficina");*/
+            listarOficinaItem();
+            crearCombo(listaEstado, "cboEstado", "Seleccione");
         }
 
         else {
@@ -143,64 +61,17 @@ function mostrarlistas(rpta) {
 }
 
 
-
-function listarMetaItem() {
-    //var idTipoItem = cboTipoBien.value;
-    var nRegistros = listaMetaItem_VG.length;
+function listarOficinaItem() {
+    var idEntidad = cboEntidad.value;
+    var nRegistros = listaOficina_VG.length;
     var contenido = "<option value=''>Seleccione</option>";
-    var campos, idCodigo, nombre;
+    var campos, idCodigo, nombre, idxEntidadItem;
     for (var i = 0; i < nRegistros; i++) {
-        campos = listaMetaItem_VG[i].split('|');
+        campos = listaOficina_VG[i].split('|');
         idCodigo = campos[0];
         nombre = campos[1];
-        contenido += "<option value='";
-        contenido += idCodigo;
-        contenido += "'>";
-        contenido += nombre;
-        contenido += "</option>";
-       
-    }
-    var cbo = document.getElementById("cboMeta");
-    if (cbo != null) {
-        cbo.innerHTML = contenido;
-    }
-    var cbo = document.getElementById("cboPadre");
-    if (cbo != null) {
-        cbo.innerHTML = contenido;
-    }
-}
-
-function listarSelect2Item(lista,idCombo) {
-    var nRegistros = lista.length;
-    var contenido = "<option value=''>Seleccione</option>";
-    var campos, idCodigo, nombre;
-    for (var i = 0; i < nRegistros; i++) {
-        campos = lista[i].split('|');
-        idCodigo = campos[0];
-        nombre = campos[1];
-        contenido += "<option value='";
-        contenido += idCodigo;
-        contenido += "'>";
-        contenido += nombre;
-        contenido += "</option>";
-    }
-    var cbo = document.getElementById(idCombo);
-    if (cbo != null) {
-        cbo.innerHTML = contenido;
-    }
-}
-
-function listarSubMetaItem() {
-    var idMeta = cboMeta.value;
-    var nRegistros = listaSubMetaItem_v.length;
-    var contenido = "<option value=''>Seleccione</option>";
-    var campos, idCodigo, nombre, idxMetaItem;
-    for (var i = 0; i < nRegistros; i++) {
-        campos = listaSubMetaItem_v[i].split('|');
-        idCodigo = campos[0];
-        nombre = campos[1];
-        idxMetaItem = campos[2];
-        if (idxMetaItem == idMeta) {
+        idxEntidadItem = campos[2];
+        if (idxEntidadItem == idEntidad) {
             contenido += "<option value='";
             contenido += idCodigo;
             contenido += "'>";
@@ -208,12 +79,12 @@ function listarSubMetaItem() {
             contenido += "</option>";
         }
     }
-    var cbo = document.getElementById("cboSubMeta");
+    var cbo = document.getElementById("cboOficina");
     if (cbo != null) {
         cbo.innerHTML = contenido;
-       /* listarClaseItem();*/
     }
 }
+
 
 function grabarDatos() {
     var data = ""
@@ -282,16 +153,6 @@ function mostrarGrabar(rpta) {
         ];
         grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
 
-        //if (vista == "Oficina") {
-        //    var listaOficinaPadre = listas[2].split("¬");
-        //    crearCombo(listaOficinaPadre, "cboOficinaPadre", "Ninguno");
-        //}
-
-        var cbo = document.getElementById("cboPadre");
-        if (cbo != null) {
-            var listaPadre = listas[2].split("¬");
-            crearCombo(listaPadre, "cboPadre", "Ninguno");
-        }
 
         if (tipo == 'A') {
             Swal.fire({
@@ -374,7 +235,7 @@ function mostrarRegistro(rpta) {
         var select2cboPadre = document.getElementById("select2-cboPadre-container");
         if (select2cboPadre != null) select2cboPadre.innerHTML = "Seleccione";
 
-       
+
         if (vista == "Clase") {
             cboTipoBien.value = campos[0];
             listarGrupoItem();
@@ -384,7 +245,7 @@ function mostrarRegistro(rpta) {
             txtNombre.value = campos[3];
             cboEstado.value = campos[4];
         }
-        
+
 
         var divPopupContainer = document.getElementById("divPopupContainer");
         if (divPopupContainer != null) { divPopupContainer.style.display = 'block'; };
@@ -442,6 +303,26 @@ function mostrarRegistro(rpta) {
     }
 }
 
+function listarSelect2Item(lista, idCombo) {
+    var nRegistros = lista.length;
+    var contenido = "<option value=''>Seleccione</option>";
+    var campos, idCodigo, nombre;
+    for (var i = 0; i < nRegistros; i++) {
+        campos = lista[i].split('|');
+        idCodigo = campos[0];
+        nombre = campos[1];
+        contenido += "<option value='";
+        contenido += idCodigo;
+        contenido += "'>";
+        contenido += nombre;
+        contenido += "</option>";
+    }
+    var cbo = document.getElementById(idCombo);
+    if (cbo != null) {
+        cbo.innerHTML = contenido;
+    }
+}
+
 function configurarBotones() {
     var btnNuevo = document.getElementById("btnNuevo");
     if (btnNuevo != null) btnNuevo.onclick = function () {
@@ -453,27 +334,20 @@ function configurarBotones() {
             tituloModal.innerText = "Nuevo Registro";
         }
 
-        var cboEmpresa = document.getElementById("cboEmpresa");
-        if (cboEmpresa != null) {
-            cboEmpresa.value = 1;
-            cboEmpresa.disabled = true;
-        }
-
         var cboEstado = document.getElementById("cboEstado");
         if (cboEstado != null) {
             cboEstado.value = 1;
             cboEstado.disabled = true;
         }
-        var select2cboMeta = document.getElementById("select2-cboMeta-container");
-        if (select2cboMeta != null) select2cboMeta.innerHTML = "Seleccione";
 
-        var select2cboPadre = document.getElementById("select2-cboPadre-container");
-        if (select2cboPadre != null) select2cboPadre.innerHTML = "Seleccione";
+        var select2cboPais = document.getElementById("select2-cboPais-container");
+        if (select2cboPais != null) select2cboPais.innerHTML = "Seleccione";
 
-        var dtgFinal = document.getElementById("dtgEsFinal");
-        if (dtgFinal != null) {
-            $('#dtgEsFinal').bootstrapToggle('off')
-        }
+        var select2cboEntidad = document.getElementById("select2-cboEntidad-container");
+        if (select2cboEntidad != null) select2cboEntidad.innerHTML = "Seleccione";
+
+        var select2cboOficina = document.getElementById("select2-cboOficina-container");
+        if (select2cboOficina != null) select2cboOficina.innerHTML = "Seleccione";
 
         //var txtFechaPedido = document.getElementById("txtFechaPedido");
         //if (txtFechaPedido != null) txtFechaPedido.value = txtFechaPedido.getAttribute("data-fecha");
@@ -531,25 +405,11 @@ function configurarBotones() {
 }
 
 function configurarCombos() {
-    var cboMeta = document.getElementById("cboMeta");
-    if (cboMeta != null) cboMeta.onchange = function () {
-        listarSubMetaItem();
+    var cboEntidad = document.getElementById("cboEntidad");
+    if (cboEntidad != null) cboEntidad.onchange = function () {
+        listarOficinaItem();
     }
 
-    //var cboGrupo = document.getElementById("cboGrupo");
-    //if (cboGrupo != null) cboGrupo.onchange = function () {
-    //    listarClaseItem();
-    //}
-
-    //var cboGrupo = document.getElementById("cboGrupo");
-    //if (cboGrupo != null) cboGrupo.onchange = function () {
-    //    listarClaseItem();
-    //}
-
-    //var cboClase = document.getElementById("cboClase");
-    //if (cboClase != null) cboClase.onchange = function () {
-    //    listarFamiliaItem();
-    //}
 
 }
 
@@ -604,6 +464,13 @@ function seleccionarFila(fila, id, prefijo) {
     if (window["fila" + prefijo] != null) window["fila" + prefijo].className = "FilaDatos";
     fila.className = "FilaSeleccionada";
     window["fila" + prefijo] = fila;
+}
 
-    
+function ComboAnoFecha() {
+    var d = new Date();
+    var n = d.getFullYear();
+    var select = document.getElementById("ano");
+    for (var i = n; i >= 2015; i--) {
+        select.options[i] = new Option(i);
+    }
 }
