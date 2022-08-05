@@ -236,15 +236,24 @@ function mostrarRegistro(rpta) {
         if (select2cboPadre != null) select2cboPadre.innerHTML = "Seleccione";
 
 
-        if (vista == "Clase") {
-            cboTipoBien.value = campos[0];
-            listarGrupoItem();
-            cboGrupo.value = campos[1];
-            document.getElementById('select2-cboGrupo-container').innerHTML = cboGrupo.options[cboGrupo.selectedIndex].text;
-            txtIdRegistro.value = campos[2];
-            txtNombre.value = campos[3];
-            cboEstado.value = campos[4];
+        if (vista == "Personal") {
+            txtIdRegistro.value = campos[0];
+            cboTipoDocumento.value = campos[1];
+            txtDocumento.value = campos[2];
+            txtApellPaterno.value = campos[3];
+            txtApellMaterno.value = campos[4];
+            txtNombres.value = campos[5];
+            cboPais.value = campos[6];
+            txtTelefono.value = campos[7];
+            txtCorreo.value = campos[8];
+            cboEntidad.value = campos[9];
+            listarOficinaItem();
+            cboOficina.value = campos[10];
+            document.getElementById('select2-cboOficina-container').innerHTML = cboOficina.options[cboOficina.selectedIndex].text;
+            cboEstado.value = campos[11];
+            
         }
+        
 
 
         var divPopupContainer = document.getElementById("divPopupContainer");
