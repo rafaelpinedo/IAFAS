@@ -484,7 +484,7 @@ function configurarBotones() {
     if (btnGuardar != null) btnGuardar.onclick = function () {
         var validar = false;
 
-        if (vista == "PedidoCompra" && validarPedido() == true) {
+        if (vista == "PedidoCompra" && validarPedido()) {
             validar = true;
         }
         else if (vista == "SolicitudCompra" && validarSoliCompra()) {
@@ -499,10 +499,14 @@ function configurarBotones() {
         else if (vista == "OrdenCompra" && validarOrdenCompra()) {
             validar = true;
         }
-        else if (validarInformacion("Reque") == true) {
-            validar = true;
+        else {
+
+            if (validarInformacion("Reque") == true) {
+                validar = true;
+            }
         }
-        if (validar == true) {
+
+        if (validar === true) {
             Swal.fire({
                 title: '¿Desea grabar la información?',
                 icon: 'warning',
@@ -523,13 +527,13 @@ function configurarBotones() {
                         grabarCotizacion();
                     }
                     else if (vista == "CuadroCompara") {
-                        grabarCuadroCompara();
+                         grabarCuadroCompara();
                     }
                     else if (vista == "OrdenCompra") {
                         grabarOrdenCompra();
                     }
                     else {
-                        grabarDatos();
+                      grabarDatos();
                     }
                     Swal.fire({
                         title: 'Procesando...',
@@ -631,7 +635,7 @@ function configurarBotones() {
 
 function mostrarEnviarCorreo(rpta) {
     if (rpta) alert(rpta);
-    else mostrarMensaje('ocurrio un error al enviar correo','error');
+    else mostrarMensaje('ocurrio un error al enviar correo', 'error');
 }
 
 function obtenerItems(datos) {
@@ -1103,7 +1107,9 @@ function mostrarSolicitudDetalle(rpta) {
             var lista = listas[0].split('¬');
             generarPivot(lista, "listaDetalle");
             var listaProveedores = listas[1].split("¬");
-            crearCombo(listaProveedores, "cboProveedor", "Seleccionar")
+            var listaTipoEjecucion = listas[2].split("¬");
+            crearCombo(listaProveedores, "cboProveedor", "Seleccionar");
+            crearCombo(listaTipoEjecucion, "cboTipoEjecucion", "Seleccionar");
             divBuenaPro.style.display = 'inline';
         }
         else {
@@ -1732,7 +1738,13 @@ function mostrarGrabar(rpta) {
         }
     }
     else {
-        mostrarMensaje("No se realizó el registro", "error")
+        Swal.fire({
+            title: 'Error!',
+            text: 'No se realizó el registro-verificador datos',
+            icon: 'error',
+            showConfirmButton: true,
+            timer: 2000
+        })
     }
 
     btnGuardar.innerHTML = "<i class='fa fa-save'></i> Grabar";
@@ -1771,7 +1783,7 @@ function aprobarPedido() {
 
 function eliminarRegistro(id) {
     var data = "";
-    if (vista == "PedidoCompra" || vista == "SolicitudCompra" || vista == "Cotizacion") {
+    if (vista == "PedidoCompra" || vista == "SolicitudCompra" || vista == "Cotizacion" || vista == "CuadroCompara") {
         var fechaInicio = txtFechaInicio.value;
         var fechaFinal = txtFechaFinal.value;
         data = id + '|' + fechaInicio + '|' + fechaFinal;
@@ -2536,64 +2548,64 @@ function grabarSolicitud() {
     btnGuardar.disabled = true;
 }
 
-function mostrarSolicitudDetalle(rpta) {
-    if (rpta) {
-        if (vista == 'CuadroCompara') {
-            var listas = rpta.split('¯');
-            var lista = listas[0].split('¬');
-            generarPivot(lista, "listaDetalle");
-            var listaProveedores = listas[1].split("¬");
-            crearCombo(listaProveedores, "cboProveedor", "Seleccionar")
-            divBuenaPro.style.display = 'inline';
-        }
-        else {
-            var contenido = "";
-            tbDetallePedido.innerHTML = "";
-            var lista = rpta.split('¬');
-            var nRegistros = lista.length;
-            var campos = [];
-            for (var i = 0; i < nRegistros; i++) {
-                campos = lista[i].split("|");
-                contenido += "<tr>";
-                contenido += "<td style='display:none'>";
-                contenido += campos[0];
-                contenido += "</td> ";
-                contenido += "<td style='display:none'>";
-                contenido += campos[1];
-                contenido += "</td> ";
-                contenido += "<td style='vertical-align:top'>";
-                contenido += campos[2];
-                contenido += "</td> ";
-                contenido += "<td style='max-width:600px;white-space: pre-line;white-space: -moz-pre-wrap;white-space: -o-pre-wrap;'>";
-                if (campos[4].length != 0) {
-                    contenido += "<h6>";
-                    contenido += campos[3];
-                    contenido += "</h6>";
-                    contenido += "<p style='white-space:pre-line;'>";
-                    contenido += campos[4];
-                    contenido += "</p>";
-                }
-                else {
-                    contenido += "<h6>";
-                    contenido += campos[3];
-                    contenido += "</h6>";
-                }
-                contenido += "</td>";
-                contenido += "<td style='vertical-align:top;'>";
-                contenido += campos[5];
-                contenido += "</td> ";
-                contenido += "<td style='vertical-align:top;text-align:right'>";
-                contenido += campos[6];
-                contenido += "</td> ";
-                contenido += "</tr>";
-            }
-            tbDetallePedido.innerHTML = contenido;
+//function mostrarSolicitudDetalle(rpta) {
+//    if (rpta) {
+//        if (vista == 'CuadroCompara') {
+//            var listas = rpta.split('¯');
+//            var lista = listas[0].split('¬');
+//            generarPivot(lista, "listaDetalle");
+//            var listaProveedores = listas[1].split("¬");
+//            crearCombo(listaProveedores, "cboProveedor", "Seleccionar")
+//            divBuenaPro.style.display = 'inline';
+//        }
+//        else {
+//            var contenido = "";
+//            tbDetallePedido.innerHTML = "";
+//            var lista = rpta.split('¬');
+//            var nRegistros = lista.length;
+//            var campos = [];
+//            for (var i = 0; i < nRegistros; i++) {
+//                campos = lista[i].split("|");
+//                contenido += "<tr>";
+//                contenido += "<td style='display:none'>";
+//                contenido += campos[0];
+//                contenido += "</td> ";
+//                contenido += "<td style='display:none'>";
+//                contenido += campos[1];
+//                contenido += "</td> ";
+//                contenido += "<td style='vertical-align:top'>";
+//                contenido += campos[2];
+//                contenido += "</td> ";
+//                contenido += "<td style='max-width:600px;white-space: pre-line;white-space: -moz-pre-wrap;white-space: -o-pre-wrap;'>";
+//                if (campos[4].length != 0) {
+//                    contenido += "<h6>";
+//                    contenido += campos[3];
+//                    contenido += "</h6>";
+//                    contenido += "<p style='white-space:pre-line;'>";
+//                    contenido += campos[4];
+//                    contenido += "</p>";
+//                }
+//                else {
+//                    contenido += "<h6>";
+//                    contenido += campos[3];
+//                    contenido += "</h6>";
+//                }
+//                contenido += "</td>";
+//                contenido += "<td style='vertical-align:top;'>";
+//                contenido += campos[5];
+//                contenido += "</td> ";
+//                contenido += "<td style='vertical-align:top;text-align:right'>";
+//                contenido += campos[6];
+//                contenido += "</td> ";
+//                contenido += "</tr>";
+//            }
+//            tbDetallePedido.innerHTML = contenido;
 
-            var spnNroItems = document.getElementById("spnNroItems");
-            if (spnNroItems != null) spnNroItems.innerHTML = 'Items: ' + nRegistros;
-        }
-    }
-}
+//            var spnNroItems = document.getElementById("spnNroItems");
+//            if (spnNroItems != null) spnNroItems.innerHTML = 'Items: ' + nRegistros;
+//        }
+//    }
+//}
 
 function validarCotizacion() {
     var idProveedor = cboProveedor.value;
@@ -2876,6 +2888,7 @@ function generarPivot(detalle, div) {
 
 function validarCuadroCompara() {
     var idProveedor = cboProveedor.value;
+    var idTipoEjecucion = cboTipoEjecucion.value;
     if (idRegistro == "") {
         mostrarMensaje("Seleccione una Solicitud de la fila", "error");
         return false;
@@ -2885,15 +2898,22 @@ function validarCuadroCompara() {
         cboProveedor.focus();
         return false;
     }
-
-    return true;
+    else if (idTipoEjecucion == "") {
+        mostrarMensaje("Seleccione Tipo de Ejecución", "error");
+        cboTipoEjecucion.focus();
+        return false;
+    }
+    else {
+        return true;
+    }
 }
 
 function grabarCuadroCompara() {
     var idSolicitud = idRegistro;
     var idProveedor = cboProveedor.value;
+    var idTipoEjecucion = cboTipoEjecucion.value;
     var data = "";
-    data = idSolicitud + '|' + idProveedor;
+    data = idSolicitud + '|' + idProveedor + '|' + idTipoEjecucion;
     var txtFechaInicio = document.getElementById("txtFechaInicio").value;
     var txtFechaFinal = document.getElementById("txtFechaFinal").value;
     data = data + '¯' + txtFechaInicio + '|' + txtFechaFinal
@@ -3014,11 +3034,10 @@ function validarOrdenCompra() {
 function grabarOrdenCompra() {
     var data = "";
     var total = lblTotal.innerHTML.replace(',', '')
-    var idEmpresa = cboEmpresa.value;
     var idFteFto = cboFteFto.value;
     var justificacion = ttaJustificacion.value;
     var idRegistro = txtIdRegistro.value;
-  
+
     data = idRegistro;
     data += "|";
     data += idSolCompra;
@@ -3026,8 +3045,6 @@ function grabarOrdenCompra() {
     data += idProveedor
     data += "|";
     data += total.replace(',', '');
-    data += "|";
-    data += idEmpresa
     data += "|";
     data += idFteFto
     data += "|";
@@ -3056,7 +3073,7 @@ function grabarOrdenCompra() {
     data = data + '¯' + txtFechaInicio + '|' + txtFechaFinal
     var frm = new FormData();
     frm.append("data", data);
-    Http.post("General/grabar?Id=" + controller + vista, mostrarGrabar, frm);
+    Http.post("General/guardar?tbl=" + controller + vista, mostrarGrabar, frm);
 
     btnGuardar.innerHTML = "Guardando <i class='fa fa-circle-o-notch fa-spin' style='color:white'></i>";
     btnGuardar.disabled = true;
