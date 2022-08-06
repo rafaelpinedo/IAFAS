@@ -1,6 +1,6 @@
 ﻿
 @{
-    ViewBag.Title = "Asignacion";
+    ViewBag.Title = "CentroGasto";
     Layout = "~/Views/_LayoutPage.cshtml";
 }
 
@@ -9,7 +9,8 @@
         <div class="main-body">
             <div class="card">
                 <div class="card-header bg-primary">
-                    <h3><i class="fa fa-industry" aria-hidden="true"></i> ASIGNACION</h3>
+                    @*<h3><i class="fa fa-industry" aria-hidden="true"></i> ENTIDA @{ ViewBag.AnhoActual}</h3>*@
+                    <h3><i class="fa fa-industry" aria-hidden="true"></i> MARCO PRESUPUESTAL</h3>
                 </div>
                 <div class="card-block">
                     <div class="form-row">
@@ -30,43 +31,30 @@
                                         <h5 class="modal-title" id="tituloModal">Nuevo Registro</h5>
                                     </div>
                                     <div class="modal-body">
-
                                         <div class="row">
-                                            <div class="form-group col-sm-6">
+                                            <div class="form-group col-sm-10">
                                                 <input type="hidden" class="control-form Popup" id="txtIdRegistro">
-                                                <label class="control-label">Año</label>
-                                                <select id="cboAnho" class="control-form Reque Popup"></select>
+                                                <label class="control-label">Empresa</label>
+                                                <select id="cboEmpresa" class="control-form Reque Popup" style="background-color: #FCFAC5"></select>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-group col-sm-12">
+                                                <label class="control-label">Nombre</label>
+                                                <input type="text" autocomplete="off" maxlength="150" class="control-form Reque Popup" id="txtNombre">
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="form-group col-sm-6">
-                                                <label class="control-label">Entidad</label>
-                                                <select id="cboEntidad" class="SelectSearch control-form Reque Popup"></select>
+                                                <label class="control-label">Abreviatura</label>
+                                                <input type="text" autocomplete="off" maxlength="20" class="control-form Reque Popup" id="txtAbreviatura">
                                             </div>
                                             <div class="form-group col-sm-6">
-                                                <label class="control-label">Fuente Financiamiento</label>
-                                                <select id="cboFuenteFto" class="SelectSearch control-form Reque Popup"></select>
+                                                <label class="control-label">Estado</label>
+                                                <select id="cboEstado" class="control-lectura Reque Popup"></select>
                                             </div>
                                         </div>
                                         
-                                        <div class="row">
-                                            <div class="form-group col-sm-12">
-                                                <label class="control-label">Meta</label>
-                                                <select id="cboMeta" class="SelectSearch control-form Reque Popup"></select>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="form-group col-sm-12">
-                                                <label class="control-label">SubMeta</label>
-                                                <select id="cboSubMeta" class="SelectSearch control-form Reque Popup"></select>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="form-group col-sm-10">
-                                                <label class="control-label">Oficina</label>
-                                                <select id="cboOficina" class="SelectSearch control-form Reque Popup"></select>
-                                            </div>
-                                        </div>
                                     </div>
                                     <div class="modal-footer">
                                         <button id="btnCancelar" class="btnCancelarForm" title="Cancelar"><i class="fa fa-undo" aria-hidden="true"></i>&nbsp;Cancelar</button>
@@ -83,4 +71,3 @@
 </div>
 <iframe name="print_frame" width="0" height="0" frameborder="0" src="about:blank"></iframe>
 <script src="~/Riztie/Js/App/AppPresu.js"></script>
-

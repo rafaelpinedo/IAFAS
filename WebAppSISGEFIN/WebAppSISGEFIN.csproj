@@ -300,7 +300,7 @@
     <Content Include="Views\Planeamiento\Tipoproceso.cshtml" />
     <Content Include="Views\Planeamiento\RegistroCN.cshtml" />
     <Content Include="Views\Planeamiento\PAC.cshtml" />
-    <Content Include="Views\Presupuesto\CentroGasto.cshtml" />
+    <Content Include="Views\Presupuesto\Entidad.cshtml" />
     <Content Include="Views\Presupuesto\FuenteFto.cshtml" />
     <Content Include="Views\Presupuesto\Meta.cshtml" />
     <Content Include="Views\Presupuesto\SubMeta.cshtml" />
@@ -311,7 +311,10 @@
     <Content Include="Views\General\Inicio.cshtml" />
     <Content Include="Views\Logistica\Configuracion.cshtml" />
     <Content Include="Views\RRHH\Personal.cshtml" />
-    <Content Include="Views\Presupuesto\Asignacion.cshtml" />
+    <Content Include="Views\Presupuesto\PCA.cshtml" />
+    <Content Include="Views\Presupuesto\CentroCosto.cshtml" />
+    <Content Include="Views\Presupuesto\MarcoPresu.cshtml" />
+    <Content Include="Views\Presupuesto\Compromiso.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
