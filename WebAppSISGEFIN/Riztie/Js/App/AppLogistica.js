@@ -484,7 +484,7 @@ function configurarBotones() {
     if (btnGuardar != null) btnGuardar.onclick = function () {
         var validar = false;
 
-        if (vista == "PedidoCompra" && validarPedido() == true) {
+        if (vista == "PedidoCompra" && validarPedido()) {
             validar = true;
         }
         else if (vista == "SolicitudCompra" && validarSoliCompra()) {
@@ -499,10 +499,14 @@ function configurarBotones() {
         else if (vista == "OrdenCompra" && validarOrdenCompra()) {
             validar = true;
         }
-        else if (validarInformacion("Reque") == true) {
-            validar = true;
+        else {
+
+            if (validarInformacion("Reque") == true) {
+                validar = true;
+            }
         }
-        if (validar == true) {
+
+        if (validar === true) {
             Swal.fire({
                 title: '¿Desea grabar la información?',
                 icon: 'warning',
@@ -523,13 +527,13 @@ function configurarBotones() {
                         grabarCotizacion();
                     }
                     else if (vista == "CuadroCompara") {
-                        grabarCuadroCompara();
+                         grabarCuadroCompara();
                     }
                     else if (vista == "OrdenCompra") {
                         grabarOrdenCompra();
                     }
                     else {
-                        grabarDatos();
+                      grabarDatos();
                     }
                     Swal.fire({
                         title: 'Procesando...',
@@ -1734,7 +1738,13 @@ function mostrarGrabar(rpta) {
         }
     }
     else {
-        mostrarMensaje("No se realizó el registro", "error")
+        Swal.fire({
+            title: 'Error!',
+            text: 'No se realizó el registro-verificador datos',
+            icon: 'error',
+            showConfirmButton: true,
+            timer: 2000
+        })
     }
 
     btnGuardar.innerHTML = "<i class='fa fa-save'></i> Grabar";
@@ -2878,6 +2888,7 @@ function generarPivot(detalle, div) {
 
 function validarCuadroCompara() {
     var idProveedor = cboProveedor.value;
+    var idTipoEjecucion = cboTipoEjecucion.value;
     if (idRegistro == "") {
         mostrarMensaje("Seleccione una Solicitud de la fila", "error");
         return false;
@@ -2887,15 +2898,22 @@ function validarCuadroCompara() {
         cboProveedor.focus();
         return false;
     }
-
-    return true;
+    else if (idTipoEjecucion == "") {
+        mostrarMensaje("Seleccione Tipo de Ejecución", "error");
+        cboTipoEjecucion.focus();
+        return false;
+    }
+    else {
+        return true;
+    }
 }
 
 function grabarCuadroCompara() {
     var idSolicitud = idRegistro;
     var idProveedor = cboProveedor.value;
+    var idTipoEjecucion = cboTipoEjecucion.value;
     var data = "";
-    data = idSolicitud + '|' + idProveedor;
+    data = idSolicitud + '|' + idProveedor + '|' + idTipoEjecucion;
     var txtFechaInicio = document.getElementById("txtFechaInicio").value;
     var txtFechaFinal = document.getElementById("txtFechaFinal").value;
     data = data + '¯' + txtFechaInicio + '|' + txtFechaFinal
@@ -3016,7 +3034,6 @@ function validarOrdenCompra() {
 function grabarOrdenCompra() {
     var data = "";
     var total = lblTotal.innerHTML.replace(',', '')
-    var idEmpresa = cboEmpresa.value;
     var idFteFto = cboFteFto.value;
     var justificacion = ttaJustificacion.value;
     var idRegistro = txtIdRegistro.value;
@@ -3028,8 +3045,6 @@ function grabarOrdenCompra() {
     data += idProveedor
     data += "|";
     data += total.replace(',', '');
-    data += "|";
-    data += idEmpresa
     data += "|";
     data += idFteFto
     data += "|";
@@ -3058,7 +3073,7 @@ function grabarOrdenCompra() {
     data = data + '¯' + txtFechaInicio + '|' + txtFechaFinal
     var frm = new FormData();
     frm.append("data", data);
-    Http.post("General/grabar?Id=" + controller + vista, mostrarGrabar, frm);
+    Http.post("General/guardar?tbl=" + controller + vista, mostrarGrabar, frm);
 
     btnGuardar.innerHTML = "Guardando <i class='fa fa-circle-o-notch fa-spin' style='color:white'></i>";
     btnGuardar.disabled = true;
