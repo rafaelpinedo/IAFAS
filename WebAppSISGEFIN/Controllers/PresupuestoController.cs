@@ -75,11 +75,46 @@ namespace WebAppSISGEFIN.Controllers
         }
 
         [FiltroAutenticacion]
-        public ActionResult Asignacion()
+        public ActionResult PCA()
         {
             string[] Data = Session["DataUsuario"].ToString().Split('|');
             string IdPerfil = Data[3];
             ViewBag.Menu = new Menu().Listar(IdPerfil);
+            return View();
+        }
+
+        [FiltroAutenticacion]
+        public ActionResult CentroCosto()
+        {
+            string[] Data = Session["DataUsuario"].ToString().Split('|');
+            string IdPerfil = Data[3];
+            ViewBag.Menu = new Menu().Listar(IdPerfil);
+            return View();
+        }
+
+        public ActionResult Entidad()
+        {
+            string[] Data = Session["DataUsuario"].ToString().Split('|');
+            string IdPerfil = Data[3];
+            ViewBag.Menu = new Menu().Listar(IdPerfil);
+            return View();
+        }
+
+        public ActionResult MarcoPresu()
+        {
+            string[] Data = Session["DataUsuario"].ToString().Split('|');
+            string IdPerfil = Data[3];
+            ViewBag.Menu = new Menu().Listar(IdPerfil);
+            int Anio = DateTime.Now.Year;
+            ViewBag.AnhoActual = Anio;
+            return View();
+        }
+        public ActionResult Compromiso()
+        {
+            string[] Data = Session["DataUsuario"].ToString().Split('|');
+            string IdPerfil = Data[3];
+            ViewBag.Menu = new Menu().Listar(IdPerfil);
+            ViewBag.AnhoActual =Convert.ToString(DateTime.Now.Year); 
             return View();
         }
     }

@@ -44,7 +44,7 @@ function mostrarlistas(rpta) {
         var listas = rpta.split("¯");
         var lista = listas[0].split("¬");
 
-        if (vista == "CentroGasto") {
+        if (vista == "Entidad") {
             var listaEmpresa = listas[1].split("¬");
             var listaEstado = listas[2].split("¬");
 
@@ -110,27 +110,42 @@ function mostrarlistas(rpta) {
             crearCombo(listaEstado, "cboEstado", "Seleccione");
             listarMetaItem();
         }
-        else if (vista == "Asignacion") {
-            //listaMetaItem_VG = listas[1].split("¬");
+        else if (vista == "CentroCosto") {
             var listaEntidad = listas[1].split("¬");
-            var listaFinanciamiento = listas[2].split("¬");
-            var listaMeta = listas[3].split("¬");
-            listaSubMetaItem_v = listas[4].split("¬");
-            var listaOficina = listas[5].split("¬");
-            
+            var listaEstado = listas[2].split("¬");
             var botones = [
                 { "cabecera": "Editar", "clase": "fa fa-pencil-square-o btn btn-info btnCirculo", "id": "Editar" },
                 { "cabecera": "Eliminar", "clase": "fa fa-trash btn btn-danger btnCirculo", "id": "Eliminar" },
             ];
             grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
+            crearCombo(listaEntidad, "cboEntidad", "Seleccione");
+            crearCombo(listaEstado, "cboEstado", "Seleccione");
             
-            listarSelect2Item(listaEntidad, "cboEntidad");
-            listarSelect2Item(listaFinanciamiento, "cboFuenteFto");
-            listarSelect2Item(listaMeta, "cboMeta");
-            listarSelect2Item(listaOficina, "cboOficina");
-            listarSubMetaItem()
-           // listarMetaItem();
+            listarMetaItem();
         }
+        
+        else if (vista == "PCA") {
+            var listaEntidad = listas[1].split("¬");
+            var listaFinanciamiento = listas[2].split("¬");
+            var listaMeta = listas[3].split("¬");
+            listaSubMetaItem_v = listas[4].split("¬");
+            var listaEstado = listas[5].split("¬");
+
+            var botones = [
+                { "cabecera": "Editar", "clase": "fa fa-pencil-square-o btn btn-info btnCirculo", "id": "Editar" },
+                { "cabecera": "Eliminar", "clase": "fa fa-trash btn btn-danger btnCirculo", "id": "Eliminar" },
+            ];
+            grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
+
+            crearCombo(listaEntidad, "cboEntidad", "Seleccione");
+            crearCombo(listaFinanciamiento, "cboFuenteFto", "Seleccione");
+            //listarSelect2Item(listaEntidad, "cboEntidad");
+            //listarSelect2Item(listaFinanciamiento, "cboFuenteFto");
+            listarSelect2Item(listaMeta, "cboMeta");
+            crearCombo(listaEstado, "cboEstado", "Seleccione");
+            listarSubMetaItem();
+        }
+
 
         else {
             var botones = [
@@ -373,15 +388,20 @@ function mostrarRegistro(rpta) {
         var select2cboPadre = document.getElementById("select2-cboPadre-container");
         if (select2cboPadre != null) select2cboPadre.innerHTML = "Seleccione";
 
-       
-        if (vista == "Clase") {
-            cboTipoBien.value = campos[0];
-            listarGrupoItem();
-            cboGrupo.value = campos[1];
-            document.getElementById('select2-cboGrupo-container').innerHTML = cboGrupo.options[cboGrupo.selectedIndex].text;
-            txtIdRegistro.value = campos[2];
-            txtNombre.value = campos[3];
-            cboEstado.value = campos[4];
+       if (vista == "PCA") {
+            //txtIdRegistro.value = campos[0];
+            //txtAnho.value = campos[1];
+            //cboEntidad.value = campos[2];
+            //cboFuenteFto.value = campos[3];
+            cboMeta.value = campos[4];
+            listarSubMetaItem();
+            cboSubMeta.value = campos[5];
+            document.getElementById('select2-cboSubMeta-container').innerHTML = cboSubMeta.options[cboSubMeta.selectedIndex].text;
+            //txtPia.value = campos[6];
+            //txtPim.value = campos[7];
+            //txtEjecutado.value = campos[8];
+            //txtDisponible.value = campos[9];
+            //cboEstado.value = campos[10];
         }
         
 
@@ -469,11 +489,18 @@ function configurarBotones() {
         var select2cboPadre = document.getElementById("select2-cboPadre-container");
         if (select2cboPadre != null) select2cboPadre.innerHTML = "Seleccione";
 
+        var select2cboSubMeta = document.getElementById("select2-cboSubMeta-container");
+        if (select2cboSubMeta != null) select2cboSubMeta.innerHTML = "Seleccione";
+
         var dtgFinal = document.getElementById("dtgEsFinal");
         if (dtgFinal != null) {
             $('#dtgEsFinal').bootstrapToggle('off')
         }
 
+        if (vista == "PCA") {
+            txtEjecutado.value = 0;
+            txtDisponible.value = 0;
+        }
         //var txtFechaPedido = document.getElementById("txtFechaPedido");
         //if (txtFechaPedido != null) txtFechaPedido.value = txtFechaPedido.getAttribute("data-fecha");
     }
@@ -538,16 +565,6 @@ function configurarCombos() {
     //var cboGrupo = document.getElementById("cboGrupo");
     //if (cboGrupo != null) cboGrupo.onchange = function () {
     //    listarClaseItem();
-    //}
-
-    //var cboGrupo = document.getElementById("cboGrupo");
-    //if (cboGrupo != null) cboGrupo.onchange = function () {
-    //    listarClaseItem();
-    //}
-
-    //var cboClase = document.getElementById("cboClase");
-    //if (cboClase != null) cboClase.onchange = function () {
-    //    listarFamiliaItem();
     //}
 
 }
