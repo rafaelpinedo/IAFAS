@@ -14,7 +14,12 @@ window.onload = function () {
     getConfigMn();
     vista = window.sessionStorage.getItem("Vista");
     controller = window.sessionStorage.getItem("Controller");
-    getListar();
+    if (vista == "InventarioInicial") {
+        getListarInventario();
+    }
+    else {
+        getListar();
+    }
     configurarBotones();
     configurarCombos();
 }
@@ -22,6 +27,13 @@ window.onload = function () {
 function getListar() {
     var data = "";
     Http.get("General/listarTabla?tbl=" + controller + vista + "&data=" + data, mostrarlistas);
+}
+function getListarInventario() {
+    var data = "";
+    var txtFechaInicio = document.getElementById("txtFechaInicio").value;
+    var txtFechaFinal = document.getElementById("txtFechaFinal").value;
+    data = txtFechaInicio + '|' + txtFechaFinal;
+    Http.get("General/listarTabla/?tbl=" + controller + vista + "&data=" + data, mostrarlistas);
 }
 
 function mostrarlistas(rpta) {
@@ -39,6 +51,19 @@ function mostrarlistas(rpta) {
             grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
             listarResponsableItem();
             crearCombo(listaEstado, "cboEstado", "Seleccione");
+        }
+        else if (vista == "InventarioInicial") {
+            var listaAlmacen = listas[1].split("¬");
+            var listaInvetario = listas[2].split("¬");
+            var botones = [
+                { "cabecera": "Editar", "clase": "fa fa-pencil-square-o btn btn-info btnCirculo", "id": "Editar" },
+                { "cabecera": "Eliminar", "clase": "fa fa-trash btn btn-danger btnCirculo", "id": "Eliminar" },
+            ];
+            grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
+            
+            crearCombo(listaAlmacen, "cboAlmacen", "Seleccione");
+            //listarSelect2Item(listaAlmacen, "cboAlmacen");
+            listarSelect2Item(listaInvetario, "cboInventario");
         }
 
         else {
@@ -71,11 +96,39 @@ function listarResponsableItem() {
     }
 }
 
+function listarSelect2Item(lista, idCombo) {
+    var nRegistros = lista.length;
+    var contenido = "<option value=''>Seleccione</option>";
+    var campos, idCodigo, nombre;
+    for (var i = 0; i < nRegistros; i++) {
+        campos = lista[i].split('|');
+        idCodigo = campos[0];
+        nombre = campos[1];
+        contenido += "<option value='";
+        contenido += idCodigo;
+        contenido += "'>";
+        contenido += nombre;
+        contenido += "</option>";
+    }
+    var cbo = document.getElementById(idCombo);
+    if (cbo != null) {
+        cbo.innerHTML = contenido;
+    }
+}
+
+
 
 function grabarDatos() {
     var data = ""
     var frm = new FormData();
     data = obtenerDatosGrabar("Popup");
+
+    if (vista == "InventarioInicial") {
+        var txtFechaInicio = document.getElementById("txtFechaInicio").value;
+        var txtFechaFinal = document.getElementById("txtFechaFinal").value;
+        data +='|'+ txtFechaInicio + '|' + txtFechaFinal;
+    }
+
     frm.append("data", data);
     Http.post("General/guardar/?tbl=" + controller + vista, mostrarGrabar, frm);
 }
@@ -96,7 +149,15 @@ function obtenerDatosGrabar(clase) {
                 if (control.id.substr(0, 3) == "dtt") {
                     if (control.value != "") {
                         var dFecha = control.value.split("-");
-                        data += dFecha[2] + "-" + dFecha[1] + "-" + dFecha[0];
+                        /*data += dFecha[2] + "-" + dFecha[1] + "-" + dFecha[0];*/
+                        //Mod. VFG
+                        if (vista == "InventarioInicial") {
+                            data += dFecha[1] + "-" + dFecha[2] + "-" + dFecha[0];
+                        }
+                        else {
+                            data += dFecha[2] + "-" + dFecha[1] + "-" + dFecha[0];
+                        }
+                        
                     }
                     else { data += ""; }
                 }
@@ -191,6 +252,11 @@ function eliminarRegistro(id) {
     var data = "";
     data = id;
 
+    if (vista == "InventarioInicial") {
+        var txtFechaInicio = document.getElementById("txtFechaInicio").value;
+        var txtFechaFinal = document.getElementById("txtFechaFinal").value;
+        data += '|' + txtFechaInicio + '|' + txtFechaFinal;
+    }
     var frm = new FormData();
     frm.append("data", data);
 
@@ -308,6 +374,9 @@ function configurarBotones() {
         var select2cboResponsable = document.getElementById("select2-cboResponsable-container");
         if (select2cboResponsable != null) select2cboResponsable.innerHTML = "Seleccione";
 
+        var select2cboInventario = document.getElementById("select2-cboInventario-container");
+        if (select2cboInventario != null) select2cboInventario.innerHTML = "Seleccione";
+
         var dtgFinal = document.getElementById("dtgEsFinal");
         if (dtgFinal != null) {
             $('#dtgEsFinal').bootstrapToggle('off')
@@ -365,6 +434,11 @@ function configurarBotones() {
     var btnCancelar = document.getElementById("btnCancelar");
     if (btnCancelar != null) btnCancelar.onclick = function () {
         divPopupContainer.style.display = 'none';
+    }
+
+    var btnConsultar = document.getElementById("btnConsultar");
+    if (btnConsultar != null) btnConsultar.onclick = function () {
+        getListarInventario();
     }
 }
 
