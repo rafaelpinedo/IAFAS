@@ -142,7 +142,6 @@ function mostrarlistas(rpta) {
             crearCombo(listaFinanciamiento, "cboFuenteFto", "Seleccione");
             console.log(lista);
             //listarSelect2Item(listaEntidad, "cboEntidad");
-            //listarSelect2Item(listaFinanciamiento, "cboFuenteFto");
             listarSelect2Item(listaMeta, "cboMeta");
             crearCombo(listaEstado, "cboEstado", "Seleccione");
             listarSubMetaItem();
