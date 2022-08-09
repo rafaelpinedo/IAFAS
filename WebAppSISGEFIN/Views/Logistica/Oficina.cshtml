@@ -46,7 +46,6 @@
                                             <div class="form-group col-sm-6">
                                                 <label class="control-label">Codigo Oficina</label>
                                                 <input type="text" autocomplete="off" class="control-lectura Popup" id="txtCodOficina" readonly>
-                                                @*<select id="cboOficinaPadre" class="control-form Popup"></select>*@
                                             </div>
                                         </div>
                                         <div class="row">
@@ -63,10 +62,15 @@
                                         </div>
                                         <div class="row">
                                             <div class="form-group col-sm-6">
+                                                <label class="control-label" for="dtgEsAgenteRetencion">Es Final</label>
+                                                <input type="checkbox" id="dtgEsFinal" class="Popup" data-toggle="toggle" data-width="160px" data-on="SI" data-off="NO" data-onstyle="success" data-offstyle="danger">
+                                            </div>
+                                            <div class="form-group col-sm-6">
                                                 <label class="control-label">Estado</label>
                                                 <select id="cboEstado" class="control-lectura Reque Popup"></select>
                                             </div>
                                         </div>
+                                       
                                     </div>
                                     <div class="modal-footer">
                                         <button id="btnCancelar" class="btnCancelarForm" title="Cancelar"><i class="fa fa-undo" aria-hidden="true"></i>&nbsp;Cancelar</button>

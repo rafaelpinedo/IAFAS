@@ -59,8 +59,12 @@ function mostrarlistas(rpta) {
         else if (vista == "InventarioInicial") {
             var listaAlmacen = listas[1].split("¬");
             var listaInvetario = listas[2].split("¬");
-           
-            grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
+            var botoness = [
+                { "cabecera": "Editar", "clase": "fa fa-pencil btn btn-info btnCirculo", "id": "Editar" },
+                /*{ "cabecera": "Anular", "clase": "fa fa-minus-circle btn btn-danger btnCirculo", "id": "Eliminar" },*/
+            ];
+
+            grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botoness, 38, false, null);
             
             crearCombo(listaAlmacen, "cboAlmacen", "Seleccione");
             listarSelect2Item(listaInvetario, "cboInventario");

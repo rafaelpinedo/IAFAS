@@ -303,6 +303,10 @@ function configurarBotones() {
         if (dtgEsAgenteRetencion != null) {
             $('#dtgEsAgenteRetencion').bootstrapToggle('off')
         }
+        var dtgEsFinal = document.getElementById("dtgEsFinal");
+        if (dtgEsFinal != null) {
+            $('#dtgEsFinal').bootstrapToggle('off')
+        }
 
         var cboEstado = document.getElementById("cboEstado");
         if (cboEstado != null) {

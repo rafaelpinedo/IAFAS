@@ -15,22 +15,20 @@ window.onload = function () {
     getConfigMn();
     vista = window.sessionStorage.getItem("Vista");
     controller = window.sessionStorage.getItem("Controller");
-    //if (vista == "ClasiGasto" || vista == "ClasiIngreso") {
-    //    getListarClasificador();
-    //}
-    //else {
-    //    getListar();
-    //}
-    getListar();
+    if (vista == "PCA") {
+        getListarProgramacion();
+    }
+    else {
+        getListar();
+    }
     configurarBotones();
    configurarCombos();
 }
-function getListarClasificador() {
+function getListarProgramacion() {
 
     var data = "";
-    var txtFechaInicio = document.getElementById("txtFechaInicio").value;
-    var txtFechaFinal = document.getElementById("txtFechaFinal").value;
-    data = txtFechaInicio + '|' + txtFechaFinal;
+    var txtAnhoFiscal = document.getElementById("txtAnioFiscal").value;
+    data = txtAnhoFiscal;
     Http.get("General/listarTabla/?tbl=" + controller + vista + "&data=" + data, mostrarlistas);
 }
 
@@ -109,7 +107,6 @@ function mostrarlistas(rpta) {
 
             crearCombo(listaEntidad, "cboEntidad", "Seleccione");
             crearCombo(listaFinanciamiento, "cboFuenteFto", "Seleccione");
-            console.log(lista);
             //listarSelect2Item(listaEntidad, "cboEntidad");
             listarSelect2Item(listaMeta, "cboMeta");
             crearCombo(listaEstado, "cboEstado", "Seleccione");
@@ -131,6 +128,7 @@ function listarMetaItem() {
     var nRegistros = listaMetaItem_VG.length;
     var contenido = "<option value=''>Seleccione</option>";
     var campos, idCodigo, nombre;
+    
     for (var i = 0; i < nRegistros; i++) {
         campos = listaMetaItem_VG[i].split('|');
         idCodigo = campos[0];
@@ -148,7 +146,9 @@ function listarMetaItem() {
     }
     var cbo = document.getElementById("cboPadre");
     if (cbo != null) {
-        cbo.innerHTML = contenido;
+        if (listaMetaItem_VG != "") {
+            cbo.innerHTML = contenido;
+        }
     }
 }
 
@@ -201,6 +201,10 @@ function grabarDatos() {
     var data = ""
     var frm = new FormData();
     data = obtenerDatosGrabar("Popup");
+    if (vista == "PCA") {
+        var txtAnhoFiscal = document.getElementById("txtAnioFiscal").value;
+        data += "|" + txtAnhoFiscal;
+    }
     frm.append("data", data);
     Http.post("General/guardar/?tbl=" + controller + vista, mostrarGrabar, frm);
 }
@@ -321,7 +325,10 @@ function editarRegistro(id) {
 function eliminarRegistro(id) {
     var data = "";
     data = id;
-
+    if (vista == "PCA") {
+        var txtAnhoFiscal = document.getElementById("txtAnioFiscal").value;
+        data += "|" + txtAnhoFiscal;
+    }
     var frm = new FormData();
     frm.append("data", data);
 
@@ -516,6 +523,16 @@ function configurarBotones() {
     var btnCancelar = document.getElementById("btnCancelar");
     if (btnCancelar != null) btnCancelar.onclick = function () {
         divPopupContainer.style.display = 'none';
+    }
+
+    var btnConsultar = document.getElementById("btnConsultar");
+    if (btnConsultar != null) btnConsultar.onclick = function () {
+        if (vista == "PCA") {
+            getListarProgramacion();
+        }
+        else {
+            getListar();
+        }
     }
 }
 
