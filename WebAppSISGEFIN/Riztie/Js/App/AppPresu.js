@@ -130,6 +130,7 @@ function mostrarlistas(rpta) {
             var listaMeta = listas[3].split("¬");
             listaSubMetaItem_v = listas[4].split("¬");
             var listaEstado = listas[5].split("¬");
+            var listaPresup = listas[6].split("¬");
 
             var botones = [
                 { "cabecera": "Editar", "clase": "fa fa-pencil-square-o btn btn-info btnCirculo", "id": "Editar" },
@@ -139,11 +140,13 @@ function mostrarlistas(rpta) {
 
             crearCombo(listaEntidad, "cboEntidad", "Seleccione");
             crearCombo(listaFinanciamiento, "cboFuenteFto", "Seleccione");
+            console.log(lista);
             //listarSelect2Item(listaEntidad, "cboEntidad");
-            //listarSelect2Item(listaFinanciamiento, "cboFuenteFto");
             listarSelect2Item(listaMeta, "cboMeta");
             crearCombo(listaEstado, "cboEstado", "Seleccione");
             listarSubMetaItem();
+            var pia = listaPresup[0].split("|")[0];
+            totalsumAnho.innerText = "Total S/ : " + formatoNumeroDecimal(pia)
         }
 
 
@@ -296,10 +299,11 @@ function mostrarGrabar(rpta) {
         ];
         grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
 
-        //if (vista == "Oficina") {
-        //    var listaOficinaPadre = listas[2].split("¬");
-        //    crearCombo(listaOficinaPadre, "cboOficinaPadre", "Ninguno");
-        //}
+        if (vista == "PCA") {
+            var listaPresup = listas[2].split("¬");
+            var pia = listaPresup[0].split("|")[0];
+            totalsumAnho.innerText = "Total S/ : " + formatoNumeroDecimal(pia)
+        }
 
         var cbo = document.getElementById("cboPadre");
         if (cbo != null) {
