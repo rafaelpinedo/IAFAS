@@ -77,6 +77,16 @@ namespace WebAppTurnera.Controllers
             return rpta;
         }
 
+        public string getreporte(string tbl, string data)
+        {
+            string Fecha = DateTime.Now.ToShortDateString();
+            string Hora = DateTime.Now.ToShortTimeString();
+            string rpta = "";
+            daSQL odaSQL = new daSQL("conSISGEFIN");
+            rpta = odaSQL.EjecutarComando("usp" + tbl + "ReporteCsv", "@Data", data);
+            return rpta + '¯' + Fecha + '¯' + Hora;
+        }
+
         public string eliminar(string tbl)
         {
             string rpta = "";
@@ -89,8 +99,6 @@ namespace WebAppTurnera.Controllers
             rpta = odaSQL.EjecutarComando("usp" + tbl + "EliminarCsv", "@Data", data);
             return rpta;
         }
-
-
 
         public void exportar(string orienta, string nombreArchivo)
         {

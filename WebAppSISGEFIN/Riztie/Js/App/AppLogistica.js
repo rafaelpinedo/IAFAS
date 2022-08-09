@@ -45,16 +45,11 @@ function mostrarlistas(rpta) {
     if (rpta) {
         var listas = rpta.split("¯");
         var lista = listas[0].split("¬");
-
         if (vista == "Proveedor") {
             var listaDocumento = listas[1].split("¬");
             var listaBanco = listas[2].split("¬");
             var listaEstado = listas[3].split("¬");
 
-            var botones = [
-                { "cabecera": "Editar", "clase": "fa fa-pencil-square-o btn btn-info btnCirculo", "id": "Editar" },
-                { "cabecera": "Eliminar", "clase": "fa fa-trash btn btn-danger btnCirculo", "id": "Eliminar" },
-            ];
             grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
             crearCombo(listaDocumento, "cboTipoDocumento", "Seleccione");
             crearCombo(listaBanco, "cboBanco", "Seleccione");
@@ -65,10 +60,6 @@ function mostrarlistas(rpta) {
             var listaOficinaPadre = listas[2].split("¬");
             var listaEstado = listas[3].split("¬");
 
-            var botones = [
-                { "cabecera": "Editar", "clase": "fa fa-pencil-square-o btn btn-info btnCirculo", "id": "Editar" },
-                { "cabecera": "Eliminar", "clase": "fa fa-trash btn btn-danger btnCirculo", "id": "Eliminar" },
-            ];
             grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
             crearCombo(listaEntidad, "cboEntidad", "Seleccione");
             crearCombo(listaOficinaPadre, "cboOficinaPadre", "Ninguno");
@@ -77,10 +68,7 @@ function mostrarlistas(rpta) {
         else if (vista == "CondicionCompra") {
             var listaEntidad = listas[1].split("¬");
             var listaEstado = listas[2].split("¬");
-            var botones = [
-                { "cabecera": "Editar", "clase": "fa fa-pencil-square-o btn btn-info btnCirculo", "id": "Editar" },
-                { "cabecera": "Eliminar", "clase": "fa fa-trash btn btn-danger btnCirculo", "id": "Eliminar" },
-            ];
+
             grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
             crearCombo(listaEntidad, "cboTipoCC", "Seleccione");
             crearCombo(listaEstado, "cboEstado", "Seleccione");
@@ -90,11 +78,6 @@ function mostrarlistas(rpta) {
             var listaDocumento = listas[2].split("¬");
             var listaEstado = listas[3].split("¬");
 
-
-            var botones = [
-                { "cabecera": "Editar", "clase": "fa fa-pencil-square-o btn btn-info btnCirculo", "id": "Editar" },
-                { "cabecera": "Eliminar", "clase": "fa fa-trash btn btn-danger btnCirculo", "id": "Eliminar" },
-            ];
             grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
             crearCombo(listaEntidad, "cboEntidad", "Seleccione");
             crearCombo(listaDocumento, "cboDocumento", "Seleccione");
@@ -105,11 +88,6 @@ function mostrarlistas(rpta) {
             var listaTipo = listas[1].split("¬");
             var listaOficina = listas[2].split("¬");
 
-            var botones = [
-                { "cabecera": "Editar", "clase": "fa fa-pencil-square-o btn btn-info btnCirculo", "id": "Editar" },
-                { "cabecera": "Eliminar", "clase": "fa fa-trash btn btn-danger btnCirculo", "id": "Eliminar" },
-            ];
-
             grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
             crearCombo(listaTipo, "cboTipoSolicitud", "Seleccione");
             crearCombo(listaOficina, "cboOficina", "Seleccione");
@@ -117,28 +95,17 @@ function mostrarlistas(rpta) {
         else if (vista == "SolicitudCompra" || vista == "Cotizacion") {
             var listaTipo = listas[1].split("¬");
 
-            var botones = [
-                { "cabecera": "Editar", "clase": "fa fa-pencil-square-o btn btn-info btnCirculo", "id": "Editar" },
-                { "cabecera": "Eliminar", "clase": "fa fa-trash btn btn-danger btnCirculo", "id": "Eliminar" },
-            ];
             grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
             crearCombo(listaTipo, "cboTipoSolicitud", "Seleccione");
         }
         else if (vista == "OrdenCompra") {
             var listaFteFto = listas[1].split("¬");
 
-            var botones = [
-                { "cabecera": "Editar", "clase": "fa fa-pencil-square-o btn btn-info btnCirculo", "id": "Editar" },
-                { "cabecera": "Eliminar", "clase": "fa fa-trash btn btn-danger btnCirculo", "id": "Eliminar" },
-            ];
             grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
             crearCombo(listaFteFto, "cboFteFto", "Seleccione");
         }
         else if (vista == "Articulo") {
-            var botones = [
-                { "cabecera": "Editar", "clase": "fa fa-pencil-square-o btn btn-info btnCirculo", "id": "Editar" },
-                { "cabecera": "Eliminar", "clase": "fa fa-trash btn btn-danger btnCirculo", "id": "Eliminar" },
-            ];
+
             grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
             var listaTipo = listas[1].split("¬");
             listaGrupoItem = listas[2].split("¬");
@@ -155,10 +122,7 @@ function mostrarlistas(rpta) {
         }
 
         else if (vista == "Grupo") {
-            var botones = [
-                { "cabecera": "Editar", "clase": "fa fa-pencil-square-o btn btn-info btnCirculo", "id": "Editar" },
-                { "cabecera": "Eliminar", "clase": "fa fa-trash btn btn-danger btnCirculo", "id": "Eliminar" },
-            ];
+
             grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
             var listaTipoBien = listas[1].split("¬");
             var listaEstado = listas[2].split("¬");
@@ -166,19 +130,13 @@ function mostrarlistas(rpta) {
             crearCombo(listaEstado, "cboEstado", "Seleccione");
         }
         else if (vista == "UniMed") {
-            var botones = [
-                { "cabecera": "Editar", "clase": "fa fa-pencil-square-o btn btn-info btnCirculo", "id": "Editar" },
-                { "cabecera": "Eliminar", "clase": "fa fa-trash btn btn-danger btnCirculo", "id": "Eliminar" },
-            ];
+
             grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
             var listaEstado = listas[1].split("¬");
             crearCombo(listaEstado, "cboEstado", "Seleccione");
         }
         else if (vista == "Clase") {
-            var botones = [
-                { "cabecera": "Editar", "clase": "fa fa-pencil-square-o btn btn-info btnCirculo", "id": "Editar" },
-                { "cabecera": "Eliminar", "clase": "fa fa-trash btn btn-danger btnCirculo", "id": "Eliminar" },
-            ];
+
             grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
             var listaTipoBien = listas[1].split("¬");
             listaGrupoItem = listas[2].split("¬");
@@ -189,10 +147,7 @@ function mostrarlistas(rpta) {
         }
 
         else if (vista == "Familia") {
-            var botones = [
-                { "cabecera": "Editar", "clase": "fa fa-pencil-square-o btn btn-info btnCirculo", "id": "Editar" },
-                { "cabecera": "Eliminar", "clase": "fa fa-trash btn btn-danger btnCirculo", "id": "Eliminar" },
-            ];
+
             grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
             var listaTipo = listas[1].split("¬");
             listaGrupoItem = listas[2].split("¬");
@@ -202,14 +157,8 @@ function mostrarlistas(rpta) {
             listarGrupoItem();
             crearCombo(listaEstado, "cboEstado", "Seleccione");
         }
-
         else {
-            var botones = [
-                { "cabecera": "Editar", "clase": "fa fa-pencil-square-o btn btn-info btnCirculo", "id": "Editar" },
-                { "cabecera": "Eliminar", "clase": "fa fa-trash btn btn-danger btnCirculo", "id": "Eliminar" },
-            ];
             grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
-
         }
     }
 }
@@ -264,9 +213,7 @@ function listarClaseItem() {
         cbo.innerHTML = contenido;
         listarFamiliaItem();
     }
-
 }
-
 
 function listarFamiliaItem() {
     var idTipoItem = cboTipoBien.value;
@@ -326,6 +273,16 @@ function configurarCombos() {
     }
 }
 function configurarBotones() {
+    var btnConsultar = document.getElementById("btnConsultar");
+    if (btnConsultar != null) btnConsultar.onclick = function () {
+        if (vista == "PedidoCompra" || vista == "SolicitudCompra" || vista == "Cotizacion" || vista == "CuadroCompara" || vista == "OrdenCompra") {
+            getListarPedido();
+        }
+        else {
+            getListar();
+        }
+    }
+
     var btnNuevo = document.getElementById("btnNuevo");
     if (btnNuevo != null) btnNuevo.onclick = function () {
         divPopupContainer.style.display = 'block';
@@ -527,13 +484,13 @@ function configurarBotones() {
                         grabarCotizacion();
                     }
                     else if (vista == "CuadroCompara") {
-                         grabarCuadroCompara();
+                        grabarCuadroCompara();
                     }
                     else if (vista == "OrdenCompra") {
                         grabarOrdenCompra();
                     }
                     else {
-                      grabarDatos();
+                        grabarDatos();
                     }
                     Swal.fire({
                         title: 'Procesando...',
@@ -1007,7 +964,7 @@ function mostrarEvaluacionDetalle(rpta) {
         contenido += "px;display: none'>";
         contenido += campos[2];
         contenido += "</td> ";
-        contenido += "<td style='white-space:pre-wrap;width:";
+        contenido += "<td style='white-space:pre-line;white-space:-moz-pre-wrap;white-space:-o-pre-wrap;width:";
         contenido += anchos[3];
         contenido += "px;'>";
         contenido += campos[3];
@@ -1518,7 +1475,7 @@ function mostrarRegistro(rpta) {
             generarPivot(detalle, "listaDetallePrevia");
         }
         else if (vista == "Articulo") {
-
+            document.getElementById("divPopupContainer").style.display = 'block';
             txtIdRegistro.value = campos[0];
             cboTipoBien.value = campos[1];
             listarGrupoItem();
@@ -1538,6 +1495,7 @@ function mostrarRegistro(rpta) {
 
         }
         else if (vista == "Clase") {
+            document.getElementById("divPopupContainer").style.display = 'block';
             cboTipoBien.value = campos[0];
             listarGrupoItem();
             cboGrupo.value = campos[1];
@@ -1547,7 +1505,7 @@ function mostrarRegistro(rpta) {
             cboEstado.value = campos[4];
         }
         else if (vista == "Familia") {
-
+            document.getElementById("divPopupContainer").style.display = 'block';
             txtIdRegistro.value = campos[3];
             cboTipoBien.value = campos[0];
             listarGrupoItem();
@@ -1706,15 +1664,14 @@ function mostrarGrabar(rpta) {
         var mensaje = mensajeResul[1];
         divPopupContainer.style.display = 'none';
 
-        var botones = [
-            { "cabecera": "Editar", "clase": "fa fa-pencil-square-o btn btn-info btnCirculo", "id": "Editar" },
-            { "cabecera": "Eliminar", "clase": "fa fa-trash btn btn-danger btnCirculo", "id": "Eliminar" },
-        ];
         grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
 
         if (vista == "Oficina") {
             var listaOficinaPadre = listas[2].split("¬");
             crearCombo(listaOficinaPadre, "cboOficinaPadre", "Ninguno");
+        }
+        else if (vista == "OrdenCompra") {
+            divPopupContainerForm1.style.display = 'none';
         }
 
         if (tipo == 'A') {
@@ -1725,7 +1682,6 @@ function mostrarGrabar(rpta) {
                 showConfirmButton: true,
                 timer: 2000
             })
-            alerta = 'success';
         }
         else {
             Swal.fire({
@@ -1783,7 +1739,7 @@ function aprobarPedido() {
 
 function eliminarRegistro(id) {
     var data = "";
-    if (vista == "PedidoCompra" || vista == "SolicitudCompra" || vista == "Cotizacion" || vista == "CuadroCompara") {
+    if (vista == "PedidoCompra" || vista == "SolicitudCompra" || vista == "Cotizacion" || vista == "CuadroCompara" || vista == "OrdenCompra") {
         var fechaInicio = txtFechaInicio.value;
         var fechaFinal = txtFechaFinal.value;
         data = id + '|' + fechaInicio + '|' + fechaFinal;
@@ -1796,7 +1752,7 @@ function eliminarRegistro(id) {
     frm.append("data", data);
 
     Swal.fire({
-        title: '¿Desea eliminar el registro?',
+        title: '¿Desea anular el registro?',
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
@@ -1817,11 +1773,7 @@ function mostrarEliminar(rpta) {
         mensajeResul = listas[1].split("|");
         var tipo = mensajeResul[0];
         var mensaje = mensajeResul[1];
-
-        var botones = [
-            { "cabecera": "Editar", "clase": "fa fa-pencil-square-o btn btn-info btnCirculo", "id": "Editar" },
-            { "cabecera": "Eliminar", "clase": "fa fa-trash btn btn-danger btnCirculo", "id": "Eliminar" },
-        ];
+              
         grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, null, botones, 38, false, null);
 
         if (vista == "Oficina") {
@@ -1829,10 +1781,9 @@ function mostrarEliminar(rpta) {
             crearCombo(listaOficinaPadre, "cboOficinaPadre", "Ninguno");
         }
 
-
         if (tipo == 'A') {
             Swal.fire({
-                title: 'Eliminado!',
+                title: 'Anulado!',
                 text: mensaje,
                 icon: 'success',
                 showConfirmButton: true,
@@ -1905,134 +1856,44 @@ function mostrarReporte(rpta) {
         }
         else if (vista == "OrdenCompra") {
             tipoOrden = Cabecera[1];
-            IdEmpresa = Cabecera[2];
-            if (IdEmpresa == 1) {
-                document.getElementById("tdNroOrden").innerHTML = "Nº " + Cabecera[0];
-                document.getElementById("tdDia").innerHTML = Cabecera[3];
-                document.getElementById("tdMes").innerHTML = Cabecera[4];
-                document.getElementById("tdAnio").innerHTML = Cabecera[5];
-                spnEmpresa.innerHTML = Cabecera[6];
-                spnRUC.innerHTML = Cabecera[7];
-                spnDireccion.innerHTML = Cabecera[8];
-                tdRegistroInterno.innerHTML = Cabecera[9];
-                tdCuadroC.innerHTML = Cabecera[10];
-                tdRequerimiento.innerHTML = Cabecera[11];
-                document.getElementById("tdCipDirector").innerHTML = Cabecera[17];
-                document.getElementById("tdDirector").innerHTML = Cabecera[18];
-                document.getElementById("tdGradoDirector").innerHTML = Cabecera[19];
-                document.getElementById("tdCipAdmon").innerHTML = Cabecera[20];
-                document.getElementById("tdAdmon").innerHTML = Cabecera[21];
-                document.getElementById("tdGradoAdmon").innerHTML = Cabecera[22];
-                tdJustificacion.innerHTML = Cabecera[39];
-                tdTotal.innerHTML = formatoNumeroDecimal(Cabecera[15]);
-                tdCuentasPagar.innerHTML = formatoNumeroDecimal(Cabecera[15]);
-                tdPlazoEntrega.innerHTML = Cabecera[23] + " DIAS";
-                tdCredito.innerHTML = Cabecera[24];
-                tdMontoTexto.innerHTML = NumeroALetras(Cabecera[15]);
-                tdResumenPresu.innerHTML = Cabecera[25] + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + Cabecera[37] + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + Cabecera[35];//Cabecera[16];
-                tdGarantiaIAFAS.innerHTML = Cabecera[38];
-                var contenido = ""
-                if (tipoOrden == "SERVICIOS") {
-                    snpTipoOrden.innerHTML = "ORDEN DE SERVICIO";
-                    contenido = "<tr>";
-                    contenido += "<th style='border: black 1px solid; padding: 5px'>ITEM</th>";
-                    contenido += "<th style='border: black 1px solid;'>DESCRIPCION DETALLADA DEL SERVICIO</th>";
-                    contenido += "<th style='border: black 1px solid; padding: 5px'>PRECIO(S/)</th>";
-                    contenido += "</tr>";
-                }
-                else {
-                    snpTipoOrden.innerHTML = "ORDEN DE COMPRA";
-                    contenido = "<tr>";
-                    contenido += "<th style='border: black 1px solid; padding: 5px'>ITEM</th>";
-                    contenido += "<th style='border: black 1px solid;'>CANTIDAD</th>";
-                    contenido += "<th style='border: black 1px solid; padding: 5px'>UNIDAD</th>";
-                    contenido += "<th style='border: black 1px solid; padding: 5px'>DESCRIPCION DETALLADA DEL PRODUCTO</th>";
-                    contenido += "<th style='border: black 1px solid; padding: 5px'>PRECIO UNITARIO</th>";
-                    contenido += "<th style='border: black 1px solid; padding: 5px'>TOTAL</th>";
-                    contenido += "</tr>";
-                }
-                tblCabecera.innerHTML = "";
-                tblCabecera.innerHTML = contenido;
+            document.getElementById("tdNroOrden").innerHTML = "Nº " + Cabecera[0];
+            document.getElementById("tdDia").innerHTML = Cabecera[2];
+            document.getElementById("tdMes").innerHTML = Cabecera[3];
+            document.getElementById("tdAnio").innerHTML = Cabecera[4];
+            spnEmpresa.innerHTML = Cabecera[5];
+            spnRUC.innerHTML = Cabecera[6];
+            spnDireccion.innerHTML = Cabecera[7];
+            tdJustificacion.innerHTML = Cabecera[8];
+            tdTotal.innerHTML = formatoNumeroDecimal(Cabecera[9]);
+            tdCuentasPagar.innerHTML = formatoNumeroDecimal(Cabecera[9]);
+            tdPlazoEntrega.innerHTML = Cabecera[10] + " DIAS";
+            tdCredito.innerHTML = Cabecera[11];
+            tdMontoTexto.innerHTML = NumeroALetras(Cabecera[9]);
+            tdGarantia.innerHTML = Cabecera[12];
+            tdSolicitante.innerHTML = Cabecera[13];
+            tdResumenPresu.innerHTML ='FTE.FTO.:'+ Cabecera[14] + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;META:' + Cabecera[15] + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PARTIDA:' + Cabecera[16];
+            var contenido = ""
+            if (tipoOrden == "SERVICIOS") {
+                snpTipoOrden.innerHTML = "ORDEN DE SERVICIO";
+                contenido = "<tr>";
+                contenido += "<th style='border: black 1px solid; padding: 5px'>ITEM</th>";
+                contenido += "<th style='border: black 1px solid;'>DESCRIPCION</th>";
+                contenido += "<th style='border: black 1px solid; padding: 5px'>PRECIO</th>";
+                contenido += "</tr>";
             }
             else {
-                spnNroOrdenMGP.innerHTML = "Nº " + Cabecera[0];
-                tdDiaMgp.innerHTML = Cabecera[3];
-                tdMesMgp.innerHTML = Cabecera[4];
-                tdAnioMgp.innerHTML = Cabecera[5];
-                tdProveedorMgp.innerHTML = Cabecera[6];
-                tdRUCMgp.innerHTML = Cabecera[7];
-                tdDireccionMGP.innerHTML = Cabecera[8];
-                tdTelefonoProvMgp.innerHTML = Cabecera[26];
-                tdCorreoProvMgp.innerHTML = Cabecera[27];
-                tdCCIMGP.innerHTML = Cabecera[28];
-                tdBancoProvMgp.innerHTML = Cabecera[29];
-                tdTelefonoMGP.innerHTML = Cabecera[30];
-                tdAreaMGP.innerHTML = Cabecera[12];
-                if (Cabecera[23] != "") {
-                    tdPlazoEntregaMgp.innerHTML = Cabecera[23] + " DIAS";
-                }
-                else {
-                    tdPlazoEntregaMgp.innerHTML = "";
-                }
-                tdFormaPagoMGP.innerHTML = Cabecera[24];
-                spnMontoLetraMgp.innerHTML = NumeroALetras(Cabecera[15]);
-                tdTotalMgp.innerHTML = formatoNumeroDecimal(Cabecera[15]);
-                tdIGVMgp.innerHTML = formatoNumeroDecimal(Cabecera[14]);
-                tdSubTotalMgp.innerHTML = formatoNumeroDecimal(Cabecera[13]);
-                tdMetaMgp.innerHTML = Cabecera[36];
-                tdSubMetaMgp.innerHTML = Cabecera[37];
-                tdPartidaMgp.innerHTML = Cabecera[35];
-                tdProcesoMgp.innerHTML = Cabecera[33];
-                tdFteFtoMgp.innerHTML = Cabecera[25];
-                tdEcofinMgp.innerHTML = Cabecera[34];
-                tdGarantiaMgp.innerHTML = Cabecera[38];
-                var contenido = ""
-                if (tipoOrden == "SERVICIOS") {
-                    snpTipoOrden.innerHTML = "ORDEN DE SERVICIO";
-                    contenido = "<tr>";
-                    contenido += "<th style='border: black 1px solid; padding: 5px'>ITEM</th>";
-                    contenido += "<th style='border: black 1px solid;'>DESCRIPCION DETALLADA DEL SERVICIO</th>";
-                    contenido += "<th style='border: black 1px solid; padding: 5px'>PRECIO(S/)</th>";
-                    contenido += "</tr>";
-                }
-                else {
-                    snpTipoOrden.innerHTML = "ORDEN DE COMPRA";
-                    contenido = "<tr>";
-                    contenido += "<th style='border: black 1px solid; padding: 5px'>ITEM</th>";
-                    contenido += "<th style='border: black 1px solid;'>CANTIDAD</th>";
-                    contenido += "<th style='border: black 1px solid; padding: 5px'>UNIDAD</th>";
-                    contenido += "<th style='border: black 1px solid; padding: 5px' colspan='4'>DESCRIPCION DETALLADA DEL PRODUCTO</th>";
-                    contenido += "<th style='border: black 1px solid; padding: 5px' colspan='2'>PRECIO UNITARIO</th>";
-                    contenido += "<th style='border: black 1px solid; padding: 5px'>TOTAL</th>";
-                    contenido += "</tr>";
-                }
-                tblCabeceraMgp.innerHTML = "";
-                tblCabeceraMgp.innerHTML = contenido;
-
-                if (tipoOrden == "SERVICIOS") {
-                    spnTipoOrdenMGP.innerHTML = "ORDEN DE SERVICIO";
-                    tdRecepccion.innerHTML = "RECEPCION ORDEN DE SERVICIO";
-                    tdNotaMgp.innerHTML = "NOTA:<br />- Sírvase remitir para su cancelación Factura o Factura Electrónica o Boleta de Venta o Recibo por Honorarios, según corresponda:a nombre de la Marina de Guerra del Perú, R.U.C.: 20153408191. Adjuntando el Acta de Conformidad y la presente Orden de Servicio.<br />" +
-                        "- En caso de retraso injustificado del contratista en la ejecución de las presentación objeto del contrato, la entidad le aplica automatianmente la penalidad por mora po cada día de retraso de acuerdo a lo establecido en el Art.Nº 162 de la Ley del Estado, aprobado mediante Decreto Supremo Nº 344 - 2018 - EF < br />" +
-                        "- La Orden de Servicio es nula sin las firmas y sellos autorizados.";
-                    tdRecibiMgp.innerHTML = "EN LA FECHA SE DEJA CONSTANCIA QUE<br />SE HA CULMINADO EL TRABAJO";
-                    tdRecibiMgp.style.textAlign = "center";
-                }
-                else {
-                    spnTipoOrdenMGP.innerHTML = "ORDEN DE COMPRA";
-                    tdRecepccion.innerHTML = "RECEPCION ORDEN DE COMPRA";
-                    tdNotaMgp.innerHTML = "NOTA:<br />Para efectos de pago:<br/>" +
-                        "- Sírvase remitir para su cancelación Factura o Factura Electrónica o Boleta de Venta o Recibo por Honorarios, según corresponda: a nombre de la Marina de Guerra del Perú, R.U.C.: 20153408191. Adjuntando el Acta de Conformidad.<br /> " +
-                        "- El proveedor debe adjuntar a su factura la copia de Orden de Compra<br />" +
-                        "- Esta O/C se anulará sin las firmas mancomunadas respectivas.<br />" +
-                        "- El area usuaria se reservará el derecho de devolver los materiales que no cumplan con las especificaciones técnicas requeridas.";
-                    tdRecibiMgp.innerHTML = "GRADO:................................................<br/>" +
-                        "ANTEFIRMA:.........................................<br/>" +
-                        "CIP:........................................................";
-                    tdRecibiMgp.style.textAlign = "left";
-                    tdRecibiMgp.style.fontSize = "8px";
-                }
+                snpTipoOrden.innerHTML = "ORDEN DE COMPRA";
+                contenido = "<tr>";
+                contenido += "<th style='border: black 1px solid; padding: 5px'>ITEM</th>";
+                contenido += "<th style='border: black 1px solid;'>CANTIDAD</th>";
+                contenido += "<th style='border: black 1px solid; padding: 5px'>UNIDAD</th>";
+                contenido += "<th style='border: black 1px solid; padding: 5px'>DESCRIPCION</th>";
+                contenido += "<th style='border: black 1px solid; padding: 5px'>PRECIO UNITARIO</th>";
+                contenido += "<th style='border: black 1px solid; padding: 5px'>TOTAL</th>";
+                contenido += "</tr>";
             }
+            tblCabecera.innerHTML = "";
+            tblCabecera.innerHTML = contenido;
         }
 
         var contenido = "";
@@ -2100,22 +1961,12 @@ function mostrarReporte(rpta) {
                         contenido += "<td style='vertical-align:top;text-align: center;'>";
                         contenido += campos[2];
                         contenido += "</td>";
-                        if (empresa == "MGP") {
-                            contenido += "<td colspan='4' style='vertical-align:top;text-align: left;max-width:500px;white-space: pre-wrap;white-space: -moz-pre-wrap;white-space: -o-pre-wrap;'>";
-                            contenido += campos[1];
-                            contenido += "</td>";
-                            contenido += "<td colspan='2' style='vertical-align:top;text-align: right;'>";
-                            contenido += formatoNumeroDecimal(campos[4] * 1);
-                            contenido += "</td>";
-                        }
-                        else {
-                            contenido += "<td style='vertical-align:top;text-align: left;max-width:500px;white-space: pre-wrap;white-space: -moz-pre-wrap;white-space: -o-pre-wrap;'>";
-                            contenido += campos[1];
-                            contenido += "</td>";
-                            contenido += "<td style='vertical-align:top;text-align: right;'>";
-                            contenido += formatoNumeroDecimal(campos[4] * 1);
-                            contenido += "</td>";
-                        }
+                        contenido += "<td style='vertical-align:top;text-align: left;max-width:500px;white-space: pre-wrap;white-space: -moz-pre-wrap;white-space: -o-pre-wrap;'>";
+                        contenido += campos[1];
+                        contenido += "</td>";
+                        contenido += "<td style='vertical-align:top;text-align: right;'>";
+                        contenido += formatoNumeroDecimal(campos[4] * 1);
+                        contenido += "</td>";
                         contenido += "<td style='vertical-align:top;text-align: right;'>";
                         contenido += formatoNumeroDecimal(campos[5] * 1);
                         contenido += "</td>";
@@ -2151,7 +2002,6 @@ function mostrarReporte(rpta) {
                 tblDetalleReporte.innerHTML = contenido;
             }
         }
-
         imprimir(divReporte.innerHTML);
     }
 }

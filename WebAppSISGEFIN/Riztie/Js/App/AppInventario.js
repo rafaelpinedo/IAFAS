@@ -14,7 +14,13 @@ window.onload = function () {
     getConfigMn();
     vista = window.sessionStorage.getItem("Vista");
     controller = window.sessionStorage.getItem("Controller");
-    getListar();
+    if (vista == "Almacen") {
+        getListar();
+    }
+    else {
+        getInventario()
+    }
+    
     configurarBotones();
     configurarCombos();
 }
@@ -24,11 +30,18 @@ function getListar() {
     Http.get("General/listarTabla?tbl=" + controller + vista + "&data=" + data, mostrarlistas);
 }
 
+function getInventario() {
+    var data = "";
+    var fechaInicio = document.getElementById("txtFechaInicio").value;
+    var fechaFinal = document.getElementById("txtFechaFinal").value;
+    data = fechaInicio + '|' + fechaFinal;
+    Http.get("General/listarTabla/?tbl=" + controller + vista + "&data=" + data, mostrarlistas);
+}
+
 function mostrarlistas(rpta) {
     if (rpta) {
         var listas = rpta.split("¯");
         var lista = listas[0].split("¬");
-
         if (vista == "Almacen") {
             listaRespoItem_VG = listas[1].split("¬");
             var listaEstado = listas[2].split("¬");
@@ -40,7 +53,15 @@ function mostrarlistas(rpta) {
             listarResponsableItem();
             crearCombo(listaEstado, "cboEstado", "Seleccione");
         }
-
+        else if (vista == "InventarioInicial") {
+            var listaItem = listas[1].split("¬");
+            var botones = [
+                { "cabecera": "Editar", "clase": "fa fa-pencil-square-o btn btn-info btnCirculo", "id": "Editar" },
+                { "cabecera": "Eliminar", "clase": "fa fa-trash btn btn-danger btnCirculo", "id": "Eliminar" },
+            ];
+            grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
+            crearCombo(listaItem, "cboArticulo", "Seleccione");
+        }
         else {
             var botones = [
                 { "cabecera": "Editar", "clase": "fa fa-pencil-square-o btn btn-info btnCirculo", "id": "Editar" },

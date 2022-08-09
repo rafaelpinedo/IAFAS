@@ -107,6 +107,13 @@ function configurarBotones() {
     if (btnCancelarForm1 != null) btnCancelarForm1.onclick = function () {
         divPopupContainerForm1.style.display = 'none';
     }
+
+    var btnReporteExcel = document.getElementById("btnReporteExcel");
+    if (btnReporteExcel != null) btnReporteExcel.onclick = function () {
+        var anio = txtAnioCN.value;
+        Http.get("General/getReporte/?tbl=" + controller + vista + "&data=" + anio, mostrarDatosExportar);
+
+    }
 }
 
 function seleccionarFila(fila, id, prefijo) {
@@ -621,4 +628,57 @@ function mostrarRegistro(rpta) {
         }
 
     }
+}
+
+function mostrarDatosExportar(rpta) {
+    if (rpta) {
+       // spnLoad.style.display = 'none';
+        var listas = rpta.split('¯');
+        var tituloReporte = listas[0];
+        contenidoExporta = listas[1];
+
+        archivo = tituloReporte + ".xlsx";
+        Http.postDownloadBytes("General/exportar/?orienta=V&nombreArchivo=" + archivo, mostrarExportar, contenidoExporta);
+    }
+}
+
+function mostrarExportar(rpta) {
+    //spnLoad.style.display = 'none';
+    if (rpta) {
+        descargarArchivo(rpta, obtenerMime());
+
+    }
+    else {
+        mostrarMensaje("No tiene archivo de descarga", "error");
+    }
+}
+
+function obtenerMime() {
+    var campos = archivo.split('.');
+    var n = campos.length;
+    var extension = campos[n - 1].toLowerCase();
+    switch (extension) {
+        case "xlsx":
+            tipoMime = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+            break;
+        case "docx":
+            tipoMime = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+            break;
+        case "pdf":
+            tipoMime = "aplication/pdf";
+            break;
+        default:
+            tipoMime = "aplication/octect-stream";
+            break;
+    }
+    return tipoMime;
+}
+
+function descargarArchivo(contenido, tipoMime) {
+    var blob = new Blob([contenido], { "type": tipoMime });
+    var enlace = document.createElement("a");
+    enlace.href = URL.createObjectURL(blob);
+    enlace.download = archivo;
+    enlace.click();
+    document.removeChild(enlace);
 }
