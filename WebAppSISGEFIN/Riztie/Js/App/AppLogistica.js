@@ -20,12 +20,20 @@ window.onload = function () {
     if (vista == "PedidoCompra" || vista == "SolicitudCompra" || vista == "Cotizacion" || vista == "CuadroCompara" || vista == "OrdenCompra") {
         getListarPedido();
     }
-    else {
+    else if (vista == "PAC" ){
+        getListarLicita();
+    }
+     else {
         getListar();
     }
     configurarBotones();
     configurarConsultas();
     configurarCombos();
+}
+
+function getListarLicita() {
+    var anioFiscal = document.getElementById("txtAnioFiscal").value;
+    Http.get("General/listarTabla/?tbl=" + controller + vista + "&data=" + anioFiscal, mostrarlistas);
 }
 
 function getListarPedido() {
@@ -155,6 +163,14 @@ function mostrarlistas(rpta) {
             var listaEstado = listas[4].split("¬");
             crearCombo(listaTipo, "cboTipoBien", "Seleccione");
             listarGrupoItem();
+            crearCombo(listaEstado, "cboEstado", "Seleccione");
+        }
+        else if (vista == "PAC") {
+            var listaEntidad = listas[1].split("¬");
+            var listaEstado = listas[2].split("¬");
+
+            grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
+            crearCombo(listaEntidad, "cboEntidadPAC", "Seleccione");
             crearCombo(listaEstado, "cboEstado", "Seleccione");
         }
         else {

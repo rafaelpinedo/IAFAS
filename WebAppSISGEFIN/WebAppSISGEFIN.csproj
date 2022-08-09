@@ -315,6 +315,11 @@
     <Content Include="Views\Presupuesto\CentroCosto.cshtml" />
     <Content Include="Views\Presupuesto\MarcoPresu.cshtml" />
     <Content Include="Views\Presupuesto\Compromiso.cshtml" />
+    <Content Include="Views\Logistica\PAC.cshtml" />
+    <Content Include="Views\Logistica\Prosel.cshtml" />
+    <Content Include="Views\Logistica\Tipoproceso.cshtml" />
+    <Content Include="Views\Logistica\RegistroCN.cshtml" />
+    <Content Include="Views\Logistica\AprobacionCN.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
