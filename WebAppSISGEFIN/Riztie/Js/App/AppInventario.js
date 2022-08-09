@@ -36,11 +36,18 @@ function getListarInventario() {
     Http.get("General/listarTabla/?tbl=" + controller + vista + "&data=" + data, mostrarlistas);
 }
 
+function getInventario() {
+    var data = "";
+    var fechaInicio = document.getElementById("txtFechaInicio").value;
+    var fechaFinal = document.getElementById("txtFechaFinal").value;
+    data = fechaInicio + '|' + fechaFinal;
+    Http.get("General/listarTabla/?tbl=" + controller + vista + "&data=" + data, mostrarlistas);
+}
+
 function mostrarlistas(rpta) {
     if (rpta) {
         var listas = rpta.split("¯");
         var lista = listas[0].split("¬");
-
         if (vista == "Almacen") {
             listaRespoItem_VG = listas[1].split("¬");
             var listaEstado = listas[2].split("¬");

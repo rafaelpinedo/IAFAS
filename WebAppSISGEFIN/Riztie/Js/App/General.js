@@ -388,6 +388,11 @@ function validarURL(url) {
         return true;
 }
 
+var botones = [
+    { "cabecera": "Editar", "clase": "fa fa-pencil btn btn-info btnCirculo", "id": "Editar" },
+    { "cabecera": "Anular", "clase": "fa fa-minus-circle btn btn-danger btnCirculo", "id": "Eliminar" },
+];
+
 function GrillaScroll(lista, divGrilla, registrosPagina, paginasBloque, tabla, controlador, listas, sinFiltros, sinReporte, botones, altoGrilla, tieneFiltro, tieneChecks, tieneMensajeRegistros, tieneOrden) {
     var nListas = (listas != null ? listas.length : 0);
     var matriz = [];

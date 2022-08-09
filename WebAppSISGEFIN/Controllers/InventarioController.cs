@@ -35,8 +35,9 @@ namespace WebAppSISGEFIN.Controllers
             string IdPerfil = Data[3];
             ViewBag.Menu = new Menu().Listar(IdPerfil);
             string Fecha = DateTime.Now.ToShortDateString();
-            ViewBag.FechaInicial = DateTime.Now.Year + "-01-01";
+            ViewBag.FechaInicial = DateTime.Now.Year - 1 + "-01-01";
             ViewBag.Fecha = Convert.ToDateTime(Fecha).ToString("yyyy-MM-dd");
+            DateTime nuevaFecha = Convert.ToDateTime(Fecha);
             return View();
         }
     }
