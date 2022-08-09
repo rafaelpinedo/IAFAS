@@ -47,11 +47,6 @@ function mostrarlistas(rpta) {
         if (vista == "Entidad") {
             var listaEmpresa = listas[1].split("¬");
             var listaEstado = listas[2].split("¬");
-
-            var botones = [
-                { "cabecera": "Editar", "clase": "fa fa-pencil-square-o btn btn-info btnCirculo", "id": "Editar" },
-                { "cabecera": "Eliminar", "clase": "fa fa-trash btn btn-danger btnCirculo", "id": "Eliminar" },
-            ];
             grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
             crearCombo(listaEmpresa, "cboEmpresa", "Seleccione");
             crearCombo(listaEstado, "cboEstado", "Seleccione");
@@ -59,30 +54,19 @@ function mostrarlistas(rpta) {
 
         else if (vista == "FuenteFto") { 
             var listaEstado = listas[1].split("¬");
-            var botones = [
-                { "cabecera": "Editar", "clase": "fa fa-pencil-square-o btn btn-info btnCirculo", "id": "Editar" },
-                { "cabecera": "Eliminar", "clase": "fa fa-trash btn btn-danger btnCirculo", "id": "Eliminar" },
-            ];
-            grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
+             grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
             crearCombo(listaEstado, "cboEstado", "Seleccione");
         }
 
         else if (vista == "Meta") {
             var listaEstado = listas[1].split("¬");
-            var botones = [
-                { "cabecera": "Editar", "clase": "fa fa-pencil-square-o btn btn-info btnCirculo", "id": "Editar" },
-                { "cabecera": "Eliminar", "clase": "fa fa-trash btn btn-danger btnCirculo", "id": "Eliminar" },
-            ];
-            grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
+             grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
             crearCombo(listaEstado, "cboEstado", "Seleccione");
         }
         else if (vista == "SubMeta") {
             listaMetaItem_VG = listas[1].split("¬");
             var listaEstado = listas[2].split("¬");
-            var botones = [
-                { "cabecera": "Editar", "clase": "fa fa-pencil-square-o btn btn-info btnCirculo", "id": "Editar" },
-                { "cabecera": "Eliminar", "clase": "fa fa-trash btn btn-danger btnCirculo", "id": "Eliminar" },
-            ];
+  
             grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
             crearCombo(listaEstado, "cboEstado", "Seleccione");
             listarMetaItem();
@@ -91,32 +75,21 @@ function mostrarlistas(rpta) {
         else if (vista == "ClasiIngreso") {
             listaMetaItem_VG= listas[1].split("¬");
             var listaEstado = listas[2].split("¬");
-            var botones = [
-                { "cabecera": "Editar", "clase": "fa fa-pencil-square-o btn btn-info btnCirculo", "id": "Editar" },
-                { "cabecera": "Eliminar", "clase": "fa fa-trash btn btn-danger btnCirculo", "id": "Eliminar" },
-            ];
-            grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
+             grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
             crearCombo(listaEstado, "cboEstado", "Seleccione");
             listarMetaItem();
         }
         else if (vista == "ClasiGasto") {
             listaMetaItem_VG = listas[1].split("¬");
             var listaEstado = listas[2].split("¬");
-            var botones = [
-                { "cabecera": "Editar", "clase": "fa fa-pencil-square-o btn btn-info btnCirculo", "id": "Editar" },
-                { "cabecera": "Eliminar", "clase": "fa fa-trash btn btn-danger btnCirculo", "id": "Eliminar" },
-            ];
-            grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
+             grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
             crearCombo(listaEstado, "cboEstado", "Seleccione");
             listarMetaItem();
         }
         else if (vista == "CentroCosto") {
             var listaEntidad = listas[1].split("¬");
             var listaEstado = listas[2].split("¬");
-            var botones = [
-                { "cabecera": "Editar", "clase": "fa fa-pencil-square-o btn btn-info btnCirculo", "id": "Editar" },
-                { "cabecera": "Eliminar", "clase": "fa fa-trash btn btn-danger btnCirculo", "id": "Eliminar" },
-            ];
+ 
             grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
             crearCombo(listaEntidad, "cboEntidad", "Seleccione");
             crearCombo(listaEstado, "cboEstado", "Seleccione");
@@ -131,11 +104,7 @@ function mostrarlistas(rpta) {
             listaSubMetaItem_v = listas[4].split("¬");
             var listaEstado = listas[5].split("¬");
             var listaPresup = listas[6].split("¬");
-
-            var botones = [
-                { "cabecera": "Editar", "clase": "fa fa-pencil-square-o btn btn-info btnCirculo", "id": "Editar" },
-                { "cabecera": "Eliminar", "clase": "fa fa-trash btn btn-danger btnCirculo", "id": "Eliminar" },
-            ];
+             
             grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
 
             crearCombo(listaEntidad, "cboEntidad", "Seleccione");
@@ -151,11 +120,7 @@ function mostrarlistas(rpta) {
 
 
         else {
-            var botones = [
-                { "cabecera": "Editar", "clase": "fa fa-pencil-square-o btn btn-info btnCirculo", "id": "Editar" },
-                { "cabecera": "Eliminar", "clase": "fa fa-trash btn btn-danger btnCirculo", "id": "Eliminar" },
-            ];
-            grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
+              grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
         }
     }
 }
@@ -292,12 +257,7 @@ function mostrarGrabar(rpta) {
         var tipo = mensajeResul[0];
         var mensaje = mensajeResul[1];
         divPopupContainer.style.display = 'none';
-
-        var botones = [
-            { "cabecera": "Editar", "clase": "fa fa-pencil-square-o btn btn-info btnCirculo", "id": "Editar" },
-            { "cabecera": "Eliminar", "clase": "fa fa-trash btn btn-danger btnCirculo", "id": "Eliminar" },
-        ];
-        grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
+          grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
 
         if (vista == "PCA") {
             var listaPresup = listas[2].split("¬");
@@ -553,7 +513,6 @@ function configurarBotones() {
         }
     }
 
-
     var btnCancelar = document.getElementById("btnCancelar");
     if (btnCancelar != null) btnCancelar.onclick = function () {
         divPopupContainer.style.display = 'none';
@@ -565,12 +524,6 @@ function configurarCombos() {
     if (cboMeta != null) cboMeta.onchange = function () {
         listarSubMetaItem();
     }
-
-    //var cboGrupo = document.getElementById("cboGrupo");
-    //if (cboGrupo != null) cboGrupo.onchange = function () {
-    //    listarClaseItem();
-    //}
-
 }
 
 function mostrarEliminar(rpta) {
@@ -581,11 +534,6 @@ function mostrarEliminar(rpta) {
         mensajeResul = listas[1].split("|");
         var tipo = mensajeResul[0];
         var mensaje = mensajeResul[1];
-
-        var botones = [
-            { "cabecera": "Editar", "clase": "fa fa-pencil-square-o btn btn-info btnCirculo", "id": "Editar" },
-            { "cabecera": "Eliminar", "clase": "fa fa-trash btn btn-danger btnCirculo", "id": "Eliminar" },
-        ];
         grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, null, botones, 38, false, null);
 
         var cbo = document.getElementById("cboPadre");
@@ -624,6 +572,4 @@ function seleccionarFila(fila, id, prefijo) {
     if (window["fila" + prefijo] != null) window["fila" + prefijo].className = "FilaDatos";
     fila.className = "FilaSeleccionada";
     window["fila" + prefijo] = fila;
-
-    
 }

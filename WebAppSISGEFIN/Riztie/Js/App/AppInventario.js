@@ -51,10 +51,7 @@ function mostrarlistas(rpta) {
         if (vista == "Almacen") {
             listaRespoItem_VG = listas[1].split("¬");
             var listaEstado = listas[2].split("¬");
-            var botones = [
-                { "cabecera": "Editar", "clase": "fa fa-pencil-square-o btn btn-info btnCirculo", "id": "Editar" },
-                { "cabecera": "Eliminar", "clase": "fa fa-trash btn btn-danger btnCirculo", "id": "Eliminar" },
-            ];
+           
             grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
             listarResponsableItem();
             crearCombo(listaEstado, "cboEstado", "Seleccione");
@@ -62,23 +59,15 @@ function mostrarlistas(rpta) {
         else if (vista == "InventarioInicial") {
             var listaAlmacen = listas[1].split("¬");
             var listaInvetario = listas[2].split("¬");
-            var botones = [
-                { "cabecera": "Editar", "clase": "fa fa-pencil-square-o btn btn-info btnCirculo", "id": "Editar" },
-                { "cabecera": "Eliminar", "clase": "fa fa-trash btn btn-danger btnCirculo", "id": "Eliminar" },
-            ];
+           
             grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
             
             crearCombo(listaAlmacen, "cboAlmacen", "Seleccione");
-            //listarSelect2Item(listaAlmacen, "cboAlmacen");
             listarSelect2Item(listaInvetario, "cboInventario");
         }
 
         else {
-            var botones = [
-                { "cabecera": "Editar", "clase": "fa fa-pencil-square-o btn btn-info btnCirculo", "id": "Editar" },
-                { "cabecera": "Eliminar", "clase": "fa fa-trash btn btn-danger btnCirculo", "id": "Eliminar" },
-            ];
-            grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
+              grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
         }
     }
 }
@@ -201,10 +190,6 @@ function mostrarGrabar(rpta) {
         var mensaje = mensajeResul[1];
         divPopupContainer.style.display = 'none';
 
-        var botones = [
-            { "cabecera": "Editar", "clase": "fa fa-pencil-square-o btn btn-info btnCirculo", "id": "Editar" },
-            { "cabecera": "Eliminar", "clase": "fa fa-trash btn btn-danger btnCirculo", "id": "Eliminar" },
-        ];
         grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
 
 
@@ -373,6 +358,11 @@ function configurarBotones() {
             tituloModal.innerText = "Nuevo Registro";
         }
 
+        var cboAlmacen = document.getElementById("cboAlmacen");
+        if (cboAlmacen != null) {
+            cboAlmacen.value = 1;
+         }
+
         var cboEstado = document.getElementById("cboEstado");
         if (cboEstado != null) {
             cboEstado.value = 1;
@@ -445,7 +435,12 @@ function configurarBotones() {
 
     var btnConsultar = document.getElementById("btnConsultar");
     if (btnConsultar != null) btnConsultar.onclick = function () {
-        getListarInventario();
+        if (vista == "InventarioInicial") {
+            getListarInventario();
+        }
+        else {
+            getListar();
+        }
     }
 }
 
@@ -476,10 +471,6 @@ function mostrarEliminar(rpta) {
         var tipo = mensajeResul[0];
         var mensaje = mensajeResul[1];
 
-        var botones = [
-            { "cabecera": "Editar", "clase": "fa fa-pencil-square-o btn btn-info btnCirculo", "id": "Editar" },
-            { "cabecera": "Eliminar", "clase": "fa fa-trash btn btn-danger btnCirculo", "id": "Eliminar" },
-        ];
         grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, null, botones, 38, false, null);
 
         var cbo = document.getElementById("cboPadre");
