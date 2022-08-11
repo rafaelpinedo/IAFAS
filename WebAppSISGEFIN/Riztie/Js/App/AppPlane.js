@@ -17,6 +17,7 @@ window.onload = function () {
     getListar();
     configurarBotones();
     // configurarConsultas();
+
 }
 
 function getListar() {
