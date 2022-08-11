@@ -1,4 +1,5 @@
-﻿var filaAnterior = null;
+﻿//const { text } = require("d3-fetch");
+var filaAnterior = null;
 var idUsu = "";
 var vista = "";
 var controller = "";
@@ -7,6 +8,7 @@ var listas = [];
 var ayudas = [];
 var formulario = [];
 var idRegistro = "";
+var matrixDeta = [[]];
 
 window.onload = function () {
     getConfigMn();
@@ -42,13 +44,14 @@ function configurarBotones() {
 
         Http.get("General/listarTabla?tbl=" + controller + vista + "Ayudas&data=", mostrarAyudas);
 
+        if (divPopupContainer.hasAttribute("nuevo")) divPopupContainer.removeAttribute("nuevo");
         divPopupContainer.style.display = 'block';
         var filas = tbDetalleCN.getElementsByTagName("tr");
         var nroFilas = filas.length;
         if (nroFilas != 0) {
             for (var i = nroFilas; i > -1; i--) {
                 var fila = filas[i];
-                if(fila != undefined) tbDetalleCN.removeChild(fila);
+                if (fila != undefined) tbDetalleCN.removeChild(fila);
             }
             var spnNroItems = document.getElementById("spnNroItems");
             spnNroItems.innerHTML = "Items: 0";
@@ -63,6 +66,8 @@ function configurarBotones() {
         }
 
         var cboEstado = document.getElementById("cboEstado");
+        cboEstado.classList.remove("control-form");
+        cboEstado.classList.add("control-lectura");
         if (cboEstado != null) {
             cboEstado.value = 1;
             cboEstado.disabled = true;
@@ -136,6 +141,15 @@ function seleccionarFila(fila, id, prefijo) {
         if (isCheck) btnSeleccionarItems.disabled = false;
         else btnSeleccionarItems.disabled = true;
     }
+    else {
+        var cboEstado = document.getElementById("cboEstado");
+        cboEstado.classList.remove("control-lectura");
+        cboEstado.classList.add("control-form");
+        if (cboEstado != null) {
+            cboEstado.value = 1;
+            cboEstado.disabled = false;
+        }
+    }
 }
 
 
@@ -146,7 +160,7 @@ function mostrarListadoItems(rpta) {
         grillaItems = new GrillaScroll(lista, "listaItem", 1000, 6, "listaItems", "Admon", null, null, null, null, 25, false, true);
 
         var tbllistaItem = document.getElementById("tbllistaItem");
-        if (typeof(tbllistaItem) != undefined && tbllistaItem != null) {
+        if (typeof (tbllistaItem) != undefined && tbllistaItem != null) {
 
             var primerCheck = tbllistaItem.tHead.getElementsByTagName("input")[0];
             primerCheck.setAttribute("id", "idFirstCheck");
@@ -168,12 +182,13 @@ function mostrarListadoItems(rpta) {
             var fila;
             for (var i = 0; i < nroFilas; i++) {
                 dato = "";
-                fila = filas[i].getElementsByTagName("td")[5];
-                if (fila.hasAttribute("style")) {
-                    dato = fila.getAttribute("style");
+                fila = filas[i].getElementsByTagName("td");
+                var celda = fila[5];
+                if (celda.hasAttribute("style")) {
+                    dato = celda.getAttribute("style");
                     dato += ";display:none";
-                    fila.removeAttribute("style");
-                    fila.setAttribute("style", dato);
+                    celda.removeAttribute("style");
+                    celda.setAttribute("style", dato);
                 }
             }
         }
@@ -221,99 +236,118 @@ function obtenerItems(datos) {
     }
 }
 
-function adicionarItem(datos) {
+function adicionarItem(datos, secuencia) {
     var campos = datos.split('|');
     var item = campos[0];
     var codigo = campos[1];
     var nombre = campos[2];
     var unimed = campos[3];
     var codUni = campos[4];
+    var idSecuencia;
 
+    var divPopupContainer = document.getElementById("divPopupContainer");
+    if (divPopupContainer.hasAttribute("nuevo")) idSecuencia = secuencia == undefined ? "" : secuencia;
     var nFilas = tbDetalleCN.rows.length;
     var existe = false;
     for (var i = 0; i < nFilas; i++) {
-        if (tbDetalleCN.rows[i].cells[0].innerHTML == item) {
+        if (tbDetalleCN.rows[i].cells[1].innerHTML == item) {
             existe = true;
             break;
         }
     }
 
     if (!existe) {
-        var filaDetalle = "<tr>";
-        filaDetalle += "<td style='white-space:pre-wrap;width:50px;display:none'>";
+        var nroMatriz = "";
+        if (secuencia == undefined) {
+            var matriz = [];
+            nroMatriz = matrixDeta.length;
+            matriz[nroMatriz] = new Array(21);
+            matriz[nroMatriz][0] = "";
+            matriz[nroMatriz][1] = item;
+            matriz[nroMatriz][2] = codUni;
+            matriz[nroMatriz][3] = nombre;
+            matrixDeta.push(matriz);
+        }
+        var filaDetalle = "<tr data-pos='";
+        filaDetalle += nroMatriz;
+        filaDetalle += "'>";
+        filaDetalle += "<td style='white-space:pre-wrap;width:50px;display:none' data-col='0'>";
+        filaDetalle += idSecuencia;
+        filaDetalle += "</td> ";
+        filaDetalle += "<td style='white-space:pre-wrap;width:50px;display:none' data-col='1'>";
         filaDetalle += item;
         filaDetalle += "</td> ";
         filaDetalle += "<td style='white-space:pre-wrap;width:100px;vertical-align:top;'>";
         filaDetalle += codigo;
         filaDetalle += "</td> ";
-        filaDetalle += "<td style='width:500px;white-space:pre-wrap;white-space: -moz-pre-wrap;white-space: -o-pre-wrap;'>";
+        filaDetalle += "<td style='width:500px;white-space:pre-wrap;white-space: -moz-pre-wrap;white-space: -o-pre-wrap;' data-col='3'>";
         filaDetalle += nombre;
         filaDetalle += "</td> ";
         filaDetalle += "<td style='white-space:pre-wrap;width:80px;vertical-align:top;'>";
         filaDetalle += unimed;
         filaDetalle += "</td> ";
-        filaDetalle += "<td style='white-space:pre-wrap;width:80px;vertical-align:top;display:none'>";
+        filaDetalle += "<td style='white-space:pre-wrap;width:80px;vertical-align:top;display:none' data-col='2'>";
         filaDetalle += codUni;
         filaDetalle += "</td> ";
 
         filaDetalle += "<td style='white-space:pre-wrap;width:70px;vertical-align:top;padding:0px'>";
-        filaDetalle += "<input type='number' style='text-align:right;width:100%;border:1px solid blue;height:25px;padding:0px' min=1 onkeyup='importes(this)'>";
+        filaDetalle += "<input type='number' style='text-align:right;width:100%;border:1px solid blue;height:25px;padding:0px' min=1 onkeyup='importes(this)' data-col='7'>";
         filaDetalle += "</td> ";
         filaDetalle += "<td style='white-space:pre-wrap;width:70px;vertical-align:top;padding:0px'>";
-        filaDetalle += "<input type='number' style='text-align:right;width:100%;border:1px solid blue;height:25px;padding:0px' min=1 onkeyup='importes(this)'>";
+        filaDetalle += "<input type='number' style='text-align:right;width:100%;border:1px solid blue;height:25px;padding:0px' min=1 onkeyup='importes(this)' data-col='8'>";
         filaDetalle += "</td> ";
         filaDetalle += "<td style='white-space:pre-wrap;width:70px;vertical-align:top;padding:0px'>";
-        filaDetalle += "<input type='number' style='text-align:right;width:100%;border:1px solid blue;height:25px;padding:0px' min=1 onkeyup='importes(this)'>";
-        filaDetalle += "</td> ";
-        filaDetalle += "<td style='white-space:pre-wrap;width:70px;vertical-align:top;padding:0px'>";
-        filaDetalle += '';
-        filaDetalle += "</td> ";
-
-        filaDetalle += "<td style='white-space:pre-wrap;width:70px;vertical-align:top;padding:0px'>";
-        filaDetalle += "<input type='number' style='text-align:right;width:100%;border:1px solid blue;height:25px;padding:0px' min=1 onkeyup='importes(this)'>";
-        filaDetalle += "</td> ";
-        filaDetalle += "<td style='white-space:pre-wrap;width:70px;vertical-align:top;padding:0px'>";
-        filaDetalle += "<input type='number' style='text-align:right;width:100%;border:1px solid blue;height:25px;padding:0px' min=1 onkeyup='importes(this)'>";
-        filaDetalle += "</td> ";
-        filaDetalle += "<td style='white-space:pre-wrap;width:70px;vertical-align:top;padding:0px'>";
-        filaDetalle += "<input type='number' style='text-align:right;width:100%;border:1px solid blue;height:25px;padding:0px' min=1 onkeyup='importes(this)'>";
+        filaDetalle += "<input type='number' style='text-align:right;width:100%;border:1px solid blue;height:25px;padding:0px' min=1 onkeyup='importes(this)' data-col='9'>";
         filaDetalle += "</td> ";
         filaDetalle += "<td style='white-space:pre-wrap;width:70px;vertical-align:top;padding:0px'>";
         filaDetalle += '';
         filaDetalle += "</td> ";
 
         filaDetalle += "<td style='white-space:pre-wrap;width:70px;vertical-align:top;padding:0px'>";
-        filaDetalle += "<input type='number' style='text-align:right;width:100%;border:1px solid blue;height:25px;padding:0px' min=1 onkeyup='importes(this)'>";
+        filaDetalle += "<input type='number' style='text-align:right;width:100%;border:1px solid blue;height:25px;padding:0px' min=1 onkeyup='importes(this)' data-col='10'>";
         filaDetalle += "</td> ";
         filaDetalle += "<td style='white-space:pre-wrap;width:70px;vertical-align:top;padding:0px'>";
-        filaDetalle += "<input type='number' style='text-align:right;width:100%;border:1px solid blue;height:25px;padding:0px' min=1 onkeyup='importes(this)'>";
+        filaDetalle += "<input type='number' style='text-align:right;width:100%;border:1px solid blue;height:25px;padding:0px' min=1 onkeyup='importes(this)' data-col='11'>";
         filaDetalle += "</td> ";
         filaDetalle += "<td style='white-space:pre-wrap;width:70px;vertical-align:top;padding:0px'>";
-        filaDetalle += "<input type='number' style='text-align:right;width:100%;border:1px solid blue;height:25px;padding:0px' min=1 onkeyup='importes(this)'>";
+        filaDetalle += "<input type='number' style='text-align:right;width:100%;border:1px solid blue;height:25px;padding:0px' min=1 onkeyup='importes(this)' data-col='12'>";
         filaDetalle += "</td> ";
         filaDetalle += "<td style='white-space:pre-wrap;width:70px;vertical-align:top;padding:0px'>";
         filaDetalle += '';
         filaDetalle += "</td> ";
 
         filaDetalle += "<td style='white-space:pre-wrap;width:70px;vertical-align:top;padding:0px'>";
-        filaDetalle += "<input type='number' style='text-align:right;width:100%;border:1px solid blue;height:25px;padding:0px' min=1 onkeyup='importes(this)'>";
+        filaDetalle += "<input type='number' style='text-align:right;width:100%;border:1px solid blue;height:25px;padding:0px' min=1 onkeyup='importes(this)' data-col='13'>";
         filaDetalle += "</td> ";
         filaDetalle += "<td style='white-space:pre-wrap;width:70px;vertical-align:top;padding:0px'>";
-        filaDetalle += "<input type='number' style='text-align:right;width:100%;border:1px solid blue;height:25px;padding:0px' min=1 onkeyup='importes(this)'>";
+        filaDetalle += "<input type='number' style='text-align:right;width:100%;border:1px solid blue;height:25px;padding:0px' min=1 onkeyup='importes(this)' data-col='14'>";
         filaDetalle += "</td> ";
         filaDetalle += "<td style='white-space:pre-wrap;width:70px;vertical-align:top;padding:0px'>";
-        filaDetalle += "<input type='number' style='text-align:right;width:100%;border:1px solid blue;height:25px;padding:0px' min=1 onkeyup='importes(this)'>";
-        filaDetalle += "</td> ";
-        filaDetalle += "<td style='white-space:pre-wrap;width:70px;vertical-align:top;padding:0px'>";
-        filaDetalle += '';
+        filaDetalle += "<input type='number' style='text-align:right;width:100%;border:1px solid blue;height:25px;padding:0px' min=1 onkeyup='importes(this)' data-col='15'>";
         filaDetalle += "</td> ";
         filaDetalle += "<td style='white-space:pre-wrap;width:70px;vertical-align:top;padding:0px'>";
         filaDetalle += '';
         filaDetalle += "</td> ";
+
         filaDetalle += "<td style='white-space:pre-wrap;width:70px;vertical-align:top;padding:0px'>";
-        filaDetalle += "<input type='number' style='text-align:right;width:100%;border:1px solid blue;height:25px;padding:0px' min=1 onkeyup='importes(this)'>";
+        filaDetalle += "<input type='number' style='text-align:right;width:100%;border:1px solid blue;height:25px;padding:0px' min=1 onkeyup='importes(this)' data-col='16'>";
         filaDetalle += "</td> ";
         filaDetalle += "<td style='white-space:pre-wrap;width:70px;vertical-align:top;padding:0px'>";
+        filaDetalle += "<input type='number' style='text-align:right;width:100%;border:1px solid blue;height:25px;padding:0px' min=1 onkeyup='importes(this)' data-col='17'>";
+        filaDetalle += "</td> ";
+        filaDetalle += "<td style='white-space:pre-wrap;width:70px;vertical-align:top;padding:0px'>";
+        filaDetalle += "<input type='number' style='text-align:right;width:100%;border:1px solid blue;height:25px;padding:0px' min=1 onkeyup='importes(this)' data-col='18'>";
+        filaDetalle += "</td> ";
+        filaDetalle += "<td style='white-space:pre-wrap;width:70px;vertical-align:top;padding:0px'>";
+        filaDetalle += '';
+        filaDetalle += "</td> ";
+        filaDetalle += "<td style='white-space:pre-wrap;width:70px;vertical-align:top;padding:0px' data-col='4'>";
+        filaDetalle += '';
+        filaDetalle += "</td> ";
+        filaDetalle += "<td style='white-space:pre-wrap;width:70px;vertical-align:top;padding:0px'>";
+        filaDetalle += "<input type='number' style='text-align:right;width:100%;border:1px solid blue;height:25px;padding:0px' min=1 onkeyup='importes(this)' data-col='5'>";
+        filaDetalle += "</td> ";
+        filaDetalle += "<td style='white-space:pre-wrap;width:70px;vertical-align:top;padding:0px' data-col='6'>";
         filaDetalle += '';
         filaDetalle += "</td> ";
 
@@ -324,10 +358,12 @@ function adicionarItem(datos) {
         filaDetalle += "</td> ";
         filaDetalle += "</tr>";
         tbDetalleCN.insertAdjacentHTML("beforeend", filaDetalle);
+
+        spnNroItems.innerHTML = "Items: " + (nFilas + 1);
     }
     else mostrarMensaje("Existen Items ya agregados- verificar", "error");
-    spnNroItems.innerHTML = "Items: " + (nFilas + 1);
     divPopupContainerForm1.style.display = 'none';
+
 }
 
 function retirarItem(col, id) {
@@ -339,34 +375,47 @@ function retirarItem(col, id) {
 }
 
 function importes(col) {
+    // var pos = Array.from(fila.parentNode.children).indexOf(fila);
+    var divPopupContainer = document.getElementById("divPopupContainer");
+    var esUpdate = (divPopupContainer.hasAttribute("nuevo")) ? true : false;
     var fila = col.parentNode.parentNode;
-    fila.childNodes[16].style.textAlign = "center";
-    fila.childNodes[16].style.fontWeight = "bold";
-    fila.childNodes[24].style.textAlign = "center";
-    fila.childNodes[24].style.fontWeight = "bold";
-    fila.childNodes[32].style.textAlign = "center";
-    fila.childNodes[32].style.fontWeight = "bold";
-    fila.childNodes[40].style.textAlign = "center";
-    fila.childNodes[40].style.fontWeight = "bold";
+    fila.childNodes[18].style.textAlign = "center";
+    fila.childNodes[18].style.fontWeight = "bold";
+    fila.childNodes[26].style.textAlign = "center";
+    fila.childNodes[26].style.fontWeight = "bold";
+    fila.childNodes[34].style.textAlign = "center";
+    fila.childNodes[34].style.fontWeight = "bold";
     fila.childNodes[42].style.textAlign = "center";
     fila.childNodes[42].style.fontWeight = "bold";
-    fila.childNodes[46].style.textAlign = "center";
-    fila.childNodes[46].style.fontWeight = "bold";
+    fila.childNodes[44].style.textAlign = "center";
+    fila.childNodes[44].style.fontWeight = "bold";
+    fila.childNodes[48].style.textAlign = "center";
+    fila.childNodes[48].style.fontWeight = "bold";
+    var pos = fila.getAttribute("data-pos");
     var elemento = fila.getElementsByTagName('input');
     var nroElemento = elemento.length;
     var valor = 0;
     var subTot = 0;
-    for (var i = 0; i < nroElemento-1; i++) {
-        valor += elemento[i].value * 1;
-        subTot += elemento[i].value * 1;
-        if (i == 2) fila.childNodes[16].innerText = valor.toString();
-        if (i == 5) fila.childNodes[24].innerText = valor.toString();
-        if (i == 8) fila.childNodes[32].innerText = valor.toString();
-        if (i == 11) fila.childNodes[40].innerText = valor.toString();
-        fila.childNodes[42].innerText = subTot.toString();
+    var posCol;
+    var valorElemento = 0;
+    for (var i = 0; i < nroElemento - 1; i++) {
+        posCol = elemento[i].getAttribute("data-col");
+        valorElemento = elemento[i].value * 1;
+        if (esUpdate) matrixDeta[pos][posCol] = valorElemento;
+        valor += valorElemento;
+        subTot += valorElemento;
+        if (i == 2) fila.childNodes[18].innerText = valor.toFixed(2).toString();
+        if (i == 5) fila.childNodes[26].innerText = valor.toFixed(2).toString();
+        if (i == 8) fila.childNodes[34].innerText = valor.toFixed(2).toString();
+        if (i == 11) fila.childNodes[42].innerText = valor.toFixed(2).toString();
+        fila.childNodes[44].innerText = subTot.toFixed(2).toString();
+        if (esUpdate) matrixDeta[pos][4] = subTot.toFixed(2);
         if (i == 2 || i == 5 || i == 8 || i == 11) valor = 0;
     }
-    fila.childNodes[46].innerText = ((elemento[12].value*1)*(fila.childNodes[42].innerText*1)).toFixed(2).toString();
+    valorElemento = elemento[12].value * 1;
+    if (esUpdate) matrixDeta[pos][5] = valorElemento;
+    fila.childNodes[48].innerText = (valorElemento * (fila.childNodes[44].innerText * 1)).toFixed(2).toString();
+    if (esUpdate) matrixDeta[pos][6] = (valorElemento * (fila.childNodes[44].innerText * 1)).toFixed(2);
 }
 
 function validarCN() {
@@ -391,89 +440,95 @@ function validarCN() {
 
 function grabarCN() {
     var data = "";
-    var idRegistro = txtIdRegistro.value;
-    var idOficina = cboOficina.value;
-    var idEntidad = "1";
-    var anioCN = hdfAnioCN.value;
-    var fechaRegistro = dttFechaRegistro.value;
-    var idPersonal = cboPersonal.value;
-    var idCodBien = cboTipoBien.value;
-    var dEstado = cboEstado.value;
-    var hEstado = "6";
+    var divPopupContainer = document.getElementById("divPopupContainer");
+    var esUpdate = (divPopupContainer.hasAttribute("nuevo")) ? true : false;
+    if (esUpdate) {
+        data = grabarCNEditData();
+    } else {
+        var idRegistro = txtIdRegistro.value;
+        var idOficina = cboOficina.value;
+        var idEntidad = "1";
+        var anioCN = hdfAnioCN.value;
+        var fechaRegistro = dttFechaRegistro.value;
+        var idPersonal = cboPersonal.value;
+        var idCodBien = cboTipoBien.value;
+        var dEstado = cboEstado.value;
+        var hEstado = "6";
 
-    data = idRegistro;
-    data += "|";
-    data += idOficina;
-    data += "|";
-    data += idEntidad;
-    data += "|";
-    data += anioCN;
-    data += "|";
-    data += fechaRegistro;
-    data += "|";
-    data += idPersonal;
-    data += "|";
-    data += idCodBien;
-    data += "|";
-    data += dEstado;
-    data += "|";
-    data += hEstado;
-    data += "¯";
+        data = idRegistro;
+        data += "|";
+        data += idOficina;
+        data += "|";
+        data += idEntidad;
+        data += "|";
+        data += anioCN;
+        data += "|";
+        data += fechaRegistro;
+        data += "|";
+        data += idPersonal;
+        data += "|";
+        data += idCodBien;
+        data += "|";
+        data += dEstado;
+        data += "|";
+        data += hEstado;
+        data += "¯";
 
-    var nfilas = tbDetalleCN.rows.length;
-    var fila;
-    for (var i = 0; i < nfilas; i++) {
-        fila = tbDetalleCN.rows[i];
-        data += "||";
-        data += fila.cells[0].innerHTML; //Item
-        data += "|";
-        data += fila.cells[4].innerHTML; //uniMed
-        data += "|";
-        data += fila.cells[2].innerHTML; //descripcion
-        data += "|";
-        data += fila.cells[21].innerHTML; //cant
-        data += "|";
-        data += fila.cells[22].childNodes[0].value; //precio
-        data += "|";
-        data += fila.cells[23].innerHTML; //subTot
-        data += "|";
-        data += fila.cells[5].childNodes[0].value == "" ? 0 : fila.cells[5].childNodes[0].value; //ene
-        data += "|";
-        data += fila.cells[6].childNodes[0].value == "" ? 0 : fila.cells[6].childNodes[0].value; //feb
-        data += "|";
-        data += fila.cells[7].childNodes[0].value == "" ? 0 : fila.cells[7].childNodes[0].value; //mar
-        data += "|";
-        data += fila.cells[9].childNodes[0].value == "" ? 0 : fila.cells[9].childNodes[0].value; //abr
-        data += "|";
-        data += fila.cells[10].childNodes[0].value == "" ? 0 : fila.cells[10].childNodes[0].value; //may
-        data += "|";
-        data += fila.cells[11].childNodes[0].value == "" ? 0 : fila.cells[11].childNodes[0].value; //jun
-        data += "|";
-        data += fila.cells[13].childNodes[0].value == "" ? 0 : fila.cells[13].childNodes[0].value; //jul
-        data += "|";
-        data += fila.cells[14].childNodes[0].value == "" ? 0 : fila.cells[14].childNodes[0].value; //ago
-        data += "|";
-        data += fila.cells[15].childNodes[0].value == "" ? 0 : fila.cells[15].childNodes[0].value; //set
-        data += "|";
-        data += fila.cells[17].childNodes[0].value == "" ? 0 : fila.cells[17].childNodes[0].value; //oct
-        data += "|";
-        data += fila.cells[18].childNodes[0].value == "" ? 0 : fila.cells[18].childNodes[0].value; //nov
-        data += "|";
-        data += fila.cells[19].childNodes[0].value == "" ? 0 : fila.cells[19].childNodes[0].value; //dic
-        data += "¬";
+        var nfilas = tbDetalleCN.rows.length;
+        var fila;
+        for (var i = 0; i < nfilas; i++) {
+            fila = tbDetalleCN.rows[i];
+            data += "||";
+            data += fila.cells[1].innerHTML; //Item
+            data += "|";
+            data += fila.cells[5].innerHTML; //uniMed
+            data += "|";
+            data += fila.cells[3].innerHTML; //descripcion
+            data += "|";
+            data += fila.cells[22].innerHTML; //cant
+            data += "|";
+            data += fila.cells[23].childNodes[0].value; //precio
+            data += "|";
+            data += fila.cells[24].innerHTML; //subTot
+            data += "|";
+            data += fila.cells[6].childNodes[0].value == "" ? 0 : fila.cells[6].childNodes[0].value; //ene
+            data += "|";
+            data += fila.cells[7].childNodes[0].value == "" ? 0 : fila.cells[7].childNodes[0].value; //feb
+            data += "|";
+            data += fila.cells[8].childNodes[0].value == "" ? 0 : fila.cells[8].childNodes[0].value; //mar
+            data += "|";
+            data += fila.cells[10].childNodes[0].value == "" ? 0 : fila.cells[10].childNodes[0].value; //abr
+            data += "|";
+            data += fila.cells[11].childNodes[0].value == "" ? 0 : fila.cells[11].childNodes[0].value; //may
+            data += "|";
+            data += fila.cells[12].childNodes[0].value == "" ? 0 : fila.cells[12].childNodes[0].value; //jun
+            data += "|";
+            data += fila.cells[14].childNodes[0].value == "" ? 0 : fila.cells[14].childNodes[0].value; //jul
+            data += "|";
+            data += fila.cells[15].childNodes[0].value == "" ? 0 : fila.cells[15].childNodes[0].value; //ago
+            data += "|";
+            data += fila.cells[16].childNodes[0].value == "" ? 0 : fila.cells[16].childNodes[0].value; //set
+            data += "|";
+            data += fila.cells[18].childNodes[0].value == "" ? 0 : fila.cells[18].childNodes[0].value; //oct
+            data += "|";
+            data += fila.cells[19].childNodes[0].value == "" ? 0 : fila.cells[19].childNodes[0].value; //nov
+            data += "|";
+            data += fila.cells[20].childNodes[0].value == "" ? 0 : fila.cells[20].childNodes[0].value; //dic
+            data += "¬";
 
-        if (fila.cells[23].innerHTML == "" || fila.cells[23].innerHTML * 1 < 1) {
-            Swal.fire({
-                title: 'Advertencia!',
-                text: "El subTotal debe ser mayor a cero.",
-                icon: 'warning',
-                showConfirmButton: true,
-                timer: 3000
-            })
-            return false;
+            if (fila.cells[24].innerHTML == "" || fila.cells[24].innerHTML * 1 < 1) {
+                Swal.fire({
+                    title: 'Advertencia!',
+                    text: "El subTotal debe ser mayor a cero.",
+                    icon: 'warning',
+                    showConfirmButton: true,
+                    timer: 3000
+                })
+                return false;
+            }
         }
+        data = data.substr(0, data.length - 1);
     }
-    data = data.substr(0, data.length - 1);
 
     var frm = new FormData();
     frm.append("data", data);
@@ -481,7 +536,6 @@ function grabarCN() {
 
     //btnGuardar.innerHTML = "Guardando <i class='fa fa-circle-o-notch fa-spin' style='color:white'></i>";
     //btnGuardar.disabled = true;
-
 }
 
 function configurarEnterCantidad(tbody, celda) {
@@ -518,7 +572,7 @@ function mostrarGrabar(rpta) {
             { "cabecera": "Eliminar", "clase": "fa fa-trash btn btn-danger btnCirculo", "id": "Eliminar" },
         ];
         grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
-        
+
         if (tipo == 'A') {
             Swal.fire({
                 title: 'Finalizado!',
@@ -554,10 +608,13 @@ function seleccionarBoton(idGrilla, idRegistro, idBoton) {
             if (tituloModal != null) {
                 tituloModal.innerText = "Actualizar Registro";
             }
+            var divPopupContainer = document.getElementById("divPopupContainer");
+            if (!divPopupContainer.hasAttribute("nuevo")) divPopupContainer.setAttribute("nuevo", "nuevo");
             editarRegistro(idRegistro);
+            divPopupContainer.style.display = 'block';
         }
         if (idBoton == "Eliminar") {
-            eliminarRegistro(idRegistro)
+            eliminarRegistro(idRegistro);
         }
     }
 }
@@ -568,71 +625,222 @@ function editarRegistro(id) {
 
 function mostrarRegistro(rpta) {
     if (rpta) {
-        var campos = rpta.split("|");
-        var controlesSelectSearch = document.getElementsByClassName("SelectSearch");
-        var nControlesSelectSearch = controlesSelectSearch.length;
-        var cboEstado = document.getElementById("cboEstado");
-        if (cboEstado != null) { cboEstado.disabled = false };
-
         var divPopupContainer = document.getElementById("divPopupContainer");
-        if (divPopupContainer != null) { divPopupContainer.style.display = 'block'; };
-        var controles = document.getElementsByClassName("Popup");
-        var nControles = controles.length;
-        var control;
-        var tipo;
-        var subCampos;
-        for (var j = 0; j < nControles; j++) {
-            control = controles[j];
-            control.style.borderColor = ""
-            tipo = control.id.substr(0, 3);
-            if (tipo == "txt" || tipo == "num" || tipo == "tta" || tipo == "tim") { control.value = campos[j]; }
-            else if (tipo == "dtt") {
-                if (campos[j] == '01/01/1900') {
-                    control.value = "";
-                } else {
-                    var dFecha = campos[j].split("/");
-                    control.value = dFecha[2] + "-" + dFecha[1] + "-" + dFecha[0];
+        if (divPopupContainer.hasAttribute("nuevo")) {
+            edicionRegistroRecuperado(rpta);
+        } else {
+            var campos = rpta.split("|");
+            var controlesSelectSearch = document.getElementsByClassName("SelectSearch");
+            var nControlesSelectSearch = controlesSelectSearch.length;
+            var cboEstado = document.getElementById("cboEstado");
+            if (cboEstado != null) { cboEstado.disabled = false };
+
+            var divPopupContainer = document.getElementById("divPopupContainer");
+            if (divPopupContainer != null) { divPopupContainer.style.display = 'block'; };
+            var controles = document.getElementsByClassName("Popup");
+            var nControles = controles.length;
+            var control;
+            var tipo;
+            var subCampos;
+            for (var j = 0; j < nControles; j++) {
+                control = controles[j];
+                control.style.borderColor = ""
+                tipo = control.id.substr(0, 3);
+                if (tipo == "txt" || tipo == "num" || tipo == "tta" || tipo == "tim") { control.value = campos[j]; }
+                else if (tipo == "dtt") {
+                    if (campos[j] == '01/01/1900') {
+                        control.value = "";
+                    } else {
+                        var dFecha = campos[j].split("/");
+                        control.value = dFecha[2] + "-" + dFecha[1] + "-" + dFecha[0];
+                    }
                 }
-            }
-            else if (tipo == "cbo") {
-                subCampos = campos[j].split("-");
-                if (subCampos[0] == 0) {
-                    control.value = '';
-                }
-                else {
-                    control.value = subCampos[0];
-                    if (nControlesSelectSearch > 0) {
-                        var controlSelect = 'select2-' + control.id + '-container';
-                        var cboControlSelect = document.getElementById(controlSelect);
-                        if (cboControlSelect != null) {
-                            var selected = control.options[control.selectedIndex].text;
-                            cboControlSelect.innerHTML = selected;
+                else if (tipo == "cbo") {
+                    subCampos = campos[j].split("-");
+                    if (subCampos[0] == 0) {
+                        control.value = '';
+                    }
+                    else {
+                        control.value = subCampos[0];
+                        if (nControlesSelectSearch > 0) {
+                            var controlSelect = 'select2-' + control.id + '-container';
+                            var cboControlSelect = document.getElementById(controlSelect);
+                            if (cboControlSelect != null) {
+                                var selected = control.options[control.selectedIndex].text;
+                                cboControlSelect.innerHTML = selected;
+                            }
                         }
                     }
                 }
-            }
-            else if (tipo == "img") {
-                control.src = "data:image/jpeg;base64," + campos[j];
-            }
-            else if (tipo == "chk" || tipo == "opt") {
-                control.checked = (campos[j] == "1")
-            }
-            else if (tipo == "dtg") {
-                if (campos[j] == 1) {
-                    $('#' + control.id).bootstrapToggle('on')
+                else if (tipo == "img") {
+                    control.src = "data:image/jpeg;base64," + campos[j];
                 }
-                else {
-                    $('#' + control.id).bootstrapToggle('off')
+                else if (tipo == "chk" || tipo == "opt") {
+                    control.checked = (campos[j] == "1")
+                }
+                else if (tipo == "dtg") {
+                    if (campos[j] == 1) {
+                        $('#' + control.id).bootstrapToggle('on')
+                    }
+                    else {
+                        $('#' + control.id).bootstrapToggle('off')
+                    }
                 }
             }
         }
-
     }
 }
 
+function eliminarRegistro() {
+    alert("prueba de datos");
+}
+function edicionRegistroRecuperado(rpta) {
+    limpiarGrilla();
+    crearCombo([], "cboOficina", null);
+    crearCombo([], "cboTipoBien", null);
+    crearCombo([], "cboEstado", null);
+    crearCombo([], "cboPersonal", null);
+
+    var listas = rpta.split("¯");
+    var listaCabecera = listas[0].split("¬");
+    var listaDetalles = listas[1].split("¬");
+    var listaOficina = listas[2].split("¬");
+    var listaTipo = listas[3].split("¬");
+    var listaEstado = listas[4].split("¬");
+    var listaPersonal = listas[5].split("¬");
+    var listaUndMedida = listas[6].split("¬");
+
+    crearCombo(listaOficina, "cboOficina", "Seleccione");
+    crearCombo(listaTipo, "cboTipoBien", "Seleccione");
+    crearCombo(listaEstado, "cboEstado", "Seleccione");
+    crearCombo(listaPersonal, "cboPersonal", "Seleccione");
+
+    var arrayCab = listaCabecera[0].split("|");
+    var cn_secuencia = arrayCab[0];
+    cboOficina.value = arrayCab[1];
+    var enti_secuencia = arrayCab[2];
+    txtAnioCN.value = arrayCab[3];
+    dttFechaRegistro.value = arrayCab[4];
+    cboPersonal.value = arrayCab[5];
+    cboTipoBien.value = arrayCab[6];
+    cboEstado.value = arrayCab[7];
+    var hest_secuencia = arrayCab[8];
+    var nroUnidad = listaUndMedida.length;
+    var nroArrayDeta = listaDetalles.length;
+    var detalle, preDeta, medida;
+
+    matrixDeta = crearMatriz2D(matrixDeta, nroArrayDeta);
+    for (var i = 0; i < nroArrayDeta; i++) {
+        detalle = listaDetalles[i].split("|");
+        for (var j = 0; j < nroUnidad; j++) {
+            medida = listaUndMedida[j].split("|");
+            if (detalle[2] == medida[0]) {
+                preDeta = medida[1];
+                break;
+            }
+        }
+        preDeta = detalle[1] + "|" + detalle[19] + "|" + detalle[3] + "|" + preDeta + "|" + detalle[2];
+        adicionarItem(preDeta, detalle[0]);
+        matrixDeta[i][0] = detalle[0];
+        matrixDeta[i][1] = detalle[1];
+        matrixDeta[i][2] = detalle[2];
+        matrixDeta[i][3] = detalle[3];
+
+        matrixDeta[i][4] = detalle[4];
+        matrixDeta[i][5] = detalle[5];
+        matrixDeta[i][6] = detalle[6];
+        matrixDeta[i][7] = detalle[7];
+        matrixDeta[i][8] = detalle[8];
+        matrixDeta[i][9] = detalle[9];
+        matrixDeta[i][10] = detalle[10];
+        matrixDeta[i][11] = detalle[11];
+        matrixDeta[i][12] = detalle[12];
+        matrixDeta[i][13] = detalle[13];
+        matrixDeta[i][14] = detalle[14];
+        matrixDeta[i][15] = detalle[15];
+        matrixDeta[i][16] = detalle[16];
+        matrixDeta[i][17] = detalle[17];
+        matrixDeta[i][18] = detalle[18];
+
+        poblarGrillaEditable(matrixDeta, i);
+    }
+}
+
+function limpiarGrilla() {
+    var tbDetalleCN = document.getElementById("tbDetalleCN");
+    var filas = tbDetalleCN.getElementsByTagName("tr");
+    var nroFilas = filas.length;
+    if (nroFilas != 0) {
+        for (var i = nroFilas; i > -1; i--) {
+            var fila = filas[i];
+            if (fila != undefined) tbDetalleCN.removeChild(fila);
+        }
+        var spnNroItems = document.getElementById("spnNroItems");
+        spnNroItems.innerHTML = "Items: 0";
+    }
+}
+
+function crearMatriz2D(matriz, rows) {
+    matriz = new Array(rows);
+    for (var i = 0; i < rows; i++) {
+        matriz[i] = new Array(21);
+    }
+    return matriz;
+}
+
+function poblarGrillaEditable(matriz, item) {
+    var tbDetalleCN = document.getElementById("tbDetalleCN");
+    var fila = tbDetalleCN.lastChild;
+    var cells = fila.getElementsByTagName("td");
+    var nroCells = cells.length;
+    var colItem, texto, valor;
+    var subTot = 0;
+    fila.setAttribute("data-pos", item);
+    for (var i = 6; i < nroCells; i++) {
+        if (cells[i].hasAttribute("data-col")) {
+            colItem = cells[i].getAttribute("data-col");
+            cells[i].innerHTML = (matriz[item][colItem] * 1).toFixed(2).toString();
+            cells[i].style.textAlign = "center";
+            cells[i].style.fontWeight = "bold";
+        } else {
+            if (cells[i].hasChildNodes()) {
+                texto = cells[i].firstChild;
+                if (texto.hasAttribute("data-col")) {
+                    colItem = texto.getAttribute("data-col");
+                    valor = (matriz[item][colItem] * 1);
+                    texto.value = valor == 0 ? "" : valor.toFixed(2).toString();
+                    subTot += (texto.value == "" ? 0 : texto.value) * 1;
+                }
+            } else {
+                cells[i].innerHTML = subTot.toFixed(2).toString();
+                cells[i].style.textAlign = "center";
+                cells[i].style.fontWeight = "bold";
+                subTot = 0;
+            }
+        }
+    }
+    var spnNroItems = document.getElementById("spnNroItems");
+    spnNroItems.innerHTML = "Items: " + (item + 1);
+}
+
+function grabarCNEditData() {
+    var data = "";
+
+
+
+
+
+
+
+
+    alert("Se enviaron los datos solicitados...");
+    return data;
+}
+
+
 function mostrarDatosExportar(rpta) {
     if (rpta) {
-       // spnLoad.style.display = 'none';
+        // spnLoad.style.display = 'none';
         var listas = rpta.split('¯');
         var tituloReporte = listas[0];
         contenidoExporta = listas[1];
