@@ -129,7 +129,8 @@
                                                 </div>
                                                 <div class="form-group col-sm-4">
                                                     <label class="control-label">Entidad Convocante de la Compra C.</label>
-                                                    <select id="cboTipoConvocante" class="control-form Popup"></select>
+                                                    <input type="number" class="control-form Popup" id="txtEntidadConv">
+                                                    @*<select id="cboTipoConvocante" class="control-form Popup"></select>*@
                                                 </div>
 
                                             </div>
@@ -166,10 +167,10 @@
                                                     <label class="control-label">Fuente Financiamiento</label>
                                                     <select id="cboFuenteFto" class="control-form Popup"></select>
                                                 </div>
-                                                <div class="form-group col-sm-4">
+                                                @*<div class="form-group col-sm-4">
                                                     <label class="control-label">Entidad</label>
                                                     <select id="cboEntidadProceso" class="control-form Popup"></select>
-                                                </div>
+                                                </div>*@
                                                 <div class="form-group col-sm-4">
                                                     <label class="control-label">Oficina</label>
                                                     <select id="cboOficinaProceso" class="control-form Popup"></select>
@@ -191,20 +192,29 @@
                                                 </div>
                                             </div>
                                             <div class="row">
-                                                <div class="form-group col-sm-3">
+                                                <div class="form-group col-sm-2">
                                                     <label class="control-label">Fecha Prevista</label>
                                                     <select id="cboFechaPrevista" class="control-form Popup"></select>
                                                 </div>
-                                                <div class="form-group col-sm-3">
-                                                    <label class="control-label">Codigo de Inversion</label>
-                                                    <input type="number" class="control-form Popup" id="txtVersion">
+                                                <div class="form-group col-sm-2">
+                                                    <label class="control-label">Moneda</label>
+                                                    <select id="cboTipoMoneda" class="control-form Requeitems Popup"></select>
                                                 </div>
+                                                <div class="form-group col-sm-2">
+                                                    <label class="control-label">Tip.Cambio</label>
+                                                    <input type="number" class="control-form Requeitems Popup" id="txtTipoCambio">
+                                                </div>
+
+                                                @*<div class="form-group col-sm-3">
+            <label class="control-label">Codigo de Inversion</label>
+            <input type="number" class="control-form Popup" id="txtVersion">
+        </div>*@
                                                 <div class="form-group col-sm-5">
                                                     <label class="control-label">Observaciones</label>
                                                     <textarea class="form-control" rows="2" id="txtObservaciones" name="comentarios"></textarea>
                                                 </div>
                                                 <div class="form-group col-sm-1">
-                                                    <button class="btn btn-out waves-effect waves-light btn-info btn-square" id="btnAgregarItems" data-toggle="modal" data-target="#divPopupWindowItem"><i class="fa fa-search-plus" aria-hidden="true"></i></button>
+                                                    <button class="btn btn-out waves-effect waves-light btn-info btn-square" id="btnMostrarItems"><i class="fa fa-search-plus" aria-hidden="true"></i></button>
 
                                                 </div>
                                             </div>
@@ -227,16 +237,16 @@
                                                                     <th style="white-space:pre-wrap; width:70px;">Monto</th>
                                                                 </tr>
                                                             </thead>
-                                                            <tbody id="tbDetalleItem">
-                                                                <tr>
-                                                                    <td style="white-space:pre-wrap;width:50px;" colspan="1"></td>
-                                                                    <td style="white-space:pre-wrap;width:50px;" colspan="1"></td>
-                                                                    <td style="white-space:pre-wrap;width:50px;" colspan="1"></td>
-                                                                    <td style="white-space:pre-wrap;width:50px;" colspan="1"></td>
-                                                                    <td style="white-space:pre-wrap;width:50px;" colspan="1"></td>
-                                                                    <td style="white-space:pre-wrap;width:50px;" colspan="1"></td>
-                                                                    <td style="white-space:pre-wrap;width:50px;" colspan="1"></td>
-                                                                </tr>
+                                                            <tbody id="tbDetalleItemPac">
+                                                                @*<tr>
+                                                                    <td style="white-space:pre-wrap;width:50px;" colspan="1">1</td>
+                                                                    <td style="white-space:pre-wrap;width:50px;" colspan="1">COMPUTADORA </td>
+                                                                    <td style="white-space:pre-wrap;width:50px;" colspan="1">UNIDAD</td>
+                                                                    <td style="white-space:pre-wrap;width:50px;" colspan="1">100</td>
+                                                                    <td style="white-space:pre-wrap;width:50px;" colspan="1">PEN</td>
+                                                                    <td style="white-space:pre-wrap;width:50px;" colspan="1">200</td>
+                                                                    <td style="white-space:pre-wrap;width:50px;" colspan="1">E</td>
+                                                                </tr>*@
                                                             </tbody>
                                                         </table>
                                                     </div>
@@ -323,37 +333,30 @@
                                         <div class="row">
                                             <div class="form-group col-sm-9">
                                                 <label class="control-label">Catálogo de Items</label>
-                                                <select id="cboCatalogoItem" class="control-form Popup"></select>
+                                                <select id="cboCatalogoItem" class="control-form Requeitems Popup"></select>
                                             </div>
                                             <div class="form-group col-sm-3">
                                                 <label class="control-label">Unidad de Medida</label>
-                                                <select id="cboUnidadMedida" class="control-form Popup"></select>
+                                                <select id="cboUnidadMedida" class="control-form Requeitems Popup"></select>
                                             </div>
                                         </div>
 
                                         <div class="row">
                                             <div class="form-group col-sm-3">
                                                 <label class="control-label">Cantidad</label>
-                                                <input type="number" class="control-form Popup" id="txtCantidad">
+                                                <input type="number" class="control-form Requeitems Popup" id="txtCantidad">
                                             </div>
-                                            <div class="form-group col-sm-3">
-                                                <label class="control-label">Moneda</label>
-                                                <select id="cboTipoMoneda" class="control-form Popup"></select>
-                                            </div>
-                                            <div class="form-group col-sm-3">
-                                                <label class="control-label">Tipo Cambio</label>
-                                                <input type="number" class="control-form Popup" id="txtTipoCambio">
-                                            </div>
+                                            
                                             <div class="form-group col-sm-3">
                                                 <label class="control-label">Valor Estimado</label>
-                                                <input type="number" class="control-form Popup" id="txtValorEstimado">
+                                                <input type="number" class="control-form Requeitems Popup" id="txtValorEstimado">
                                             </div>
                                         </div>
 
                                     </div>
                                     <div class="modal-footer">
                                         <button id="btnCancelarForm2" class="btnCancelarForm" title="Cancelar"><i class="fa fa-undo" aria-hidden="true"></i>&nbsp;Cancelar</button>
-                                        <button class="btnGuardarForm bg-customer" id="btnSeleccionarItems" title="btn btn-success"><span class="fa fa-hand-o-left"></span>&nbsp;Agregar Items</button>
+                                        <button class="btnGuardarForm bg-customer" id="btnAgregarPacItems" title="btn btn-success"><span class="fa fa-hand-o-left"></span>&nbsp;Agregar Items</button>
                                     </div>
                                 </div>
                             </div>

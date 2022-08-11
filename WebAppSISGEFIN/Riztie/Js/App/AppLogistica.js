@@ -755,12 +755,101 @@ function configurarBotones() {
         obtenerItems(data);
     }
 
-    var btnAgregarItems = document.getElementById("btnAgregarItems");
-    if (btnAgregarItems != null) btnAgregarItems.onclick = function () {
-        var divPopupContainerForm2 = document.getElementById("divPopupContainerForm2");
-        if (divPopupContainerForm2 != null) { divPopupContainerForm2.style.display = 'block'; };
+    if (vista == "PAC") {
+
+        var btnMostrarItems = document.getElementById("btnMostrarItems");
+        if (btnMostrarItems != null) btnMostrarItems.onclick = function () {
+            var idTipoItems = cboTipoItem.value;
+            if (idTipoItems != "") {
+                var divPopupContainerForm2 = document.getElementById("divPopupContainerForm2");
+                if (divPopupContainerForm2 != null) { divPopupContainerForm2.style.display = 'block'; };
+            }
+            else {
+                mostrarMensaje("Seleccione tipo de Items", "error")
+                cboTipoItem.focus();
+            }
+        }
+
+        var btnAgregarPacItems = document.getElementById("btnAgregarPacItems");
+        if (btnAgregarPacItems != null) btnAgregarPacItems.onclick = function () {
+            validarPCAItems();
+            //var divPopupContainerForm2 = document.getElementById("divPopupContainerForm2");
+            //if (divPopupContainerForm2 != null) { divPopupContainerForm2.style.display = 'none'; };
+
+            //var idTipoItems = cboTipoItem.value;
+            //if (idTipoItems != "") {
+               
+            //}
+            //else {
+            //    mostrarMensaje("Seleccione tipo de Items", "error")
+            //    cboTipoItem.focus();
+            //}
+        }
+    }
+    
+}
+function validarPCAItems() {
+    if (validarInformacion("Requeitems")) {
+        var vExito = false;
+        var catalogo = document.getElementById("cboCatalogoItem");
+        var unidadMedida = document.getElementById("cboUnidadMedida");
+        var moneda = document.getElementById("cboTipoMoneda");
+        var codigoitemsCatalogo = catalogo.value;
+        var nombreitemsCatalogo = catalogo.options[catalogo.selectedIndex].text;
+        var codUnidadMedida = unidadMedida.value;
+        var nomUnidadMedida = unidadMedida.options[unidadMedida.selectedIndex].text;
+        var cantidad = txtCantidad.value;
+        var codTipoMoneda = moneda.value;
+        var nomTipoMoneda = moneda.options[moneda.selectedIndex].text;
+        var tipoCambio = txtTipoCambio.value;
+        var valorEstimado = txtValorEstimado.value;
+        //var data = codigoitemsCatalogo + '|' + nombreitemsCatalogo + '|' + codUnidadMedida + '|' + nomUnidadMedida + '|' +
+        //    cantidad + '|' + codTipoMoneda + '|' + nomTipoMoneda + '|' + tipoCambio + '|' + valorEstimado;
+       // alert(data);
+        var item = 0;
+        var nFilas = tbDetalleItemPac.rows.length;
+        console.log(nFilas);
+        item = nFilas + 1;
+        var existe = false;
+        for (var i = 0; i < nFilas; i++) {
+            if (tbDetalleItemPac.rows[i].cells[0].innerHTML == item) {
+                existe = true;
+                break;
+            }
+        }
+
+       var divPopupContainerForm2 = document.getElementById("divPopupContainerForm2");
+       if (divPopupContainerForm2 != null) { divPopupContainerForm2.style.display = 'none'; };
+
+        var filaDetalle = '<tr>';
+        filaDetalle += "<td style='white-space:pre-wrap;width:50px;display:none'>" + codigoitemsCatalogo + "</td> ";
+        filaDetalle += "<td style='white-space:pre-wrap;width:50px;display:none'>" + codUnidadMedida + "</td> ";
+        filaDetalle += "<td style='white-space:pre-wrap;width:50px;display:none'>" + codTipoMoneda + "</td> ";
+        filaDetalle += '<td style="white-space:pre-wrap;width:50px;" colspan="1">' + item + '</td>';
+        filaDetalle += '<td style="white-space:pre-wrap;width:50px;" colspan="1">' + nombreitemsCatalogo+'</td>';
+        filaDetalle += '<td style="white-space:pre-wrap;width:50px;" colspan="1">' + nomUnidadMedida + '</td>';
+        filaDetalle += '<td style="white-space:pre-wrap;width:50px;" colspan="1">' + cantidad + '</td>';
+        filaDetalle += '<td style="white-space:pre-wrap;width:50px;" colspan="1">' + nomTipoMoneda + '</td>';
+        filaDetalle += '<td style="white-space:pre-wrap;width:50px;" colspan="1">' + valorEstimado + '</td>';
+        filaDetalle += "<td style='white-space:pre-wrap;width:10px;vertical-align:top;'>";
+        filaDetalle += "<i class='fa fa-trash f-16 text-c-red' title='Quitar Item' onclick='retirarItemPCA(this,\"";
+        filaDetalle += item;
+        filaDetalle += "\");'></i>";
+        filaDetalle += "</td> ";
+        filaDetalle += ' </tr >';
+        tbDetalleItemPac.insertAdjacentHTML("beforeend", filaDetalle);
+
     }
 }
+
+function retirarItemPCA(col, id) {
+    var fila = col.parentNode.parentNode;
+    tbDetalleItemPac.removeChild(fila);
+    //var nFilas = 0;
+    //nFilas = tbDetallePedido.rows.length;
+    //spnNroItems.innerHTML = "Items: " + (nFilas);
+}
+
 
 function mostrarEnviarCorreo(rpta) {
     if (rpta) alert(rpta);
