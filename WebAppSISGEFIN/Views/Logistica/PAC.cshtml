@@ -3,6 +3,16 @@
     Layout = "~/Views/_LayoutPage.cshtml";
 }
 
+<style>
+    .tbFilas {
+        background-color: #02B29D;
+        /*color: black;*/
+        color: ghostwhite;
+        text-align: center;
+        font-weight: bold;
+    }
+</style>
+
 <div class="pcoded-content">
     <div class="pcoded-inner-content">
         <div class="main-body">
@@ -34,46 +44,34 @@
                                         <h5 class="modal-title" id="tituloModal">Nuevo Registro</h5>
                                     </div>
                                     <div class="modal-body">
-                                        <div class="row">
-                                            <div class="form-group col-sm-4">
-                                                <input type="hidden" class="control-form Popup" id="txtIdRegistro">
-                                                <label class="control-label">Entidad</label>
-                                                <select id="cboEntidadPAC" class="control-form Reque Popup"></select>
+                                        <fieldset class="fieldset">
+                                            <div class="row">
+                                                <div class="form-group col-sm-4">
+                                                    <input type="hidden" class="control-form Popup" id="txtIdRegistro">
+                                                    <label class="control-label">Entidad</label>
+                                                    <select id="cboEntidadPAC" class="control-form Reque Popup"></select>
+                                                </div>
+                                                <div class="form-group col-sm-2">
+                                                    <label class="control-label">Año</label>
+                                                    <input type="number" autocomplete="off" class="control-form Reque Popup" id="txtAnioPAC" value="@ViewBag.Anio">
+                                                </div>
+                                                <div class="form-group col-sm-2">
+                                                    <label class="control-label">Versión</label>
+                                                    <input type="number" class="control-form Reque Popup" id="txtVersion">
+                                                </div>
                                             </div>
-                                            <div class="form-group col-sm-2">
-                                                <label class="control-label">Año</label>
-                                                <input type="number" autocomplete="off" class="control-form Popup" id="txtAnioPAC" value="@ViewBag.Anio">
+                                            <div class="row">
+                                                <div class="form-group col-sm-4">
+                                                    <label class="control-label">Instrumento de aprobación</label>
+                                                    <input type="text" autocomplete="off" class="control-form Reque Popup" id="txtAprobacion">
+                                                </div>
+                                                <div class="form-group col-sm-4">
+                                                    <label class="control-label">Estado</label>
+                                                    <select id="cboEstado" class="control-lectura Reque Popup"></select>
+                                                </div>
                                             </div>
-                                            <div class="form-group col-sm-2">
-                                                <label class="control-label">Versión</label>
-                                                <input type="number" class="control-form Popup" id="txtVersion">
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="form-group col-sm-4">
-                                                <label class="control-label">Instrumento de aprobación</label>
-                                                <input type="text" autocomplete="off" class="control-form Reque Popup" id="txtAprobacion">
-                                            </div>
-                                            <div class="form-group col-sm-4">
-                                                <label class="control-label">Estado</label>
-                                                <select id="cboEstado" class="control-lectura Reque Popup"></select>
-                                            </div>
-                                        </div>
-                                        <hr />
-                                        <div class="row">
-                                            <div class="form-group col-sm-4">
-                                                <label class="control-label">Tipo Item</label>
-                                                <select id="cboTipoItem" class="control-lectura Reque Popup"></select>
-                                            </div>
-                                            <div class="form-group col-sm-4">
-                                                <label class="control-label">Tipo Compra</label>
-                                                <select id="cboTipoCompra" class="control-lectura Reque Popup"></select>
-                                            </div>
-                                            <div class="form-group col-sm-4">
-                                                <label class="control-label">Tipo</label>
-                                                <select id="cboTipo" class="control-lectura Reque Popup"></select>
-                                            </div>
-                                        </div>
+                                        </fieldset>
+
                                     </div>
                                     <div class="modal-footer">
                                         <button id="btnCancelar" class="btnCancelarForm" title="Cancelar"><i class="fa fa-undo" aria-hidden="true"></i>&nbsp;Cancelar</button>
@@ -83,6 +81,285 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="form-row">
+                        <div class="modal custom-modal" tabindex="-1" role="dialog" aria-hidden="true" id="divPopupContainerForm1" style="overflow-y:auto;">
+                            <div class="modal-dialog modal-xl bg-personalizado" id="divPopupWindowForm1" style="margin-top:30px;">
+                                <div class="modal-content">
+                                    <div id="divBarraForm1" class="modal-header bg-personalizado" style="cursor:move">
+                                        <h5 class="modal-title" id="tituloModal">Registro Proceso</h5>
+                                    </div>
+                                    <div class="modal-body">
+                                        <fieldset class="fieldset">
+                                            @*<div class="row">
+            <div class="form-group col-sm-4">
+                <input type="hidden" class="control-form Popup" id="txtIdRegistro">
+                <label class="control-label">Entidad</label>
+                <select id="cboEntidadPAC" class="control-form Popup"></select>
+            </div>
+            <div class="form-group col-sm-2">
+                <label class="control-label">Año</label>
+                <input type="number" autocomplete="off" class="control-form Popup" id="txtAnioPAC" value="@ViewBag.Anio">
+            </div>
+            <div class="form-group col-sm-2">
+                <label class="control-label">Versión</label>
+                <input type="number" class="control-form" id="txtVersion">
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-sm-4">
+                <label class="control-label">Instrumento de aprobación</label>
+                <input type="text" autocomplete="off" class="control-form Popup" id="txtAprobacion">
+            </div>
+            <div class="form-group col-sm-4">
+                <label class="control-label">Estado</label>
+                <select id="cboEstado" class="control-lectura Popup"></select>
+            </div>
+        </div>
+        <hr style="margin-top: 5px;margin-bottom: 10px;">*@
+
+                                            <div class="row">
+                                                <div class="form-group col-sm-4">
+                                                    <label class="control-label">Tipo Item</label>
+                                                    <select id="cboTipoItem" class="control-form Popup"></select>
+                                                </div>
+                                                <div class="form-group col-sm-4">
+                                                    <label class="control-label">Tipo Compra o Selección</label>
+                                                    <select id="cboTipoCompra" class="control-form Popup"></select>
+                                                </div>
+                                                <div class="form-group col-sm-4">
+                                                    <label class="control-label">Entidad Convocante de la Compra C.</label>
+                                                    <select id="cboTipoConvocante" class="control-form Popup"></select>
+                                                </div>
+
+                                            </div>
+                                            <div class="row">
+                                                <div class="form-group col-sm-4">
+                                                    <label class="control-label">Tipo</label>
+                                                    <select id="cboTipo" class="control-form Popup"></select>
+                                                </div>
+                                                <div class="form-group col-sm-4">
+                                                    <label class="control-label">Tipo de Proceso</label>
+                                                    <select id="cboTipoProceso" class="control-form Popup"></select>
+                                                </div>
+                                                <div class="form-group col-sm-4">
+                                                    <label class="control-label">Objeto de Contratación</label>
+                                                    <select id="cboObjetoContratacion" class="control-form Popup"></select>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="form-group col-sm-2">
+                                                    <label class="control-label">Antecedentes</label>
+                                                    <select id="cboAntecedentes" class="control-form Popup"></select>
+                                                </div>
+                                                <div class="form-group col-sm-5">
+                                                    <label class="control-label">Descripción del Antecedente</label>
+                                                    <textarea class="form-control" rows="2" id="txtComentarioAntecedente"></textarea>
+                                                </div>
+                                                <div class="form-group col-sm-5">
+                                                    <label class="control-label">Descripción Tipo Servicio</label>
+                                                    <textarea class="form-control Popup" rows="2" id="txtDescripcionServicio"></textarea>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="form-group col-sm-4">
+                                                    <label class="control-label">Fuente Financiamiento</label>
+                                                    <select id="cboFuenteFto" class="control-form Popup"></select>
+                                                </div>
+                                                <div class="form-group col-sm-4">
+                                                    <label class="control-label">Entidad</label>
+                                                    <select id="cboEntidadProceso" class="control-form Popup"></select>
+                                                </div>
+                                                <div class="form-group col-sm-4">
+                                                    <label class="control-label">Oficina</label>
+                                                    <select id="cboOficinaProceso" class="control-form Popup"></select>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="form-group col-sm-4">
+                                                    <label class="control-label">Departamento</label>
+                                                    <select id="cboDepartamento" class="control-form Popup"></select>
+                                                </div>
+                                                <div class="form-group col-sm-4">
+                                                    <label class="control-label">Provincia</label>
+                                                    <select id="cboProvincia" class="control-form Popup"></select>
+                                                </div>
+                                                <div class="form-group col-sm-4">
+                                                    <label class="control-label">Distrito</label>
+                                                    <select id="cboDistrito" class="control-form Popup"></select>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="form-group col-sm-3">
+                                                    <label class="control-label">Fecha Prevista</label>
+                                                    <select id="cboFechaPrevista" class="control-form Popup"></select>
+                                                </div>
+                                                <div class="form-group col-sm-3">
+                                                    <label class="control-label">Codigo de Inversion</label>
+                                                    <input type="number" class="control-form Popup" id="txtVersion">
+                                                </div>
+                                                <div class="form-group col-sm-5">
+                                                    <label class="control-label">Observaciones</label>
+                                                    <textarea class="form-control" rows="2" id="txtObservaciones" name="comentarios"></textarea>
+                                                </div>
+                                                <div class="form-group col-sm-1">
+                                                    <button class="btn btn-out waves-effect waves-light btn-info btn-square" id="btnAgregarItems" data-toggle="modal" data-target="#divPopupWindowItem"><i class="fa fa-search-plus" aria-hidden="true"></i></button>
+
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="form-group col-sm-12">
+                                                    <div class="table-responsive" style="height:315px;">
+                                                        <table class="grilla bordered">
+                                                            <thead>
+                                                                <tr class="FilaHead">
+                                                                    <th rowspan="2" style="white-space:pre-wrap;width:50px;">Item</th>
+                                                                    <th rowspan="2" style="white-space:pre-wrap;width:500px;">Descripción Catalogo</th>
+                                                                    <th rowspan="2" style="white-space:pre-wrap;width:80px;">Unidad Medida</th>
+                                                                    <th colspan="3">Valor Estimado</th>
+                                                                    <th rowspan="2" style="white-space:pre-wrap;width:10px;"></th>
+                                                                </tr>
+                                                                <tr class="FilaHead">
+                                                                    <th style="white-space:pre-wrap; width:90px;">Cantidad</th>
+                                                                    <th style="white-space:pre-wrap; width:70px;">Moneda</th>
+                                                                    <th style="white-space:pre-wrap; width:70px;">Monto</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody id="tbDetalleItem">
+                                                                <tr>
+                                                                    <td style="white-space:pre-wrap;width:50px;" colspan="1"></td>
+                                                                    <td style="white-space:pre-wrap;width:50px;" colspan="1"></td>
+                                                                    <td style="white-space:pre-wrap;width:50px;" colspan="1"></td>
+                                                                    <td style="white-space:pre-wrap;width:50px;" colspan="1"></td>
+                                                                    <td style="white-space:pre-wrap;width:50px;" colspan="1"></td>
+                                                                    <td style="white-space:pre-wrap;width:50px;" colspan="1"></td>
+                                                                    <td style="white-space:pre-wrap;width:50px;" colspan="1"></td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            @*<div class="row">
+            <div class="table table-responsive" style="height:160px;">
+                <table class="grilla bordered">
+                    <thead>
+                        <tr class="tbFilas">
+                            <th colspan="1" rowspan="2" class="text-center" style="white-space:pre-wrap; width:5px;">ITEM</th>
+                            <th colspan="1" rowspan="2" class="text-center" style="white-space:pre-wrap; width:5px;">ANTE-CEDENTE</th>
+                            <th colspan="1" rowspan="2" class="text-center" style="white-space:pre-wrap; width:5px;">DESCRIPCIÓN DEL ANTECEDENTE</th>
+                            <th colspan="1" rowspan="2" class="text-center" style="white-space:pre-wrap; width:5px;">DESCRIPCIÓN DE LOS BIENES, SERVICIOS Y OBRAS A CONTRATAR</th>
+                            <th colspan="1" rowspan="2" class="text-center" style="white-space:pre-wrap; width:5px;">CATÁLOGO ÚNICO DE BIENES, SERVICIOS Y OBRAS - ITEM</th>
+                            <th colspan="1" rowspan="2" class="text-center" style="white-space:pre-wrap; width:5px;">UNIDAD DE MEDIDA</th>
+                            <th colspan="1" rowspan="2" class="text-center" style="white-space:pre-wrap; width:5px;">CANTIDAD</th>
+                            <th colspan="1" rowspan="2" class="text-center" style="white-space:pre-wrap; width:5px;">TIPO DE MONEDA</th>
+                            <th colspan="1" rowspan="2" class="text-center" style="white-space:pre-wrap; width:5px;">TIPO DE CAMBIO</th>
+                            <th colspan="1" rowspan="2" class="text-center" style="white-space:pre-wrap; width:5px;">VALOR ESTIMADO DE LA CONTRATACIÓN</th>
+                            <th colspan="3" rowspan="1" class="text-center" style="white-space:pre-wrap; width:5px;">CÓDIGO DE UBICACIÓN GEOGRÁFICA DEL LUGAR DE LA PRESTACIÓN</th>
+                            <th colspan="1" rowspan="2" class="text-center" style="white-space:pre-wrap; width:5px;">FUENTE DE FINANCIAMIENTO</th>
+                            <th colspan="1" rowspan="2" class="text-center" style="white-space:pre-wrap; width:5px;">FECHA PREVISTA DE LA CONVOCATORIA</th>
+                            <th colspan="1" rowspan="2" class="text-center" style="white-space:pre-wrap; width:5px;">ÓRGANO ENCARGADO DE LAS CONTRA-TACIONES</th>
+                            <th colspan="1" rowspan="2" class="text-center" style="white-space:pre-wrap; width:5px;">OBSERVA-CIONES</th>
+                            <th colspan="1" rowspan="2" class="text-center" style="white-space:pre-wrap; width:5px;">DIFUSIÓN DEL PAC POR LAS FUERZAS ARMADAS</th>
+                            <th colspan="1" rowspan="2" class="text-center" style="white-space:pre-wrap; width:5px;">CÓDIGO ÚNICO DE INVERSIÓN (PRINCIPAL)</th>
+
+                        </tr>
+                        <tr class="tbFilas">
+                            <th colspan="1" style="white-space:pre-wrap; width:5px;">DEPA</th>
+                            <th colspan="1" style="white-space:pre-wrap; width:5px;">PROV</th>
+                            <th colspan="1" style="white-space:pre-wrap; width:5px;">DIST</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="white-space:pre-wrap;width:50px;" colspan="1"></td>
+                            <td style="white-space:pre-wrap;width:50px;" colspan="1"></td>
+                            <td style="white-space:pre-wrap;width:50px;" colspan="1"></td>
+                            <td style="white-space:pre-wrap;width:50px;" colspan="1"></td>
+                            <td style="white-space:pre-wrap;width:50px;" colspan="1"></td>
+                            <td style="white-space:pre-wrap;width:50px;" colspan="1"></td>
+                            <td style="white-space:pre-wrap;width:50px;" colspan="1"></td>
+                            <td style="white-space:pre-wrap;width:50px;" colspan="1"></td>
+                            <td style="white-space:pre-wrap;width:50px;" colspan="1"></td>
+                            <td style="white-space:pre-wrap;width:50px;" colspan="1"></td>
+                            <td style="white-space:pre-wrap;width:50px;" colspan="1"></td>
+                            <td style="white-space:pre-wrap;width:50px;" colspan="1"></td>
+                            <td style="white-space:pre-wrap;width:50px;" colspan="1"></td>
+                            <td style="white-space:pre-wrap;width:50px;" colspan="1"></td>
+                            <td style="white-space:pre-wrap;width:50px;" colspan="1"></td>
+                            <td style="white-space:pre-wrap;width:50px;" colspan="1"></td>
+                            <td style="white-space:pre-wrap;width:50px;" colspan="1"></td>
+                            <td style="white-space:pre-wrap;width:50px;" colspan="1"></td>
+
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>*@
+                                        </fieldset>
+
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button id="btnCancelarForm1" class="btnCancelarForm" title="Cancelar"><i class="fa fa-undo" aria-hidden="true"></i>&nbsp;Cancelar</button>
+                                        <button id="btnGuardarProceso" class="btnGuardarForm bg-customer" title="Guardar datos"><span class="fa fa-save"></span>&nbsp;Grabar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="form-row">
+                        <div class="modal custom-modal" tabindex="-1" role="dialog" aria-hidden="true" id="divPopupContainerForm2" style="overflow-y:auto;">
+                            <div class="modal-dialog modal-lg bg-personalizado" id="divPopupWindowForm2" style="margin-top:30px;">
+                                <div class="modal-content">
+                                    <div id="divBarraForm2" class="modal-header bg-personalizado" style="cursor:move">
+                                        <h5 class="modal-title" id="tituloModal">Item</h5>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="row">
+                                            <div class="form-group col-sm-9">
+                                                <label class="control-label">Catálogo de Items</label>
+                                                <select id="cboCatalogoItem" class="control-form Popup"></select>
+                                            </div>
+                                            <div class="form-group col-sm-3">
+                                                <label class="control-label">Unidad de Medida</label>
+                                                <select id="cboUnidadMedida" class="control-form Popup"></select>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="form-group col-sm-3">
+                                                <label class="control-label">Cantidad</label>
+                                                <input type="number" class="control-form Popup" id="txtCantidad">
+                                            </div>
+                                            <div class="form-group col-sm-3">
+                                                <label class="control-label">Moneda</label>
+                                                <select id="cboTipoMoneda" class="control-form Popup"></select>
+                                            </div>
+                                            <div class="form-group col-sm-3">
+                                                <label class="control-label">Tipo Cambio</label>
+                                                <input type="number" class="control-form Popup" id="txtTipoCambio">
+                                            </div>
+                                            <div class="form-group col-sm-3">
+                                                <label class="control-label">Valor Estimado</label>
+                                                <input type="number" class="control-form Popup" id="txtValorEstimado">
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button id="btnCancelarForm2" class="btnCancelarForm" title="Cancelar"><i class="fa fa-undo" aria-hidden="true"></i>&nbsp;Cancelar</button>
+                                        <button class="btnGuardarForm bg-customer" id="btnSeleccionarItems" title="btn btn-success"><span class="fa fa-hand-o-left"></span>&nbsp;Agregar Items</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
