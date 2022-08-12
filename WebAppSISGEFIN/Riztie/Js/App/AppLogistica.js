@@ -12,9 +12,7 @@ var listaGrupoItem = [];
 var listaClaseItem = [];
 var listaFamiliaItem = [];
 var estadoTabla = "";
-var listaRegiones = [];
-
-
+var listaUbigeo = [];
 
 window.onload = function () {
     getConfigMn();
@@ -60,6 +58,8 @@ function mostrarlistas(rpta) {
             var listaDocumento = listas[1].split("¬");
             var listaBanco = listas[2].split("¬");
             var listaEstado = listas[3].split("¬");
+            listaUbigeo = listas[4].split("¬");
+            listarDepartamentos();
 
             grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
             crearCombo(listaDocumento, "cboTipoDocumento", "Seleccione");
@@ -224,6 +224,79 @@ function mostrarlistas(rpta) {
             grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
         }
     }
+}
+
+
+function listarDepartamentos() {
+    var nRegistros = listaUbigeo.length;
+    var contenido = "<option value=''>Seleccione</option>";
+    var idDpto, idProv, idDist, nombre, ubigeo;
+    for (var i = 0; i < nRegistros; i++) {
+        ubigeo = listaUbigeo[i];
+        idDpto = ubigeo.substr(0, 2);
+        idProv = ubigeo.substr(2, 2);
+        idDist = ubigeo.substr(4, 2);
+        if (idDpto != "00" && idProv == "00" && idDist == "00") {
+            nombre = ubigeo.substr(6, ubigeo.length - 6);
+            contenido += "<option value='";
+            contenido += idDpto;
+            contenido += "'>";
+            contenido += nombre;
+            contenido += "</option>";
+        }
+    }
+    var cbo = document.getElementById("cboDepartamento");
+    if (cbo != null) cbo.innerHTML = contenido;
+    listarProvincias();
+}
+
+function listarProvincias() {
+    var nRegistros = listaUbigeo.length;
+
+    var contenido = "<option value=''>Seleccione</option>";
+    var idDpto, idProv, idDist, nombre, ubigeo;
+    var idDptoSel = document.getElementById("cboDepartamento").value;
+    for (var i = 0; i < nRegistros; i++) {
+        ubigeo = listaUbigeo[i];
+        idDpto = ubigeo.substr(0, 2);
+        idProv = ubigeo.substr(2, 2);
+        idDist = ubigeo.substr(4, 2);
+        if (idDpto == idDptoSel && idProv != "00" && idDist == "00") {
+            nombre = ubigeo.substr(6, ubigeo.length - 6);
+            contenido += "<option value='";
+            contenido += idProv;
+            contenido += "'>";
+            contenido += nombre;
+            contenido += "</option>";
+        }
+    }
+    var cbo = document.getElementById("cboProvincia");
+    if (cbo != null) cbo.innerHTML = contenido;
+    listarDistritos();
+}
+
+function listarDistritos() {
+    var nRegistros = listaUbigeo.length;
+    var contenido = "<option value=''>Seleccione</option>";
+    var idDpto, idProv, idDist, nombre, ubigeo;
+    var idDptoSel = document.getElementById("cboDepartamento").value;
+    var idProvSel = document.getElementById("cboProvincia").value;
+    for (var i = 0; i < nRegistros; i++) {
+        ubigeo = listaUbigeo[i];
+        idDpto = ubigeo.substr(0, 2);
+        idProv = ubigeo.substr(2, 2);
+        idDist = ubigeo.substr(4, 2);
+        if (idDpto == idDptoSel && idProv == idProvSel && idDist != "00") {
+            nombre = ubigeo.substr(6, ubigeo.length - 6);
+            contenido += "<option value='";
+            contenido += idDist;
+            contenido += "'>";
+            contenido += nombre;
+            contenido += "</option>";
+        }
+    }
+    var cbo = document.getElementById("cboDistrito");
+    if (cbo != null) cbo.innerHTML = contenido;
 }
 function listarDepartamentoItem() {
     //var idTipoItem = cboTipoBien.value;
@@ -433,7 +506,18 @@ function configurarCombos() {
             tbDetallePedido.innerHTML = "";
         }
     }
+
+    var cboDepartamento = document.getElementById("cboDepartamento")
+    if (cboDepartamento != null) cboDepartamento.onchange = function () {
+        listarProvincias();
+    }
+
+    var cboProvincia = document.getElementById("cboProvincia")
+    if (cboProvincia != null) cboProvincia.onchange = function () {
+        listarDistritos();
+    }
 }
+
 function configurarBotones() {
     var btnConsultar = document.getElementById("btnConsultar");
     if (btnConsultar != null) btnConsultar.onclick = function () {
