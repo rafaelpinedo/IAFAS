@@ -1846,7 +1846,6 @@ function mostrarRegistro(rpta) {
 
                     txtIdPac.value = campos[0];
                     txtIdPacProceso.value = campos[1];
-                    console.log(campos[1]);
                     cboTipoItem.value = campos[2];
                     cboTipoCompra.value = campos[3];
                     txtEntidadConv.value = campos[4];
@@ -3408,8 +3407,7 @@ function grabarDatosPacProcesos() {
             var frm = new FormData();
             data = obtenerDatosGrabar("Popuproceso");
             data += "¯" + dataItem;
-    frm.append("data", data);
-    console.log(data);
+    frm.append("data", data); 
     
     Http.post("General/guardar/?tbl=" + controller + vista + 'Proceso', mostrarGrabar, frm);
 }
@@ -3447,9 +3445,6 @@ function listasDetalleItemPacProcesos(listaDetalle) {
         var nFilas = tbDetalleItemPac.rows.length;
         tbBodyDetalleItemPac.innerHTML = "";
 
-       
-
-        console.log(nFilas);
         if ((nFilas * 1) > 1) {
 
             var totalCantidad = 0;
