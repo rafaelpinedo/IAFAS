@@ -237,6 +237,7 @@
     <Compile Include="Controllers\GeneralController.cs" />
     <Compile Include="Controllers\IngresosController.cs" />
     <Compile Include="Controllers\InventarioController.cs" />
+    <Compile Include="Controllers\LicitacionController.cs" />
     <Compile Include="Controllers\LogisticaController.cs" />
     <Compile Include="Controllers\PatrimonioController.cs" />
     <Compile Include="Controllers\PlaneamientoController.cs" />
@@ -320,6 +321,11 @@
     <Content Include="Views\Logistica\Tipoproceso.cshtml" />
     <Content Include="Views\Logistica\RegistroCN.cshtml" />
     <Content Include="Views\Logistica\AprobacionCN.cshtml" />
+    <Content Include="Views\Licitacion\Tipoproceso.cshtml" />
+    <Content Include="Views\Licitacion\PAC.cshtml" />
+    <Content Include="Views\Licitacion\Prosel.cshtml" />
+    <Content Include="Views\Licitacion\Contrato.cshtml" />
+    <Content Include="Views\Licitacion\Comite.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

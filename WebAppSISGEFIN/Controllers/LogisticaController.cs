@@ -213,48 +213,7 @@ namespace WebAppSISGEFIN.Controllers
             return View();
         }
 
-        [FiltroAutenticacion]
-        public ActionResult Tipoproceso()
-        {
-            string[] Data = Session["DataUsuario"].ToString().Split('|');
-            string IdPerfil = Data[3];
-            ViewBag.Menu = new Menu().Listar(IdPerfil);
-            return View();
-        }
-
-        [FiltroAutenticacion]
-        public ActionResult PAC()
-        {
-            string[] Data = Session["DataUsuario"].ToString().Split('|');
-            string IdPerfil = Data[3];
-            ViewBag.Menu = new Menu().Listar(IdPerfil);
-            int Anio = DateTime.Now.Year;
-            ViewBag.Anio = Anio;
-            return View();
-        }
-
-        [FiltroAutenticacion]
-        public ActionResult Prosel()
-        {
-            string[] Data = Session["DataUsuario"].ToString().Split('|');
-            string IdPerfil = Data[3];
-            ViewBag.Menu = new Menu().Listar(IdPerfil);
-            int Anio = DateTime.Now.Year;
-            ViewBag.Anio = Anio;
-            return View();
-        }
-
-        [FiltroAutenticacion]
-        public ActionResult Contrato()
-        {
-            string[] Data = Session["DataUsuario"].ToString().Split('|');
-            string IdPerfil = Data[3];
-            ViewBag.Menu = new Menu().Listar(IdPerfil);
-            int Anio = DateTime.Now.Year;
-            ViewBag.Anio = Anio;
-            return View();
-        }
-
+       
         [FiltroAutenticacion]
         public ActionResult RegistroCN()
         {
