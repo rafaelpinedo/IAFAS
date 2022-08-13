@@ -13,6 +13,13 @@ var listaClaseItem = [];
 var listaFamiliaItem = [];
 var estadoTabla = "";
 var listaUbigeo = [];
+var listaItemInventario = [];
+
+var botonesProceso = [
+    { "cabecera": "Editar", "clase": "fa fa-plus-circle btn btn-info btnCirculo", "id": "Proceso" },
+    { "cabecera": "Editar", "clase": "fa fa-pencil btn btn-info btnCirculo", "id": "Editar" },
+    { "cabecera": "Anular", "clase": "fa fa-minus-circle btn btn-danger btnCirculo", "id": "Eliminar" },
+];
 
 window.onload = function () {
     getConfigMn();
@@ -174,7 +181,7 @@ function mostrarlistas(rpta) {
 
             var listaTipoItem = listas[3].split("¬");
             var listaTipoCompra = listas[4].split("¬");
-            var listaEntidadConvocante = listas[5].split("¬");
+            //var listaEntidadConvocante = listas[5].split("¬");
             var listaTipo = listas[6].split("¬");
             var listaTipoProceso = listas[7].split("¬");
             var listabjetoContratacion = listas[8].split("¬");
@@ -182,26 +189,20 @@ function mostrarlistas(rpta) {
             var listaFuenteFto = listas[10].split("¬");
             var listaOficinaProceso = listas[11].split("¬");
             var listaFechaPrevista = listas[12].split("¬");
-            listaRegiones = listas[13].split("¬");
+            listaUbigeo = listas[13].split("¬");
+            listaItemInventario = listas[14].split("¬");
 
-            var listaInventario = listas[14].split("¬");
             var listaUnidadMedi = listas[15].split("¬");
             var listaTipoMoneda = listas[16].split("¬");
 
 
-            var botonesPer = [
-                { "cabecera": "Editar", "clase": "fa fa-plus-circle btn btn-info btnCirculo", "id": "Proceso" }, 
-                { "cabecera": "Editar", "clase": "fa fa-pencil btn btn-info btnCirculo", "id": "Editar" },
-                { "cabecera": "Anular", "clase": "fa fa-minus-circle btn btn-danger btnCirculo", "id": "Eliminar" },
-            ];
-
-            grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botonesPer, 38, false, null);
+            grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botonesProceso, 38, false, null);
             crearCombo(listaEntidad, "cboEntidadPAC", "Seleccione");
             crearCombo(listaEstado, "cboEstado", "Seleccione");
 
             crearCombo(listaTipoItem, "cboTipoItem", "Seleccione");
             crearCombo(listaTipoCompra, "cboTipoCompra", "Seleccione"); 
-            crearCombo(listaEntidadConvocante, "cboTipoConvocante", "Seleccione");
+            //crearCombo(listaEntidadConvocante, "cboTipoConvocante", "Seleccione");
             crearCombo(listaTipo, "cboTipo", "Seleccione");
             crearCombo(listaTipoProceso, "cboTipoProceso", "Seleccione");
             crearCombo(listabjetoContratacion, "cboObjetoContratacion", "Seleccione");
@@ -211,14 +212,12 @@ function mostrarlistas(rpta) {
             crearCombo(listaOficinaProceso, "cboOficinaProceso", "Seleccione");
             crearCombo(listaFechaPrevista, "cboFechaPrevista", "Seleccione");
 
-            crearCombo(listaInventario, "cboCatalogoItem", "Seleccione");
+           // crearCombo(listaInventario, "cboCatalogoItem", "Seleccione");
             crearCombo(listaUnidadMedi, "cboUnidadMedida", "Seleccione");
             crearCombo(listaTipoMoneda, "cboTipoMoneda", "Seleccione");
 
-            listarDepartamentoItem();
-            //crearCombo(listaDepartamento, "cboDepartamento", "Seleccione");
-            //crearCombo(listaProvincia, "cboProvincia", "Seleccione");
-            //crearCombo(listaDistrito, "cboDistrito", "Seleccione");
+            listarDepartamentos();
+            listarItemInventario();
         }
         else {
             grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
@@ -226,6 +225,33 @@ function mostrarlistas(rpta) {
     }
 }
 
+function listarItemInventario() {
+    var idTipoServicio = cboObjetoContratacion.value;
+    //Servicios y Consultoria de Obras
+    if (idTipoServicio == "2" || idTipoServicio == "4") {
+        idTipoServicio = "2";
+    }
+
+    var nRegistros = listaItemInventario.length;
+    var contenido = "<option value=''>Seleccione</option>";
+    var campos, idItem,  nombreItem,idTipoServ;
+    for (var i = 0; i < nRegistros; i++) {
+        campos = listaItemInventario[i].split('|');
+        idItem = campos[0];
+        nombreItem = campos[1];
+        idTipoServ = campos[2];
+
+        if (idTipoServ == idTipoServicio) {
+            contenido += "<option value='";
+            contenido += idItem;
+            contenido += "'>";
+            contenido += nombreItem;
+            contenido += "</option>";
+        }
+    }
+    var cbo = document.getElementById("cboCatalogoItem");
+    if (cbo != null) cbo.innerHTML = contenido;
+}
 
 function listarDepartamentos() {
     var nRegistros = listaUbigeo.length;
@@ -297,95 +323,6 @@ function listarDistritos() {
     }
     var cbo = document.getElementById("cboDistrito");
     if (cbo != null) cbo.innerHTML = contenido;
-}
-function listarDepartamentoItem() {
-    //var idTipoItem = cboTipoBien.value;
-    var nRegistros = listaRegiones.length;
-    var contenido = "<option value=''>Seleccione</option>";
-    var campos, idCodDep,idCodProv,idCodDist, nombre;
-
-    if (listaRegiones != null || listaRegiones != "") {
-        for (var i = 0; i < nRegistros; i++) {
-            campos = listaRegiones[i].split('|');
-            idCodDep = campos[0];
-            idCodProv = campos[1];
-            idCodDist = campos[2];
-            nombre = campos[3];
-            if (idCodProv == "00" && idCodDist =="00") {
-                contenido += "<option value='";
-                contenido += idCodDep;
-                contenido += "'>";
-                contenido += nombre;
-                contenido += "</option>";
-            }
-        }
-    }
-   
-    var cbo = document.getElementById("cboDepartamento");
-    if (cbo != null) {
-        cbo.innerHTML = contenido;
-        listarProvinciaItem();
-    }
-}
-
-function listarProvinciaItem() {
-    var idDepartamento = cboDepartamento.value;
-    var nRegistros = listaRegiones.length;
-    var contenido = "<option value=''>Seleccione</option>";
-    var campos, idCodDep, idCodProv, idCodDist, nombre;
-
-    if (listaRegiones != null || listaRegiones != "") {
-        for (var i = 0; i < nRegistros; i++) {
-            campos = listaRegiones[i].split('|');
-            idCodDep = campos[0];
-            idCodProv = campos[1];
-            idCodDist = campos[2];
-            nombre = campos[3];//&& idCodProv == "00" && idCodDist == "00"
-            if (idCodDep == idDepartamento && idCodProv !="00" && idCodDist == "00") {
-                contenido += "<option value='";
-                contenido += idCodProv;
-                contenido += "'>";
-                contenido += nombre;
-                contenido += "</option>";
-            }
-        }
-    }
-    var cbo = document.getElementById("cboProvincia");
-    if (cbo != null) {
-        cbo.innerHTML = contenido;
-           listarDistritoItem();
-    }
-}
-
-function listarDistritoItem() {
-    var idDepartamento = cboDepartamento.value;
-    var idProvincia = cboProvincia.value;
-
-    var nRegistros = listaRegiones.length;
-    var contenido = "<option value=''>Seleccione</option>";
-    var campos, idCodDep, idCodProv, idCodDist, nombre;
-
-    if (listaRegiones != null || listaRegiones != "") {
-        for (var i = 0; i < nRegistros; i++) {
-            campos = listaRegiones[i].split('|');
-            idCodDep = campos[0];
-            idCodProv = campos[1];
-            idCodDist = campos[2];
-            nombre = campos[3];//&& idCodProv == "00" && idCodDist == "00"
-            if (idCodDep == idDepartamento && idCodProv==idProvincia && idCodDist != "00") {
-                contenido += "<option value='";
-                contenido += idCodDist;
-                contenido += "'>";
-                contenido += nombre;
-                contenido += "</option>";
-            }
-        }
-    }
-
-    var cbo = document.getElementById("cboDistrito");
-    if (cbo != null) {
-        cbo.innerHTML = contenido;
-    }
 }
 
 function listarGrupoItem() {
@@ -482,16 +419,6 @@ function configurarCombos() {
         listarFamiliaItem();
     }
 
-    var cboDepartamento = document.getElementById("cboDepartamento");
-    if (cboDepartamento != null) cboDepartamento.onchange = function () {
-        listarProvinciaItem();
-    }
-
-    var cboProvincia = document.getElementById("cboProvincia");
-    if (cboProvincia != null) cboProvincia.onchange = function () {
-        listarDistritoItem();
-    }
-
     var cboTipoSolicitud = document.getElementById("cboTipoSolicitud")
     if (cboTipoSolicitud != null) cboTipoSolicitud.onchange = function () {
         var idTipoSolicitud = cboTipoSolicitud.value;
@@ -515,6 +442,28 @@ function configurarCombos() {
     var cboProvincia = document.getElementById("cboProvincia")
     if (cboProvincia != null) cboProvincia.onchange = function () {
         listarDistritos();
+    }
+
+    if (vista == "PAC") {
+
+        var cboObjetoContratacion = document.getElementById("cboObjetoContratacion")
+        if (cboObjetoContratacion != null) cboObjetoContratacion.onchange = function () {
+            listarItemInventario();
+        }
+
+        var cboAntecedentes = document.getElementById("cboAntecedentes")
+        if (cboAntecedentes != null) cboAntecedentes.onchange = function () {
+            let cboAntece = cboAntecedentes.value;
+            let comentarioAntecedente = document.getElementById("txtComentarioAntecedente");
+            if (cboAntece == "1") {
+                comentarioAntecedente.readOnly = false;
+            }
+            else {
+                comentarioAntecedente.readOnly = true;
+                comentarioAntecedente.value = "";
+            }
+        }
+
     }
 }
 
@@ -844,96 +793,85 @@ function configurarBotones() {
         var btnMostrarItems = document.getElementById("btnMostrarItems");
         if (btnMostrarItems != null) btnMostrarItems.onclick = function () {
             var idTipoItems = cboTipoItem.value;
-            if (idTipoItems != "") {
-                var divPopupContainerForm2 = document.getElementById("divPopupContainerForm2");
-                if (divPopupContainerForm2 != null) { divPopupContainerForm2.style.display = 'block'; };
-            }
-            else {
+            var idObjetoContra = cboObjetoContratacion.value;
+            var nFilas = tbDetalleItemPac.rows.length;
+
+            if (idTipoItems == "") {
                 mostrarMensaje("Seleccione tipo de Items", "error")
                 cboTipoItem.focus();
+            }
+            else if (idObjetoContra=="") {
+                mostrarMensaje("Seleccione tipo de Objeto de Contratación", "error")
+                cboObjetoContratacion.focus();
+            }
+             else {
+                 if (idTipoItems=="1" && nFilas=="1") {
+                     mostrarMensaje("No se Puede Agregar Mas Item", "warning")
+                 }
+                 else {
+                     //Limpiar Formulario
+                     var cboCatalogoItem = document.getElementById("select2-cboCatalogoItem-container");
+                     if (cboCatalogoItem != null) cboCatalogoItem.innerHTML = "Seleccione";
+                     cboUnidadMedida.value = "";
+                     txtCantidad.value = "";
+                     txtValorEstimado.value = "";
+                     var divPopupContainerForm2 = document.getElementById("divPopupContainerForm2");
+                     if (divPopupContainerForm2 != null) { divPopupContainerForm2.style.display = 'block'; };
+                 }
             }
         }
 
         var btnAgregarPacItems = document.getElementById("btnAgregarPacItems");
         if (btnAgregarPacItems != null) btnAgregarPacItems.onclick = function () {
             validarPCAItems();
-            //var divPopupContainerForm2 = document.getElementById("divPopupContainerForm2");
-            //if (divPopupContainerForm2 != null) { divPopupContainerForm2.style.display = 'none'; };
-
-            //var idTipoItems = cboTipoItem.value;
-            //if (idTipoItems != "") {
-               
-            //}
-            //else {
-            //    mostrarMensaje("Seleccione tipo de Items", "error")
-            //    cboTipoItem.focus();
-            //}
         }
-    }
-    
-}
-function validarPCAItems() {
-    if (validarInformacion("Requeitems")) {
-        var vExito = false;
-        var catalogo = document.getElementById("cboCatalogoItem");
-        var unidadMedida = document.getElementById("cboUnidadMedida");
-        var moneda = document.getElementById("cboTipoMoneda");
-        var codigoitemsCatalogo = catalogo.value;
-        var nombreitemsCatalogo = catalogo.options[catalogo.selectedIndex].text;
-        var codUnidadMedida = unidadMedida.value;
-        var nomUnidadMedida = unidadMedida.options[unidadMedida.selectedIndex].text;
-        var cantidad = txtCantidad.value;
-        var codTipoMoneda = moneda.value;
-        var nomTipoMoneda = moneda.options[moneda.selectedIndex].text;
-        var tipoCambio = txtTipoCambio.value;
-        var valorEstimado = txtValorEstimado.value;
-        //var data = codigoitemsCatalogo + '|' + nombreitemsCatalogo + '|' + codUnidadMedida + '|' + nomUnidadMedida + '|' +
-        //    cantidad + '|' + codTipoMoneda + '|' + nomTipoMoneda + '|' + tipoCambio + '|' + valorEstimado;
-       // alert(data);
-        var item = 0;
-        var nFilas = tbDetalleItemPac.rows.length;
-        console.log(nFilas);
-        item = nFilas + 1;
-        var existe = false;
-        for (var i = 0; i < nFilas; i++) {
-            if (tbDetalleItemPac.rows[i].cells[0].innerHTML == item) {
-                existe = true;
-                break;
+
+        var btnGuardarProceso = document.getElementById("btnGuardarProceso");
+        if (btnGuardarProceso != null) btnGuardarProceso.onclick = function () {
+            var validar = false;
+            var nFilas = tbDetalleItemPac.rows.length;
+            
+            if (validarInformacion("RequeProc") == true && nFilas > 0 ) {
+                validar = true;
+            }
+            else if (nFilas == 0) {
+                mostrarMensaje("Agregar Item ", "error");
+                return;
+            }
+
+            if (validar === true) {
+                Swal.fire({
+                    title: '¿Desea grabar la información?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Si',
+                    cancelButtonText: 'No'
+                }).then((result) => {
+                    if (result.value) {
+                        //if (vista == "PedidoCompra") {
+                        //    grabarPedido();
+                        //}
+
+                        grabarDatosPacProcesos();
+
+                        Swal.fire({
+                            title: 'Procesando...',
+                            allowEscapeKey: false,
+                            allowOutsideClick: false,
+                            onOpen: () => {
+                                Swal.showLoading()
+                            }
+                        })
+                    }
+                })
             }
         }
 
-       var divPopupContainerForm2 = document.getElementById("divPopupContainerForm2");
-       if (divPopupContainerForm2 != null) { divPopupContainerForm2.style.display = 'none'; };
-
-        var filaDetalle = '<tr>';
-        filaDetalle += "<td style='white-space:pre-wrap;width:50px;display:none'>" + codigoitemsCatalogo + "</td> ";
-        filaDetalle += "<td style='white-space:pre-wrap;width:50px;display:none'>" + codUnidadMedida + "</td> ";
-        filaDetalle += "<td style='white-space:pre-wrap;width:50px;display:none'>" + codTipoMoneda + "</td> ";
-        filaDetalle += '<td style="white-space:pre-wrap;width:50px;" colspan="1">' + item + '</td>';
-        filaDetalle += '<td style="white-space:pre-wrap;width:50px;" colspan="1">' + nombreitemsCatalogo+'</td>';
-        filaDetalle += '<td style="white-space:pre-wrap;width:50px;" colspan="1">' + nomUnidadMedida + '</td>';
-        filaDetalle += '<td style="white-space:pre-wrap;width:50px;" colspan="1">' + cantidad + '</td>';
-        filaDetalle += '<td style="white-space:pre-wrap;width:50px;" colspan="1">' + nomTipoMoneda + '</td>';
-        filaDetalle += '<td style="white-space:pre-wrap;width:50px;" colspan="1">' + valorEstimado + '</td>';
-        filaDetalle += "<td style='white-space:pre-wrap;width:10px;vertical-align:top;'>";
-        filaDetalle += "<i class='fa fa-trash f-16 text-c-red' title='Quitar Item' onclick='retirarItemPCA(this,\"";
-        filaDetalle += item;
-        filaDetalle += "\");'></i>";
-        filaDetalle += "</td> ";
-        filaDetalle += ' </tr >';
-        tbDetalleItemPac.insertAdjacentHTML("beforeend", filaDetalle);
-
     }
+    
 }
-
-function retirarItemPCA(col, id) {
-    var fila = col.parentNode.parentNode;
-    tbDetalleItemPac.removeChild(fila);
-    //var nFilas = 0;
-    //nFilas = tbDetallePedido.rows.length;
-    //spnNroItems.innerHTML = "Items: " + (nFilas);
-}
-
 
 function mostrarEnviarCorreo(rpta) {
     if (rpta) alert(rpta);
@@ -1470,14 +1408,23 @@ function seleccionarBoton(idGrilla, idRegistro, idBoton) {
             if (tituloModal != null) {
                 tituloModal.innerText = "Actualizar Registro";
             }
+
+            let txtIdPac = document.getElementById("txtIdPac");
+            if (txtIdPac != null) {
+                txtIdPac.value = "0";
+            }
+
             editarRegistro(idRegistro);
         }
         if (idBoton == "Eliminar") {
             eliminarRegistro(idRegistro)
         }
         if (idBoton == "Proceso") {
-            var divPopupContainerForm1 = document.getElementById("divPopupContainerForm1");
-            if (divPopupContainerForm1 != null) { divPopupContainerForm1.style.display = 'block'; };
+            var txtIdPac = document.getElementById("txtIdPac");
+            if (txtIdPac != null) { txtIdPac.value = idRegistro }
+
+            Http.get("General/obtenerTabla/?tbl=" + controller + vista + idBoton + '&id=' + idRegistro, mostrarRegistro);
+        
         }
     }
 }
@@ -1866,10 +1813,90 @@ function mostrarRegistro(rpta) {
             txtNombre.value = campos[4];
             cboEstado.value = campos[5];
         }
+        else if (vista == "PAC") {
+            var txtIdPacPr = document.getElementById("txtIdPac").value;
+            if (txtIdPacPr != "0") {
+
+                if (campos[0] != '0¯0') {
+                    var listaCabe = rpta.split("¯")[0];
+                    var listaDetalle = rpta.split("¯")[1];
+                    campos = listaCabe.split("|");
+
+                    txtIdPac.value = campos[0];
+                    txtIdPacProceso.value = campos[1];
+                    console.log(campos[1]);
+                    cboTipoItem.value = campos[2];
+                    cboTipoCompra.value = campos[3];
+                    txtEntidadConv.value = campos[4];
+                    cboTipo.value = campos[5];
+                    cboTipoProceso.value = campos[6];
+                    cboObjetoContratacion.value = campos[7];
+                    cboAntecedentes.value = campos[8];
+                    txtComentarioAntecedente.value = campos[9];
+                    txtDescripcionServicio.value = campos[10];
+                    cboFuenteFto.value = campos[11];
+                    cboOficinaProceso.value = campos[12];
+                    cboFechaPrevista.value = campos[13];
+
+                    listarDepartamentos();
+                    cboDepartamento.value = campos[14];
+                    document.getElementById('select2-cboDepartamento-container').innerHTML = cboDepartamento.options[cboDepartamento.selectedIndex].text;
+                    listarProvincias();
+                    cboProvincia.value = campos[15];
+                    document.getElementById('select2-cboProvincia-container').innerHTML = cboProvincia.options[cboProvincia.selectedIndex].text;
+                    listarDistritos();
+                    cboDistrito.value = campos[16];
+                    document.getElementById('select2-cboDistrito-container').innerHTML = cboDistrito.options[cboDistrito.selectedIndex].text;
+                    cboTipoMoneda.value = campos[17];
+                    txtTipoCambio.value = campos[18];
+                    txtObservaciones.value = campos[19];
+
+                    let comentarioAntecedente = document.getElementById("txtComentarioAntecedente");
+                    if (campos[9] == "") {
+                        comentarioAntecedente.readOnly = true;
+                    }
+                    else {
+                        comentarioAntecedente.readOnly = false;
+                    }
+                    //Detalle
+                    tbDetalleItemPac.innerHTML = "";
+                    listasDetalleItemPacProcesos(listaDetalle);
+
+                }
+                else {
+                    var idpac = txtIdPac.value;
+                    limpiarForm("Popuproceso");
+                    tbDetalleItemPac.innerHTML = "";
+                    tbBodyDetalleItemPac.innerHTML = "";
+                    txtIdPac.value = idpac;
+                    listarDepartamentos();
+                    document.getElementById("txtComentarioAntecedente").readOnly = true;
+                   
+                }
+
+                listarItemInventario();
+                var divPopupContainerForm1 = document.getElementById("divPopupContainerForm1");
+                if (divPopupContainerForm1 != null) { divPopupContainerForm1.style.display = 'block'; };
+            }
+            else {
+
+                txtIdRegistro.value = campos[0];
+                cboEntidadPAC.value = campos[1];
+                txtAnioPAC.value = campos[2];
+                txtVersion.value = campos[3];
+                txtAprobacion.value = campos[4];
+                cboEstado.value = campos[5];
+
+                var divPopupContainer = document.getElementById("divPopupContainer");
+                if (divPopupContainer != null) { divPopupContainer.style.display = 'block'; };
+            }
+             
+        }
         else {
             var divPopupContainer = document.getElementById("divPopupContainer");
             if (divPopupContainer != null) { divPopupContainer.style.display = 'block'; };
             var controles = document.getElementsByClassName("Popup");
+
             var nControles = controles.length;
             var control;
             var tipo;
@@ -2013,6 +2040,11 @@ function mostrarGrabar(rpta) {
         var mensaje = mensajeResul[1];
         divPopupContainer.style.display = 'none';
 
+        if (vista == "PAC") {
+            divPopupContainerForm1.style.display = 'none';
+            botones = botonesProceso; 
+        }
+
         grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
 
         if (vista == "Oficina") {
@@ -2022,6 +2054,7 @@ function mostrarGrabar(rpta) {
         else if (vista == "OrdenCompra") {
             divPopupContainerForm1.style.display = 'none';
         }
+       
 
         if (tipo == 'A') {
             Swal.fire({
@@ -2122,7 +2155,11 @@ function mostrarEliminar(rpta) {
         mensajeResul = listas[1].split("|");
         var tipo = mensajeResul[0];
         var mensaje = mensajeResul[1];
-              
+
+        if (vista == "PAC") {
+            botones = botonesProceso;
+        }
+
         grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, null, botones, 38, false, null);
 
         if (vista == "Oficina") {
@@ -3276,4 +3313,154 @@ function grabarOrdenCompra() {
 
     btnGuardar.innerHTML = "Guardando <i class='fa fa-circle-o-notch fa-spin' style='color:white'></i>";
     btnGuardar.disabled = true;
+}
+
+function validarPCAItems() {
+    if (validarInformacion("Requeitems")) {
+
+        var catalogo = document.getElementById("cboCatalogoItem");
+        var unidadMedida = document.getElementById("cboUnidadMedida");
+        var codigoitemsCatalogo = catalogo.value;
+        var nombreitemsCatalogo = catalogo.options[catalogo.selectedIndex].text;
+        var codUnidadMedida = unidadMedida.value;
+        var nomUnidadMedida = unidadMedida.options[unidadMedida.selectedIndex].text;
+        var cantidad = txtCantidad.value;
+
+        var valorEstimado = txtValorEstimado.value;
+
+        var item = 0;
+        var nFilas = tbDetalleItemPac.rows.length;
+        item = nFilas + 1;
+        var existe = false;
+        for (var i = 0; i < nFilas; i++) {
+            if (tbDetalleItemPac.rows[i].cells[0].innerHTML == codigoitemsCatalogo) {
+                existe = true;
+                break;
+            }
+        }
+        if (existe) {
+            mostrarMensaje("Item ya se encuentra agregado", "warning");
+        }
+        else {
+            var dataItem = '';
+            dataItem = item + '|' + codigoitemsCatalogo + '|' + codUnidadMedida + '|' +  nombreitemsCatalogo + '|' +
+                nomUnidadMedida + '|' + cantidad + '|' + valorEstimado;
+            listasDetalleItemPacProcesos(dataItem);
+
+            var divPopupContainerForm2 = document.getElementById("divPopupContainerForm2");
+            if (divPopupContainerForm2 != null) { divPopupContainerForm2.style.display = 'none'; };
+        }
+    }
+}
+function grabarDatosPacProcesos() {
+    var nFilas = tbDetalleItemPac.rows.length;
+    var data = ""
+    var dataItem = ""; 
+            var fila;
+            for (var i = 0; i < nFilas; i++) {
+                fila = tbDetalleItemPac.rows[i];
+                dataItem += fila.cells[0].innerHTML; //codigo Item
+                dataItem += "|";
+                dataItem += fila.cells[1].innerHTML; //unidad medida
+                dataItem += "|";
+                dataItem += fila.cells[5].innerHTML.replace(/,/g, ''); //Cantidad
+                dataItem += "|";
+                dataItem += (fila.cells[6].innerHTML).replace(/,/g, ''); //Precio
+                dataItem += "¬";
+            }
+            dataItem = dataItem.substr(0, dataItem.length - 1);
+
+            var frm = new FormData();
+            data = obtenerDatosGrabar("Popuproceso");
+            data += "¯" + dataItem;
+    frm.append("data", data);
+    console.log(data);
+    
+    Http.post("General/guardar/?tbl=" + controller + vista + 'Proceso', mostrarGrabar, frm);
+}
+
+function listasDetalleItemPacProcesos(listaDetalle) {
+    //Detalle
+    if (listaDetalle) {
+        var listaDet = listaDetalle.split('¬');
+        var nRegistros = listaDet.length;
+        var camposDetalle = [];
+
+        var filaDetalle = '';
+        for (var i = 0; i < nRegistros; i++) {
+            camposDetalle = listaDet[i].split("|");
+            //totalCantidad = totalCantidad + (camposDetalle[5] * 1);
+            //totalMonto = totalMonto + (camposDetalle[6]*1);
+            // item++;
+            filaDetalle += '<tr>';
+            filaDetalle += "<td style='white-space:pre-wrap;width:50px;display:none'>" + camposDetalle[1] + "</td> ";
+            filaDetalle += "<td style='white-space:pre-wrap;width:50px;display:none'>" + camposDetalle[2] + "</td> ";
+            filaDetalle += '<td style="white-space:pre-wrap;width:50px;" colspan="1">' + camposDetalle[0] + '</td>';
+            filaDetalle += '<td style="white-space:pre-wrap;width:50px;" colspan="1">' + camposDetalle[3] + '</td>';
+            filaDetalle += '<td style="white-space:pre-wrap;width:50px;" colspan="1">' + camposDetalle[4] + '</td>';
+            filaDetalle += '<td style="white-space:pre-wrap;width:50px;" colspan="1">' + formatoNumeroDecimal(camposDetalle[5]) + '</td>';
+            filaDetalle += '<td style="white-space:pre-wrap;width:50px;" colspan="1">' + formatoNumeroDecimal(camposDetalle[6]) + '</td>';
+            filaDetalle += "<td style='white-space:pre-wrap;width:10px;vertical-align:top;'>";
+            filaDetalle += "<i class='fa fa-trash f-16 text-c-red' title='Quitar Item' onclick='retirarItemPCA(this,\"";
+            filaDetalle += camposDetalle[0];
+            filaDetalle += "\");'></i>";
+            filaDetalle += "</td>";
+            filaDetalle += '</tr>';
+        }
+        tbDetalleItemPac.insertAdjacentHTML("beforeend", filaDetalle);
+
+        var nFilas = tbDetalleItemPac.rows.length;
+        tbBodyDetalleItemPac.innerHTML = "";
+
+       
+
+        console.log(nFilas);
+        if ((nFilas * 1) > 1) {
+
+            var totalCantidad = 0;
+            var totalMonto = 0;
+
+            var fila, itemCant = 0, itemMonto = 0;
+            for (var i = 0; i < nFilas; i++) {
+                fila = tbDetalleItemPac.rows[i];
+
+                itemCant = (fila.cells[5].innerText).replace(/,/g, '');
+                itemMonto = (fila.cells[6].innerText).replace(/,/g, '');
+                totalCantidad = totalCantidad + (itemCant * 1);
+                totalMonto = totalMonto + (itemMonto * 1);
+            }
+
+            var tbBodyResumen = "";
+            tbBodyResumen += '<tr>';
+            tbBodyResumen += '<td colspan="3" class="text-right">TOTAL</td>';
+            tbBodyResumen += '<td>' + formatoNumeroDecimal(totalCantidad)+'</td>';
+            tbBodyResumen += '<td colspan="2">' + formatoNumeroDecimal(totalMonto)+'</td>';
+            tbBodyResumen += '</tr>';
+            tbBodyDetalleItemPac.innerHTML = tbBodyResumen;
+        }
+    }
+}
+
+function retirarItemPCA(col, id) {
+
+    var filaRemove = col.parentNode.parentNode;
+    tbDetalleItemPac.removeChild(filaRemove);
+
+    var dataItem = "";
+    var nFilas = tbDetalleItemPac.rows.length;
+    var fila,item=0;
+    for (var i = 0; i < nFilas; i++) {
+        item += 1;
+        fila = tbDetalleItemPac.rows[i];
+        dataItem += item + '|' + fila.cells[0].innerHTML + '|';
+        dataItem += fila.cells[1].innerHTML + '|' + fila.cells[3].innerHTML+'|';
+        dataItem += fila.cells[4].innerHTML + '|';
+        dataItem += (fila.cells[5].innerHTML).replace(/,/g, '') +'|';
+        dataItem += (fila.cells[6].innerHTML).replace(/,/g, '');
+        dataItem += "¬";
+    }
+    dataItem = dataItem.substr(0, dataItem.length - 1);
+
+    tbDetalleItemPac.innerHTML = "";
+    listasDetalleItemPacProcesos(dataItem);
 }
