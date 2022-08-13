@@ -31,6 +31,9 @@ window.onload = function () {
     else if (vista == "PAC" ){
         getListarLicita();
     }
+    else if (vista == "Articulo") {
+        getListarArticulo('B')
+    }
      else {
         getListar();
     }
@@ -55,6 +58,10 @@ function getListarPedido() {
 function getListar() {
     var data = "";
     Http.get("General/listarTabla?tbl=" + controller + vista + "&data=" + data, mostrarlistas);
+}
+
+function getListarArticulo(tipo) {
+    Http.get("General/listarTabla?tbl=" + controller + vista + "&data=" + tipo, mostrarlistas);
 }
 
 function mostrarlistas(rpta) {
@@ -468,6 +475,21 @@ function configurarCombos() {
 }
 
 function configurarBotones() {
+    var btnTabBienes = document.getElementById("btnTabBienes");
+    if (btnTabBienes != null) btnTabBienes.onclick = function () {
+        getListarArticulo('B')
+    }
+
+    var btnTabServicios = document.getElementById("btnTabServicios");
+    if (btnTabServicios != null) btnTabServicios.onclick = function () {
+        getListarArticulo('S')
+    }
+
+    var btnTabObras = document.getElementById("btnTabObras");
+    if (btnTabObras != null) btnTabObras.onclick = function () {
+        getListarArticulo('O')
+    }
+
     var btnConsultar = document.getElementById("btnConsultar");
     if (btnConsultar != null) btnConsultar.onclick = function () {
         if (vista == "PedidoCompra" || vista == "SolicitudCompra" || vista == "Cotizacion" || vista == "CuadroCompara" || vista == "OrdenCompra") {
@@ -1921,7 +1943,19 @@ function mostrarRegistro(rpta) {
                     }
                     else {
                         control.value = subCampos[0];
-                        if (nControlesSelectSearch > 0) {
+                        if (vista == "Proveedor") {
+                            listarDepartamentos();
+                            cboDepartamento.value = campos[9];
+                            document.getElementById('select2-cboDepartamento-container').innerHTML = cboDepartamento.options[cboDepartamento.selectedIndex].text;
+                            listarProvincias();
+                            cboProvincia.value = campos[10];
+                            document.getElementById('select2-cboProvincia-container').innerHTML = cboProvincia.options[cboProvincia.selectedIndex].text;
+                            listarDistritos();
+                            cboDistrito.value = campos[11];
+                            document.getElementById('select2-cboDistrito-container').innerHTML = cboDistrito.options[cboDistrito.selectedIndex].text;
+                        }
+                        else {
+                         if(nControlesSelectSearch > 0) 
                             var controlSelect = 'select2-' + control.id + '-container';
                             var cboControlSelect = document.getElementById(controlSelect);
                             if (cboControlSelect != null) {
@@ -1929,6 +1963,7 @@ function mostrarRegistro(rpta) {
                                 cboControlSelect.innerHTML = selected;
                             }
                         }
+                    
                     }
                 }
                 else if (tipo == "img") {
