@@ -185,7 +185,6 @@
     <Content Include="Riztie\Images\navbar-img-6.jpg" />
     <Content Include="Riztie\Images\NOFOTO.jpg" />
     <Content Include="Riztie\Images\user-bg.jpg" />
-    <Content Include="Riztie\Js\App\AppLicitacion.js" />
     <Content Include="Riztie\Js\App\AppRRHH.js" />
     <Content Include="Riztie\Js\App\AppInventario.js" />
     <Content Include="Riztie\Js\App\AppLogistica.js" />
