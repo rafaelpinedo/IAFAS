@@ -57,9 +57,7 @@ function grabarDatos() {
     if (vista == "Comite") {
         let detalle = obtenerItemComision();
         data += '¯' + detalle;
-        console.log(data)
     }
-
     frm.append("data", data);
     Http.post("General/guardar/?tbl=" + controller + vista, mostrarGrabar, frm);
 }
@@ -211,10 +209,8 @@ function mostrarRegistro(rpta) {
             txtAnhio.value = campos[1];
             txtNumResol.value = campos[2];
             txtObjContrat.value = campos[3];
-
-            //var dFecha = campos[4].split("/");
-            //txtFechaCom.value = dFecha[2] + "-" + dFecha[1] + "-" + dFecha[0];
-          
+            var dFechaReque = campos[4].split("/");
+            txtFechaCom.value = dFechaReque[2] + "-" + dFechaReque[1] + "-" + dFechaReque[0];          
             cboEstado.value = campos[5];
 
             var select2cboPersona = document.getElementById("select2-cboPersona-container");
@@ -224,7 +220,6 @@ function mostrarRegistro(rpta) {
             var divPopupContainer = document.getElementById("divPopupContainer");
             if (divPopupContainer != null) { divPopupContainer.style.display = 'block'; };
             return;
-
         }
 
 
@@ -338,8 +333,15 @@ function configurarBotones() {
     if (btnGuardar != null) btnGuardar.onclick = function () {
         var validar = false;
 
-        if (vista == "PedidoCompra" && validarPedido() == true) {
-            validar = true;
+        if (vista == "Comite" && validarInformacion("Reque") == true) {
+            var nFilas = tbDetalleComite.rows.length;
+            if (nFilas == 0) {
+                mostrarMensaje("Asignar Personas a la Comisión", "error");
+                return;
+            }
+            else {
+                validar = true;
+            }
         }
         else if (validarInformacion("Reque") == true) {
             validar = true;
@@ -543,10 +545,9 @@ function obtenerItemComision() {
 
     var nFilas = tbDetalleComite.rows.length;
     var fila;
-    dataItem = '';
-    if (nFilas = 0) {
+    var dataItem = '';
+    if (nFilas == 0) {
         mostrarMensaje("Asignar Personas a la Comisión", "error");
-        
     }
     for (var i = 0; i < nFilas; i++) {
         fila = tbDetalleComite.rows[i];
