@@ -9,7 +9,13 @@ var formulario = [];
 var idRegistro = "";
 var operacion = 0;
 var listaOficina_VG = [];
+var listaItemInventario = [];
 
+var botonesProceso = [
+    { "cabecera": "Editar", "clase": "fa fa-plus-circle btn btn-info btnCirculo", "id": "Proceso" },
+    { "cabecera": "Editar", "clase": "fa fa-pencil btn btn-info btnCirculo", "id": "Editar" },
+    { "cabecera": "Anular", "clase": "fa fa-minus-circle btn btn-danger btnCirculo", "id": "Eliminar" },
+];
 
 window.onload = function () {
     getConfigMn();
