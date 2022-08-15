@@ -192,6 +192,7 @@
     <Content Include="Riztie\Js\App\AppPresu.js" />
     <Content Include="Riztie\Js\App\AppSecurity.js" />
     <Content Include="Riztie\Js\App\General.js" />
+    <Content Include="Riztie\Js\App\AppLicitacion.js" />
     <Content Include="Riztie\Js\App\Login.js" />
     <Content Include="Riztie\Js\App\MontoLetras.js" />
     <Content Include="Riztie\Js\App\sha256.js" />
