@@ -48,6 +48,20 @@ function mostrarlistas(rpta) {
             crearCombo(listaCargo, "cboCargoPersona", "Seleccione");
             
         }
+        else if (vista == "Prosel") {
+            var listaSolicitud = listas[1].split("¬");
+            var listaTipoItem = listas[2].split("¬");
+            var listaProcedimiento = listas[3].split("¬");
+            var listaComite = listas[4].split("¬");
+            var listaEstado = listas[5].split("¬");
+
+            grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
+            crearCombo(listaSolicitud, "cboSolicitudCompra", "Ninguno");
+            crearCombo(listaTipoItem, "cboTipoItem", "Seleccione");
+            crearCombo(listaProcedimiento, "cboProcedimiento", "Seleccione");
+            crearCombo(listaComite, "cboComite", "Seleccione");
+            crearCombo(listaEstado, "cboEstado", "Seleccione");
+        }
 
         else {
             grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
