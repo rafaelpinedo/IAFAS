@@ -92,33 +92,62 @@
                                     </div>
                                     <div class="modal-body">
                                         <fieldset class="fieldset">
-                                            @*<div class="row">
-                                                    <div class="form-group col-sm-4">
-                                                        <input type="hidden" class="control-form Popup" id="txtIdRegistro">
-                                                        <label class="control-label">Entidad</label>
-                                                        <select id="cboEntidadPAC" class="control-form Popup"></select>
-                                                    </div>
-                                                    <div class="form-group col-sm-2">
-                                                        <label class="control-label">Año</label>
-                                                        <input type="number" autocomplete="off" class="control-form Popup" id="txtAnioPAC" value="@ViewBag.Anio">
-                                                    </div>
-                                                    <div class="form-group col-sm-2">
-                                                        <label class="control-label">Versión</label>
-                                                        <input type="number" class="control-form" id="txtVersion">
+                                            <div class="row">
+                                                <div class="form-group col-md-5">
+                                                    <button class="input-group-inverse btn btn-inverse" id="btnAgregar" data-toggle="tooltip" data-placement="bottom" title="Nuevo"><i class="fa fa-plus-circle fa-lg" aria-hidden="true"></i></button>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="form-group col-sm-12">
+                                                    <div class="table-responsive" style="height:315px;" id="divListaPAC">
                                                     </div>
                                                 </div>
-                                                <div class="row">
-                                                    <div class="form-group col-sm-4">
-                                                        <label class="control-label">Instrumento de aprobación</label>
-                                                        <input type="text" autocomplete="off" class="control-form Popup" id="txtAprobacion">
-                                                    </div>
-                                                    <div class="form-group col-sm-4">
-                                                        <label class="control-label">Estado</label>
-                                                        <select id="cboEstado" class="control-lectura Popup"></select>
+                                            </div>
+                                            <hr />
+                                            <div class="row">
+                                                <div class="form-group col-sm-12">
+                                                    <div class="table-responsive" style="height:315px;display:none" id="divListaDetalle">
+                                                        <table class="grilla bordered">
+                                                            <thead>
+                                                                <tr class="FilaHead">
+                                                                    <th rowspan="2" style="white-space:pre-wrap;width:50px;">Item</th>
+                                                                    <th rowspan="2" style="white-space:pre-wrap;width:500px;">Descripción Catalogo</th>
+                                                                    <th rowspan="2" style="white-space:pre-wrap;width:80px;">Unidad Medida</th>
+                                                                    <th colspan="2">Valor Estimado</th>
+                                                                    <th rowspan="2" style="white-space:pre-wrap;width:10px;"></th>
+                                                                </tr>
+                                                                <tr class="FilaHead">
+                                                                    <th style="white-space:pre-wrap; width:90px;">Cantidad</th>
+                                                                    <th style="white-space:pre-wrap; width:70px;">Monto</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody id="tbListaDetalleItemPac">
+                                                            </tbody>
+                                                            <tbody id="tbBodyListaDetalleItemPac">
+                                                            </tbody>
+                                                        </table>
                                                     </div>
                                                 </div>
-                                                <hr style="margin-top: 5px;margin-bottom: 10px;">*@
-
+                                            </div>
+                                        </fieldset>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button id="btnCancelarForm1" class="btnCancelarForm" title="Cancelar"><i class="fa fa-undo" aria-hidden="true"></i>&nbsp;Cancelar</button>
+                                        <button id="btnGuardarProceso" class="btnGuardarForm bg-customer" title="Guardar datos"><span class="fa fa-save"></span>&nbsp;Grabar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="modal custom-modal" tabindex="-1" role="dialog" aria-hidden="true" id="divPopupContainerForm3" style="overflow-y:auto;">
+                            <div class="modal-dialog modal-xl bg-personalizado" id="divPopupWindowForm3" style="margin-top:30px;">
+                                <div class="modal-content">
+                                    <div id="divBarraForm3" class="modal-header bg-personalizado" style="cursor:move">
+                                        <h5 class="modal-title" id="tituloModal">Registro Proceso</h5>
+                                    </div>
+                                    <div class="modal-body">
+                                        <fieldset class="fieldset">
                                             <div class="row">
                                                 <div class="form-group col-sm-4">
                                                     <input type="hidden" class="control-form RequeProc Popuproceso" id="txtIdPac">
@@ -209,10 +238,9 @@
                                                 <div class="form-group col-sm-1 text-center">
                                                     <label class="control-label">&nbsp;&nbsp;</label>
                                                     <button class="btn btn-out waves-effect waves-light btn-info btn-square" id="btnMostrarItems"><i class="fa fa-search-plus" aria-hidden="true"></i></button>
-
                                                 </div>
                                             </div>
-
+                                            <hr />
                                             <div class="row">
                                                 <div class="form-group col-sm-12">
                                                     <div class="table-responsive" style="height:315px;">
@@ -231,41 +259,23 @@
                                                                 </tr>
                                                             </thead>
                                                             <tbody id="tbDetalleItemPac">
-                                                                @*<tr>
-                                                                        <td style="white-space:pre-wrap;width:50px;" colspan="1">1</td>
-                                                                        <td style="white-space:pre-wrap;width:50px;" colspan="1">COMPUTADORA </td>
-                                                                        <td style="white-space:pre-wrap;width:50px;" colspan="1">UNIDAD</td>
-                                                                        <td style="white-space:pre-wrap;width:50px;" colspan="1">100</td>
-                                                                        <td style="white-space:pre-wrap;width:50px;" colspan="1">PEN</td>
-                                                                        <td style="white-space:pre-wrap;width:50px;" colspan="1">200</td>
-                                                                        <td style="white-space:pre-wrap;width:50px;" colspan="1">E</td>
-                                                                    </tr>*@
                                                             </tbody>
                                                             <tbody id="tbBodyDetalleItemPac">
-                                                                @*<tr>
-                                                                        <td colspan="3" class="text-right">TOTAL</td>
-                                                                        <td > <label>2500</label></td>
-                                                                        <td colspan="2"> <label>2800</label></td>
-                                                                    </tr>*@
                                                             </tbody>
                                                         </table>
                                                     </div>
                                                 </div>
                                             </div>
-
                                         </fieldset>
-
                                     </div>
                                     <div class="modal-footer">
-                                        <button id="btnCancelarForm1" class="btnCancelarForm" title="Cancelar"><i class="fa fa-undo" aria-hidden="true"></i>&nbsp;Cancelar</button>
+                                        <button id="btnCancelarForm3" class="btnCancelarForm" title="Cancelar"><i class="fa fa-undo" aria-hidden="true"></i>&nbsp;Cancelar</button>
                                         <button id="btnGuardarProceso" class="btnGuardarForm bg-customer" title="Guardar datos"><span class="fa fa-save"></span>&nbsp;Grabar</button>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-
-
                     <div class="form-row">
                         <div class="modal custom-modal" tabindex="-1" role="dialog" aria-hidden="true" id="divPopupContainerForm2" style="overflow-y:auto;">
                             <div class="modal-dialog modal-lg bg-personalizado" id="divPopupWindowForm2" style="margin-top:30px;">
@@ -308,6 +318,7 @@
                             </div>
                         </div>
                     </div>
+
 
                 </div>
             </div>

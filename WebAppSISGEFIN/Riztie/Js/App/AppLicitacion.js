@@ -9,6 +9,7 @@ var formulario = [];
 var idRegistro = "";
 var operacion = 0;
 var listaItemInventario = [];
+var listaUbigeo = [];
 
 var botonesProceso = [
     { "cabecera": "Editar", "clase": "fa fa-plus-circle btn btn-info btnCirculo", "id": "Proceso" },
@@ -351,10 +352,17 @@ function seleccionarBoton(idGrilla, idRegistro, idBoton) {
         if (idBoton == "Proceso") {
             var txtIdPac = document.getElementById("txtIdPac");
             if (txtIdPac != null) { txtIdPac.value = idRegistro }
-
-            Http.get("General/obtenerTabla/?tbl=" + controller + vista + idBoton + '&id=' + idRegistro, mostrarRegistro);
-
+            Http.get("General/listarTabla/?tbl=" + controller + vista + 'Detalle&data=' + idRegistro, mostrarDetalles);
         }
+    }
+}
+
+function mostrarDetalles(rpta) {
+
+    if (rpta) {
+        divPopupContainerForm1.style.display='block'
+        var lista = rpta.split('¬');
+        grillaItem = new GrillaScroll(lista, "divListaPAC", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
     }
 }
 
@@ -579,6 +587,16 @@ function listarSelect2Item(lista, idCombo) {
 }
 
 function configurarBotones() {
+
+    
+    var btnAgregar = document.getElementById("btnAgregar");
+    if (btnAgregar != null) btnAgregar.onclick = function () {
+        divPopupContainerForm3.style.display = 'block';
+        limpiarForm("Popup");
+
+     
+    }
+
     var btnNuevo = document.getElementById("btnNuevo");
     if (btnNuevo != null) btnNuevo.onclick = function () {
         divPopupContainer.style.display = 'block';
@@ -717,6 +735,11 @@ function configurarBotones() {
     var btnCancelarForm2 = document.getElementById("btnCancelarForm2");
     if (btnCancelarForm2 != null) btnCancelarForm2.onclick = function () {
         divPopupContainerForm2.style.display = 'none';
+    }
+
+    var btnCancelarForm3 = document.getElementById("btnCancelarForm3");
+    if (btnCancelarForm3 != null) btnCancelarForm3.onclick = function () {
+        divPopupContainerForm3.style.display = 'none';
     }
 
     if (vista == "PAC") {
@@ -893,6 +916,11 @@ function seleccionarFila(fila, id, prefijo) {
     if (window["fila" + prefijo] != null) window["fila" + prefijo].className = "FilaDatos";
     fila.className = "FilaSeleccionada";
     window["fila" + prefijo] = fila;
+
+    if (prefijo == "divListaPAC") {
+        Http.get("General/obtenerTabla/?tbl=" + controller + vista + 'Proceso&id=' + id, mostrarRegistro);
+        divListaDetalle.style.display = 'block';
+    }
 }
 
 
