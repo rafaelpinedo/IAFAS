@@ -185,7 +185,6 @@
     <Content Include="Riztie\Images\navbar-img-6.jpg" />
     <Content Include="Riztie\Images\NOFOTO.jpg" />
     <Content Include="Riztie\Images\user-bg.jpg" />
-    <Content Include="Riztie\Js\App\AppLicitacion.js" />
     <Content Include="Riztie\Js\App\AppRRHH.js" />
     <Content Include="Riztie\Js\App\AppInventario.js" />
     <Content Include="Riztie\Js\App\AppLogistica.js" />
@@ -193,7 +192,6 @@
     <Content Include="Riztie\Js\App\AppPresu.js" />
     <Content Include="Riztie\Js\App\AppSecurity.js" />
     <Content Include="Riztie\Js\App\General.js" />
-    <Content Include="Riztie\Js\App\AppLicitacion.js" />
     <Content Include="Riztie\Js\App\Login.js" />
     <Content Include="Riztie\Js\App\MontoLetras.js" />
     <Content Include="Riztie\Js\App\sha256.js" />
