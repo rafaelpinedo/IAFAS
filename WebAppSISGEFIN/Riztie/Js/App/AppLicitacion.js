@@ -10,6 +10,7 @@ var idRegistro = "";
 var operacion = 0;
 var listaOficina_VG = [];
 
+
 window.onload = function () {
     getConfigMn();
     vista = window.sessionStorage.getItem("Vista");
