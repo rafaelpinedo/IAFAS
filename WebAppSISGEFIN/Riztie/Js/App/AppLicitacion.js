@@ -350,10 +350,88 @@ function seleccionarBoton(idGrilla, idRegistro, idBoton) {
             eliminarRegistro(idRegistro)
         }
         if (idBoton == "Proceso") {
-            var txtIdPac = document.getElementById("txtIdPac");
-            if (txtIdPac != null) { txtIdPac.value = idRegistro }
+
+            let txtIdPac = document.getElementById("txtIdPac");
+            if (txtIdPac != null) {
+                txtIdPac.value = idRegistro;
+            }
             Http.get("General/listarTabla/?tbl=" + controller + vista + 'Detalle&data=' + idRegistro, mostrarDetalles);
         }
+    }
+
+    if (idGrilla == "divListaPAC") {
+        debugger;
+        if (idBoton == "Editar") {
+            let tituloModal = document.getElementById("tituloModal");
+            if (tituloModal != null) {
+                tituloModal.innerText = "Actualizar Registro";
+            }
+            var txtIdPac = document.getElementById("txtIdPac");
+            if (txtIdPac != null) { txtIdPac.value = idRegistro }
+            //editarRegistro(idRegistro);
+            Http.get("General/obtenerTabla/?tbl=" + controller + vista + 'Proceso' + '&id=' + idRegistro, mostrarRegistro);
+            return; 
+           // divPopupContainerForm3.style.display = 'block';
+        }
+        if (idBoton == "Eliminar") {
+
+            var data = "";
+            data = idRegistro;
+            var frm = new FormData();
+            frm.append("data", data);
+
+            Swal.fire({
+                title: '¿Desea eliminar el registro?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Si',
+                cancelButtonText: 'No'
+            }).then((result) => {
+                if (result.value) {
+                    Http.post("General/eliminar/?tbl=" + controller + vista + 'Proceso', mostrarDetallesProceso, frm);
+                }
+            })
+            //eliminarRegistro(idRegistro);
+        }
+    }
+}
+
+function mostrarDetallesProceso(rpta) {
+    var mensajeResul = [];
+    if (rpta) {
+        listas = rpta.split("¯")
+        lista = listas[0].split("¬");
+        mensajeResul = listas[1].split("|");
+        var tipo = mensajeResul[0];
+        var mensaje = mensajeResul[1];
+        divPopupContainerForm3.style.display = 'none';
+
+        grillaItem = new GrillaScroll(lista, "divListaPAC", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
+
+        if (tipo == 'A') {
+            Swal.fire({
+                title: 'Finalizado!',
+                text: mensaje,
+                icon: 'success',
+                showConfirmButton: true,
+                timer: 2000
+            })
+            alerta = 'success';
+        }
+        else {
+            Swal.fire({
+                title: 'Error!',
+                text: mensaje,
+                icon: 'error',
+                showConfirmButton: true,
+                timer: 2000
+            })
+        }
+    }
+    else {
+        mostrarMensaje("No se realizó el registro", "error")
     }
 }
 
@@ -393,6 +471,7 @@ function eliminarRegistro(id) {
 }
 
 function mostrarRegistro(rpta) {
+    debugger;
     if (rpta) {
         var campos = rpta.split("|");
         var controlesSelectSearch = document.getElementsByClassName("SelectSearch");
@@ -428,6 +507,7 @@ function mostrarRegistro(rpta) {
             return;
         }
         else if (vista == "PAC") {
+            debugger;
             var txtIdPacPr = document.getElementById("txtIdPac").value;
             if (txtIdPacPr != "0") {
 
@@ -473,7 +553,7 @@ function mostrarRegistro(rpta) {
                     }
                     //Detalle
                     tbDetalleItemPac.innerHTML = "";
-                    listasDetalleItemPacProcesos(listaDetalle);
+                    listasDetalPacProcesos(listaDetalle);
 
                 }
                 else {
@@ -488,8 +568,10 @@ function mostrarRegistro(rpta) {
                 }
 
                 listarItemInventario();
-                var divPopupContainerForm1 = document.getElementById("divPopupContainerForm1");
-                if (divPopupContainerForm1 != null) { divPopupContainerForm1.style.display = 'block'; };
+                divPopupContainerForm3.style.display = 'block';
+
+                //var divPopupContainerForm1 = document.getElementById("divPopupContainerForm1");
+                //if (divPopupContainerForm1 != null) { divPopupContainerForm1.style.display = 'block'; };
             }
             else {
 
@@ -589,14 +671,6 @@ function listarSelect2Item(lista, idCombo) {
 function configurarBotones() {
 
     
-    var btnAgregar = document.getElementById("btnAgregar");
-    if (btnAgregar != null) btnAgregar.onclick = function () {
-        divPopupContainerForm3.style.display = 'block';
-        limpiarForm("Popup");
-
-     
-    }
-
     var btnNuevo = document.getElementById("btnNuevo");
     if (btnNuevo != null) btnNuevo.onclick = function () {
         divPopupContainer.style.display = 'block';
@@ -620,12 +694,6 @@ function configurarBotones() {
         if (tbDetalleComite != null) {
             tbDetalleComite.innerHTML = "";
         }
-        //Pac Nuevo
-        let txtIdPac = document.getElementById("txtIdPac");
-        if (txtIdPac != null) {
-            txtIdPac.value = "0";
-        }
-
         //var txtFechaComision = document.getElementById("dttFechaCom");
         //if (txtFechaComision != null) txtFechaComision.value = txtFechaComision.getAttribute("data-fecha");
 
@@ -743,6 +811,27 @@ function configurarBotones() {
     }
 
     if (vista == "PAC") {
+        //Nuevo Pac
+        var btnAgregar = document.getElementById("btnAgregar");
+        if (btnAgregar != null) btnAgregar.onclick = function () {
+            //Pac Nuevo
+            divPopupContainerForm3.style.display = 'block';
+            let txtIdPac = document.getElementById("txtIdPac");
+            let IdPac = "";
+            if (txtIdPac != null) {
+                IdPac= txtIdPac.value;
+            }
+            limpiarForm("Popuproceso");
+
+            txtIdPac.value = IdPac;
+            //Default 
+            cboTipoCompra.value = "0";
+            txtEntidadConv.value="IAFAS"
+
+            tbDetalleItemPac.innerHTML = "";
+            tbBodyDetalleItemPac.innerHTML = "";
+        }
+
         var btnMostrarItems = document.getElementById("btnMostrarItems");
         if (btnMostrarItems != null) btnMostrarItems.onclick = function () {
             var idTipoItems = cboTipoItem.value;
@@ -823,8 +912,6 @@ function configurarBotones() {
         if (btnConsultarPac != null) btnConsultarPac.onclick = function () {
             getListarLicitaPac();
         }
-         
-        
     }
     
 }
@@ -842,6 +929,16 @@ function configurarCombos() {
     }
 
     if (vista == "PAC") {
+
+        var cboTipoCompra = document.getElementById("cboTipoCompra")
+        if (cboTipoCompra != null) cboTipoCompra.onchange = function () {
+            if (cboTipoCompra.value == "0") {
+                txtEntidadConv.value = "IAFAS"
+            }
+            else {
+                txtEntidadConv.value = ""
+            }
+        }
 
         var cboObjetoContratacion = document.getElementById("cboObjetoContratacion")
         if (cboObjetoContratacion != null) cboObjetoContratacion.onchange = function () {
@@ -918,7 +1015,7 @@ function seleccionarFila(fila, id, prefijo) {
     window["fila" + prefijo] = fila;
 
     if (prefijo == "divListaPAC") {
-        Http.get("General/obtenerTabla/?tbl=" + controller + vista + 'Proceso&id=' + id, mostrarRegistro);
+        Http.get("General/obtenerTabla/?tbl=" + controller + vista + 'Proceso&id=' + id, listasDetalleItemPacProcesos);
         divListaDetalle.style.display = 'block';
     }
 }
@@ -1023,7 +1120,7 @@ function validarPCAItems() {
             var dataItem = '';
             dataItem = item + '|' + codigoitemsCatalogo + '|' + codUnidadMedida + '|' + nombreitemsCatalogo + '|' +
                 nomUnidadMedida + '|' + cantidad + '|' + valorEstimado;
-            listasDetalleItemPacProcesos(dataItem);
+            listasDetalPacProcesos(dataItem);
 
             var divPopupContainerForm2 = document.getElementById("divPopupContainerForm2");
             if (divPopupContainerForm2 != null) { divPopupContainerForm2.style.display = 'none'; };
@@ -1052,22 +1149,78 @@ function grabarDatosPacProcesos() {
     data = obtenerDatosGrabar("Popuproceso");
     data += "¯" + dataItem;
     frm.append("data", data);
-
-    Http.post("General/guardar/?tbl=" + controller + vista + 'Proceso', mostrarGrabar, frm);
+    Http.post("General/guardar/?tbl=" + controller + vista + 'Proceso', mostrarDetallesProceso, frm);
 }
 
-function listasDetalleItemPacProcesos(listaDetalle) {
+function listasDetalleItemPacProcesos(rpta) {
+    //Detalle
+    console.log(rpta);
+
+    if (rpta) {
+
+        tbListDetalleItemPac.innerHTML = "";
+        tbBodyListDetalleItemPac.innerHTML = "";
+        var lista = rpta.split('¯')[1];
+        var listaDet = lista.split('¬');
+        var nRegistros = listaDet.length;
+        var camposDetalle = [];
+
+        var totalCantidad = 0;
+        var totalMonto = 0;
+        var sumaTotal = 0;
+
+        var cantoTotal = 0;
+        var filaDetalle = '';
+        for (var i = 0; i < nRegistros; i++) {
+            camposDetalle = listaDet[i].split("|");
+            cantoTotal = (camposDetalle[5] * 1) * ( camposDetalle[6] * 1);
+            filaDetalle += '<tr>';
+            filaDetalle += "<td style='white-space:pre-wrap;width:50px;display:none'>" + camposDetalle[1] + "</td> ";
+            filaDetalle += "<td style='white-space:pre-wrap;width:50px;display:none'>" + camposDetalle[2] + "</td> ";
+            filaDetalle += '<td style="white-space:pre-wrap;width:50px;" colspan="1">' + camposDetalle[0] + '</td>';
+            filaDetalle += '<td style="white-space:pre-wrap;width:50px;" colspan="1">' + camposDetalle[3] + '</td>';
+            filaDetalle += '<td style="white-space:pre-wrap;width:50px;" colspan="1">' + camposDetalle[4] + '</td>';
+            filaDetalle += '<td style="white-space:pre-wrap;width:50px;" colspan="1" class="text-center">' + formatoNumeroDecimal(camposDetalle[5]) + '</td>';
+            filaDetalle += '<td style="white-space:pre-wrap;width:50px;" colspan="1" class="text-center">' + formatoNumeroDecimal(camposDetalle[6]) + '</td>';
+            filaDetalle += '<td style="white-space:pre-wrap;width:50px;" colspan="1" class="text-center">' + formatoNumeroDecimal(cantoTotal) + '</td>';
+            filaDetalle += '</tr>';
+
+            totalCantidad = totalCantidad + (camposDetalle[5] * 1);
+            totalMonto = totalMonto + (camposDetalle[6] * 1);
+            sumaTotal = sumaTotal + (cantoTotal * 1);
+
+        }
+
+        tbListDetalleItemPac.insertAdjacentHTML("beforeend", filaDetalle);
+        var nFilas = tbListDetalleItemPac.rows.length;
+        
+
+        if ((nFilas * 1) > 1) {
+
+            var tbBodyResumen = "";
+            tbBodyResumen += '<tr>';
+            tbBodyResumen += '<td colspan="3" class="text-right">TOTAL</td>';
+            tbBodyResumen += '<td>' + formatoNumeroDecimal(totalCantidad) + '</td>';
+            tbBodyResumen += '<td>' + formatoNumeroDecimal(totalMonto) + '</td>';
+            tbBodyResumen += '<td colspan="1">' + formatoNumeroDecimal(sumaTotal) + '</td>';
+            tbBodyResumen += '</tr>';
+            tbBodyListDetalleItemPac.innerHTML = tbBodyResumen;
+        }
+    }
+}
+
+
+function listasDetalPacProcesos(listaDetalle) {
     //Detalle
     if (listaDetalle) {
         var listaDet = listaDetalle.split('¬');
         var nRegistros = listaDet.length;
         var camposDetalle = [];
-
+        var cantoTotal = 0;
         var filaDetalle = '';
         for (var i = 0; i < nRegistros; i++) {
             camposDetalle = listaDet[i].split("|");
-            //totalCantidad = totalCantidad + (camposDetalle[5] * 1);
-            //totalMonto = totalMonto + (camposDetalle[6]*1);
+            cantoTotal = (camposDetalle[5] * 1) * (camposDetalle[6] * 1);
             // item++;
             filaDetalle += '<tr>';
             filaDetalle += "<td style='white-space:pre-wrap;width:50px;display:none'>" + camposDetalle[1] + "</td> ";
@@ -1075,8 +1228,9 @@ function listasDetalleItemPacProcesos(listaDetalle) {
             filaDetalle += '<td style="white-space:pre-wrap;width:50px;" colspan="1">' + camposDetalle[0] + '</td>';
             filaDetalle += '<td style="white-space:pre-wrap;width:50px;" colspan="1">' + camposDetalle[3] + '</td>';
             filaDetalle += '<td style="white-space:pre-wrap;width:50px;" colspan="1">' + camposDetalle[4] + '</td>';
-            filaDetalle += '<td style="white-space:pre-wrap;width:50px;" colspan="1">' + formatoNumeroDecimal(camposDetalle[5]) + '</td>';
-            filaDetalle += '<td style="white-space:pre-wrap;width:50px;" colspan="1">' + formatoNumeroDecimal(camposDetalle[6]) + '</td>';
+            filaDetalle += '<td style="white-space:pre-wrap;width:50px;" colspan="1" class="text-center">' + formatoNumeroDecimal(camposDetalle[5]) + '</td>';
+            filaDetalle += '<td style="white-space:pre-wrap;width:50px;" colspan="1" class="text-center">' + formatoNumeroDecimal(camposDetalle[6]) + '</td>';
+            filaDetalle += '<td style="white-space:pre-wrap;width:50px;" colspan="1" class="text-center">' + formatoNumeroDecimal(cantoTotal) + '</td>';
             filaDetalle += "<td style='white-space:pre-wrap;width:10px;vertical-align:top;'>";
             filaDetalle += "<i class='fa fa-trash f-16 text-c-red' title='Quitar Item' onclick='retirarItemPCA(this,\"";
             filaDetalle += camposDetalle[0];
@@ -1093,22 +1247,26 @@ function listasDetalleItemPacProcesos(listaDetalle) {
 
             var totalCantidad = 0;
             var totalMonto = 0;
+            var sumaTotal = 0;
 
-            var fila, itemCant = 0, itemMonto = 0;
+            var fila, itemCant = 0, itemMonto = 0, itemTotal = 0;
             for (var i = 0; i < nFilas; i++) {
                 fila = tbDetalleItemPac.rows[i];
 
                 itemCant = (fila.cells[5].innerText).replace(/,/g, '');
                 itemMonto = (fila.cells[6].innerText).replace(/,/g, '');
+                itemTotal = (fila.cells[7].innerText).replace(/,/g, '');
                 totalCantidad = totalCantidad + (itemCant * 1);
                 totalMonto = totalMonto + (itemMonto * 1);
+                sumaTotal += (itemTotal * 1);
             }
 
             var tbBodyResumen = "";
             tbBodyResumen += '<tr>';
             tbBodyResumen += '<td colspan="3" class="text-right">TOTAL</td>';
             tbBodyResumen += '<td>' + formatoNumeroDecimal(totalCantidad) + '</td>';
-            tbBodyResumen += '<td colspan="2">' + formatoNumeroDecimal(totalMonto) + '</td>';
+            tbBodyResumen += '<td>' + formatoNumeroDecimal(totalMonto) + '</td>';
+            tbBodyResumen += '<td colspan="2">' + formatoNumeroDecimal(sumaTotal) + '</td>';
             tbBodyResumen += '</tr>';
             tbBodyDetalleItemPac.innerHTML = tbBodyResumen;
         }
@@ -1136,5 +1294,5 @@ function retirarItemPCA(col, id) {
     dataItem = dataItem.substr(0, dataItem.length - 1);
 
     tbDetalleItemPac.innerHTML = "";
-    listasDetalleItemPacProcesos(dataItem);
+    listasDetalPacProcesos(dataItem);
 }

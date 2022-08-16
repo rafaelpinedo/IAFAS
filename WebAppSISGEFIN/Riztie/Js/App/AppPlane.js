@@ -291,6 +291,15 @@ function adicionarItem(datos, secuencia) {
     if (!existe) {
         var nroMatriz = "";
         if (secuencia == undefined) {
+            var tituloModal = document.getElementById("tituloModal");
+            tituloModal = tituloModal.innerText.substr(0, 1);
+            tituloModal = tituloModal.toLowerCase() == "n" ? true : false;
+            if (tituloModal) {
+                var cboOficina = document.getElementById("cboOficina");
+                cboOficina.setAttribute("disabled","");
+                var cboTipoBien = document.getElementById("cboTipoBien");
+                cboTipoBien.setAttribute("disabled","");
+            }
             var matriz = [];
             nroMatriz = matrixDeta.length;
             matriz[nroMatriz] = new Array(21);
@@ -403,6 +412,12 @@ function retirarItem(col, id) {
     tbDetalleCN.removeChild(fila);
     var nFilas = 0;
     nFilas = tbDetalleCN.rows.length;
+    if (nFilas == 0) {
+        var cboOficina = document.getElementById("cboOficina");
+        if (cboOficina.hasAttribute("disabled")) cboOficina.removeAttribute("disabled");
+        var cboTipoBien = document.getElementById("cboTipoBien");
+        if (cboTipoBien.hasAttribute("disabled")) cboTipoBien.removeAttribute("disabled");
+    }
     spnNroItems.innerHTML = "Items: " + (nFilas);
     var divPopupContainer = document.getElementById("divPopupContainer");
     var esUpdate = (divPopupContainer.hasAttribute("nuevo")) ? true : false;
@@ -577,7 +592,19 @@ function grabarCN() {
     if (data != "") {
         var frm = new FormData();
         frm.append("data", data);
-        Http.post("General/guardar?tbl=" + controller + vista, mostrarGrabar, frm);
+        Swal.fire({
+            title: '¿Desea Grabar el registro?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Si',
+            cancelButtonText: 'No'
+        }).then((result) => {
+            if (result.value) {
+                Http.post("General/guardar?tbl=" + controller + vista, mostrarGrabar, frm);
+            }
+        })
     }
 
     //btnGuardar.innerHTML = "Guardando <i class='fa fa-circle-o-notch fa-spin' style='color:white'></i>";
@@ -740,8 +767,21 @@ function mostrarRegistro(rpta) {
 function eliminarRegistro(id) {
     var frm = new FormData();
     frm.append("data", id);
-    Http.post("General/eliminar?tbl=" + controller + vista, mostrarGrabar, frm);
+    Swal.fire({
+        title: '¿Desea eliminar el registro?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Si',
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.value) {
+            Http.post("General/eliminar?tbl=" + controller + vista, mostrarGrabar, frm);
+        }
+    })
 }
+
 function edicionRegistroRecuperado(rpta) {
     limpiarGrilla();
     crearCombo([], "cboOficina", null);
