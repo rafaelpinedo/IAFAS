@@ -374,7 +374,26 @@ function seleccionarBoton(idGrilla, idRegistro, idBoton) {
            // divPopupContainerForm3.style.display = 'block';
         }
         if (idBoton == "Eliminar") {
-            eliminarRegistro(idRegistro)
+
+            var data = "";
+            data = idRegistro;
+            var frm = new FormData();
+            frm.append("data", data);
+
+            Swal.fire({
+                title: '¿Desea eliminar el registro?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Si',
+                cancelButtonText: 'No'
+            }).then((result) => {
+                if (result.value) {
+                    Http.post("General/eliminar/?tbl=" + controller + vista + 'Proceso', mostrarDetallesProceso, frm);
+                }
+            })
+            //eliminarRegistro(idRegistro);
         }
     }
 }
@@ -1143,7 +1162,7 @@ function listasDetalleItemPacProcesos(rpta) {
         var filaDetalle = '';
         for (var i = 0; i < nRegistros; i++) {
             camposDetalle = listaDet[i].split("|");
-            cantoTotal = (camposDetalle[5] * 1) + ( camposDetalle[6] * 1);
+            cantoTotal = (camposDetalle[5] * 1) * ( camposDetalle[6] * 1);
             filaDetalle += '<tr>';
             filaDetalle += "<td style='white-space:pre-wrap;width:50px;display:none'>" + camposDetalle[1] + "</td> ";
             filaDetalle += "<td style='white-space:pre-wrap;width:50px;display:none'>" + camposDetalle[2] + "</td> ";
@@ -1172,7 +1191,7 @@ function listasDetalleItemPacProcesos(rpta) {
             tbBodyResumen += '<td colspan="3" class="text-right">TOTAL</td>';
             tbBodyResumen += '<td>' + formatoNumeroDecimal(totalCantidad) + '</td>';
             tbBodyResumen += '<td>' + formatoNumeroDecimal(totalMonto) + '</td>';
-            tbBodyResumen += '<td colspan="2">' + formatoNumeroDecimal(sumaTotal) + '</td>';
+            tbBodyResumen += '<td colspan="1">' + formatoNumeroDecimal(sumaTotal) + '</td>';
             tbBodyResumen += '</tr>';
             tbBodyListDetalleItemPac.innerHTML = tbBodyResumen;
         }
@@ -1190,7 +1209,7 @@ function listasDetalPacProcesos(listaDetalle) {
         var filaDetalle = '';
         for (var i = 0; i < nRegistros; i++) {
             camposDetalle = listaDet[i].split("|");
-            cantoTotal = (camposDetalle[5] * 1) + (camposDetalle[6] * 1);
+            cantoTotal = (camposDetalle[5] * 1) * (camposDetalle[6] * 1);
             // item++;
             filaDetalle += '<tr>';
             filaDetalle += "<td style='white-space:pre-wrap;width:50px;display:none'>" + camposDetalle[1] + "</td> ";
@@ -1228,7 +1247,7 @@ function listasDetalPacProcesos(listaDetalle) {
                 itemTotal = (fila.cells[7].innerText).replace(/,/g, '');
                 totalCantidad = totalCantidad + (itemCant * 1);
                 totalMonto = totalMonto + (itemMonto * 1);
-                sumaTotal = sumaTotal + (itemTotal * 1);
+                sumaTotal += (itemTotal * 1);
             }
 
             var tbBodyResumen = "";
@@ -1264,5 +1283,5 @@ function retirarItemPCA(col, id) {
     dataItem = dataItem.substr(0, dataItem.length - 1);
 
     tbDetalleItemPac.innerHTML = "";
-    listasDetalleItemPacProcesos(dataItem);
+    listasDetalPacProcesos(dataItem);
 }
