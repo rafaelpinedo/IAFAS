@@ -3,8 +3,6 @@
     ViewBag.Title = "PAC";
     Layout = "~/Views/_LayoutPage.cshtml";
 }
-
-
 <style>
     .tbFilas {
         background-color: #02B29D;
@@ -88,7 +86,7 @@
                             <div class="modal-dialog modal-xl bg-personalizado" id="divPopupWindowForm1" style="margin-top:30px;">
                                 <div class="modal-content">
                                     <div id="divBarraForm1" class="modal-header bg-personalizado" style="cursor:move">
-                                        <h5 class="modal-title" id="tituloModal">Registro Proceso</h5>
+                                        <h5 class="modal-title" id="tituloModal">Listado de  Procesos - PAC</h5>
                                     </div>
                                     <div class="modal-body">
                                         <fieldset class="fieldset">
@@ -113,17 +111,18 @@
                                                                     <th rowspan="2" style="white-space:pre-wrap;width:50px;">Item</th>
                                                                     <th rowspan="2" style="white-space:pre-wrap;width:500px;">Descripción Catalogo</th>
                                                                     <th rowspan="2" style="white-space:pre-wrap;width:80px;">Unidad Medida</th>
-                                                                    <th colspan="2">Valor Estimado</th>
+                                                                    <th colspan="3">Valor Estimado</th>
                                                                     <th rowspan="2" style="white-space:pre-wrap;width:10px;"></th>
                                                                 </tr>
                                                                 <tr class="FilaHead">
                                                                     <th style="white-space:pre-wrap; width:90px;">Cantidad</th>
-                                                                    <th style="white-space:pre-wrap; width:70px;">Monto</th>
+                                                                    <th style="white-space:pre-wrap; width:70px;">Sub Total</th>
+                                                                    <th style="white-space:pre-wrap; width:70px;">Total</th>
                                                                 </tr>
                                                             </thead>
-                                                            <tbody id="tbListaDetalleItemPac">
+                                                            <tbody id="tbListDetalleItemPac">
                                                             </tbody>
-                                                            <tbody id="tbBodyListaDetalleItemPac">
+                                                            <tbody id="tbBodyListDetalleItemPac" class="FilaHead">
                                                             </tbody>
                                                         </table>
                                                     </div>
@@ -133,14 +132,14 @@
                                     </div>
                                     <div class="modal-footer">
                                         <button id="btnCancelarForm1" class="btnCancelarForm" title="Cancelar"><i class="fa fa-undo" aria-hidden="true"></i>&nbsp;Cancelar</button>
-                                        <button id="btnGuardarProceso" class="btnGuardarForm bg-customer" title="Guardar datos"><span class="fa fa-save"></span>&nbsp;Grabar</button>
+                                        @*<button id="btnGuardarProceso" class="btnGuardarForm bg-customer" title="Guardar datos"><span class="fa fa-save"></span>&nbsp;Grabar</button>*@
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="form-row">
-                        <div class="modal custom-modal" tabindex="-1" role="dialog" aria-hidden="true" id="divPopupContainerForm3" style="overflow-y:auto;">
+                        <div class="modal custom-modal" tabindex="-1" role="dialog" aria-hidden="true" id="divPopupContainerForm3" style="overflow-y: auto; background: none;">
                             <div class="modal-dialog modal-xl bg-personalizado" id="divPopupWindowForm3" style="margin-top:30px;">
                                 <div class="modal-content">
                                     <div id="divBarraForm3" class="modal-header bg-personalizado" style="cursor:move">
@@ -250,17 +249,18 @@
                                                                     <th rowspan="2" style="white-space:pre-wrap;width:50px;">Item</th>
                                                                     <th rowspan="2" style="white-space:pre-wrap;width:500px;">Descripción Catalogo</th>
                                                                     <th rowspan="2" style="white-space:pre-wrap;width:80px;">Unidad Medida</th>
-                                                                    <th colspan="2">Valor Estimado</th>
+                                                                    <th colspan="3">Valor Estimado</th>
                                                                     <th rowspan="2" style="white-space:pre-wrap;width:10px;"></th>
                                                                 </tr>
                                                                 <tr class="FilaHead">
                                                                     <th style="white-space:pre-wrap; width:90px;">Cantidad</th>
-                                                                    <th style="white-space:pre-wrap; width:70px;">Monto</th>
+                                                                    <th style="white-space:pre-wrap; width:70px;">Sub Total</th>
+                                                                    <th style="white-space:pre-wrap; width:70px;">Total</th>
                                                                 </tr>
                                                             </thead>
                                                             <tbody id="tbDetalleItemPac">
                                                             </tbody>
-                                                            <tbody id="tbBodyDetalleItemPac">
+                                                            <tbody id="tbBodyDetalleItemPac" class="FilaHead">
                                                             </tbody>
                                                         </table>
                                                     </div>
