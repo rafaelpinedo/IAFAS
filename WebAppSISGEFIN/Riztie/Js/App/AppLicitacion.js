@@ -923,8 +923,6 @@ function seleccionarFila(fila, id, prefijo) {
     }
 }
 
-
-
 function listasDetalleComite(listaDetalle) {
     //Detalle
     if (listaDetalle) {
