@@ -824,6 +824,9 @@ function configurarBotones() {
             limpiarForm("Popuproceso");
 
             txtIdPac.value = IdPac;
+            //Default 
+            cboTipoCompra.value = "0";
+            txtEntidadConv.value="IAFAS"
 
             tbDetalleItemPac.innerHTML = "";
             tbBodyDetalleItemPac.innerHTML = "";
@@ -926,6 +929,16 @@ function configurarCombos() {
     }
 
     if (vista == "PAC") {
+
+        var cboTipoCompra = document.getElementById("cboTipoCompra")
+        if (cboTipoCompra != null) cboTipoCompra.onchange = function () {
+            if (cboTipoCompra.value == "0") {
+                txtEntidadConv.value = "IAFAS"
+            }
+            else {
+                txtEntidadConv.value = ""
+            }
+        }
 
         var cboObjetoContratacion = document.getElementById("cboObjetoContratacion")
         if (cboObjetoContratacion != null) cboObjetoContratacion.onchange = function () {
