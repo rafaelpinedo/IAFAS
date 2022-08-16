@@ -282,6 +282,11 @@ if (divPopupContainer != null) moverVentana("divPopupContainer", "divPopupWindow
 var divPopupContainerForm1 = document.getElementById("divPopupContainerForm1");
 if (divPopupContainerForm1 != null) moverVentana("divPopupContainerForm1", "divPopupWindowForm1", "divBarraForm1");
 
+var divPopupContainerForm2 = document.getElementById("divPopupContainerForm2");
+if (divPopupContainerForm2 != null) moverVentana("divPopupContainerForm2", "divPopupWindowForm2", "divBarraForm2");
+
+var divPopupContainerForm3 = document.getElementById("divPopupContainerForm3");
+if (divPopupContainerForm3 != null) moverVentana("divPopupContainerForm3", "divPopupWindowForm3", "divBarraForm3");
 
 function formatoNumeroDecimal(num) {
     if (!num || num == 'NaN') return '-';
