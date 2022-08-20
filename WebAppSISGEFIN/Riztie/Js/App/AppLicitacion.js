@@ -12,6 +12,7 @@ var operacion = 0;
 var listaItemInventario = [];
 var listaUbigeo = [];
 var listaComiteItem = [];
+var listaEstadoBuenaProItem = [];
 
 var botonesProceso = [
     { "cabecera": "Editar", "clase": "fa fa-plus-circle btn btn-info btnCirculo", "id": "Proceso" },
@@ -52,13 +53,13 @@ function mostrarlistas(rpta) {
             var listaPersonal = listas[1].split("¬");
             var listaEstado = listas[2].split("¬");
             var listaCargo = listas[3].split("¬");
-             
+
             grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
 
             listarSelect2Item(listaPersonal, "cboPersona");
             crearCombo(listaEstado, "cboEstado", "Seleccione");
             crearCombo(listaCargo, "cboCargoPersona", "Seleccione");
-            
+
         }
         else if (vista == "PAC") {
             var listaEntidad = listas[1].split("¬");
@@ -110,6 +111,8 @@ function mostrarlistas(rpta) {
             var listaComite = listas[4].split("¬");
             var listaEstado = listas[5].split("¬");
             var listaProveedor = listas[6].split("¬");
+            //var listaEstadoBuenaPro = listas[7].split("¬");
+            listaEstadoBuenaProItem = listas[7].split("¬");
 
             grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
             crearCombo(listaSolicitud, "cboSolicitudCompra", "Ninguno");
@@ -119,6 +122,8 @@ function mostrarlistas(rpta) {
             crearCombo(listaEstado, "cboEstado", "Seleccione");
             listarSelect2Item(listaProveedor, "cboProveedorProsel");
 
+            //listarEstadoBuenaPro(listaEstadoBuenaPro, "estadobuenapro");
+            //console.log(listaEstadoBuenaPro);
             document.getElementById("tabProsel").style.display = "block";
         }
 
@@ -127,6 +132,7 @@ function mostrarlistas(rpta) {
         }
     }
 }
+
 
 function listarSelect2Item(lista, idCombo) {
     var nRegistros = lista.length;
@@ -371,7 +377,7 @@ function seleccionarBoton(idGrilla, idRegistro, idBoton) {
                     txtIdPac.value = "0";
                 }
             }
-           
+
             editarRegistro(idRegistro);
         }
         if (idBoton == "Eliminar") {
@@ -397,8 +403,8 @@ function seleccionarBoton(idGrilla, idRegistro, idBoton) {
             if (txtIdPac != null) { txtIdPac.value = idRegistro }
             //editarRegistro(idRegistro);
             Http.get("General/obtenerTabla/?tbl=" + controller + vista + 'Proceso' + '&id=' + idRegistro, mostrarRegistro);
-            return; 
-           // divPopupContainerForm3.style.display = 'block';
+            return;
+            // divPopupContainerForm3.style.display = 'block';
         }
         if (idBoton == "Eliminar") {
 
@@ -465,7 +471,7 @@ function mostrarDetallesProceso(rpta) {
 function mostrarDetalles(rpta) {
 
     if (rpta) {
-        divPopupContainerForm1.style.display='block'
+        divPopupContainerForm1.style.display = 'block'
         var lista = rpta.split('¬');
         grillaItem = new GrillaScroll(lista, "divListaPAC", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
     }
@@ -497,7 +503,7 @@ function eliminarRegistro(id) {
     })
 }
 
-function mostrarRegistro(rpta) { 
+function mostrarRegistro(rpta) {
     if (rpta) {
         var campos = rpta.split("|");
         var controlesSelectSearch = document.getElementsByClassName("SelectSearch");
@@ -532,7 +538,7 @@ function mostrarRegistro(rpta) {
             if (divPopupContainer != null) { divPopupContainer.style.display = 'block'; };
             return;
         }
-        else if (vista == "PAC") { 
+        else if (vista == "PAC") {
             var txtIdPacPr = document.getElementById("txtIdPac").value;
             if (txtIdPacPr != "0") {
 
@@ -594,9 +600,6 @@ function mostrarRegistro(rpta) {
 
                 listarItemInventario();
                 divPopupContainerForm3.style.display = 'block';
-
-                //var divPopupContainerForm1 = document.getElementById("divPopupContainerForm1");
-                //if (divPopupContainerForm1 != null) { divPopupContainerForm1.style.display = 'block'; };
             }
             else {
 
@@ -612,11 +615,9 @@ function mostrarRegistro(rpta) {
             }
 
         }
-        else if (vista == "Prosel") { 
+        else if (vista == "Prosel") {
             var dataH = rpta.split('¯')[0];
-            var dataCabeCal = rpta.split('¯')[1];
-            var dataDetallRegistro = rpta.split('¯')[3];
-            var dataDetallEvaTecnica = rpta.split('¯')[4];
+           
 
             campos = dataH.split('|');
 
@@ -637,28 +638,42 @@ function mostrarRegistro(rpta) {
             txtEvalTecnica.value = campos[11];
             txtEvalEconomica.value = campos[12];
             txtEvalMinTecnica.value = campos[13];
-            //Calendario
+            //datos del Tab
+            var dataCalendario = rpta.split('¯')[1];
+            var dataCabeCal = dataCalendario.split('¥')[0];
+            //var dataCaleDet = dataCalendario.split('¥')[0];
+
+            var dataDetallEvaTecnica = rpta.split('¯')[2];
+            var dataDetallRegistro = rpta.split('¯')[3];
+            
             var camposHCal = "";
-            tbDetalleProcesoRegistro.innerHTML = "";
-            if (dataCabeCal != "0") {
+
+            tabProsel.style.display = "block";
+            limpiarTablesTabProcesoSeleccion();
+            if (dataCabeCal != "") {
                 camposHCal = dataCabeCal.split('|');
                 txtIdCal.value = camposHCal[0];
                 txtNumeroDocCal.value = camposHCal[1];
                 txtFechaEmisionCal.value = camposHCal[2];
                 txtGlosaCal.value = camposHCal[3];
-                listarCalendarioProsel(rpta, 'S');
+                listarCalendarioProsel(dataCalendario, 'S');
 
                 tabRegistroListar(dataDetallRegistro);
                 tabEvaTecnicaProveedorListar(dataDetallRegistro);
+                tabEvaEconomicaProveedorListar(dataDetallRegistro);
+                //buena  pro
+                listarTabBuenaPro(dataDetallRegistro);
             }
             else {
-                listarCalendarioProsel(rpta,'N');
+                limpiarForm("PopupCal");
+                listarCalendarioProsel(dataCalendario, 'N');
             }
-
+          
+            console.log(1,dataDetallEvaTecnica);
             tabEvaluacionTecnicaListar(dataDetallEvaTecnica);
-            
+
             var divPopupContainer = document.getElementById("divPopupContainer");
-            if (divPopupContainer != null) { divPopupContainer.style.display = 'block'; }; 
+            if (divPopupContainer != null) { divPopupContainer.style.display = 'block'; };
             return;
         }
         else {
@@ -718,7 +733,7 @@ function mostrarRegistro(rpta) {
 
 
 
-       
+
     }
 }
 
@@ -744,7 +759,7 @@ function listarSelect2Item(lista, idCombo) {
 
 function configurarBotones() {
 
-    
+
     var btnNuevo = document.getElementById("btnNuevo");
     if (btnNuevo != null) btnNuevo.onclick = function () {
         divPopupContainer.style.display = 'block';
@@ -792,6 +807,22 @@ function configurarBotones() {
                 validar = true;
             }
         }
+        else if (vista == "Prosel" && validarInformacion("Reque") == true) {
+            var tecnica = txtEvalTecnica.value;
+            var economica = txtEvalEconomica.value;
+
+            var result = (tecnica * 1) + (economica * 1);
+            console.log(result);
+
+            if (parseFloat(result) != 100.0) {
+                mostrarMensaje("Coeficiente Eval. Técnica - Económica ", "error");
+                txtEvalTecnica.focus();
+                return;
+            }
+            else {
+                validar = true;
+            }
+        }
         else if (validarInformacion("Reque") == true) {
             validar = true;
         }
@@ -809,7 +840,7 @@ function configurarBotones() {
                     //if (vista == "PedidoCompra") {
                     //    grabarPedido();
                     //}
-                     
+
                     grabarDatos();
 
                     Swal.fire({
@@ -845,20 +876,20 @@ function configurarBotones() {
             var nombrePersonal = personal.options[personal.selectedIndex].text;
             var codCargo = cargo.value;
             var nombreCargo = cargo.options[cargo.selectedIndex].text;
-            
+
             var item = 0;
-            let mensage = ''; 
+            let mensage = '';
             var nFilas = tbDetalleComite.rows.length;
             item = nFilas + 1;
             var existe = false;
             for (var i = 0; i < nFilas; i++) {
                 if (tbDetalleComite.rows[i].cells[0].innerHTML == codPersonal) {
                     existe = true;
-                    mensage = "Personal ya se encuentra" ;
+                    mensage = "Personal ya se encuentra";
                     break;
                 }
                 if (tbDetalleComite.rows[i].cells[1].innerHTML == codCargo) {
-                    mensage = "Cargo ya se encuentra" ;
+                    mensage = "Cargo ya se encuentra";
                     existe = true;
                     break;
                 }
@@ -898,14 +929,14 @@ function configurarBotones() {
             let txtIdPac = document.getElementById("txtIdPac");
             let IdPac = "";
             if (txtIdPac != null) {
-                IdPac= txtIdPac.value;
+                IdPac = txtIdPac.value;
             }
             limpiarForm("Popuproceso");
 
             txtIdPac.value = IdPac;
             //Default 
             cboTipoCompra.value = "0";
-            txtEntidadConv.value="IAFAS"
+            txtEntidadConv.value = "IAFAS"
 
             tbDetalleItemPac.innerHTML = "";
             tbBodyDetalleItemPac.innerHTML = "";
@@ -992,11 +1023,11 @@ function configurarBotones() {
             getListarLicitaPac();
         }
     }
-    
+
 }
 
 function configurarCombos() {
-   
+
     var cboDepartamento = document.getElementById("cboDepartamento")
     if (cboDepartamento != null) cboDepartamento.onchange = function () {
         listarProvincias();
@@ -1253,7 +1284,7 @@ function listasDetalleItemPacProcesos(rpta) {
         var filaDetalle = '';
         for (var i = 0; i < nRegistros; i++) {
             camposDetalle = listaDet[i].split("|");
-            cantoTotal = (camposDetalle[5] * 1) * ( camposDetalle[6] * 1);
+            cantoTotal = (camposDetalle[5] * 1) * (camposDetalle[6] * 1);
             filaDetalle += '<tr>';
             filaDetalle += "<td style='white-space:pre-wrap;width:50px;display:none'>" + camposDetalle[1] + "</td> ";
             filaDetalle += "<td style='white-space:pre-wrap;width:50px;display:none'>" + camposDetalle[2] + "</td> ";
@@ -1273,7 +1304,7 @@ function listasDetalleItemPacProcesos(rpta) {
 
         tbListDetalleItemPac.insertAdjacentHTML("beforeend", filaDetalle);
         var nFilas = tbListDetalleItemPac.rows.length;
-        
+
 
         if ((nFilas * 1) > 1) {
 
@@ -1377,12 +1408,12 @@ function retirarItemPCA(col, id) {
     listasDetalPacProcesos(dataItem);
 }
 
-function listarCalendarioProsel(rpta,tipo) {
+function listarCalendarioProsel(rpta, tipo) {
 
     if (rpta) {
 
         tbDetalleProcesoCalen.innerHTML = "";
-        var listaDetHe = rpta.split('¯')[2];
+        var listaDetHe = rpta.split('¥')[1];
         var listaDet = listaDetHe.split('¬');
         var nRegistros = listaDet.length;
         var camposDetalle = [];
@@ -1390,24 +1421,24 @@ function listarCalendarioProsel(rpta,tipo) {
         var filaDetalle = '';
         for (var i = 0; i < nRegistros; i++) {
             camposDetalle = listaDet[i].split("|");
-          
+
             filaDetalle += '<tr>';
             filaDetalle += '<td class="text-center">' + camposDetalle[0] + '</td>';
             filaDetalle += '<td style="display:none">' + camposDetalle[1] + '</td>';
             filaDetalle += '<td>' + camposDetalle[2] + '</td>';
 
             if (tipo == "S") {
-                filaDetalle += '<td><input type="date" id="txtFechaIniCalendario" class="control-form RequeCalendar" value="' + camposDetalle[3]+'"/></td>';
-                filaDetalle += '<td><input type="date" id="txtFechaFinCalendario" class="control-form RequeCalendar" value="' + camposDetalle[4]+'"/></td>';
+                filaDetalle += '<td><input type="date" id="txtFechaIniCalendario" class="control-form RequeCalendar" value="' + camposDetalle[3] + '"/></td>';
+                filaDetalle += '<td><input type="date" id="txtFechaFinCalendario" class="control-form RequeCalendar" value="' + camposDetalle[4] + '"/></td>';
             }
             else {
                 filaDetalle += '<td><input type="date" id="txtFechaIniCalendario" class="control-form RequeCalendar"/></td>';
                 filaDetalle += '<td><input type="date" id="txtFechaFinCalendario" class="control-form RequeCalendar"/></td>';
             }
             filaDetalle += '</tr>';
-        } 
+        }
         tbDetalleProcesoCalen.insertAdjacentHTML("beforeend", filaDetalle);
-       
+
     }
 }
 
@@ -1419,7 +1450,7 @@ function guardarCalendario() {
     }
     if (existe == true) {
         var dataHeadCal = txtIdCal.value + '|' + txtNumeroDocCal.value + '|' + txtFechaEmisionCal.value + '|' +
-                        txtGlosaCal.value + '|' + txtIdRegistro.value;
+            txtGlosaCal.value + '|' + txtIdRegistro.value;
         var dataItem = "";
         var nFilas = tbDetalleProcesoCalen.rows.length;
         var fila;
@@ -1433,7 +1464,7 @@ function guardarCalendario() {
         dataItem = dataItem.substr(0, dataItem.length - 1);
         var frm = new FormData();
         dataHeadCal += "¯" + dataItem;
-        frm.append("data", dataHeadCal); 
+        frm.append("data", dataHeadCal);
         //mostrarMensaje("Item ya se encuentra agregado", "warning");
         Http.post("General/guardar/?tbl=" + controller + vista + 'Calendario', mostarResultadoItemProSel, frm);
     }
@@ -1449,33 +1480,49 @@ function mostarResultadoItemProSel(rpta) {
         }
         else {
             tipo = "error";
-        } 
+        }
+        var data = "";
+        data = rpta.split("¯")[1];
+        console.log(data);
+        tabEvaluacionTecnicaListar(data);
+
         var tabActual = document.getElementById(tabid);
         var tabSiguiente = "";
+        
         switch (tabid) {
             case "tabCalendario":
                 txtIdCal.value = id;
+                // $('.nav-tabs a[href="#tabTecEconomica"]').tab('show');
                 tabActual.classList.remove("active");
-                tabSiguiente = document.getElementById("tabParticipante");
+                tabSiguiente = document.getElementById("tabTecEconomica");
                 tabSiguiente.classList.add("active");
-                tabSiguiente.click();
+                tabSiguiente.classList.add("show");
+                //tabSiguiente.click();
+
+                break;
+            case "tabTecEconomica":
+                // txtIdCal.value = id;
+                console.log(rpta);
+                
+                //ACTUALIZAR
+                console.log(id);
                 break;
             case "tabParticipante":
                 // txtIdCal.value = id;
                 console.log(id);
-                break; 
+                break;
             default:
                 txtIdCal.value = 0;
                 break;
         }
         mostrarMensaje(mensage, tipo);
-        
-       //warning -success -danger - info -error
+
+        //warning -success -danger - info -error
     }
     else {
         mostrarMensaje("Datos no Guardados", "error");
     }
-    
+
 }
 
 function vizualizarComite() {
@@ -1512,14 +1559,29 @@ function vizualizarComite() {
                 tbDetalleVerComision.insertAdjacentHTML("beforeend", filaDetalle);
             }
         }
-        
+
         var divPopupContainerForm1 = document.getElementById("divPopupContainerForm1");
         if (divPopupContainerForm1 != null) { divPopupContainerForm1.style.display = 'block'; };
     }
 }
 
-function puntajeEconomica(data) {
-    console.log(data);
+function puntajeEconomica() {
+    var tec = txtEvalTecnica.value;
+    var econo = txtEvalEconomica.value;
+    var result = 0;
+    if (tec == "") {
+        mostrarMensaje("Ingresar Coeficiente Eval. Técnica", "error");
+        txtEvalTecnica.focus();
+    }
+    else if (econo != "") {
+        result = (tec * 1) + (econo * 1);
+        if (result > 100) {
+            mostrarMensaje("Excede del 100 %.", "warning");
+        }
+        else if (result == 100) {
+            mostrarMensaje("Objetivo de 100 %.", "success");
+        }
+    }
 }
 
 function tabAgregarRegistro() {
@@ -1547,8 +1609,8 @@ function tabAgregarRegistro() {
             var data = nFilas + '|' + proveedor.value + '|' + textoProveedor;
             tabRegistroListar(data);
         }
-       
-    } 
+
+    }
 }
 
 
@@ -1592,7 +1654,7 @@ function guardarTabRegistro() {
         var fila;
         for (var i = 0; i < nFilas; i++) {
             fila = tbDetalleProcesoRegistro.rows[i];
-            dataItem += idProcesos+'|'+ fila.cells[0].innerHTML;
+            dataItem += idProcesos + '|' + fila.cells[0].innerHTML;
             dataItem += "¬";
         }
         dataItem = dataItem.substr(0, dataItem.length - 1);
@@ -1629,57 +1691,50 @@ function tabEvaluacionTecnicaListar(rpta) {
         var listaDet = rpta.split('¬');
         var nRegistros = listaDet.length;
         var camposDetalle = [];
-
         var filaDetalle = '', tipoCondicion;
-        var factorTecnico = "";
+
         for (var i = 0; i < nRegistros; i++) {
             camposDetalle = listaDet[i].split("|");
-            tipoCondicion = parseInt(camposDetalle[3]);
-
+            tipoCondicion = parseInt(camposDetalle[4]);
+           
             filaDetalle += '<tr>';
             filaDetalle += "<td style='white-space:pre-wrap;width:50px;display:none'>" + camposDetalle[0] + "</td> ";
             filaDetalle += '<td style="white-space:pre-wrap;width:50px;display:none">' + camposDetalle[1] + '</td>';
             filaDetalle += '<td style="white-space:pre-wrap;width:50px;display:none">' + camposDetalle[2] + '</td>';
             filaDetalle += '<td style="white-space:pre-wrap;width:50px;display:none">' + camposDetalle[3] + '</td>';
-          
+
             if (tipoCondicion == 99 || tipoCondicion == 98) {
-                factorTecnico += camposDetalle[1] + '|' + camposDetalle[2] + '¬';
                 filaDetalle += '<td style="white-space:pre-wrap;width:50px;" colspan="1">' + camposDetalle[1] + '</td>';
-                filaDetalle += '<td style="white-space:pre-wrap;width:50px;" colspan="1" class="text-center">' + camposDetalle[2] + '</td>';
-                filaDetalle += '<td style="white-space:pre-wrap;width:50px;" colspan="1"><input type="number" step="any" style="display:none" value="' + camposDetalle[4] +'"/></td>';
+                filaDetalle += '<td style="white-space:pre-wrap;width:50px;" colspan="1" class="text-center">' + camposDetalle[5] + '</td>';
+
+                if (tipoCondicion == 98) {
+                    filaDetalle += '<td style="white-space:pre-wrap;width:50px;" colspan="1"><input type="number" step="any" id="tecnicaEva" style="text-align:right;width:100%;border:1px solid #f7200e;height:25px;padding:0px" value="' + camposDetalle[6] + '"/ disabled></td>';
+                }
+                else {
+                    filaDetalle += '<td style="white-space:pre-wrap;width:50px;" colspan="1"><input type="number" step="any" id="economicaEva" style="text-align:right;width:100%;border:1px solid #f7200e;height:25px;padding:0px" value="' + camposDetalle[6] + '"/ disabled></td>';
+                }
                 filaDetalle += '<td style="white-space:pre-wrap;width:50px;" colspan="1">' + '' + '</td>';
             }
             else {
                 filaDetalle += '<td style="white-space:pre-wrap;width:50px;" colspan="1">' + camposDetalle[1] + '</td>';
-                filaDetalle += '<td style="white-space:pre-wrap;width:50px;" colspan="1">' + camposDetalle[2] + '</td>';
-                filaDetalle += '<td style="white-space:pre-wrap;width:50px;" colspan="1"><input type="number" step="any" style="text-align:right;width:100%;border:1px solid blue;height:25px;padding:0px" value="'+ camposDetalle[4] +'"/></td>';
+                filaDetalle += '<td style="white-space:pre-wrap;width:50px;" colspan="1">' + camposDetalle[5] + '</td>';
+                if (tipoCondicion == 1) {
+                    filaDetalle += '<td style="white-space:pre-wrap;width:50px;" colspan="1"><input type="number" id="tecEva" step="any" style="text-align:right;width:100%;border:1px solid blue;height:25px;padding:0px" value="' + camposDetalle[6] + '" onkeyup="importeData(this)"/></td>';
+                }
+                else {
+                    filaDetalle += '<td style="white-space:pre-wrap;width:50px;" colspan="1"><input type="number" id="ecoEva" step="any" style="text-align:right;width:100%;border:1px solid blue;height:25px;padding:0px" value="' + camposDetalle[6] + '" onkeyup="importeData(this)"/></td>';
+                }
+
                 filaDetalle += "<td style='white-space:pre-wrap;width:10px;'>";
                 filaDetalle += "<i class='fa fa-trash f-16 text-c-red' title='Quitar Item' onclick='tabEvalTecnicaEconomicaItem(this,\"";
-                filaDetalle += camposDetalle[0];
+                filaDetalle += camposDetalle[1];
                 filaDetalle += "\");'></i>";
                 filaDetalle += "</td>";
             }
             filaDetalle += '</tr>';
         }
-
-        factorTecnico = factorTecnico.substr(0, factorTecnico.length - 1);
+      
         tbDetalleEvaluacionTecnica.insertAdjacentHTML("beforeend", filaDetalle);
-
-        var camposDetaResult = [];
-        var listaResult = factorTecnico.split('¬');
-        var nRegistros = listaResult.length;
-        tbDetalleEvaluacionTecResult.innerHTML = "";
-        var filaDetResul = "";
-        for (var ik = 0; ik < nRegistros; ik++) {
-            camposDetaResult = listaResult[ik].split("|");
-            filaDetResul += '<tr>';
-            filaDetResul += '<td style="white-space:pre-wrap;width:50px; display:none;" >' + camposDetaResult[0] + '</td>';
-            filaDetResul += '<td style="white-space:pre-wrap;width:50px;" colspan="2">' + camposDetaResult[1] + '</td>';
-            filaDetResul += '<td style="white-space:pre-wrap;width:50px;" colspan="1">20</td>';
-            filaDetResul += '<td style="white-space:pre-wrap;width:50px;" colspan="1"></td>';
-            filaDetResul += '</tr>';
-        }
-        tbDetalleEvaluacionTecResult.insertAdjacentHTML("beforeend", filaDetResul);
     }
 }
 
@@ -1687,31 +1742,15 @@ function tabEvalTecnicaEconomicaItem(col) {
 
     var filaRemove = col.parentNode.parentNode;
     tbDetalleEvaluacionTecnica.removeChild(filaRemove);
-
-    var dataItem = "";
-    var nFilas = tbDetalleEvaluacionTecnica.rows.length;
-    var fila, item = 0;
-    for (var i = 0; i < nFilas; i++) {
-        item += 1;
-        fila = tbDetalleEvaluacionTecnica.rows[i];
-        dataItem += fila.cells[0].innerHTML + '|' + fila.cells[1].innerHTML + '|' + fila.cells[2].innerHTML + '|' + fila.cells[3].innerHTML + '|' ;
-        dataItem += fila.cells[6].childNodes[0].value;
-        dataItem += "¬";
-    }
-    dataItem = dataItem.substr(0, dataItem.length - 1);
-    console.log('dataItem eliminar=>', dataItem);
-    tbDetalleEvaluacionTecnica.innerHTML = "";
-    tbDetalleEvaluacionTecResult.innerHTML = "";
-    tabEvaluacionTecnicaListar(dataItem);
 }
 
-
 function guardarTabEvaTecEconomico() {
+    debugger;
     var nFilas = tbDetalleEvaluacionTecnica.rows.length;
     var idProcesos = txtIdRegistro.value;
     var dataItem = "";
     var existe = false;
-    if (nFilas > 1) {
+    if (nFilas > 2) {
         existe = true;
     }
     else {
@@ -1719,19 +1758,83 @@ function guardarTabEvaTecEconomico() {
     }
     if (existe == true) {
         var fila;
+        var total = 0; 
         for (var i = 0; i < nFilas; i++) {
             fila = tbDetalleEvaluacionTecnica.rows[i];
-            dataItem += fila.cells[0].innerHTML + '|' + fila.cells[1].innerHTML + '|';
-            dataItem += fila.cells[6].childNodes[0].value;
+            dataItem += fila.cells[0].innerHTML + '|' + fila.cells[1].innerHTML + '|' + fila.cells[2].innerHTML + '|';
+            dataItem += fila.cells[6].childNodes[0].value + '|' + fila.cells[3].innerHTML ;
             dataItem += "¬";
+            total = total + (fila.cells[6].childNodes[0].value * 1);
         }
         dataItem = dataItem.substr(0, dataItem.length - 1);
-        var frm = new FormData();
-        var data = idProcesos + '¯' + dataItem
 
-        console.log(data);
-        frm.append("data", data);
-        Http.post("General/guardar/?tbl=" + controller + vista + 'EvalTecEcon', mostarResultadoItemProSel, frm);
+        if (total != 400) {
+            mostrarMensaje("Regularizar Valores al 100 %", "error");
+            return;
+        }
+        else {
+            var frm = new FormData();
+            var data = idProcesos + '¯' + dataItem
+            console.log(data);
+         
+            frm.append("data", data);
+            Http.post("General/guardar/?tbl=" + controller + vista + 'EvalTecEcon', mostarResultadoItemProSel, frm);
+            tbDetalleEvaluacionTecnica.innerHTML = "";
+        }
+    }
+}
+
+
+function importeData(id) {
+    var tbDetalleItem = document.getElementById("tbDetalleEvaluacionTecnica");
+    if (tbDetalleItem != null) {
+        var nFilas = tbDetalleItem.rows.length
+        var fila
+        var totaltec = 0;
+        var totaleco = 0;
+        var subTotalTec, subTotalEco;
+        for (var i = 0; i < nFilas; i++) {
+            fila = tbDetalleItem.rows[i];
+            if (fila.cells[6].childNodes[0].id == "tecEva") {
+                subTotalTec = fila.cells[6].childNodes[0].value * 1;
+                totaltec = totaltec + subTotalTec;
+            }
+            else if (fila.cells[6].childNodes[0].id == "ecoEva") {
+                subTotalEco = fila.cells[6].childNodes[0].value * 1;
+                totaleco = totaleco + subTotalEco;
+            }
+        }
+        tecnicaEva.value = totaltec;
+        economicaEva.value = totaleco;
+    }
+}
+
+function totalCotizacion(id) {
+    var tbDetalleItem = document.getElementById("tbDetalleItem");
+    if (tbDetalleItem != null) {
+        var nFilas = tbDetalleItem.rows.length
+        var fila
+        var total = 0
+        var precio, cantidad, subtotal
+        if (id == 'I') {
+            for (var i = 0; i < nFilas; i++) {
+                fila = tbDetalleItem.rows[i];
+                cantidad = fila.cells[4].innerHTML * 1;
+                precio = fila.cells[5].childNodes[0].value * 1;
+                subtotal = cantidad * precio;
+                total = total + subtotal;
+            }
+        }
+        else {
+            for (var i = 0; i < nFilas; i++) {
+                fila = tbDetalleItem.rows[i];
+                cantidad = fila.cells[4].innerHTML * 1;
+                precio = fila.cells[5].innerHTML * 1;
+                subtotal = cantidad * precio;
+                total = total + subtotal;
+            }
+        }
+        htTotal.innerHTML = "TOTAL: " + formatoNumeroDecimal(total);
     }
 }
 
@@ -1751,7 +1854,7 @@ function tabEvaTecnicaProveedorListar(rpta) {
             filaDetalle += '<td style="white-space:pre-wrap;width:50px;" colspan="1">' + camposDetalle[0] + '</td>';
             filaDetalle += '<td style="white-space:pre-wrap;width:50px;" colspan="1">' + camposDetalle[2] + '</td>';
             filaDetalle += "<td style='white-space:pre-wrap;width:10px;vertical-align:top;'>";
-            filaDetalle += "<i class='fa fa-pencil f-16 text-c-blue' aria-hidden='true' title='Asingar Evaluacion' onclick='tabEvaTecbuscarProveedorListar("+ camposDetalle[0] + ",\"";
+            filaDetalle += "<i class='fa fa-pencil f-16 text-c-blue' aria-hidden='true' title='Asingar Evaluacion' onclick='tabEvaTecbuscarProveedorListar(" + camposDetalle[0] + ",\"";
             filaDetalle += camposDetalle[2];
             filaDetalle += "\");'></i>";
             filaDetalle += "</td>";
@@ -1763,63 +1866,75 @@ function tabEvaTecnicaProveedorListar(rpta) {
 
 function tabEvaTecbuscarProveedorListar(id, texto) {
     txtProveedorEvaTec.value = id;
-    var idRegistro = txtIdRegistro.value + '|' + id;
+    var idRegistro = txtIdRegistro.value + '|' + id + '|1';
     idTextoEvaTec.innerText = "Evaluación Técnica : " + texto;
     //console.log(texto);
     tbDetalleEvaTecnicaLista.innerHTML = "";
     Http.get("General/obtenerTabla/?tbl=" + controller + vista + 'EvalTecEcon' + '&id=' + idRegistro, tabEvaTecgetProveedorListar);
-  
+
 }
+
 function tabEvaTecgetProveedorListar(rpta) {
     if (rpta) {
         var listaRpta = rpta.split('¯')[0];
+        console.log(listaRpta);
         var listaDet = listaRpta.split('¬');
         var nRegistros = listaDet.length;
         var camposDetalle = [];
-        var IdEvaTecnica = idEvaluacionTecnica.value;
+        var IdEvaTecnica = 1;
         var filaDetalle = '', varTipoEvaluacion;
-        var filaTectinica = '';
+
         for (var i = 0; i < nRegistros; i++) {
             camposDetalle = listaDet[i].split("|");
-            varTipoEvaluacion = parseInt(camposDetalle[3]);
+            varTipoEvaluacion = parseInt(camposDetalle[8]);
 
             if (varTipoEvaluacion == IdEvaTecnica) {
-                filaTectinica += camposDetalle[4] + '|' + camposDetalle[2] + '¬';
-                filaDetalle += '<tr>';
-                filaDetalle += "<td style='white-space:pre-wrap;width:50px;display:none'>" + camposDetalle[1] + "</td> ";
-                filaDetalle += '<td style="white-space:pre-wrap;width:50px;" colspan="1">' + camposDetalle[0] + '</td>';
-                filaDetalle += '<td style="white-space:pre-wrap;width:50px;" colspan="1">' + camposDetalle[4] + '</td>';
-                filaDetalle += '<td style="white-space:pre-wrap;width:50px;" colspan="1">' + camposDetalle[2] + '</td>';
-                filaDetalle += '<td style="white-space:pre-wrap;width:50px;" colspan="1"><input type="number" step="any" style="text-align:right;width:100%;border:1px solid blue;height:25px;padding:0px" value="' + camposDetalle[1] + '"/></td>';
-                filaDetalle += '</tr>';
+                if (parseInt(camposDetalle[7]) == parseInt(camposDetalle[8])) {
+                    filaDetalle += '<tr>';
+                    filaDetalle += "<td style='white-space:pre-wrap;width:50px;display:none'>" + camposDetalle[0] + "</td> ";
+                    filaDetalle += "<td style='white-space:pre-wrap;width:50px;display:none'>" + camposDetalle[1] + "</td> ";
+                    filaDetalle += "<td style='white-space:pre-wrap;width:50px;display:none'>" + camposDetalle[2] + "</td> ";
+
+                    filaDetalle += '<td style="white-space:pre-wrap;width:50px;" colspan="1">' + camposDetalle[1] + '</td>';
+                    filaDetalle += '<td style="white-space:pre-wrap;width:50px;" colspan="1">' + camposDetalle[3] + '</td>';
+                    filaDetalle += '<td style="white-space:pre-wrap;width:50px;" colspan="1">' + camposDetalle[4] + '</td>';
+                    filaDetalle += '<td style="white-space:pre-wrap;width:50px;" colspan="1"><input type="number" id="evaltec" step="any" min="0" max="' + camposDetalle[4] + '" style="text-align:right;width:100%;border:1px solid blue;height:25px;padding:0px" value="' + camposDetalle[5] + '" onkeyup="importeTecnico(this)"/></td>';
+                    filaDetalle += '</tr>';
+                }
+                else {
+                    filaDetalle += '<tr>';
+                    filaDetalle += "<td style='white-space:pre-wrap;width:50px;display:none'>" + camposDetalle[0] + "</td> ";
+                    filaDetalle += "<td style='white-space:pre-wrap;width:50px;display:none'>" + camposDetalle[1] + "</td> ";
+                    filaDetalle += "<td style='white-space:pre-wrap;width:50px;display:none'>" + camposDetalle[2] + "</td> ";
+
+                    filaDetalle += '<td style="white-space:pre-wrap;width:50px;" colspan="1">' + camposDetalle[1] + '</td>';
+                    filaDetalle += '<td style="white-space:pre-wrap;width:50px;" colspan="1" class="text-center">' + camposDetalle[3] + '</td>';
+                    filaDetalle += '<td style="white-space:pre-wrap;width:50px;" colspan="1">' + camposDetalle[4] + '</td>';
+                    filaDetalle += '<td style="white-space:pre-wrap;width:50px;" colspan="1"><input type="number" id="evaltecresult" step="any" min="0" max="' + camposDetalle[4] + '" style="text-align:right;width:100%;border:1px solid #dc354;height:25px;padding:0px" value="' + camposDetalle[5] + '"/ disabled></td>';
+                    filaDetalle += '</tr>';
+                }
             }
         }
 
-        filaTectinica = filaTectinica.substr(0, filaTectinica.length - 1);
         tbDetalleEvaTecnicaLista.insertAdjacentHTML("beforeend", filaDetalle);
-        tabEvaTecgetCriterioEva(filaTectinica);
     }
-  
 }
 
-function tabEvaTecgetCriterioEva(rpta) {
-    //tbDetalleEvaTecCriterio
-    if (rpta) {
-        tbDetalleEvaTecCriterio.innerHTML = "";
-        var listaDet = rpta.split('¬');
-        var nRegistros = listaDet.length;
-        var camposDetalle = [];
-        var filaDetalle = '';
-        for (var i = 0; i < nRegistros; i++) {
-            camposDetalle = listaDet[i].split("|");
-                filaDetalle += '<tr>';
-                filaDetalle += "<td style='white-space:pre-wrap;width:50px;'>" + camposDetalle[0] + "</td>";
-                filaDetalle += '<td style="white-space:pre-wrap;width:50px;" colspan="1">0</td>';
-                filaDetalle += '<td style="white-space:pre-wrap;width:50px;" colspan="1">' + camposDetalle[1] + '</td>';
-                filaDetalle += '</tr>';
-            
+function importeTecnico(id) {
+    var tbDetalleItem = document.getElementById("tbDetalleEvaTecnicaLista");
+    if (tbDetalleItem != null) {
+        var nFilas = tbDetalleItem.rows.length
+        var fila
+        var totaltec = 0;
+        var subTotalTec;
+        for (var i = 0; i < nFilas; i++) {
+            fila = tbDetalleItem.rows[i];
+            if (fila.cells[6].childNodes[0].id == "evaltec") {
+                subTotalTec = fila.cells[6].childNodes[0].value * 1;
+                totaltec = totaltec + subTotalTec;
+            }
         }
-        tbDetalleEvaTecCriterio.insertAdjacentHTML("beforeend", filaDetalle);
+        evaltecresult.value = totaltec;
     }
 }
 
@@ -1838,8 +1953,8 @@ function guardarTabEvaTecnicoProveedor() {
         var fila;
         for (var i = 0; i < nFilas; i++) {
             fila = tbDetalleEvaTecnicaLista.rows[i];
-            dataItem += fila.cells[1].innerHTML + '|';
-            dataItem += fila.cells[3].childNodes[0].value;
+            dataItem += fila.cells[0].innerHTML + '|' + fila.cells[1].innerHTML + '|';
+            dataItem += fila.cells[6].childNodes[0].value;
             dataItem += "¬";
         }
         dataItem = dataItem.substr(0, dataItem.length - 1);
@@ -1848,5 +1963,234 @@ function guardarTabEvaTecnicoProveedor() {
         console.log(data);
         frm.append("data", data);
         Http.post("General/guardar/?tbl=" + controller + vista + 'EvalTecnico', mostarResultadoItemProSel, frm);
+        idTextoEvaTec.innerText = "Evaluación Técnica  ";
+        tbDetalleEvaTecnicaLista.innerHTML = "";
     }
+}
+
+function tabEvaEconomicaProveedorListar(rpta) {
+    if (rpta) {
+        var listaDet = rpta.split('¬');
+        var nRegistros = listaDet.length;
+        var camposDetalle = [];
+
+        var filaDetalle = '';
+        for (var i = 0; i < nRegistros; i++) {
+            camposDetalle = listaDet[i].split("|");
+            filaDetalle += '<tr>';
+            filaDetalle += "<td style='white-space:pre-wrap;width:50px;display:none'>" + camposDetalle[1] + "</td> ";
+            filaDetalle += '<td style="white-space:pre-wrap;width:50px;" colspan="1">' + camposDetalle[0] + '</td>';
+            filaDetalle += '<td style="white-space:pre-wrap;width:50px;" colspan="1">' + camposDetalle[2] + '</td>';
+            filaDetalle += "<td style='white-space:pre-wrap;width:10px;vertical-align:top;'>";
+            filaDetalle += "<i class='fa fa-pencil f-16 text-c-blue' aria-hidden='true' title='Asingar Evaluacion' onclick='tabEvaEconomicabuscarProveedorListar(" + camposDetalle[0] + ",\"";
+            filaDetalle += camposDetalle[2];
+            filaDetalle += "\");'></i>";
+            filaDetalle += "</td>";
+            filaDetalle += '</tr>';
+        }
+        tbDetalleEvaEconomica.insertAdjacentHTML("beforeend", filaDetalle);
+    }
+}
+
+function tabEvaEconomicabuscarProveedorListar(id, texto) {
+    idEvaluacionEconomica.value = id;
+    var idRegistro = txtIdRegistro.value + '|' + id + '|5';
+    idTextoEvaEco.innerText = "Evaluación Económica : " + texto;
+    tbDetalleEvaEconoLista.innerHTML = "";
+    Http.get("General/obtenerTabla/?tbl=" + controller + vista + 'EvalTecEcon' + '&id=' + idRegistro, tabEvaEconomicogetProveedorListar);
+
+}
+
+function tabEvaEconomicogetProveedorListar(rpta) {
+    if (rpta) {
+        var listaRpta = rpta.split('¯')[0];
+        debugger;
+        console.log(listaRpta);
+        var listaDet = listaRpta.split('¬');
+        var nRegistros = listaDet.length;
+        var camposDetalle = [];
+        var IdEvaEconomica = 5;
+        var filaDetalle = '', TipoEvaluacion;
+
+        for (var i = 0; i < nRegistros; i++) {
+            camposDetalle = listaDet[i].split("|");
+            TipoEvaluacion = parseInt(camposDetalle[8]);
+            console.log(TipoEvaluacion)
+            if (parseInt(camposDetalle[8]) == IdEvaEconomica) {
+                if (parseInt(camposDetalle[7]) == parseInt(camposDetalle[8])) {
+                    filaDetalle += '<tr>';
+                    filaDetalle += "<td style='white-space:pre-wrap;width:50px;display:none'>" + camposDetalle[0] + "</td> ";
+                    filaDetalle += "<td style='white-space:pre-wrap;width:50px;display:none'>" + camposDetalle[1] + "</td> ";
+                    filaDetalle += "<td style='white-space:pre-wrap;width:50px;display:none'>" + camposDetalle[2] + "</td> ";
+
+                    filaDetalle += '<td style="white-space:pre-wrap;width:50px;" colspan="1">' + camposDetalle[1] + '</td>';
+                    filaDetalle += '<td style="white-space:pre-wrap;width:50px;" colspan="1">' + camposDetalle[3] + '</td>';
+                    filaDetalle += '<td style="white-space:pre-wrap;width:50px;" colspan="1">' + camposDetalle[4] + '</td>';
+                    filaDetalle += '<td style="white-space:pre-wrap;width:50px;" colspan="1"><input type="number" id="evaecono" step="any" min="0" max="' + camposDetalle[4] + '" style="text-align:right;width:100%;border:1px solid blue;height:25px;padding:0px" value="' + camposDetalle[5] + '"/ onkeyup="importeEvaEconomico(this)"></td>';
+                    filaDetalle += '</tr>';
+                }
+                else {
+                    filaDetalle += '<tr>';
+                    filaDetalle += "<td style='white-space:pre-wrap;width:50px;display:none'>" + camposDetalle[0] + "</td> ";
+                    filaDetalle += "<td style='white-space:pre-wrap;width:50px;display:none'>" + camposDetalle[1] + "</td> ";
+                    filaDetalle += "<td style='white-space:pre-wrap;width:50px;display:none'>" + camposDetalle[2] + "</td> ";
+
+                    filaDetalle += '<td style="white-space:pre-wrap;width:50px;" colspan="1">' + camposDetalle[1] + '</td>';
+                    filaDetalle += '<td style="white-space:pre-wrap;width:50px;" colspan="1" class="text-center">' + camposDetalle[3] + '</td>';
+                    filaDetalle += '<td style="white-space:pre-wrap;width:50px;" colspan="1">' + camposDetalle[4] + '</td>';
+                    filaDetalle += '<td style="white-space:pre-wrap;width:50px;" colspan="1"><input type="number" id="evaeconoResult" step="any" min="0" max="' + camposDetalle[4] + '" style="text-align:right;width:100%;border:1px solid #dc354;height:25px;padding:0px" value="' + camposDetalle[5] + '"/ disabled></td>';
+                    filaDetalle += '</tr>';
+                }
+            }
+        }
+        tbDetalleEvaEconoLista.insertAdjacentHTML("beforeend", filaDetalle);
+    }
+}
+
+function importeEvaEconomico(id) {
+    var tbDetalleItem = document.getElementById("tbDetalleEvaEconoLista");
+    if (tbDetalleItem != null) {
+        var nFilas = tbDetalleItem.rows.length
+        var fila
+        var totaltec = 0;
+        var subTotalTec;
+        for (var i = 0; i < nFilas; i++) {
+            fila = tbDetalleItem.rows[i];
+            if (fila.cells[6].childNodes[0].id == "evaecono") {
+                subTotalTec = fila.cells[6].childNodes[0].value * 1;
+                totaltec = totaltec + subTotalTec;
+            }
+        }
+        evaeconoResult.value = totaltec;
+    }
+}
+
+function guardarTabEvaEconomicaProveedor() {
+    var nFilas = tbDetalleEvaEconoLista.rows.length;
+    var idProveedor = txtProveedorEvaTec.value;
+    var dataItem = "";
+    var existe = false;
+    if (nFilas > 0) {
+        existe = true;
+    }
+    else {
+        mostrarMensaje("Agregar  Evaluación", "error");
+    }
+    if (existe == true) {
+        var fila;
+        for (var i = 0; i < nFilas; i++) {
+            fila = tbDetalleEvaEconoLista.rows[i];
+            dataItem += fila.cells[0].innerHTML + '|' + fila.cells[1].innerHTML + '|';
+            dataItem += fila.cells[6].childNodes[0].value;
+            dataItem += "¬";
+        }
+        dataItem = dataItem.substr(0, dataItem.length - 1);
+        var frm = new FormData();
+        var data = idProveedor + '¯' + dataItem
+        console.log(data);
+        frm.append("data", data);
+        Http.post("General/guardar/?tbl=" + controller + vista + 'EvalTecnico', mostarResultadoItemProSel, frm);
+        idTextoEvaEco.innerText = "Evaluación Económica  ";
+        tbDetalleEvaEconomicaLista.innerHTML = "";
+    }
+}
+
+function limpiarTablesTabProcesoSeleccion() {
+
+    tbDetalleProcesoCalen.innerHTML = "";
+    tbDetalleEvaluacionTecnica.innerHTML = "";
+    tbDetalleProcesoRegistro.innerHTML = "";
+    tbDetalleEvaTecnica.innerHTML = "";
+    tbDetalleEvaTecnicaLista.innerHTML = "";
+    tbDetalleEvaEconomica.innerHTML = "";
+    tbDetalleEvaEconoLista.innerHTML = "";
+    tbDetalleBuenaPro.innerHTML = "";
+}
+
+function listarTabBuenaPro(rpta) {
+    if (rpta) {
+        var listaDet = rpta.split('¬');
+        var nRegistros = listaDet.length;
+        var camposDetalle = [];
+
+        var filaDetalle = '';
+        for (var i = 0; i < nRegistros; i++) {
+            camposDetalle = listaDet[i].split("|");
+
+            filaDetalle +='<tr>';
+            filaDetalle += '<td>' + camposDetalle[0]+'</td>';
+            filaDetalle += '<td>' + camposDetalle[2] +'</td>';
+            filaDetalle +='<td><input type="number" class="control-form RequeBuenaPro" step="any" value="0.000"></td>';
+            filaDetalle +='<td><input type="date" id="txtFechaAdju" class="control-form RequeBuenaPro"> </td>';
+            filaDetalle +='<td><select class="control-form estadobuenapro RequeBuenaPro"></select></td>';
+            filaDetalle +='<td>';
+            filaDetalle +='<i class="fa fa-trash f-16 text-c-red" title="Quitar Item" onclick="tabBuenaProEliminarItem(this);"></i>';
+            filaDetalle +='</td>';
+            filaDetalle +='</tr>';
+
+        }
+        tbDetalleBuenaPro.insertAdjacentHTML("beforeend", filaDetalle);
+        listarEstadoBuenaPro(listaEstadoBuenaProItem, "estadobuenapro");
+      
+    }
+}
+
+
+function listarEstadoBuenaPro(lista, clase) {
+    var nRegistros = lista.length;
+    var contenido = "<option value=''>Seleccione</option>";
+    var campos, idCodigo, nombre;
+    for (var i = 0; i < nRegistros; i++) {
+        campos = lista[i].split('|');
+        idCodigo = campos[0];
+        nombre = campos[1];
+        contenido += "<option value='";
+        contenido += idCodigo;
+        contenido += "'>";
+        contenido += nombre;
+        contenido += "</option>";
+    }
+    $("." + clase).prepend($(contenido));
+}
+
+
+
+function guardarTabBuenaPro() {
+    var nFilas = tbDetalleBuenaPro.rows.length;
+    var idProveedor = txtProveedorEvaTec.value;
+    var dataItem = "";
+    var existe = false;
+    
+   
+    if (nFilas > 0) {
+
+        if (validarInformacion("RequeBuenaPro") == true) {
+            existe = true;
+        }
+    }
+    else {
+        mostrarMensaje("Falta Información", "error");
+    }
+
+    if (existe == true) {
+        var fila;
+        for (var i = 0; i < nFilas; i++) {
+            fila = tbDetalleBuenaPro.rows[i];
+            dataItem += fila.cells[0].innerHTML + '|' + fila.cells[2].childNodes[0].value + '|';
+            dataItem += fila.cells[3].childNodes[0].value + '|' + fila.cells[4].childNodes[0].value;
+            dataItem += "¬";
+        }
+        dataItem = dataItem.substr(0, dataItem.length - 1);
+        var frm = new FormData();
+        var data = dataItem;
+        console.log(data);
+        frm.append("data", data);
+        Http.post("General/guardar/?tbl=" + controller + vista + 'BuenaPro', mostarResultadoItemProSel, frm);
+    }
+}
+
+function tabBuenaProEliminarItem(col) {
+
+    var filaRemove = col.parentNode.parentNode;
+    tbDetalleBuenaPro.removeChild(filaRemove);
 }
