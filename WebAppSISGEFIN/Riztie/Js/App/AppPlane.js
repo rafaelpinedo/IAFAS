@@ -234,10 +234,13 @@ function mostrarAyudas(rpta) {
         var listaTipo = listas[1].split("¬");
         var listaEstado = listas[2].split("¬");
         var listaPersonal = listas[3].split("¬");
+        var fechaActual = new Date;
         crearCombo(listaOficina, "cboOficina", "Seleccione");
         crearCombo(listaTipo, "cboTipoBien", "Seleccione");
         crearCombo(listaEstado, "cboEstado", null);
         crearCombo(listaPersonal, "cboPersonal", "Seleccione");
+        var dttFechaRegistro = document.getElementById("dttFechaRegistro");
+        dttFechaRegistro.value = fechaActual.toLocaleDateString("en-CA");
     }
 }
 
@@ -947,7 +950,7 @@ function grabarCNEditData() {
             for (var j = 4; j < 19; j++) {
                 nulos +=  matrixDeta[i][j] * 1;
             }
-            if (matrixDeta[i][6] == undefined || matrixDeta[i][6] == "" || (matrixDeta[i][6] < 1 && nulos > 0)) {
+            if (matrixDeta[i][6] == undefined || matrixDeta[i][6] == "" || (matrixDeta[i][6]*1 < 1 && Math.abs(nulos) > 0)) {
                 Swal.fire({
                     title: 'Advertencia!',
                     text: "El subTotal debe ser mayor a cero.",
