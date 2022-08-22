@@ -1,0 +1,488 @@
+﻿
+@{
+    ViewBag.Title = "Pendiente";
+    Layout = "~/Views/_LayoutPage.cshtml";
+}
+
+<div class="pcoded-content">
+    <div class="pcoded-inner-content">
+        <div class="main-body">
+            <div class="card">
+                <div class="card-header bg-primary">
+                    <h3><i class="fa fa-file" aria-hidden="true"></i> Pendiente Almacén</h3>
+                </div>
+                <div class="card-block">
+                    <div class="form-row">
+                        <div class="form-group col-sm-2">
+                            <label class="control-label">Fecha Inicio</label>
+                            <input type="date" id="txtFechaInicio" class="control-form" value="@ViewBag.FechaInicial">
+                        </div>
+                        <div class="form-group col-sm-2">
+                            <label class="control-label">Fecha Final</label>
+                            <input type="date" id="txtFechaFinal" class="control-form" value="@ViewBag.Fecha">
+                        </div>
+                        <div class="form-group col-md-3 m-3">
+                            <button class="input-group-inverse btn btn-inverse" id="btnConsultar" data-toggle="tooltip" data-placement="bottom" title="Consultar"><i class="fa fa-search fa-lg" aria-hidden="true"></i></button>
+                            @*<button class="btn btn-out waves-effect waves-light btn-info btn-square" id="btnImprimir" data-toggle="tooltip" data-placement="bottom" title="Imprimir Pedido"><i class="fa fa-print fa-lg" aria-hidden="true"></i></button>*@
+                        </div>
+                        <div class="form-group col-sm-2">
+                            <label class="control-label">&nbsp;</label>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="optIngreso">
+                                <label class="form-check-label control-label" for="optIngreso">Ingreso</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="optSalida">
+                                <label class="form-check-label control-label" for="optSalida">Salida</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <div class="table-responsive dt-responsive" id="lista"></div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="modal custom-modal" tabindex="-1" role="dialog" aria-hidden="true" id="divPopupContainerFormato" style="overflow-y:auto;">
+                            <div class="modal-dialog modal-xl bg-personalizado" id="divPopupWindowFormato" style="margin-top:1px;">
+                                <div class="modal-content">
+                                    <div id="divBarraFormato" class="modal-header bg-personalizado" style="cursor:move">
+                                        <h5 class="modal-title" id="Titulo">Pendiente de Ingreso</h5>
+                                        <button type="button" id="btnCerrarFormato" class="close"><span aria-hidden="true">&times;</span><span class="sr-only"></span></button>
+                                    </div>
+                                    <div class="modal-body" id="divCuerpoPendiente">
+                                        <div class="row">
+                                            <div id="divRegistro" class="col-xl-12">
+                                                <div class="row">
+                                                    <div class="col-sm-3">
+                                                        <input type="hidden" class="control-form Popup" id="txtIdRegistro">
+                                                        <input type="hidden" class="control-form Popup" id="txtIdES">
+                                                        <label class="control-label">Nro. Pendiente</label>
+                                                        <label class="control-lectura Popup" id="lblNroPendienteIngreso"></label>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <label class="control-label">Fecha</label>
+                                                        <input type="date" id="ddtFecha" disabled class="control-lectura Popup" />
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <label class="control-label">Almacén</label>
+                                                        <select class="control-lectura Reque Popup" id="cboAlmacen"></select>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <label class="control-label">Tipo Operación</label>
+                                                        <select class="control-form Reque Popup" id="cboTipoOperacion"></select>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-sm-5">
+                                                        <label class="control-label">Proveedor</label>
+                                                        <select class="SelectSearch control-form Reque Popup" id="cboProveedor"></select>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <label class="control-label">Orden Compra</label>
+                                                        <label class="control-lectura Popup" id="lblOrdenCompra"></label>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <label class="control-label">Estado</label>
+                                                        <select class="control-lectura Reque Popup" id="cboEstado"></select>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-sm-9">
+                                                        <label class="control-label">Justificación</label>
+                                                        <textarea class="control-form Reque Popup" id="ttaJustificacion" maxlength="200" rows="2"></textarea>
+                                                    </div>
+                                                    <div class="col-sm-2">
+                                                        <label class="control-label">&nbsp;</label>
+                                                        <button class="btn btn-success btn-sm" id="btnMostrar" title="Generar">
+                                                            Generar N.E.A.
+                                                        </button>
+                                                    </div>
+                                                    <div class="col-sm-1 text-right">
+                                                        <label class="control-label">&nbsp;</label>
+                                                        <i class="fa fa-arrow-right fa-3x btn-info" id="btnAgregarItem" title="Abrir" style="cursor: pointer;border-radius: 50%;"></i>
+                                                    </div>
+                                                </div>
+                                                <div class="row m-2">
+                                                    <div class="form-group col-sm-12">
+                                                        <div class="table-responsive" style="height:255px;overflow-y:auto">
+                                                            <table class='grilla bordered'>
+                                                                <thead id="tbCabecera">
+                                                                    <tr class='FilaHead'>
+                                                                        <th style="width:50px;display:none">id</th>
+                                                                        <th style="width:50px;">Item</th>
+                                                                        <th style="width:50px;">Código</th>
+                                                                        <th style="width:500px;">Descripción</th>
+                                                                        <th style="width:50px;">Unidad Medida</th>
+                                                                        <th style="width:80px;">Costo Unitario</th>
+                                                                        <th style="width:70px;">Cantidad</th>
+                                                                        <th style="width:70px;">Cantidad Ingresada</th>
+                                                                        <th style="width:70px;">Cantidad a Aprobar</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody id="tbDetallePendiente"></tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="form-group col-md-12">
+                                                        <span id="spnNroItems" class="control-label">Items: 0</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-xl-5" id="divItems" style="display:none">
+                                                <fieldset class="fieldset">
+                                                    <legend class="legend">Seleccionar Items</legend>
+                                                    <div class="row">
+                                                        <div class="form-group col-md-12">
+                                                            <div class="table-responsive" id="listaItem" style="height:485px"></div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="form-group col-sm-6">
+                                                            <button id="btnSeleccionarItems" class="btn btn-success"> <i class="fa fa-hand-o-left" aria-hidden="true"></i>Agregar</button>
+                                                        </div>
+                                                    </div>
+                                                </fieldset>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button class="btnGuardarForm bg-customer" id="btnGuardar" title="Guardar datos"><span class="fa fa-save"></span>&nbsp;Grabar</button>
+                                        <button class="btnCancelarForm" id="btnCancelarFormato" title="Cancelar"><i class="fa fa-undo" aria-hidden="true"></i>&nbsp;Cancelar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal custom-modal" tabindex="-1" role="dialog" aria-hidden="true" id="divPopupContainerDetalleItem" style="overflow-y:auto;">
+                            <div class="modal-dialog modal-xl" id="divPopupWindowDetalleItem" style="margin-top: 1px;background-color:lightseagreen">
+                                <div class="modal-content">
+                                    <div id="divBarraDetalleItem" class="modal-header" style="cursor:move;background-color:lightseagreen">
+                                        <h5 class="modal-title" id="TituloNuevo">Generar</h5>
+                                        <button type="button" id="btnCerrarDetalleItem" class="close"><span aria-hidden="true">&times;</span><span class="sr-only"></span></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="row">
+                                            <div class="col-sm-3">
+                                                <input type="hidden" class="control-form Popup" id="txtIdRegistroNuevo">
+                                                <label class="control-label">Nro. Pendiente</label>
+                                                <label class="control-lectura" id="lblNroPendienteIngresoNuevo"></label>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <label class="control-label">Fecha</label>
+                                                <input type="date" disabled id="ddtFechaNuevo" class="control-lectura" />
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <label class="control-label">Almacén</label>
+                                                <select class="control-lectura Reque Popup" disabled id="cboAlmacenNuevo"></select>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <label class="control-label">Tipo Operación</label>
+                                                <select class="control-form Reque Popup" id="cboTipoOperacionNuevo"></select>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+
+                                            <div class="col-sm-5">
+                                                <label class="control-label">Proveedor</label>
+                                                <select class="control-lectura Reque Popup" disabled id="cboProveedorNuevo"></select>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <label class="control-label" id="lblTituloOrdenNuevo">Orden Compra</label>
+                                                <label class="control-lectura" id="lblOrdenCompraNuevo"></label>
+                                            </div>
+                                            @*<div class="col-sm-5" style="display:none" id="divAreaNuevo">
+                                                    <label class="control-label">Area</label>
+                                                    <select class="control-lectura Reque Popup" disabled id="cboAreaNuevo"></select>
+                                                </div>*@
+                                            @*<div class="col-sm-4" style="display:none" id="divRecepcion">
+                                                    <label class="control-label">Recepcionado por</label>
+                                                    <select class="SelectSearch control-form Reque Popup" id="cboRecepcion"></select>
+                                                </div>*@
+
+                                            <div class="col-sm-3">
+                                                <label class="control-label">Estado</label>
+                                                <select class="control-lectura Reque Popup" disabled id="cboEstadoNuevo"></select>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-9">
+                                                <label class="control-label">Justificación</label>
+                                                <textarea class="control-form Reque Popup" id="ttaJustificacionNuevo" maxlength="200" rows="2"></textarea>
+                                            </div>
+                                        </div>
+                                        <div id="divDatosGuia">
+                                            <div class="row">
+                                                <div class="col-sm-4">
+                                                    <label class="control-label control-label">Tipo Documento</label>
+                                                    <select class="control-form Reque Popup" id="cboTipoDocumento"></select>
+                                                </div>
+                                                <div class="col-sm-4">
+                                                    <label class="control-label">Nro Documento</label>
+                                                    <input type="text" class="control-form" autocomplete="off" id="txtNroGuia" />
+                                                </div>
+                                                <div class="col-sm-4">
+                                                    <label class="control-label">Fecha</label>
+                                                    <input type="date" class="control-form" id="ddtFechaGuia" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row m-2">
+                                            <div class="form-group col-sm-12">
+                                                <div class="table-responsive" style="height:275px;">
+                                                    <table class='grilla bordered'>
+                                                        <thead id="tbCabeceraGenerar">
+                                                            <tr class='FilaHead'>
+                                                                <th rowspan="2" style="width:50px;display:none">id</th>
+                                                                <th rowspan="2" style="width:50px;">Item</th>
+                                                                <th rowspan="2" style="width:50px;">Código</th>
+                                                                <th rowspan="2" style="width:500px;">Descripción</th>
+                                                                <th rowspan="2" style="width:50px;">Unidad Medida</th>
+                                                                <th rowspan="2" style="width:80px;">Costo Unitario</th>
+                                                                <th colspan="3">Valores</th>
+                                                            </tr>
+                                                            <tr class='FilaHead'>
+                                                                <th style="width:70px;">Cantidad</th>
+                                                                <th style="width:70px;">Cantidad Ingresada</th>
+                                                                <th style="width:70px;">Cantidad a Aprobar</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody id="tbDetalleGenerar"></tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-group col-md-12">
+                                                <span id="spnNroItemsNuevo" class="control-label">Items: 0</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button class="btnGuardarForm bg-customer" id="btnGenerar" title="Generar"><span class="fa fa-save"></span>&nbsp;Grabar</button>
+                                        <button class="btnCancelarForm" id="btnCancelarDetalleItem" title="Cancelar"><i class="fa fa-undo" aria-hidden="true"></i>&nbsp;Cancelar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="modal custom-modal" tabindex="-1" role="dialog" aria-hidden="true" id="divPopupContainerFormatoPCS" style="overflow-y:auto;">
+                            <div class="modal-dialog modal-xl bg-personalizado" id="divPopupWindowFormatoPCS" style="margin-top:1px;">
+                                <div class="modal-content">
+                                    <div id="divBarraFormatoPCS" class="modal-header bg-personalizado" style="cursor:move">
+                                        <h5 class="modal-title">Pendiente de Salida</h5>
+                                        <button type="button" id="btnCerrarFormatoPCS" class="close"><span aria-hidden="true">&times;</span><span class="sr-only"></span></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="row">
+                                            <div id="divRegistroPCS" class="col-xl-12">
+                                                <div class="row">
+                                                    <div class="col-sm-3">
+                                                        <input type="hidden" class="control-form Popup" id="txtIdRegistroPCS">
+                                                        <input type="hidden" class="control-form Popup" id="txtIdESPCS">
+                                                        <label class="control-label">Nro. Pendiente</label>
+                                                        <label class="control-lectura Popup" id="lblNroPendienteSalida"></label>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <label class="control-label">Fecha</label>
+                                                        <input type="date" id="ddtFechaPCS" disabled class="control-lectura Popup" />
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <label class="control-label">Almacén</label>
+                                                        <select class="control-lectura Reque Popup" id="cboAlmacenPCS"></select>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <label class="control-label">Tipo Operación</label>
+                                                        <select class="control-form Reque Popup" id="cboTipoOperacionPCS"></select>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-sm-3" style="display:none">
+                                                        <label class="control-label">Proveedor</label>
+                                                        <select class="SelectSearch control-form Reque Popup" id="cboProveedorPCS"></select>
+                                                    </div>
+                                                    <div class="col-sm-6">
+                                                        <label class="control-label">Solicitante</label>
+                                                        <select class="SelectSearch control-form Reque Popup" id="cboArea"></select>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <label class="control-label">Estado</label>
+                                                        <select class="control-lectura Reque Popup" id="cboEstadoPCS"></select>
+                                                    </div>
+                                                    <div class="col-sm-2">
+                                                        <label class="control-label">&nbsp;</label>
+                                                        <button class="btn btn-success btn-sm" id="btnMostrarPCS" title="Generar">
+                                                            Generar PECOSA
+                                                        </button>
+                                                    </div>
+                                                    <div class="col-sm-1 text-right">
+                                                        <label class="control-label">&nbsp;</label>
+                                                        <i class="fa fa-arrow-right fa-3x btn-info" id="btnAgregarItemPCS" title="Abrir" style="cursor: pointer;border-radius: 50%;"></i>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-sm-6">
+                                                        <label class="control-label">Jefa del Area</label>
+                                                        <select class="control-form Reque Popup" id="cboJefeArea"></select>
+                                                    </div>
+                                                    <div class="col-sm-6">
+                                                        <label class="control-label">Justificación</label>
+                                                        <textarea class="control-form Reque Popup" id="ttaJustificacionPCS" maxlength="200" rows="2"></textarea>
+                                                    </div>
+
+                                                </div>
+                                                <div class="row m-2">
+                                                    <div class="form-group col-sm-12">
+                                                        <div class="table-responsive" style="height:325px;overflow-y:auto">
+                                                            <table class='grilla bordered'>
+                                                                <thead id="tbCabeceraPCS">
+                                                                    <tr class='FilaHead'>
+                                                                        <th style="width:50px;display:none">id</th>
+                                                                        <th style="width:50px;">Item</th>
+                                                                        <th style="width:50px;">Código</th>
+                                                                        <th style="width: 500px;white-space: pre-wrap">Descripción</th>
+                                                                        <th style="width: 50px;white-space: pre-wrap">Unidad Medida</th>
+                                                                        <th style="width: 70px;white-space: pre-wrap">Cantidad Solicitada</th>
+                                                                        <th style="width: 70px;white-space: pre-wrap;color:black;font-weight:bold; background-color: #a2eff7" id="thStock">Stock Actual</th>
+                                                                        <th style="width: 70px;white-space: pre-wrap">Cantidad Atendida</th>
+                                                                        <th style="width: 70px;white-space: pre-wrap">Cantidad Comprometida</th>
+                                                                        <th style="width: 70px;white-space: pre-wrap" id="thAccion"></th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody id="tbDetallePendientePCS"></tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="form-group col-md-12">
+                                                        <span id="spnNroItemsPCS" class="control-label">Items: 0</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-xl-5" id="divItemsPCS" style="display:none">
+                                                <fieldset class="fieldset">
+                                                    <legend class="legend">Seleccionar Items</legend>
+                                                    <div class="row">
+                                                        <div class="form-group col-md-12">
+                                                            <div class="table-responsive" id="listaItemPCS" style="height:485px"></div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="form-group col-sm-6">
+                                                            <button id="btnSeleccionarItemsPCS" class="btn btn-success"> <i class="fa fa-hand-o-left" aria-hidden="true"></i>Agregar</button>
+                                                        </div>
+                                                    </div>
+                                                </fieldset>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button class="btnGuardarForm bg-customer" id="btnGuardarPCS" title="Guardar datos"><span class="fa fa-save"></span>&nbsp;Grabar</button>
+                                        <button class="btnCancelarForm" id="btnCancelarFormatoPCS" title="Cancelar"><i class="fa fa-undo" aria-hidden="true"></i>&nbsp;Cancelar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal custom-modal" tabindex="-1" role="dialog" aria-hidden="true" id="divPopupContainerDetalleItemPCS" style="overflow-y:auto;">
+                            <div class="modal-dialog modal-xl" id="divPopupWindowDetalleItemPCS" style="margin-top: 1px;background-color:lightseagreen">
+                                <div class="modal-content">
+                                    <div id="divBarraDetalleItemPCS" class="modal-header" style="cursor:move;background-color:lightseagreen">
+                                        <h5 class="modal-title">Despacho salida</h5>
+                                        <button type="button" id="btnCerrarDetalleItemPCS" class="close"><span aria-hidden="true">&times;</span><span class="sr-only"></span></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="row">
+                                            <div class="col-sm-3">
+                                                <input type="hidden" class="control-form Popup" id="txtIdRegistroSalidaNuevo">
+                                                <label class="control-label">Nro. Pendiente</label>
+                                                <label class="control-lectura" id="lblNroPendienteSalidaNuevo"></label>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <label class="control-label">Fecha</label>
+                                                <input type="date" disabled id="ddtFechaSalidaNuevo" class="control-lectura" />
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <label class="control-label">Almacén</label>
+                                                <select class="control-lectura" disabled id="cboAlmacenSalidaNuevo"></select>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <label class="control-label">Tipo Operación</label>
+                                                <select class="control-form" id="cboTipoOperacionSalidaNuevo"></select>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+
+                                            <div class="col-sm-3">
+                                                <label class="control-label">Proveedor</label>
+                                                <select class="control-lectura Reque Popup" disabled id="cboProveedorSalidaNuevo"></select>
+                                            </div>
+
+                                            <div class="col-sm-5">
+                                                <label class="control-label">Solicitante</label>
+                                                <select class="control-lectura Reque Popup" disabled id="cboAreaNuevo"></select>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <label class="control-label">Estado</label>
+                                                <select class="control-lectura" disabled id="cboEstadoSalidaNuevo"></select>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-8">
+                                                <label class="control-label">Justificación</label>
+                                                <textarea class="control-form" id="ttaJustificacionSalidaNuevo" maxlength="200" rows="2"></textarea>
+                                            </div>
+                                            <div class="col-sm-4" id="divRecepcion">
+                                                <label class="control-label">Recepcionado por</label>
+                                                <select class="SelectSearch control-form Reque Popup" id="cboRecepcion"></select>
+                                            </div>
+                                        </div>
+                                        <div class="row m-2">
+                                            <div class="form-group col-sm-12">
+                                                <div class="table-responsive" style="height:325px;overflow-y:auto">
+                                                    <table class='grilla bordered'>
+                                                        <thead id="tbCabeceraPCS">
+                                                            <tr class='FilaHead'>
+                                                                <th style="width:50px;display:none">id</th>
+                                                                <th style="width:50px;">Item</th>
+                                                                <th style="width:50px;">Código</th>
+                                                                <th style="width: 500px;white-space: pre-wrap">Descripción</th>
+                                                                <th style="width: 50px;white-space: pre-wrap">Unidad Medida</th>
+                                                                <th style="width: 70px;white-space: pre-wrap;color:black;font-weight:bold; background-color: #a2eff7">Stock Actual</th>
+                                                                <th style="width: 70px;white-space: pre-wrap;color:black;font-weight:bold; background-color:#F7DF00;">Cantidad Pedida</th>
+                                                                <th style="width: 70px;white-space: pre-wrap">Cantidad Atendida</th>
+                                                                <th style="width: 70px;white-space: pre-wrap">Cantidad Comprometida</th>
+                                                                <th style="width: 70px;white-space: pre-wrap">Cantidad Guiada</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody id="tbDetallePendienteSalida"></tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-group col-md-12">
+                                                <span id="spnNroItemsSalidaNuevo" class="control-label">Items: 0</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button class="btnGuardarForm bg-customer" id="btnGenerarPCS" title="Generar"><span class="fa fa-save"></span>&nbsp;Grabar</button>
+                                        <button class="btnCancelarForm" id="btnCancelarDetalleItemPCS" title="Cancelar"><i class="fa fa-undo" aria-hidden="true"></i>&nbsp;Cancelar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="styleSelector">
+            </div>
+
+        </div>
+    </div>
+</div>
+<iframe name="print_frame" width="0" height="0" frameborder="0" src="about:blank"></iframe>
+<script src="~/Riztie/Js/App/AppInventario.js"></script>

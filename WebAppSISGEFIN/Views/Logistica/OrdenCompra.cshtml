@@ -90,7 +90,6 @@
                             <button class="input-group-inverse btn btn-inverse" id="btnConsultar" data-toggle="tooltip" data-placement="bottom" title="Consultar"><i class="fa fa-search fa-lg" aria-hidden="true"></i></button>
                             <button class="input-group-inverse btn btn-primary" id="btnNuevo" data-toggle="tooltip" data-placement="bottom" title="Nuevo"><i class="fa fa-plus-circle fa-lg" aria-hidden="true"></i></button>
                             <button class="btn btn-out waves-effect waves-light btn-info btn-square" id="btnImprimir" data-toggle="tooltip" data-placement="bottom" title="Imprimir Orden con Formato"><i class="fa fa-print fa-lg" aria-hidden="true"></i></button>
-                            @*<button class="btn btn-out waves-effect waves-light btn-success btn-square" id="btnImprimirPreImpreso" data-toggle="tooltip" data-placement="bottom" title="Imprimir Orden pre impreso"><i class="fa fa-newspaper-o fa-lg" aria-hidden="true"></i></button>*@
                         </div>
                     </div>
                     <div class="form-row">
@@ -321,21 +320,21 @@
                                                             <td><strong>MES:</strong></td>
                                                             <td style="border: 1px solid black;text-align: center" id="tdMes"></td>
                                                             <td>&nbsp;</td>
-                                                            <td style="border-right: 1px solid black;border-left: 1px solid black; text-align: center;font-size: 12px" id="tdGradoAdmon"></td>
+                                                            <td style="border-right: 1px solid black;border-left: 1px solid black; text-align: center;font-size: 12px" id="tdGradoJelog">Teniente Segundo</td>
                                                         </tr>
                                                         <tr>
                                                             <td colspan="2" style="border-left: 1px solid black;font-size: 12px;text-align: center"><strong>Teléfono:5147800 Anexo:4759</strong></td>
                                                             <td><strong>AÑO:</strong></td>
                                                             <td style="border: 1px solid black;text-align: center" id="tdAnio"></td>
                                                             <td>&nbsp;</td>
-                                                            <td style="border-right: 1px solid black;border-left: 1px solid black; text-align: center;font-size: 12px" id="tdAdmon"></td>
+                                                            <td style="border-right: 1px solid black;border-left: 1px solid black; text-align: center;font-size: 12px" id="tdJelog"></td>
                                                         </tr>
                                                         <tr>
                                                             <td colspan="2" style="border-left: 1px solid black;font-size: 12px;text-align: center">&nbsp;</td>
                                                             <td id="tdEtiquetaIAFAS" style="color:red;font-size:20px">&nbsp;</td>
                                                             <td>&nbsp;</td>
                                                             <td>&nbsp;</td>
-                                                            <td style="border-right: 1px solid black;border-left: 1px solid black; text-align: center;font-size: 12px" id="tdCipAdmon"></td>
+                                                            <td style="border-right: 1px solid black;border-left: 1px solid black; text-align: center;font-size: 12px" id="tdDNIJelog"></td>
                                                         </tr>
                                                         <tr>
                                                             <td width="485" style="border-left: 1px solid black;font-size: 12px">&nbsp;</td>
@@ -360,7 +359,7 @@
                                                             <td style="border: 1px solid black;text-align: center;font-size: 12px" id="tdRegistroInterno">&nbsp;</td>
                                                             <td style="border: 1px solid black;text-align: center;font-size: 12px" id="tdCuadroC">&nbsp;</td>
                                                             <td colspan="3" style="border: 1px solid black;text-align: center;font-size: 12px" id="tdRequerimiento">&nbsp;</td>
-                                                            <td style="border-right: 1px solid black;border-left: 1px solid black; text-align: center;font-size: 12px" id="tdGradoDirector"></td>
+                                                            <td style="border-right: 1px solid black;border-left: 1px solid black; text-align: center;font-size: 12px" id="tdGradoDirector">Capitán de Navío</td>
                                                         </tr>
                                                         <tr>
                                                             <td colspan="5" style="border-left: 1px solid black;border-right: 1px solid black;font-size: 12px"><strong>SEÑOR(ES):</strong><span id="spnEmpresa"> </span></td>
@@ -368,7 +367,7 @@
                                                         </tr>
                                                         <tr>
                                                             <td colspan="5" style="border-left: 1px solid black;border-right: 1px solid black;font-size: 12px"><strong>RUC: </strong><span id="spnRUC"></span></td>
-                                                            <td style="border-right: 1px solid black;border-left: 1px solid black; text-align: center;font-size: 12px" id="tdCipDirector"></td>
+                                                            <td style="border-right: 1px solid black;border-left: 1px solid black; text-align: center;font-size: 12px" id="tdDNIDirector"></td>
                                                         </tr>
                                                         <tr>
                                                             <td colspan="5" style="border-left: 1px solid black;border-right: 1px solid black;font-size: 12px"><strong>DIRECCION</strong>: <span id="spnDireccion"></span></td>
@@ -463,7 +462,7 @@
                                                 <table width="100%" cellpadding="0" cellspacing="0" style="font-size: 10px;">
                                                     <tbody>
                                                         <tr>
-                                                            <td width="24%">NOTA:</td>
+                                                            <td width="66%">NOTA:</td>
                                                             <td width="24%" rowspan="6" style="vertical-align: top">
                                                                 <table cellpadding="5" cellspacing="0" style="font-size: 10px;">
                                                                     <tr>
@@ -515,7 +514,7 @@
                             <div class="modal-dialog modal-xl bg-personalizado" id="divPopupWindowForm1" style="margin-top:1px">
                                 <div class="modal-content">
                                     <div id="divBarraForm1" class="modal-header bg-personalizado" style="cursor:move">
-                                        <h5 class="modal-title">Nueva Orden de Compra</h5>
+                                        <h5 class="modal-title">Orden de Compra</h5>
                                     </div>
                                     <div class="modal-body">
                                         <div class="row">
