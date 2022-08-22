@@ -523,7 +523,6 @@ function eliminarRegistro(id) {
 }
 
 function mostrarContrato(rpta) {
-    debugger;
     if (rpta) {
         var listas = rpta.split("¯");
         var campos = listas[0].split('|');
