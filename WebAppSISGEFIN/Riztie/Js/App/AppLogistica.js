@@ -14,9 +14,10 @@ var listaFamiliaItem = [];
 var estadoTabla = "";
 var listaUbigeo = [];
 var listaItemInventario = [];
+var idTabActivo = "";
 
 var botonesProceso = [
-    { "cabecera": "Editar", "clase": "fa fa-plus-circle btn btn-info btnCirculo", "id": "Proceso" },
+    { "cabecera": "Editar", "clase": "fa fa-plus-circle btn btn-primary btnCirculo", "id": "Proceso" },
     { "cabecera": "Editar", "clase": "fa fa-pencil btn btn-info btnCirculo", "id": "Editar" },
     { "cabecera": "Anular", "clase": "fa fa-minus-circle btn btn-danger btnCirculo", "id": "Eliminar" },
 ];
@@ -28,22 +29,20 @@ window.onload = function () {
     if (vista == "PedidoCompra" || vista == "SolicitudCompra" || vista == "Cotizacion" || vista == "CuadroCompara" || vista == "OrdenCompra") {
         getListarPedido();
     }
-    else if (vista == "PAC" ){
+    else if (vista == "PAC") {
         getListarLicita();
     }
     else if (vista == "Articulo") {
         getListarArticulo('B')
     }
-    
-     else {
+
+    else {
         getListar();
     }
     configurarBotones();
     configurarConsultas();
     configurarCombos();
 }
-
-
 
 function getListarLicita() {
     var anioFiscal = document.getElementById("txtAnioFiscal").value;
@@ -63,7 +62,7 @@ function getListar() {
     if (vista == "Configuracion") {
         Http.get("General/listarTabla?tbl=" + controller + vista + "&data=" + data, mostrarConfiguracion);
     }
-    else { 
+    else {
         Http.get("General/listarTabla?tbl=" + controller + vista + "&data=" + data, mostrarlistas);
     }
 }
@@ -216,7 +215,7 @@ function mostrarlistas(rpta) {
             crearCombo(listaEstado, "cboEstado", "Seleccione");
 
             crearCombo(listaTipoItem, "cboTipoItem", "Seleccione");
-            crearCombo(listaTipoCompra, "cboTipoCompra", "Seleccione"); 
+            crearCombo(listaTipoCompra, "cboTipoCompra", "Seleccione");
             //crearCombo(listaEntidadConvocante, "cboTipoConvocante", "Seleccione");
             crearCombo(listaTipo, "cboTipo", "Seleccione");
             crearCombo(listaTipoProceso, "cboTipoProceso", "Seleccione");
@@ -227,7 +226,7 @@ function mostrarlistas(rpta) {
             crearCombo(listaOficinaProceso, "cboOficinaProceso", "Seleccione");
             crearCombo(listaFechaPrevista, "cboFechaPrevista", "Seleccione");
 
-           // crearCombo(listaInventario, "cboCatalogoItem", "Seleccione");
+            // crearCombo(listaInventario, "cboCatalogoItem", "Seleccione");
             crearCombo(listaUnidadMedi, "cboUnidadMedida", "Seleccione");
             crearCombo(listaTipoMoneda, "cboTipoMoneda", "Seleccione");
 
@@ -242,6 +241,7 @@ function mostrarlistas(rpta) {
 
 function mostrarConfiguracion(rpta) {
     if (rpta) {
+        idTabActivo = "tabParametro";
         var listas = rpta.split('¯');
         var listaPersonal = listas[0].split('¬');
         var anioFiscal = listas[1].split('|');
@@ -257,7 +257,7 @@ function mostrarConfiguracion(rpta) {
         crearCombo(listaPersonal, "cboJelogAlma", "Seleccione");
         crearCombo(listaPersonal, "cboJefeAlmacen", "Seleccione");
 
-        txtAnioFiscal.value = anioFiscal[1]*1;
+        txtAnioFiscal.value = anioFiscal[1] * 1;
         txtAnioFiscal.setAttribute('data-id', anioFiscal[0]);
 
         txtAnioCN.value = anioCN[1] * 1;
@@ -290,7 +290,7 @@ function listarItemInventario() {
 
     var nRegistros = listaItemInventario.length;
     var contenido = "<option value=''>Seleccione</option>";
-    var campos, idItem,  nombreItem,idTipoServ;
+    var campos, idItem, nombreItem, idTipoServ;
     for (var i = 0; i < nRegistros; i++) {
         campos = listaItemInventario[i].split('|');
         idItem = campos[0];
@@ -524,6 +524,16 @@ function configurarCombos() {
 }
 
 function configurarBotones() {
+    var tabParametro = document.getElementById("tabParametro");
+    if (tabParametro != null) tabParametro.onclick = function () {
+        idTabActivo = "tabParametro";
+    }
+
+    var tabAutorizacion = document.getElementById("tabAutorizacion");
+    if (tabAutorizacion != null) tabAutorizacion.onclick = function () {
+        idTabActivo = "tabAutorizacion";
+    }
+
     var btnTabBienes = document.getElementById("btnTabBienes");
     if (btnTabBienes != null) btnTabBienes.onclick = function () {
         getListarArticulo('B')
@@ -759,6 +769,9 @@ function configurarBotones() {
                     else if (vista == "OrdenCompra") {
                         grabarOrdenCompra();
                     }
+                    else if (vista == "Configuracion") {
+                        grabarConfiguracion();
+                    }
                     else {
                         grabarDatos();
                     }
@@ -871,24 +884,24 @@ function configurarBotones() {
                 mostrarMensaje("Seleccione tipo de Items", "error")
                 cboTipoItem.focus();
             }
-            else if (idObjetoContra=="") {
+            else if (idObjetoContra == "") {
                 mostrarMensaje("Seleccione tipo de Objeto de Contratación", "error")
                 cboObjetoContratacion.focus();
             }
-             else {
-                 if (idTipoItems=="1" && nFilas=="1") {
-                     mostrarMensaje("No se Puede Agregar Mas Item", "warning")
-                 }
-                 else {
-                     //Limpiar Formulario
-                     var cboCatalogoItem = document.getElementById("select2-cboCatalogoItem-container");
-                     if (cboCatalogoItem != null) cboCatalogoItem.innerHTML = "Seleccione";
-                     cboUnidadMedida.value = "";
-                     txtCantidad.value = "";
-                     txtValorEstimado.value = "";
-                     var divPopupContainerForm2 = document.getElementById("divPopupContainerForm2");
-                     if (divPopupContainerForm2 != null) { divPopupContainerForm2.style.display = 'block'; };
-                 }
+            else {
+                if (idTipoItems == "1" && nFilas == "1") {
+                    mostrarMensaje("No se Puede Agregar Mas Item", "warning")
+                }
+                else {
+                    //Limpiar Formulario
+                    var cboCatalogoItem = document.getElementById("select2-cboCatalogoItem-container");
+                    if (cboCatalogoItem != null) cboCatalogoItem.innerHTML = "Seleccione";
+                    cboUnidadMedida.value = "";
+                    txtCantidad.value = "";
+                    txtValorEstimado.value = "";
+                    var divPopupContainerForm2 = document.getElementById("divPopupContainerForm2");
+                    if (divPopupContainerForm2 != null) { divPopupContainerForm2.style.display = 'block'; };
+                }
             }
         }
 
@@ -901,8 +914,8 @@ function configurarBotones() {
         if (btnGuardarProceso != null) btnGuardarProceso.onclick = function () {
             var validar = false;
             var nFilas = tbDetalleItemPac.rows.length;
-            
-            if (validarInformacion("RequeProc") == true && nFilas > 0 ) {
+
+            if (validarInformacion("RequeProc") == true && nFilas > 0) {
                 validar = true;
             }
             else if (nFilas == 0) {
@@ -941,7 +954,7 @@ function configurarBotones() {
         }
 
     }
-    
+
 }
 
 function mostrarEnviarCorreo(rpta) {
@@ -1495,7 +1508,7 @@ function seleccionarBoton(idGrilla, idRegistro, idBoton) {
             if (txtIdPac != null) { txtIdPac.value = idRegistro }
 
             Http.get("General/obtenerTabla/?tbl=" + controller + vista + idBoton + '&id=' + idRegistro, mostrarRegistro);
-        
+
         }
     }
 }
@@ -1653,7 +1666,7 @@ function mostrarRegistro(rpta) {
         var nControlesSelectSearch = controlesSelectSearch.length;
         var cboEstado = document.getElementById("cboEstado");
         if (cboEstado != null) { cboEstado.disabled = false };
-        
+
         if (vista == "PedidoCompra") {
             editarPedidoCompra(rpta);
         }
@@ -1814,14 +1827,14 @@ function mostrarRegistro(rpta) {
             if (cabecera[12] != "GENERADA") {
                 btnGuardar.style.display = 'none';
                 btnGuardar.disabled = true;
-               
+
                 cboFteFto.disabled = true;
                 ttaJustificacion.disabled = true;
             }
             else {
                 btnGuardar.style.display = 'inline';
                 btnGuardar.disabled = false;
-              
+
                 cboFteFto.disabled = false;
                 ttaJustificacion.disabled = false;
             }
@@ -1857,7 +1870,6 @@ function mostrarRegistro(rpta) {
             cboUniMed.value = campos[7];
             txtNombre.value = campos[8];
             cboEstado.value = campos[9];
-
         }
         else if (vista == "Clase") {
             document.getElementById("divPopupContainer").style.display = 'block';
@@ -1866,6 +1878,7 @@ function mostrarRegistro(rpta) {
             cboGrupo.value = campos[1];
             document.getElementById('select2-cboGrupo-container').innerHTML = cboGrupo.options[cboGrupo.selectedIndex].text;
             txtIdRegistro.value = campos[2];
+            txtCodigo.value = campos[2];
             txtNombre.value = campos[3];
             cboEstado.value = campos[4];
         }
@@ -1939,7 +1952,7 @@ function mostrarRegistro(rpta) {
         //            txtIdPac.value = idpac;
         //            listarDepartamentos();
         //            document.getElementById("txtComentarioAntecedente").readOnly = true;
-                   
+
         //        }
 
         //        listarItemInventario();
@@ -1958,7 +1971,7 @@ function mostrarRegistro(rpta) {
         //        var divPopupContainer = document.getElementById("divPopupContainer");
         //        if (divPopupContainer != null) { divPopupContainer.style.display = 'block'; };
         //    }
-             
+
         //}
         else {
             var divPopupContainer = document.getElementById("divPopupContainer");
@@ -2001,15 +2014,15 @@ function mostrarRegistro(rpta) {
                             document.getElementById('select2-cboDistrito-container').innerHTML = cboDistrito.options[cboDistrito.selectedIndex].text;
                         }
                         else {
-                         if(nControlesSelectSearch > 0) 
-                            var controlSelect = 'select2-' + control.id + '-container';
+                            if (nControlesSelectSearch > 0)
+                                var controlSelect = 'select2-' + control.id + '-container';
                             var cboControlSelect = document.getElementById(controlSelect);
                             if (cboControlSelect != null) {
                                 var selected = control.options[control.selectedIndex].text;
                                 cboControlSelect.innerHTML = selected;
                             }
                         }
-                    
+
                     }
                 }
                 else if (tipo == "img") {
@@ -2031,6 +2044,27 @@ function mostrarRegistro(rpta) {
     }
 }
 
+
+function grabarConfiguracion() {
+    var data = "";
+    var frm = new FormData();
+
+    if (idTabActivo == "tabAutorizacion") {
+        var idDirector = cboDirector.value
+        var idRegistroDirector = cboDirector.getAttribute('data-id');
+        var idJeLog = cboJelog.value
+        var idRegistroJeLog = cboJelog.getAttribute('data-id');
+
+        var idJelogAlma = cboJelogAlma.value
+        var idRegistroJelogAlma = cboJelogAlma.getAttribute('data-id');
+        var idJefeAlmacen = cboJefeAlmacen.value
+        var idRegistroJefeAlmacen = cboJefeAlmacen.getAttribute('data-id');
+
+        data = idRegistroDirector + '|' + idDirector + '|' + idRegistroJeLog + '|' + idJeLog + '|' + idRegistroJelogAlma + '|' + idJelogAlma + '|' + idRegistroJefeAlmacen + '|' + idJefeAlmacen
+        frm.append("data", data);
+        Http.post("General/guardar/?tbl=" + controller + vista + 'Autorizacion', mostrarGrabarConfiguracion, frm);
+    }
+}
 
 function grabarDatos() {
     var data = ""
@@ -2111,6 +2145,45 @@ function mostrarGrabarDetalleItem(rpta) {
 
 }
 
+function mostrarGrabarConfiguracion(rpta) {
+    var mensajeResul = [];
+    if (rpta) {
+        mensajeResul = rpta.split("|");
+        var tipo = mensajeResul[0];
+        var mensaje = mensajeResul[1];
+        if (tipo == 'A') {
+            Swal.fire({
+                title: 'Finalizado!',
+                text: mensaje,
+                icon: 'success',
+                showConfirmButton: true,
+                timer: 2000
+            })
+        }
+        else {
+            Swal.fire({
+                title: 'Error!',
+                text: mensaje,
+                icon: 'error',
+                showConfirmButton: true,
+                timer: 2000
+            })
+        }
+    }
+    else {
+        Swal.fire({
+            title: 'Error!',
+            text: 'No se realizó el registro-verificador datos',
+            icon: 'error',
+            showConfirmButton: true,
+            timer: 2000
+        })
+    }
+
+    btnGuardar.innerHTML = "<i class='fa fa-save'></i> Grabar";
+    btnGuardar.disabled = false;
+}
+
 function mostrarGrabar(rpta) {
     var mensajeResul = [];
     if (rpta) {
@@ -2123,7 +2196,7 @@ function mostrarGrabar(rpta) {
 
         if (vista == "PAC") {
             document.getElementById('divPopupContainerForm1').style.display = 'none';
-            botones = botonesProceso; 
+            botones = botonesProceso;
         }
 
         grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
@@ -2421,7 +2494,7 @@ function mostrarReporte(rpta) {
                         contenido += campos[0];
                         contenido += "</td > ";
                         contenido += "<td style='vertical-align:top;text-align: justify;max-width:500px;white-space: pre-wrap;white-space: -moz-pre-wrap;white-space: -o-pre-wrap;'>";
-                        contenido +=campos[1];
+                        contenido += campos[1];
                         contenido += "</td > ";
                         contenido += "<td style='vertical-align:top;text-align: right;'>";
                         contenido += formatoNumeroDecimal(campos[5] * 1);
@@ -3218,17 +3291,17 @@ function generarPivot(detalle, div) {
 }
 
 function validarCuadroCompara() {
-    var idProveedor = cboProveedor.value;
+    //var idProveedor = cboProveedor.value;
     var idTipoEjecucion = cboTipoEjecucion.value;
     if (idRegistro == "") {
         mostrarMensaje("Seleccione una Solicitud de la fila", "error");
         return false;
     }
-    else if (idProveedor == "") {
-        mostrarMensaje("Otorgue la buena pro al Proveedor", "error");
-        cboProveedor.focus();
-        return false;
-    }
+    //else if (idProveedor == "") {
+    //    mostrarMensaje("Otorgue la buena pro al Proveedor", "error");
+    //    cboProveedor.focus();
+    //    return false;
+    //}
     else if (idTipoEjecucion == "") {
         mostrarMensaje("Seleccione Tipo de Ejecución", "error");
         cboTipoEjecucion.focus();
@@ -3241,10 +3314,10 @@ function validarCuadroCompara() {
 
 function grabarCuadroCompara() {
     var idSolicitud = idRegistro;
-    var idProveedor = cboProveedor.value;
+    //var idProveedor = cboProveedor.value;
     var idTipoEjecucion = cboTipoEjecucion.value;
     var data = "";
-    data = idSolicitud + '|' + idProveedor + '|' + idTipoEjecucion;
+    data = idSolicitud + '|' + idTipoEjecucion;
     var txtFechaInicio = document.getElementById("txtFechaInicio").value;
     var txtFechaFinal = document.getElementById("txtFechaFinal").value;
     data = data + '¯' + txtFechaInicio + '|' + txtFechaFinal
@@ -3438,7 +3511,7 @@ function validarPCAItems() {
         }
         else {
             var dataItem = '';
-            dataItem = item + '|' + codigoitemsCatalogo + '|' + codUnidadMedida + '|' +  nombreitemsCatalogo + '|' +
+            dataItem = item + '|' + codigoitemsCatalogo + '|' + codUnidadMedida + '|' + nombreitemsCatalogo + '|' +
                 nomUnidadMedida + '|' + cantidad + '|' + valorEstimado;
             listasDetalleItemPacProcesos(dataItem);
 
@@ -3450,26 +3523,26 @@ function validarPCAItems() {
 function grabarDatosPacProcesos() {
     var nFilas = tbDetalleItemPac.rows.length;
     var data = ""
-    var dataItem = ""; 
-            var fila;
-            for (var i = 0; i < nFilas; i++) {
-                fila = tbDetalleItemPac.rows[i];
-                dataItem += fila.cells[0].innerHTML; //codigo Item
-                dataItem += "|";
-                dataItem += fila.cells[1].innerHTML; //unidad medida
-                dataItem += "|";
-                dataItem += fila.cells[5].innerHTML.replace(/,/g, ''); //Cantidad
-                dataItem += "|";
-                dataItem += (fila.cells[6].innerHTML).replace(/,/g, ''); //Precio
-                dataItem += "¬";
-            }
-            dataItem = dataItem.substr(0, dataItem.length - 1);
+    var dataItem = "";
+    var fila;
+    for (var i = 0; i < nFilas; i++) {
+        fila = tbDetalleItemPac.rows[i];
+        dataItem += fila.cells[0].innerHTML; //codigo Item
+        dataItem += "|";
+        dataItem += fila.cells[1].innerHTML; //unidad medida
+        dataItem += "|";
+        dataItem += fila.cells[5].innerHTML.replace(/,/g, ''); //Cantidad
+        dataItem += "|";
+        dataItem += (fila.cells[6].innerHTML).replace(/,/g, ''); //Precio
+        dataItem += "¬";
+    }
+    dataItem = dataItem.substr(0, dataItem.length - 1);
 
-            var frm = new FormData();
-            data = obtenerDatosGrabar("Popuproceso");
-            data += "¯" + dataItem;
-    frm.append("data", data); 
-    
+    var frm = new FormData();
+    data = obtenerDatosGrabar("Popuproceso");
+    data += "¯" + dataItem;
+    frm.append("data", data);
+
     Http.post("General/guardar/?tbl=" + controller + vista + 'Proceso', mostrarGrabar, frm);
 }
 
@@ -3524,8 +3597,8 @@ function listasDetalleItemPacProcesos(listaDetalle) {
             var tbBodyResumen = "";
             tbBodyResumen += '<tr>';
             tbBodyResumen += '<td colspan="3" class="text-right">TOTAL</td>';
-            tbBodyResumen += '<td>' + formatoNumeroDecimal(totalCantidad)+'</td>';
-            tbBodyResumen += '<td colspan="2">' + formatoNumeroDecimal(totalMonto)+'</td>';
+            tbBodyResumen += '<td>' + formatoNumeroDecimal(totalCantidad) + '</td>';
+            tbBodyResumen += '<td colspan="2">' + formatoNumeroDecimal(totalMonto) + '</td>';
             tbBodyResumen += '</tr>';
             tbBodyDetalleItemPac.innerHTML = tbBodyResumen;
         }
@@ -3539,14 +3612,14 @@ function retirarItemPCA(col, id) {
 
     var dataItem = "";
     var nFilas = tbDetalleItemPac.rows.length;
-    var fila,item=0;
+    var fila, item = 0;
     for (var i = 0; i < nFilas; i++) {
         item += 1;
         fila = tbDetalleItemPac.rows[i];
         dataItem += item + '|' + fila.cells[0].innerHTML + '|';
-        dataItem += fila.cells[1].innerHTML + '|' + fila.cells[3].innerHTML+'|';
+        dataItem += fila.cells[1].innerHTML + '|' + fila.cells[3].innerHTML + '|';
         dataItem += fila.cells[4].innerHTML + '|';
-        dataItem += (fila.cells[5].innerHTML).replace(/,/g, '') +'|';
+        dataItem += (fila.cells[5].innerHTML).replace(/,/g, '') + '|';
         dataItem += (fila.cells[6].innerHTML).replace(/,/g, '');
         dataItem += "¬";
     }
