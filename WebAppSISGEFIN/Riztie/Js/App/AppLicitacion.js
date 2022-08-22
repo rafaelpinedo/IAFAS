@@ -2373,7 +2373,7 @@ function listarTabBuenaPro(rpta) {
             var estadoHtml = "";
             estadoHtml = listarEstadoBuenaPro(listaEstadoBuenaProItem, camposDetalle[4]);
 
-            filaDetalle += "<tr class='FilaDatos' onclick='seleccionarFila(this,"+camposDetalle[6]+",\"divListaBuenaPro\");'>";
+            filaDetalle += "<tr class='FilaDatos' onclick='seleccionarFilaItem(this,"+camposDetalle[6]+",\"divListaBuenaPro\");'>";
             filaDetalle += "<td style='white-space:pre-wrap;width:50px;display:none'>" + camposDetalle[0] + "</td> ";
             filaDetalle += "<td style='white-space:pre-wrap;width:50px;display:none'>" + camposDetalle[1] + "</td> ";
             filaDetalle += "<td style='white-space:pre-wrap;width:50px;display:none'>" + camposDetalle[4] + "</td> ";
@@ -2481,7 +2481,7 @@ function limpiarTablesTabProcesoSeleccion() {
     tbDetalleBuenaPro.innerHTML = "";
 }
 
-function seleccionarFila(fila, id, prefijo) {
+function seleccionarFilaItem(fila, id, prefijo) {
     idRegistro = id;
     window["id" + prefijo] = id;
     if (window["fila" + prefijo] != null) window["fila" + prefijo].className = "FilaDatos";
