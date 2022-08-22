@@ -83,8 +83,7 @@
                                             <div class="form-group col-sm-1" style="padding-top: 15px;margin-bottom: 5px;">
 
                                                 <button class="input-group-inverse btn btn-primary btn-md" id="btnVizualizarComite" data-toggle="tooltip" data-placement="bottom" title="Ver Comite" onclick="vizualizarComite()">
-
-                                                    <i class="fa fa-user fa-lg" aria-hidden="true"></i>
+                                                    <i class="fa fa-users fa-lg" aria-hidden="true"></i>
                                                 </button>
                                             </div>
                                         </div>
@@ -112,27 +111,27 @@
                                                 <div class="tab-header card">
                                                     <ul class="nav nav-tabs md-tabs tab-timeline" role="tablist" id="mytab">
                                                         <li class="nav-item">
-                                                            <a id="tabCalendario" class="nav-link active" data-toggle="tab" href="#calendario" role="tab">Calendario</a>
+                                                            <a id="tabCalendario" class="nav-link active" data-toggle="tab" href="#pane_calendario" role="tab">Calendario</a>
                                                             <div class="slide"></div>
                                                         </li>
                                                         <li class="nav-item">
-                                                            <a id="tabTecEconomica" class="nav-link" data-toggle="tab" href="#factorTecnicoEconomico" role="tab">Factores Evaluación Técnica - Económica</a>
+                                                            <a id="tabTecEconomica" class="nav-link" data-toggle="tab" href="#pane_factorTecnEcon" role="tab">Factores Evaluación Técnica - Económica</a>
                                                             <div class="slide"></div>
                                                         </li>
                                                         <li class="nav-item">
-                                                            <a id="tabParticipante" class="nav-link" data-toggle="tab" href="#participante" role="tab">Participantes</a>
+                                                            <a id="tabParticipante" class="nav-link" data-toggle="tab" href="#pane_participante" role="tab">Participantes</a>
                                                             <div class="slide"></div>
                                                         </li>
                                                         <li class="nav-item">
-                                                            <a id="tabEvaluacionTec" class="nav-link" data-toggle="tab" href="#evaltecnica" role="tab">Evaluación Técnica</a>
+                                                            <a id="tabEvaluacionTec" class="nav-link" data-toggle="tab" href="#pane_evaltecnica" role="tab">Evaluación Técnica</a>
                                                             <div class="slide"></div>
                                                         </li>
                                                         <li class="nav-item">
-                                                            <a id="tabEvaluacionEco" class="nav-link" data-toggle="tab" href="#evaleconomica" role="tab">Evaluación Económica</a>
+                                                            <a id="tabEvaluacionEco" class="nav-link" data-toggle="tab" href="#pane_evaleconomica" role="tab">Evaluación Económica</a>
                                                             <div class="slide"></div>
                                                         </li>
                                                         <li class="nav-item">
-                                                            <a id="tabBuenaPro" class="nav-link" data-toggle="tab" href="#buenapro" role="tab">Buena Pro</a>
+                                                            <a id="tabBuenaPro" class="nav-link" data-toggle="tab" href="#pane_buenapro" role="tab">Buena Pro</a>
                                                             <div class="slide"></div>
                                                         </li>
                                                     </ul>
@@ -142,7 +141,7 @@
                                                 <div id="tabProsel" class="tab-content" style="display:none">
                                                     <!-- tab panel personal start -->
                                                     <!-- START TAB CALENDARIO -->
-                                                    <div class="tab-pane active" id="calendario" role="tabpanel">
+                                                    <div class="tab-pane active" id="pane_calendario" role="tabpanel">
                                                         <div class="card">
                                                             <div class="card-block">
                                                                 <div class="view-info">
@@ -164,7 +163,7 @@
                                                                     <hr />
                                                                     <div class="row">
                                                                         <div class="form-group col-sm-12">
-                                                                            <div class="table-responsive" style="height:300px;">
+                                                                            <div class="table-responsive table-hover" style="height:300px;">
                                                                                 <table class='grilla bordered'>
                                                                                     <thead>
                                                                                         <tr class='FilaHead'>
@@ -192,13 +191,13 @@
                                                     </div>
                                                     <!-- END  -->
                                                     <!-- START TAB FACTOR TECNICO Y ECONOMICO -->
-                                                    <div class="tab-pane" id="factorTecnicoEconomico" role="tabpanel">
+                                                    <div class="tab-pane" id="pane_factorTecnEcon" role="tabpanel">
                                                         <div class="card">
                                                             <div class="card-block">
                                                                 <div class="view-info">
                                                                     <div class="row">
                                                                         <div class="form-group col-sm-12">
-                                                                            <div class="table-responsive" style="height:350px;">
+                                                                            <div class="table-responsive table-hover" style="height:350px;">
                                                                                 <table class='grilla bordered'>
                                                                                     <thead>
                                                                                         <tr class='FilaHead'>
@@ -232,7 +231,7 @@
                                                     </div>
                                                     <!-- END  -->
                                                     <!-- START TAB REGISTRO PARTICPANTE -->
-                                                    <div class="tab-pane" id="participante" role="tabpanel">
+                                                    <div class="tab-pane" id="pane_participante" role="tabpanel">
                                                         <div class="card">
                                                             <div class="card-block">
                                                                 <div class="view-info">
@@ -251,7 +250,7 @@
                                                                     </div>
                                                                     <div class="row">
                                                                         <div class="form-group col-sm-12">
-                                                                            <div class="table-responsive" style="height:300px;">
+                                                                            <div class="table-responsive table-hover" style="height:300px;">
                                                                                 <table class='grilla bordered'>
                                                                                     <thead>
                                                                                         <tr class='FilaHead'>
@@ -261,6 +260,10 @@
                                                                                         </tr>
                                                                                     </thead>
                                                                                     <tbody id="tbDetalleProcesoRegistro">
+                                                                                        <tr>
+                                                                                            <td style="white-space:pre-wrap;width:10px;vertical-align:top;"><i class="fa fa-trash f-16 text-c-red" title="Quitar Item" onclick="tabRegistroEliminarItem(this,'hola','data')"></i></td>
+                                                                                        </tr>
+                                                                                        
                                                                                     </tbody>
                                                                                 </table>
                                                                             </div>
@@ -272,9 +275,9 @@
                                                                         <button class="input-group-inverse btn btn-primary btn-sm float-right" id="btnRegistro" data-toggle="tooltip" data-placement="bottom" title="Siguiente" onclick="guardarTabRegistro()" style="margin-left: 15px;">
                                                                             <i class="fa fa-arrow-right fa-lg" aria-hidden="true"></i>
                                                                         </button>
-                                                                        <button class="input-group-inverse btn btn-primary btn-sm float-right" id="btnCalendario" data-toggle="tooltip" data-placement="bottom" title="Siguiente" onclick="retornarTab()">
+                                                                        @*<button class="input-group-inverse btn btn-primary btn-sm float-right" id="btnCalendario" data-toggle="tooltip" data-placement="bottom" title="Siguiente" onclick="retornarTab()">
                                                                             <i class="fa fa-arrow-left fa-lg" aria-hidden="true"></i>
-                                                                        </button>
+                                                                        </button>*@
 
                                                                     </div>
                                                                 </div>
@@ -283,16 +286,16 @@
                                                     </div>
                                                     <!-- END  -->
                                                     <!-- START TAB EVALUACION TECNICA PROVEEDOR -->
-                                                    <div class="tab-pane" id="evaltecnica" role="tabpanel">
+                                                    <div class="tab-pane" id="pane_evaltecnica" role="tabpanel">
                                                         <div class="card">
                                                             <div class="card-block">
                                                                 <div class="view-info">
                                                                     <input type="hidden" id="idEvaluacionTecnica" value="5" />
                                                                     <div class="row">
-                                                                        <div class="form-group col-sm-6">
+                                                                        <div class="form-group col-sm-6" style="padding-right: 2px;padding-left: 2px;">
                                                                             <fieldset class="fieldset">
                                                                                 <legend class="legend">Participantes</legend>
-                                                                                <div class="table-responsive" style="height:250px;">
+                                                                                <div class="table-responsive" id="divListaEvaTecnica" style="height:315px;">
                                                                                     <table class='grilla bordered'>
                                                                                         <thead>
                                                                                             <tr class='FilaHead'>
@@ -307,11 +310,18 @@
                                                                                 </div>
                                                                             </fieldset>
                                                                         </div>
-                                                                        <div class="form-group col-sm-6">
+                                                                        <div class="form-group col-sm-6" style="padding-right: 2px;padding-left: 2px;">
                                                                             <fieldset class="fieldset">
                                                                                 <legend class="legend" id="idTextoEvaTec">Evaluación Técnica</legend>
                                                                                 <div class="col-sm-12">
-                                                                                    <div class="table-responsive" style="height:250px;">
+                                                                                    <button class="input-group-inverse btn btn-primary btn-sm float-right"  data-toggle="tooltip" data-placement="bottom" title="Siguiente" onclick="guardarTabEvaTecnicoProveedor()">
+                                                                                        <i class="fa fa-save fa-lg" aria-hidden="true">&nbsp;&nbsp; Guardar</i>
+                                                                                    </button>
+                                                                                </div>
+                                                                                <br />
+                                                                                <br />
+                                                                                <div class="col-sm-12">
+                                                                                    <div class="table-responsive table-hover" style="height:270px;">
                                                                                         <table class='grilla bordered'>
                                                                                             <thead>
                                                                                                 <tr class='FilaHead'>
@@ -336,7 +346,7 @@
                                                                 <br />
                                                                 <div class="row">
                                                                     <div class="col-sm-12">
-                                                                        <button class="input-group-inverse btn btn-primary btn-sm float-right" id="btnRegistro" data-toggle="tooltip" data-placement="bottom" title="Siguiente" onclick="guardarTabEvaTecnicoProveedor()" style="margin-left: 15px;">
+                                                                        <button class="input-group-inverse btn btn-primary btn-sm float-right"  data-toggle="tooltip" data-placement="bottom" title="Siguiente" onclick="tabProselSiguienteItem('tabEvaluacionTec')" style="margin-left: 15px;">
                                                                             <i class="fa fa-arrow-right fa-lg" aria-hidden="true"></i>
                                                                         </button>
                                                                     </div>
@@ -346,16 +356,16 @@
                                                     </div>
                                                     <!-- END  -->
                                                     <!-- START TAB EVALUACION ECONOMICA PROVEEDOR -->
-                                                    <div class="tab-pane" id="evaleconomica" role="tabpanel">
+                                                    <div class="tab-pane" id="pane_evaleconomica" role="tabpanel">
                                                         <div class="card">
                                                             <div class="card-block">
                                                                 <div class="view-info">
                                                                     <input type="hidden" id="idEvaluacionEconomica" value="1" />
                                                                     <div class="row">
-                                                                        <div class="form-group col-sm-6">
+                                                                        <div class="form-group col-sm-6" style="padding-right: 2px;padding-left: 2px;">
                                                                             <fieldset class="fieldset">
                                                                                 <legend class="legend">Participantes</legend>
-                                                                                <div class="table-responsive" style="height:250px;">
+                                                                                <div class="table-responsive" id="divListaEvaEconomia" style="height:315px;">
                                                                                     <table class='grilla bordered'>
                                                                                         <thead>
                                                                                             <tr class='FilaHead'>
@@ -370,16 +380,24 @@
                                                                                 </div>
                                                                             </fieldset>
                                                                         </div>
-                                                                        <div class="form-group col-sm-6">
+                                                                        <div class="form-group col-sm-6" style="padding-right: 2px;padding-left: 2px;">
                                                                             <fieldset class="fieldset">
                                                                                 <legend class="legend" id="idTextoEvaEco">Evaluación Económica</legend>
                                                                                 <div class="col-sm-12">
-                                                                                    <div class="table-responsive" style="height:250px;">
+                                                                                    <button class="input-group-inverse btn btn-primary btn-sm float-right" id="btnRegistro" data-toggle="tooltip" data-placement="bottom" title="Siguiente" onclick="guardarTabEvaEconomicaProveedor()">
+                                                                                        <i class="fa fa-save fa-lg" aria-hidden="true">&nbsp;&nbsp; Guardar</i>
+                                                                                    </button>
+                                                                                </div>
+                                                                                <br />
+                                                                                <br />
+                                                                                <div class="col-sm-12" style="padding-right: 0px;padding-left: 0px;">
+                                                                                    <div class="table-responsive" style="height:270px;">
                                                                                         <table class='grilla bordered'>
                                                                                             <thead>
                                                                                                 <tr class='FilaHead'>
                                                                                                     <th rowspan="1" style="white-space:pre-wrap;width:40px;">Id</th>
                                                                                                     <th rowspan="1" style="white-space:pre-wrap;width:500px;">Descripción Factor</th>
+                                                                                                    <th rowspan="1" style="white-space:pre-wrap;width:150px;">Monto Propuesto</th>
                                                                                                     <th rowspan="1" style="white-space:pre-wrap;width:40px;">P.Max</th>
                                                                                                     <th rowspan="1" style="white-space:pre-wrap;width:40px;">Calificación</th>
                                                                                                 </tr>
@@ -395,10 +413,10 @@
                                                                     </div>
                                                                     <input type="hidden" id="txtProveedorEvaEcono" value="0" />
                                                                 </div>
-                                                                <br />
+                                                               
                                                                 <div class="row">
                                                                     <div class="col-sm-12">
-                                                                        <button class="input-group-inverse btn btn-primary btn-sm float-right" id="btnRegistro" data-toggle="tooltip" data-placement="bottom" title="Siguiente" onclick="guardarTabEvaEconomicaProveedor()" style="margin-left: 15px;">
+                                                                        <button class="input-group-inverse btn btn-primary btn-sm float-right" data-toggle="tooltip" data-placement="bottom" title="Siguiente" onclick="tabProselSiguienteItem('tabEvaluacionEco')" style="margin-left: 15px;">
                                                                             <i class="fa fa-arrow-right fa-lg" aria-hidden="true"></i>
                                                                         </button>
                                                                     </div>
@@ -407,7 +425,7 @@
                                                         </div>
                                                     </div>
                                                     <!-- END  -->
-                                                    <div class="tab-pane" id="buenapro" role="tabpanel">
+                                                    <div class="tab-pane" id="pane_buenapro" role="tabpanel">
                                                         <div class="card">
                                                             <div class="card-block">
 
@@ -417,7 +435,7 @@
                                                                         <div class="form-group col-sm-12">
                                                                             <fieldset class="fieldset">
                                                                                 <legend class="legend">Resultado de Participantes</legend>
-                                                                                <div class="table-responsive" style="height:250px;">
+                                                                                <div class="table-responsive" id="divListaBuenaPro" style="height:250px;">
                                                                                     <table class='grilla bordered'>
                                                                                         <thead>
                                                                                             <tr class="FilaHead">
