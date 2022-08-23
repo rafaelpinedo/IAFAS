@@ -95,7 +95,7 @@ function mostrarlistas(rpta) {
 
             grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
             crearCombo(listaEntidad, "cboEntidad", "Seleccione");
-            crearCombo(listaOficinaPadre, "cboOficinaPadre", "Ninguno");
+            crearCombo(listaOficinaPadre, "cboOficinaPadre", "Primer Nivel");
             crearCombo(listaEstado, "cboEstado", "Seleccione");
         }
         else if (vista == "CondicionCompra") {
@@ -2130,7 +2130,7 @@ function mostrarGrabar(rpta) {
 
         if (vista == "Oficina") {
             var listaOficinaPadre = listas[2].split("¬");
-            crearCombo(listaOficinaPadre, "cboOficinaPadre", "Ninguno");
+            crearCombo(listaOficinaPadre, "cboOficinaPadre", "Primer Nivel");
         }
         else if (vista == "OrdenCompra") {
             document.getElementById('divPopupContainerForm1').style.display = 'none';
@@ -2251,7 +2251,7 @@ function mostrarEliminar(rpta) {
 
         if (vista == "Oficina") {
             var listaOficinaPadre = listas[2].split("¬");
-            crearCombo(listaOficinaPadre, "cboOficinaPadre", "Ninguno");
+            crearCombo(listaOficinaPadre, "cboOficinaPadre", "Primer Nivel");
         }
 
         if (tipo == 'A') {
