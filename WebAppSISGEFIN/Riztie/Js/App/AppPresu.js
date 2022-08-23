@@ -78,9 +78,13 @@ function mostrarlistas(rpta) {
             listarMetaItem();
         }
         else if (vista == "ClasiGasto") {
+
             listaMetaItem_VG = listas[1].split("¬");
             var listaEstado = listas[2].split("¬");
              grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
+            crearCombo(listaMetaItem_VG, "cboPadre", "Ninguno");
+            var select2cboPadre= document.getElementById("select2-cboPadre-container");
+            if (select2cboPadre != null) select2cboPadre.innerHTML = "Ninguno";
             crearCombo(listaEstado, "cboEstado", "Seleccione");
             listarMetaItem();
         }

@@ -324,6 +324,7 @@
     <Content Include="Views\Licitacion\Prosel.cshtml" />
     <Content Include="Views\Licitacion\Contrato.cshtml" />
     <Content Include="Views\Licitacion\Comite.cshtml" />
+    <Content Include="Views\Inventario\Pendiente.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -69,6 +69,8 @@ namespace WebAppSISGEFIN.Controllers
             string[] Data = Session["DataUsuario"].ToString().Split('|');
             string IdPerfil = Data[3];
             ViewBag.Menu = new Menu().Listar(IdPerfil);
+            DateTime fecha = DateTime.Now;
+            ViewBag.Fecha = Convert.ToDateTime(fecha).ToString("yyyy-MM-dd");
             int Anio = DateTime.Now.Year;
             ViewBag.Anio = Anio;
             return View();
