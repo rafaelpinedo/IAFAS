@@ -1,5 +1,4 @@
-﻿
-var filaAnterior = null;
+﻿var filaAnterior = null;
 var idUsu = "";
 var vista = "";
 var controller = "";
@@ -13,6 +12,11 @@ var listaItemInventario = [];
 var listaUbigeo = [];
 var listaComiteItem = [];
 var listaEstadoBuenaProItem = [];
+var idTabActivo = "";
+var idCombos = [];
+var listas = [];
+var ayudas = [];
+var formulario = [];
 
 var botonesProceso = [
     { "cabecera": "Editar", "clase": "fa fa-plus-circle btn btn-info btnCirculo", "id": "Proceso" },
@@ -24,7 +28,7 @@ window.onload = function () {
     getConfigMn();
     vista = window.sessionStorage.getItem("Vista");
     controller = window.sessionStorage.getItem("Controller");
-    if (vista == "PAC" || vista == "Contrato" || vista=="Prosel") {
+    if (vista == "PAC" || vista == "Contrato" || vista == "Prosel") {
         getListarLicitaPac();
     }
     else {
@@ -305,6 +309,15 @@ function listarDistritos() {
 }
 
 
+function grabarDatosVarios(clase, tab) {
+    var idPrincipal = txtIdRegistro.value;
+    var data = ""
+    var frm = new FormData();
+    data = idPrincipal + '|' + obtenerDatosGrabar(clase);
+    frm.append("data", data);
+    Http.post("General/guardar/?tbl=" + controller + vista + tab, mostrarGrabarTab, frm);
+}
+
 function grabarDatos() {
     var data = ""
     var frm = new FormData();
@@ -327,6 +340,46 @@ function grabarDatos() {
     Http.post("General/guardar/?tbl=" + controller + vista, mostrarGrabar, frm);
 }
 
+function mostrarGrabarTab(rpta) {
+    var mensajeResul = [];
+    if (rpta) {
+        var listas = rpta.split("¯")
+        var lista = listas[0].split("¬");
+        mensajeResul = listas[1].split("|");
+        var tipo = mensajeResul[0];
+        var mensaje = mensajeResul[1];
+        divPopupContainerForm1.style.display = 'none';
+        if (idTabActivo == "tabGarantia") {
+            grillaGarantia = new GrillaScroll(lista, "divListaGarantia", 100, 6, vista, controller, null, false, true, null, 32, false, null);
+        }
+        else if (idTabActivo == "tabCronograma") {
+            grillaCronograma = new GrillaScroll(lista, "divListaCronograma", 100, 6, vista, controller, null, false, true, null, 32, false, null);
+        }
+
+        if (tipo == 'A') {
+            Swal.fire({
+                title: 'Finalizado!',
+                text: mensaje,
+                icon: 'success',
+                showConfirmButton: true,
+                timer: 2000
+            })
+            alerta = 'success';
+        }
+        else {
+            Swal.fire({
+                title: 'Error!',
+                text: mensaje,
+                icon: 'error',
+                showConfirmButton: true,
+                timer: 2000
+            })
+        }
+    }
+    else {
+        mostrarMensaje("No se realizó el registro", "error")
+    }
+}
 
 function obtenerDatosGrabar(clase) {
     var data = "";
@@ -338,7 +391,6 @@ function obtenerDatosGrabar(clase) {
         switch (control.tagName) {
             case "INPUT":
                 if (control.id.substr(0, 3) == "txt") data += control.value;
-                if (control.id.substr(0, 3) == "num") data += control.value;
                 if (control.id.substr(0, 3) == "num") data += control.value;
                 if (control.id.substr(0, 3) == "dtt") {
                     if (control.value != "") {
@@ -427,7 +479,7 @@ function seleccionarBoton(idGrilla, idRegistro, idBoton) {
             if (txtIdPac != null) {
                 txtIdPac.value = "0";
             }
-            
+
             let divContratoDetalle = document.getElementById("divContratoDetalle");
             if (divContratoDetalle != null) divContratoDetalle.style.display = 'inline';
 
@@ -459,7 +511,7 @@ function seleccionarBoton(idGrilla, idRegistro, idBoton) {
             Http.get("General/obtenerTabla/?tbl=" + controller + vista + 'Proceso' + '&id=' + idRegistro, mostrarRegistro);
 
             return;
-            
+
         }
         if (idBoton == "Eliminar") {
 
@@ -548,7 +600,7 @@ function eliminarRegistro(id) {
     if (vista == "Prosel") {
         data += '|' + txtAnioFiscal.value;
     }
-   // if (vista ="")
+    // if (vista ="")
 
     var frm = new FormData();
     frm.append("data", data);
@@ -563,82 +615,86 @@ function eliminarRegistro(id) {
         cancelButtonText: 'No'
     }).then((result) => {
         if (result.value) {
-            Http.post("General/eliminar/?tbl=" + controller + vista, mostrarEliminar, frm);
+            if (vista == "Contrato" && idTabActivo == "tabGarantia") {
+                Http.post("General/eliminar/?tbl=" + controller + vista + 'Garantia', mostrarEliminarTab, frm);
+            }
+            else if (vista == "Contrato" && idTabActivo == "tabCronograma") {
+                Http.post("General/eliminar/?tbl=" + controller + vista + 'Cronograma', mostrarEliminarTab, frm);
+            }
+            else {
+                Http.post("General/eliminar/?tbl=" + controller + vista, mostrarEliminar, frm);
+            }
         }
     })
 }
 
 function mostrarContrato(rpta) {
     if (rpta) {
+        divLicitacion.style.display = 'none';
         var listas = rpta.split("¯");
         var campos = listas[0].split('|');
         var listaDetalle = listas[1].split('¬');
 
         var controlesSelectSearch = document.getElementsByClassName("SelectSearch");
         var nControlesSelectSearch = controlesSelectSearch.length;
-        //var cboEstado = document.getElementById("cboEstado");
-        //if (cboEstado != null) { cboEstado.disabled = false };
-        //var cboEmpresa = document.getElementById("cboEmpresa");
-        //if (cboEmpresa != null) { cboEmpresa.disabled = false };
-        //var select2cboPadre = document.getElementById("select2-cboPadre-container");
-        //if (select2cboPadre != null) select2cboPadre.innerHTML = "Seleccione";
-            var divPopupContainer = document.getElementById("divPopupContainer");
-            if (divPopupContainer != null) { divPopupContainer.style.display = 'block'; };
-            var controles = document.getElementsByClassName("Popup");
-            var nControles = controles.length;
-            var control;
-            var tipo;
-            var subCampos;
-            for (var j = 0; j < nControles; j++) {
-                control = controles[j];
-                control.style.borderColor = ""
-                tipo = control.id.substr(0, 3);
-                if (tipo == "txt" || tipo == "tta" || tipo == "tim") { control.value = campos[j]; }
-                else if (tipo == "num") {
-                    control.style.textAlign = "right";
-                    control.value = campos[j];
+
+        var divPopupContainer = document.getElementById("divPopupContainer");
+        if (divPopupContainer != null) { divPopupContainer.style.display = 'block'; };
+        var controles = document.getElementsByClassName("Popup");
+        var nControles = controles.length;
+        var control;
+        var tipo;
+        var subCampos;
+        for (var j = 0; j < nControles; j++) {
+            control = controles[j];
+            control.style.borderColor = ""
+            tipo = control.id.substr(0, 3);
+            if (tipo == "txt" || tipo == "tta" || tipo == "tim") { control.value = campos[j]; }
+            else if (tipo == "num") {
+                control.style.textAlign = "right";
+                control.value = campos[j];
+            }
+            else if (tipo == "dtt") {
+                if (campos[j] == '01/01/1900') {
+                    control.value = "";
+                } else {
+                    var dFecha = campos[j].split("/");
+                    control.value = dFecha[2] + "-" + dFecha[1] + "-" + dFecha[0];
                 }
-                else if (tipo == "dtt") {
-                    if (campos[j] == '01/01/1900') {
-                        control.value = "";
-                    } else {
-                        var dFecha = campos[j].split("/");
-                        control.value = dFecha[2] + "-" + dFecha[1] + "-" + dFecha[0];
-                    }
+            }
+            else if (tipo == "cbo") {
+                subCampos = campos[j].split("-");
+                if (subCampos[0] == 0) {
+                    control.value = '';
                 }
-                else if (tipo == "cbo") {
-                    subCampos = campos[j].split("-");
-                    if (subCampos[0] == 0) {
-                        control.value = '';
-                    }
-                    else {
-                        control.value = subCampos[0];
-                        if (nControlesSelectSearch > 0) {
-                            var controlSelect = 'select2-' + control.id + '-container';
-                            var cboControlSelect = document.getElementById(controlSelect);
-                            if (cboControlSelect != null) {
-                                var selected = control.options[control.selectedIndex].text;
-                                cboControlSelect.innerHTML = selected;
-                            }
+                else {
+                    control.value = subCampos[0];
+                    if (nControlesSelectSearch > 0) {
+                        var controlSelect = 'select2-' + control.id + '-container';
+                        var cboControlSelect = document.getElementById(controlSelect);
+                        if (cboControlSelect != null) {
+                            var selected = control.options[control.selectedIndex].text;
+                            cboControlSelect.innerHTML = selected;
                         }
                     }
                 }
-                else if (tipo == "img") {
-                    control.src = "data:image/jpeg;base64," + campos[j];
+            }
+            else if (tipo == "img") {
+                control.src = "data:image/jpeg;base64," + campos[j];
+            }
+            else if (tipo == "chk" || tipo == "opt") {
+                control.checked = (campos[j] == "1")
+            }
+            else if (tipo == "dtg") {
+                if (campos[j] == 1) {
+                    $('#' + control.id).bootstrapToggle('on')
                 }
-                else if (tipo == "chk" || tipo == "opt") {
-                    control.checked = (campos[j] == "1")
-                }
-                else if (tipo == "dtg") {
-                    if (campos[j] == 1) {
-                        $('#' + control.id).bootstrapToggle('on')
-                    }
-                    else {
-                        $('#' + control.id).bootstrapToggle('off')
-                    }
+                else {
+                    $('#' + control.id).bootstrapToggle('off')
                 }
             }
-       
+        }
+
         listasDetalleContrato(listaDetalle);
     }
 }
@@ -877,7 +933,7 @@ function mostrarRegistro(rpta) {
 
 
 
-       
+
     }
 }
 
@@ -902,18 +958,94 @@ function listarSelect2Item(lista, idCombo) {
 }
 
 function configurarBotones() {
+    var btnEliminarForm = document.getElementById("btnEliminarForm");
+    if (btnEliminarForm != null) btnEliminarForm.onclick = function () {
+        if (idRegistro == "") {
+            mostrarMensaje('Seleccione un registro de la lista')
+        }
+        else {
+            eliminarRegistro(idRegistro);
+        }
+    }
 
-    
+    var btnNuevoForm = document.getElementById("btnNuevoForm");
+    if (btnNuevoForm != null) btnNuevoForm.onclick = function () {
+        divPopupContainerForm1.style.display = 'block';
+        if (idTabActivo == "tabGarantia") {
+            nombreFormulario.innerHTML = "Registro de Garantía";
+            limpiarForm("PopupGar");
+        }
+        else if (idTabActivo == "tabCronograma") {
+            nombreFormulario.innerHTML = "Registro de Cronograma";
+            limpiarForm("PopupCrono");
+        }
+    }
+
+    var tabCompromiso = document.getElementById("tabCompromiso");
+    if (tabCompromiso != null) tabCompromiso.onclick = function () {
+        idTabActivo = "tabCompromiso";
+        btnNuevoForm.style.display = 'none';
+        btnEliminarForm.style.display = 'none';
+    }
+
+    var tabGarantia = document.getElementById("tabGarantia");
+    if (tabGarantia != null) tabGarantia.onclick = function () {
+        idTabActivo = "tabGarantia";
+        var data = "";
+        if (idRegistro != "") { 
+            Http.get("General/listarTabla?tbl=" + controller + vista + "Garantia&data=" + idRegistro, mostrarlistaTab);
+        }
+        btnNuevoForm.style.display = 'inline';
+        btnEliminarForm.style.display = 'inline';
+    }
+
+    var tabCronograma = document.getElementById("tabCronograma");
+    if (tabCronograma != null) tabCronograma.onclick = function () {
+        idTabActivo = "tabCronograma";
+        //var data = "";
+        if (idRegistro != "") {
+            Http.get("General/listarTabla?tbl=" + controller + vista + "Cronograma&data=" + idRegistro, mostrarlistaTab);
+        }
+        btnNuevoForm.style.display = 'inline';
+        btnEliminarForm.style.display = 'inline';
+    }
+
     var btnNuevo = document.getElementById("btnNuevo");
     if (btnNuevo != null) btnNuevo.onclick = function () {
         divPopupContainer.style.display = 'block';
         limpiarForm("Popup");
 
+        
+        let divContratoDetalle = document.getElementById("divContratoDetalle");
+        if (divContratoDetalle != null) {
+            divContratoDetalle.style.display = 'none';
+        }
+
+        let tbBodyListDetalleItemPac = document.getElementById("tbBodyListDetalleItemPac");
+        if (tbBodyListDetalleItemPac != null) {
+            tbBodyListDetalleItemPac.innerText = "";
+        }
+
+        let tbListDetalleItemPac = document.getElementById("tbListDetalleItemPac");
+        if (tbListDetalleItemPac != null) {
+            tbListDetalleItemPac.innerText = "";
+        }
+
+        let divListaGarantia = document.getElementById("divListaGarantia");
+        if (divListaGarantia != null) {
+            divListaGarantia.innerText = "";
+        }
+
+        let divListaCronograma = document.getElementById("divListaCronograma");
+        if (divListaCronograma != null) {
+            divListaCronograma.innerText = "";
+        }
+
         let tituloModal = document.getElementById("tituloModal");
         if (tituloModal != null) {
             tituloModal.innerText = "Nuevo Registro";
         }
-                
+
         var txtAnio = document.getElementById("txtAnio");
         if (txtAnio != null) {
             var anio = txtAnio.getAttribute('value');
@@ -988,7 +1120,7 @@ function configurarBotones() {
                     //if (vista == "PedidoCompra") {
                     //    grabarPedido();
                     //}
-                     
+
                     grabarDatos();
                     Swal.fire({
                         title: 'Procesando...',
@@ -1002,7 +1134,6 @@ function configurarBotones() {
             })
         }
     }
-
 
     var btnCancelar = document.getElementById("btnCancelar");
     if (btnCancelar != null) btnCancelar.onclick = function () {
@@ -1065,6 +1196,16 @@ function configurarBotones() {
     var btnCancelarForm3 = document.getElementById("btnCancelarForm3");
     if (btnCancelarForm3 != null) btnCancelarForm3.onclick = function () {
         divPopupContainerForm3.style.display = 'none';
+    }
+
+    var btnAgregar = document.getElementById("btnAgregar");
+    if (btnAgregar != null) btnAgregar.onclick = function () {
+        if (vista == "Contrato" && idTabActivo == "tabGarantia") {
+            if (validarInformacion("RequeGar")) grabarDatosVarios("PopupGar", "Garantia");
+        }
+        else if (vista == "Contrato" && idTabActivo == "tabCronograma") {
+            if (validarInformacion("RequeCrono")) grabarDatosVarios("PopupCrono", "Cronograma");
+        }
     }
 
     if (vista == "PAC") {
@@ -1169,15 +1310,222 @@ function configurarBotones() {
     var btnConsultar = document.getElementById("btnConsultar");
     if (btnConsultar != null) btnConsultar.onclick = function () {
 
-        if (vista == "PAC" || vista == "Contrato" || vista == "Prosel" ) {
+        if (vista == "PAC" || vista == "Prosel"|| vista == "Contrato") {
             getListarLicitaPac();
         }
         else {
             getListar();
         }
     }
-    
 }
+
+
+function mostrarlistaTab(rpta) {
+    if (rpta) {
+        var listas = rpta.split('¯');
+        var lista = listas[0].split('¬');
+
+        if (idTabActivo == "tabGarantia") {
+            grillaGarantia = new GrillaScroll(lista, "divListaGarantia", 100, 6, vista, controller, null, false, null, null, 25, true, null);
+            formulario = listas[1].split("¬");
+            crearFormulario("PopupGar", "RequeGar");
+        }
+        else {
+            grillaGarantia = new GrillaScroll(lista, "divListaCronograma", 100, 6, vista, controller, null, false, null, null, 25, true, null);
+            formulario = listas[1].split("¬");
+            crearFormulario("PopupCrono", "RequeCrono");
+        }
+
+
+        var nListas = listas.length;
+        if (nListas > 2) {
+            for (var i = 2; i < nListas; i++) {
+                ayudas.push(listas[i].split("¬"));
+            }
+            if (ayudas.length > 0) {
+                for (var i = 0; i < ayudas.length; i++) {
+                    crearCombo(ayudas[i], idCombos[i], "Seleccione");
+                }
+            }
+        }
+    }
+}
+
+function crearFormulario(clasePop, claseReque) {
+    var contenido = "";
+    var nRegistros = formulario.length;
+    var prefijo;
+    var campos = [];
+    var cAyudas = 0;
+    var esLectura;
+    var esBuscar;
+    var decimal;
+    var nCol = formulario[0];
+    var cantCol = 0;
+    if (nRegistros > 0) {
+        contenido += "<div class='row'>";
+        contenido += "<div class='col-md-12 mx-auto'>";
+        for (var i = 1; i < nRegistros; i++) {
+            campos = formulario[i].split("|");
+            prefijo = campos[1].substr(0, 3);
+            esObligatorio = (campos[3].indexOf(claseReque) > -1);
+            esBuscar = (campos[3].indexOf("Buscar") > -1);
+            esLectura = (campos[3].indexOf("Lectura") > -1);
+            esPopup = (campos[3].indexOf("Lectura") > -1);
+            var dataValue = campos[1];
+            if (cantCol == '0') {
+                contenido += "<div class='form-group row'>";
+            }
+            if (nCol == '2') { contenido += "<div class='col-lg-6'>" }
+            else { contenido += "<div class='col-lg-12'>" };
+            cantCol++;
+            contenido += "<div class='col-sm-";
+            contenido += campos[2];
+            contenido += "'>";
+            if ((prefijo != "chk") && (prefijo != "opt")) {
+                contenido += "<label for='";
+                contenido += campos[1];
+                contenido += "' class='control-label'>";
+                contenido += campos[0]
+                contenido += "</label> ";
+            }
+
+            switch (prefijo) {
+                case "txt":
+                    contenido += "<input type='text'";
+                    contenido += " id = '";
+                    contenido += dataValue;
+                    contenido += "' class='control-form " + clasePop;
+                    if (esObligatorio) contenido += " " + claseReque;
+                    contenido += "'";
+                    if (esLectura) contenido += " readonly='readonly' style='background-color:#FBEC88'";
+                    contenido += " autocomplete='off'";
+                    contenido += "/>";
+                    break;
+                case "dtt":
+                    contenido += "<input type='date'";
+                    contenido += " id = '";
+                    contenido += dataValue;
+                    contenido += "' class='control-form " + clasePop;
+                    if (esObligatorio) contenido += " " + claseReque;
+                    contenido += "'";
+                    if (esLectura) contenido += " readonly='readonly' style='background-color:#FBEC88'";
+                    contenido += "/>";
+                    break;
+                case "tim":
+                    contenido += "<input type='time'";
+                    contenido += " id = '";
+                    contenido += dataValue;
+                    contenido += "' class='control-form " + clasePop;
+                    if (esObligatorio) contenido += " " + claseReque;
+                    contenido += "'";
+                    if (esLectura) contenido += " readonly='readonly' style='background-color:#FBEC88'";
+                    contenido += "/>";
+                    break;
+                case "mal":
+                    contenido += "<input type='email' ";
+                    contenido += " id = '";
+                    contenido += dataValue;
+                    contenido += "' class='control-form " + clasePop;
+                    if (esObligatorio) contenido += " " + claseReque;
+                    contenido += "'";
+                    if (esLectura) contenido += " readonly='readonly' style='background-color:#FBEC88'";
+                    contenido += "/>";
+                    break;
+                case "num":
+                    contenido += "<input type='number' ";
+                    contenido += " id = '";
+                    contenido += dataValue;
+                    contenido += "' class='control-form " + clasePop;
+                    if (esObligatorio) contenido += " " + claseReque;
+                    contenido += "'";
+                    if (esLectura) contenido += " readonly='readonly' style='background-color:#FBEC88'";
+                    contenido += " step='any' ";
+                    if (decimal) contenido += " step='any' ";
+                    contenido += "/>";
+                    break;
+                case "tta":
+                    contenido += "<textarea type='time' ";
+                    contenido += " id = '";
+                    contenido += dataValue;
+                    contenido += "' class='control-form " + clasePop;
+                    if (esObligatorio) contenido += " " + claseReque;
+                    contenido += "'";
+                    if (esLectura) contenido += " readonly='readonly' style='background-color:#FBEC88'";
+                    contenido += ">";
+                    contenido += "</textarea>";
+                    break;
+                case "chk":
+                    contenido += "<div class='custom-control custom-checkbox'>";
+                    contenido += "<input type='checkbox' ";
+                    contenido += " id='";
+                    contenido += dataValue;
+                    contenido += "' class='custom-control-input " + clasePop;
+                    if (esObligatorio) contenido += " " + claseReque;
+                    contenido += "'";
+                    if (esLectura) contenido += " readonly='readonly'";
+                    contenido += "/>";
+                    contenido += "<label for='";
+                    contenido += dataValue;
+                    contenido += "' class='custom-control-label texto-negrita'>";
+                    contenido += campos[0]
+                    contenido += "</label> ";
+                    contenido += "</div> ";
+                    break;
+                case "opt":
+                    contenido += "<div class='custom-control custom-radio'>";
+                    contenido += "<input type='radio' ";
+                    contenido += " id = '";
+                    contenido += dataValue;
+                    contenido += "' class='custom-control-input " + clasePop;
+                    if (esObligatorio) contenido += " " + claseReque;
+                    contenido += "'";
+                    if (esLectura) contenido += " readonly='readonly'";
+                    contenido += "/>";
+                    contenido += "<label for='";
+                    contenido += dataValue;
+                    contenido += "' class='custom-control-label texto-negrita'>";
+                    contenido += campos[0]
+                    contenido += "</label> ";
+                    contenido += "</div> ";
+                    break;
+                case "cbo":
+                    contenido += "<select ";
+                    contenido += " id='";
+                    contenido += dataValue;
+                    if (esBuscar) { contenido += "' class='SelectSearch control-form " + clasePop } else { contenido += "' class='control-form " + clasePop };
+                    if (esObligatorio) contenido += " " + claseReque;
+                    contenido += "'";
+                    if (esLectura) contenido += " disabled style='background-color:#FBEC88'";
+                    contenido += "></select>";
+                    idCombos.push(dataValue);
+                    break;
+            }
+            if (cantCol <= nCol) {
+                contenido += "</div>";
+                contenido += "</div>";
+                if (cantCol == nCol) {
+                    cantCol = 0;
+                }
+            }
+            if (cantCol == '0') {
+                contenido += "</div>";
+            }
+        }
+        contenido += "</div>";
+        contenido += "</div>";
+        document.getElementById("divFormulario").innerHTML = contenido;
+    }
+    if (vista == "PAC" || vista == "Contrato" || vista == "Prosel") {
+        getListarLicitaPac();
+    }
+    else {
+        getListar();
+    }
+}
+    
+
+
 
 function configurarCombos() {
 
@@ -1222,8 +1570,48 @@ function configurarCombos() {
         }
 
     }
-
 }
+
+function mostrarEliminarTab(rpta) {
+    var mensajeResul = [];
+    if (rpta) {
+        listas = rpta.split("¯");
+        lista = listas[0].split("¬");
+        mensajeResul = listas[1].split("|");
+        var tipo = mensajeResul[0];
+        var mensaje = mensajeResul[1];
+
+        if (idTabActivo == "tabGarantia") {
+            grillaGarantia = new GrillaScroll(lista, "divListaGarantia", 100, 6, vista, controller, null, false, null, null, 30, false, null);
+        }
+        else if (idTabActivo == "tabCronograma") {
+            grillaCronograma = new GrillaScroll(lista, "divListaCronograma", 100, 6, vista, controller, null, false, null, null, 30, false, null);
+        }
+
+        if (tipo == 'A') {
+            Swal.fire({
+                title: 'Eliminado!',
+                text: mensaje,
+                icon: 'success',
+                showConfirmButton: true,
+                timer: 2000
+            })
+        }
+        else {
+            Swal.fire({
+                title: 'Advertencia!',
+                text: mensaje,
+                icon: 'warning',
+                showConfirmButton: true,
+                timer: 2000
+            })
+        }
+    }
+    else {
+        mostrarMensaje("No se proceso el registro - verifique por favor", "error");
+    }
+}
+
 
 function mostrarEliminar(rpta) {
     var mensajeResul = [];
@@ -1275,7 +1663,6 @@ function seleccionarFila(fila, id, prefijo) {
     if (window["fila" + prefijo] != null) window["fila" + prefijo].className = "FilaDatos";
     fila.className = "FilaSeleccionada";
     window["fila" + prefijo] = fila;
-
     if (prefijo == "divListaPAC") {
         Http.get("General/obtenerTabla/?tbl=" + controller + vista + 'Proceso&id=' + id, listasDetalleItemPacProcesos);
         divListaDetalle.style.display = 'block';
@@ -1472,7 +1859,7 @@ function listasDetalleContrato(rpta) {
 }
 
 function listasDetalleItemPacProcesos(rpta) {
-   
+
     if (rpta) {
 
         tbListDetalleItemPac.innerHTML = "";
@@ -1675,7 +2062,6 @@ function puntajeEconomica() {
 }
 //**********************************************MENU EDICION  PROCESO TAB*******************************************//
 // next Menu
-
 function mostarResultadoItemProSel(rpta) {
     if (rpta) {
 
@@ -1717,11 +2103,11 @@ function mostarResultadoItemProSel(rpta) {
             tbDetalleEvaTecnica.innerHTML = "";
             tbDetalleEvaEconomica.innerHTML = "";
             tbDetalleBuenaPro.innerHTML = "";
-            
+
             tabRegistroListar(dataDatos);
             tabEvaTecnicaProveedorListar(dataDatos);
             tabEvaEconomicaProveedorListar(dataDatos);
-            
+
             listarTabBuenaPro(dataBuenaPro);
             document.getElementById(tabid).classList.remove("active");
             document.getElementById("tabEvaluacionTec").classList.add("active");
@@ -1773,7 +2159,7 @@ function mostarResultadoItemProSel(rpta) {
 
             document.getElementById("tabParticipante").classList.add("active");
             document.getElementById("pane_participante").classList.add("active");
-           
+
 
             tabRegistroListar(dataDatos);
             tabEvaTecnicaProveedorListar(dataDatos);
@@ -1790,6 +2176,7 @@ function mostarResultadoItemProSel(rpta) {
         mostrarMensaje("Datos no Guardados", "error");
     }
 }
+
 
 //============Calendario ============//
 function listarCalendarioProsel(rpta, tipo) {
@@ -2218,7 +2605,7 @@ function guardarTabEvaTecnicoProveedor() {
         for (var i = 0; i < nFilas; i++) {
             fila = tbDetalleEvaTecnicaLista.rows[i];
             dataItem += fila.cells[0].innerHTML + '|' + fila.cells[1].innerHTML + '|';
-            dataItem += fila.cells[6].childNodes[0].value+'|0';
+            dataItem += fila.cells[6].childNodes[0].value + '|0';
             dataItem += "¬";
         }
         dataItem = dataItem.substr(0, dataItem.length - 1);
@@ -2228,7 +2615,7 @@ function guardarTabEvaTecnicoProveedor() {
         idTextoEvaTec.innerText = "Evaluación Técnica  ";
         tbDetalleEvaTecnicaLista.innerHTML = "";
         Http.post("General/guardar/?tbl=" + controller + vista + 'EvalTecnico', mostarResultadoItemProSel, frm);
-        
+
     }
 }
 //==============Evaluacion Economica  =================================//
@@ -2244,7 +2631,7 @@ function tabEvaEconomicaProveedorListar(rpta) {
         for (var i = 0; i < nRegistros; i++) {
             camposDetalle = listaDet[i].split("|");
             aptoProceso = (camposDetalle[5] * 1)
-           
+
             if (aptoProceso >= (valorProceso * 1)) {
                 filaDetalle += "<tr class='FilaDatos' onclick='seleccionarFilaEvaluacion(this," + camposDetalle[0] + ",\"divListaEvaEconomia\",\"" + camposDetalle[4] + "\",5);'>";
                 filaDetalle += "<td style='white-space:pre-wrap;width:50px;display:none'>" + camposDetalle[0] + "</td> ";
@@ -2264,7 +2651,7 @@ function tabEvaEconomicaProveedorListar(rpta) {
     }
 }
 
-function seleccionarFilaEvaluacion(fila, id, prefijo,texto,tipoEvaluacion) {
+function seleccionarFilaEvaluacion(fila, id, prefijo, texto, tipoEvaluacion) {
     idRegistro = id;
     window["id" + prefijo] = id;
     if (window["fila" + prefijo] != null) window["fila" + prefijo].className = "FilaDatos";
@@ -2272,7 +2659,7 @@ function seleccionarFilaEvaluacion(fila, id, prefijo,texto,tipoEvaluacion) {
     window["fila" + prefijo] = fila;
     var parametro = "";
     if (prefijo == "divListaEvaEconomia") {
-        
+
         txtProveedorEvaTec.value = id;
         parametro = txtIdRegistro.value + '|' + id + '|' + tipoEvaluacion;
         idTextoEvaEco.innerText = texto;
@@ -2301,7 +2688,7 @@ function tabEvaEconomicogetProveedorListar(rpta) {
 
         for (var i = 0; i < nRegistros; i++) {
             camposDetalle = listaDet[i].split("|");
-            
+
             if (parseInt(camposDetalle[8]) == IdEvaEconomica) {
                 if (parseInt(camposDetalle[7]) == parseInt(camposDetalle[8])) {
                     filaDetalle += '<tr>';
@@ -2340,7 +2727,7 @@ function tabEvaEconomicogetProveedorListar(rpta) {
             }
         }
         tbDetalleEvaEconoLista.insertAdjacentHTML("beforeend", filaDetalle);
-         
+
     }
 }
 
@@ -2350,7 +2737,7 @@ function importeEvaEconomico(id) {
         var nFilas = tbDetalleItem.rows.length
         var fila
         var totaltec = 0;
-        var subTotalTec, valorMax=0;
+        var subTotalTec, valorMax = 0;
         for (var i = 0; i < nFilas; i++) {
             fila = tbDetalleItem.rows[i];
             if (fila.cells[7].childNodes[0].id == "evaecono") {
@@ -2444,7 +2831,7 @@ function listarEstadoBuenaPro(lista, id) {
     if (id == "") {
         contenido = "<option selected value=''>Seleccione</option>";
     }
-   
+
     var campos, idCodigo, nombre;
     for (var i = 0; i < nRegistros; i++) {
         campos = lista[i].split('|');
@@ -2486,7 +2873,7 @@ function guardarTabBuenaPro() {
         for (var i = 0; i < nFilas; i++) {
             fila = tbDetalleBuenaPro.rows[i];
             dataItem += fila.cells[0].innerHTML + '|' + fila.cells[1].innerHTML + '|' + fila.cells[8].childNodes[0].value + '|';
-            dataItem += fila.cells[9].childNodes[0].value + '|' + fila.cells[10].childNodes[0].value+ '|' + fila.cells[3].innerHTML;
+            dataItem += fila.cells[9].childNodes[0].value + '|' + fila.cells[10].childNodes[0].value + '|' + fila.cells[3].innerHTML;
             dataItem += "¬";
         }
         dataItem = dataItem.substr(0, dataItem.length - 1);
@@ -2509,7 +2896,7 @@ function tabBuenaProEliminarItem(col) {
 //-------------------------------------------------------------------//
 function tabProselSiguienteItem(id) {
     var valor = "";
-    valor = "A|Se registro  satisfactoriamente|5|" + id +"¯data"
+    valor = "A|Se registro  satisfactoriamente|5|" + id + "¯data"
     mostarResultadoItemProSel(valor);
 }
 function limpiarTablesTabProcesoSeleccion() {
