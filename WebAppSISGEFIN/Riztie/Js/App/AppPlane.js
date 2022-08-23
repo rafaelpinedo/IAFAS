@@ -1039,6 +1039,7 @@ function descargarArchivo(contenido, tipoMime) {
     document.removeChild(enlace);
 }
 
+
 function mostrarAyudasReporte(rpta) {
     if (rpta) {
         var listaOficinas = rpta.split('¬');
