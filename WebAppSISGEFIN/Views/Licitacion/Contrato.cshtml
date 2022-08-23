@@ -1,9 +1,7 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "Contrato";
     Layout = "~/Views/_LayoutPage.cshtml";
 }
-
 <div class="pcoded-content">
     <div class="pcoded-inner-content">
         <div class="main-body">
@@ -41,7 +39,7 @@
                                                 <input type="hidden" class="control-form Popup" id="txtIdRegistro">
                                                 <input type="number" id="txtAnio" class="control-form Reque Popup" value="@ViewBag.Anio" />
                                             </div>
-                                            <div class="form-group col-sm-4">
+                                            <div class="form-group col-sm-4" id="divLicitacion">
                                                 <label class="control-label">Licitación</label>
                                                 <select id="cboLicitacion" class="control-form Popup"></select>
                                             </div>
@@ -51,7 +49,7 @@
                                             </div>
                                             <div class="form-group col-sm-3">
                                                 <label class="control-label">Fecha Emisión</label>
-                                                <input type="date" id="dttFechaEmision" class="control-form Reque Popup" value="@ViewBag.Fecha"/>
+                                                <input type="date" id="dttFechaEmision" class="control-form Reque Popup" value="@ViewBag.Fecha" />
                                             </div>
                                         </div>
                                         <div class="row">
@@ -115,29 +113,33 @@
                                                     <div class="tab-header card">
                                                         <ul class="nav nav-tabs md-tabs tab-timeline" role="tablist" id="mytab">
                                                             <li class="nav-item">
-                                                                <a class="nav-link active" data-toggle="tab" href="#compromiso" role="tab">Compromiso Anual</a>
+                                                                <a class="nav-link active" id="tabCompromiso" data-toggle="tab" href="#compromiso" role="tab">Compromiso Anual</a>
                                                                 <div class="slide"></div>
                                                             </li>
                                                             <li class="nav-item">
-                                                                <a class="nav-link" data-toggle="tab" href="#garantia" role="tab">Garantías</a>
-                                                                <div class="slide"></div>
-                                                            </li>
-                                                            <li class="nav-item">
-                                                                <a class="nav-link" data-toggle="tab" href="#adelanto" role="tab">Adelanto</a>
-                                                                <div class="slide"></div>
-                                                            </li>
-                                                            <li class="nav-item">
-                                                                <a class="nav-link" data-toggle="tab" href="#adenda" role="tab">Adenda</a>
-                                                                <div class="slide"></div>
-                                                            </li>
-                                                            <li class="nav-item">
-                                                                <a class="nav-link" data-toggle="tab" href="#cronograma" role="tab">Cronograma</a>
+                                                                <a class="nav-link" id="tabGarantia" data-toggle="tab" href="#garantia" role="tab">Garantías</a>
                                                                 <div class="slide"></div>
                                                             </li>
                                                             @*<li class="nav-item">
-                                <a class="nav-link" data-toggle="tab" href="#buenapro" role="tab">Penalidad</a>
-                                <div class="slide"></div>
-                            </li>*@
+                                                                <a class="nav-link" id="tabAdelanto" data-toggle="tab" href="#adelanto"  role="tab">Adelanto</a>
+                                                                <div class="slide"></div>
+                                                            </li>
+                                                            <li class="nav-item">
+                                                                <a class="nav-link" id="tabAdenda" data-toggle="tab" href="#adenda" role="tab">Adenda</a>
+                                                                <div class="slide"></div>
+                                                            </li>*@
+                                                            <li class="nav-item">
+                                                                <a class="nav-link" id="tabCronograma" data-toggle="tab" href="#cronograma" role="tab">Cronograma</a>
+                                                                <div class="slide"></div>
+                                                            </li>
+                                                            <li class="nav-item m-2">
+                                                                <button class="btn btn-sm btn-info" id="btnNuevoForm" data-toggle="tooltip" data-placement="bottom" title="Nuevo" style="display:none;"><i class="fa fa-plus" aria-hidden="true"></i></button>
+                                                                <button class="btn btn-sm btn-danger" id="btnEliminarForm" data-toggle="tooltip" data-placement="bottom" title="Eliminar" style="display:none;"><i class="fa fa-minus" aria-hidden="true"></i></button>
+                                                            </li>
+                                                            @*<li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#buenapro" role="tab">Penalidad</a>
+            <div class="slide"></div>
+        </li>*@
                                                         </ul>
                                                     </div>
                                                     <div class="tab-content">
@@ -191,315 +193,28 @@
                                                             </div>
                                                         </div>
                                                         <div class="tab-pane" id="garantia" role="tabpanel">
-                                                            <!-- info card start -->
                                                             <div class="card">
                                                                 <div class="card-block">
-                                                                    <div class="row">
-                                                                        <div class="col-md-6">
-                                                                            <div class="card b-l-success business-info services m-b-20">
-                                                                                <div class="card-header">
-                                                                                    <div class="service-header">
-                                                                                        <a href="#">
-                                                                                            <h5 class="card-header-text">Shivani Hero</h5>
-                                                                                        </a>
-                                                                                    </div>
-                                                                                    <span class="dropdown-toggle addon-btn text-muted f-right service-btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" role="tooltip">
-                                                                                    </span>
-                                                                                    <div class="dropdown-menu dropdown-menu-right b-none services-list">
-                                                                                        <a class="dropdown-item" href="#!"><i class="icofont icofont-edit"></i> Edit</a>
-                                                                                        <a class="dropdown-item" href="#!"><i class="icofont icofont-ui-delete"></i> Delete</a>
-                                                                                        <a class="dropdown-item" href="#!"><i class="icofont icofont-eye-alt"></i> View</a>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class="card-block">
-                                                                                    <div class="row">
-                                                                                        <div class="col-sm-12">
-                                                                                            <p class="task-detail">Lorem ipsum dolor sit amet, consectet ur adipisicing elit, sed do eiusmod temp or incidi dunt ut labore et.Lorem ipsum dolor sit amet, consecte.</p>
-                                                                                        </div>
-                                                                                        <!-- end of col-sm-8 -->
-                                                                                    </div>
-                                                                                    <!-- end of row -->
-                                                                                </div>
-                                                                                <!-- end of card-block -->
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="col-md-6">
-                                                                            <div class="card b-l-danger business-info services">
-                                                                                <div class="card-header">
-                                                                                    <div class="service-header">
-                                                                                        <a href="#">
-                                                                                            <h5 class="card-header-text">Dress and Sarees</h5>
-                                                                                        </a>
-                                                                                    </div>
-                                                                                    <span class="dropdown-toggle addon-btn text-muted f-right service-btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" role="tooltip">
-                                                                                    </span>
-                                                                                    <div class="dropdown-menu dropdown-menu-right b-none services-list">
-                                                                                        <a class="dropdown-item" href="#!"><i class="icofont icofont-edit"></i> Edit</a>
-                                                                                        <a class="dropdown-item" href="#!"><i class="icofont icofont-ui-delete"></i> Delete</a>
-                                                                                        <a class="dropdown-item" href="#!"><i class="icofont icofont-eye-alt"></i> View</a>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class="card-block">
-                                                                                    <div class="row">
-                                                                                        <div class="col-sm-12">
-                                                                                            <p class="task-detail">Lorem ipsum dolor sit amet, consectet ur adipisicing elit, sed do eiusmod temp or incidi dunt ut labore et.Lorem ipsum dolor sit amet, consecte.</p>
-                                                                                        </div>
-                                                                                        <!-- end of col-sm-8 -->
-                                                                                    </div>
-                                                                                    <!-- end of row -->
-                                                                                </div>
-                                                                                <!-- end of card-block -->
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="col-md-6">
-                                                                            <div class="card b-l-info business-info services">
-                                                                                <div class="card-header">
-                                                                                    <div class="service-header">
-                                                                                        <a href="#">
-                                                                                            <h5 class="card-header-text">Shivani Auto Port</h5>
-                                                                                        </a>
-                                                                                    </div>
-                                                                                    <span class="dropdown-toggle addon-btn text-muted f-right service-btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" role="tooltip">
-                                                                                    </span>
-                                                                                    <div class="dropdown-menu dropdown-menu-right b-none services-list">
-                                                                                        <a class="dropdown-item" href="#!"><i class="icofont icofont-edit"></i> Edit</a>
-                                                                                        <a class="dropdown-item" href="#!"><i class="icofont icofont-ui-delete"></i> Delete</a>
-                                                                                        <a class="dropdown-item" href="#!"><i class="icofont icofont-eye-alt"></i> View</a>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class="card-block">
-                                                                                    <div class="row">
-                                                                                        <div class="col-sm-12">
-                                                                                            <p class="task-detail">Lorem ipsum dolor sit amet, consectet ur adipisicing elit, sed do eiusmod temp or incidi dunt ut labore et.Lorem ipsum dolor sit amet, consecte.</p>
-                                                                                        </div>
-                                                                                        <!-- end of col-sm-8 -->
-                                                                                    </div>
-                                                                                    <!-- end of row -->
-                                                                                </div>
-                                                                                <!-- end of card-block -->
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="col-md-6">
-                                                                            <div class="card b-l-warning business-info services">
-                                                                                <div class="card-header">
-                                                                                    <div class="service-header">
-                                                                                        <a href="#">
-                                                                                            <h5 class="card-header-text">Hair stylist</h5>
-                                                                                        </a>
-                                                                                    </div>
-                                                                                    <span class="dropdown-toggle addon-btn text-muted f-right service-btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" role="tooltip">
-                                                                                    </span>
-                                                                                    <div class="dropdown-menu dropdown-menu-right b-none services-list">
-                                                                                        <a class="dropdown-item" href="#!"><i class="icofont icofont-edit"></i> Edit</a>
-                                                                                        <a class="dropdown-item" href="#!"><i class="icofont icofont-ui-delete"></i> Delete</a>
-                                                                                        <a class="dropdown-item" href="#!"><i class="icofont icofont-eye-alt"></i> View</a>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class="card-block">
-                                                                                    <div class="row">
-                                                                                        <div class="col-sm-12">
-                                                                                            <p class="task-detail">Lorem ipsum dolor sit amet, consectet ur adipisicing elit, sed do eiusmod temp or incidi dunt ut labore et.Lorem ipsum dolor sit amet, consecte.</p>
-                                                                                        </div>
-                                                                                        <!-- end of col-sm-8 -->
-                                                                                    </div>
-                                                                                    <!-- end of row -->
-                                                                                </div>
-                                                                                <!-- end of card-block -->
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="col-md-6">
-                                                                            <div class="card b-l-danger business-info services">
-                                                                                <div class="card-header">
-                                                                                    <div class="service-header">
-                                                                                        <a href="#">
-                                                                                            <h5 class="card-header-text">BMW India</h5>
-                                                                                        </a>
-                                                                                    </div>
-                                                                                    <span class="dropdown-toggle addon-btn text-muted f-right service-btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" role="tooltip">
-                                                                                    </span>
-                                                                                    <div class="dropdown-menu dropdown-menu-right b-none services-list">
-                                                                                        <a class="dropdown-item" href="#!"><i class="icofont icofont-edit"></i> Edit</a>
-                                                                                        <a class="dropdown-item" href="#!"><i class="icofont icofont-ui-delete"></i> Delete</a>
-                                                                                        <a class="dropdown-item" href="#!"><i class="icofont icofont-eye-alt"></i> View</a>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class="card-block">
-                                                                                    <div class="row">
-                                                                                        <div class="col-sm-12">
-                                                                                            <p class="task-detail">Lorem ipsum dolor sit amet, consectet ur adipisicing elit, sed do eiusmod temp or incidi dunt ut labore et.Lorem ipsum dolor sit amet, consecte.</p>
-                                                                                        </div>
-                                                                                        <!-- end of col-sm-8 -->
-                                                                                    </div>
-                                                                                    <!-- end of row -->
-                                                                                </div>
-                                                                                <!-- end of card-block -->
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="col-md-6">
-                                                                            <div class="card b-l-success business-info services">
-                                                                                <div class="card-header">
-                                                                                    <div class="service-header">
-                                                                                        <a href="#">
-                                                                                            <h5 class="card-header-text">Shivani Hero</h5>
-                                                                                        </a>
-                                                                                    </div>
-                                                                                    <span class="dropdown-toggle addon-btn text-muted f-right service-btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" role="tooltip">
-                                                                                    </span>
-                                                                                    <div class="dropdown-menu dropdown-menu-right b-none services-list">
-                                                                                        <a class="dropdown-item" href="#!"><i class="icofont icofont-edit"></i> Edit</a>
-                                                                                        <a class="dropdown-item" href="#!"><i class="icofont icofont-ui-delete"></i> Delete</a>
-                                                                                        <a class="dropdown-item" href="#!"><i class="icofont icofont-eye-alt"></i> View</a>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class="card-block">
-                                                                                    <div class="row">
-                                                                                        <div class="col-sm-12">
-                                                                                            <p class="task-detail">Lorem ipsum dolor sit amet, consectet ur adipisicing elit, sed do eiusmod temp or incidi dunt ut labore et.Lorem ipsum dolor sit amet, consecte.</p>
-                                                                                        </div>
-                                                                                        <!-- end of col-sm-8 -->
-                                                                                    </div>
-                                                                                    <!-- end of row -->
-                                                                                </div>
-                                                                                <!-- end of card-block -->
-                                                                            </div>
+                                                                    <div class="form-row">
+                                                                        <div class="form-group col-md-12">
+                                                                            <div class="table-responsive" id="divListaGarantia"></div>
                                                                         </div>
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                            <!-- info card end -->
                                                         </div>
                                                         <div class="tab-pane" id="adelanto" role="tabpanel">
                                                             <div class="row">
                                                                 <div class="col-sm-12">
-                                                                    <!-- contact data table card start -->
                                                                     <div class="card">
-                                                                        <div class="card-block contact-details">
-                                                                            <div class="data_table_main table-responsive dt-responsive">
-                                                                                <table id="simpletable" class="table  table-striped table-bordered nowrap">
-                                                                                    <thead>
-                                                                                        <tr>
-                                                                                            <th>Name</th>
-                                                                                            <th>Email</th>
-                                                                                            <th>Mobileno.</th>
-                                                                                            <th>Favourite</th>
-                                                                                            <th>Action</th>
-                                                                                        </tr>
-                                                                                    </thead>
-                                                                                    <tbody>
-                                                                                        <tr>
-                                                                                            <td>Garrett Winters</td>
-                                                                                            <td>abc123@gmail.com</td>
-                                                                                            <td>9989988988</td>
-                                                                                            <td><i class="fa fa-star-o" aria-hidden="true"></i></td>
-                                                                                            <td class="dropdown">
-                                                                                                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-cog" aria-hidden="true"></i></button>
-                                                                                                <div class="dropdown-menu dropdown-menu-right b-none contact-menu">
-                                                                                                    <a class="dropdown-item" href="#!"><i class="icofont icofont-edit"></i>Edit</a>
-                                                                                                    <a class="dropdown-item" href="#!"><i class="icofont icofont-ui-delete"></i>Delete</a>
-                                                                                                    <a class="dropdown-item" href="#!"><i class="icofont icofont-eye-alt"></i>View</a>
-                                                                                                    <a class="dropdown-item" href="#!"><i class="icofont icofont-tasks-alt"></i>Project</a>
-                                                                                                    <a class="dropdown-item" href="#!"><i class="icofont icofont-ui-note"></i>Notes</a>
-                                                                                                    <a class="dropdown-item" href="#!"><i class="icofont icofont-eye-alt"></i>Activity</a>
-                                                                                                    <a class="dropdown-item" href="#!"><i class="icofont icofont-badge"></i>Schedule</a>
-                                                                                                </div>
-                                                                                            </td>
-                                                                                        </tr>
-                                                                                        <tr>
-                                                                                            <td>Garrett Winters</td>
-                                                                                            <td>abc123@gmail.com</td>
-                                                                                            <td>9989988988</td>
-                                                                                            <td><i class="fa fa-star" aria-hidden="true"></i></td>
-                                                                                            <td class="dropdown">
-                                                                                                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-cog" aria-hidden="true"></i></button>
-                                                                                                <div class="dropdown-menu dropdown-menu-right b-none contact-menu">
-                                                                                                    <a class="dropdown-item" href="#!"><i class="icofont icofont-edit"></i>Edit</a>
-                                                                                                    <a class="dropdown-item" href="#!"><i class="icofont icofont-ui-delete"></i>Delete</a>
-                                                                                                    <a class="dropdown-item" href="#!"><i class="icofont icofont-eye-alt"></i>View</a>
-                                                                                                    <a class="dropdown-item" href="#!"><i class="icofont icofont-tasks-alt"></i>Project</a>
-                                                                                                    <a class="dropdown-item" href="#!"><i class="icofont icofont-ui-note"></i>Notes</a>
-                                                                                                    <a class="dropdown-item" href="#!"><i class="icofont icofont-eye-alt"></i>Activity</a>
-                                                                                                    <a class="dropdown-item" href="#!"><i class="icofont icofont-badge"></i>Schedule</a>
-                                                                                                </div>
-                                                                                            </td>
-                                                                                        </tr>
-                                                                                        <tr>
-                                                                                            <td>Garrett Winters</td>
-                                                                                            <td>abc123@gmail.com</td>
-                                                                                            <td>9989988988</td>
-                                                                                            <td><i class="fa fa-star-o" aria-hidden="true"></i></td>
-                                                                                            <td class="dropdown">
-                                                                                                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-cog" aria-hidden="true"></i></button>
-                                                                                                <div class="dropdown-menu dropdown-menu-right b-none contact-menu">
-                                                                                                    <a class="dropdown-item" href="#!"><i class="icofont icofont-edit"></i>Edit</a>
-                                                                                                    <a class="dropdown-item" href="#!"><i class="icofont icofont-ui-delete"></i>Delete</a>
-                                                                                                    <a class="dropdown-item" href="#!"><i class="icofont icofont-eye-alt"></i>View</a>
-                                                                                                    <a class="dropdown-item" href="#!"><i class="icofont icofont-tasks-alt"></i>Project</a>
-                                                                                                    <a class="dropdown-item" href="#!"><i class="icofont icofont-ui-note"></i>Notes</a>
-                                                                                                    <a class="dropdown-item" href="#!"><i class="icofont icofont-eye-alt"></i>Activity</a>
-                                                                                                    <a class="dropdown-item" href="#!"><i class="icofont icofont-badge"></i>Schedule</a>
-                                                                                                </div>
-                                                                                            </td>
-                                                                                        </tr>
-                                                                                        <tr>
-                                                                                            <td>Garrett Winters</td>
-                                                                                            <td>abc123@gmail.com</td>
-                                                                                            <td>9989988988</td>
-                                                                                            <td><i class="fa fa-star" aria-hidden="true"></i></td>
-                                                                                            <td class="dropdown">
-                                                                                                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-cog" aria-hidden="true"></i></button>
-                                                                                                <div class="dropdown-menu dropdown-menu-right b-none contact-menu">
-                                                                                                    <a class="dropdown-item" href="#!"><i class="icofont icofont-edit"></i>Edit</a>
-                                                                                                    <a class="dropdown-item" href="#!"><i class="icofont icofont-ui-delete"></i>Delete</a>
-                                                                                                    <a class="dropdown-item" href="#!"><i class="icofont icofont-eye-alt"></i>View</a>
-                                                                                                    <a class="dropdown-item" href="#!"><i class="icofont icofont-tasks-alt"></i>Project</a>
-                                                                                                    <a class="dropdown-item" href="#!"><i class="icofont icofont-ui-note"></i>Notes</a>
-                                                                                                    <a class="dropdown-item" href="#!"><i class="icofont icofont-eye-alt"></i>Activity</a>
-                                                                                                    <a class="dropdown-item" href="#!"><i class="icofont icofont-badge"></i>Schedule</a>
-                                                                                                </div>
-                                                                                            </td>
-                                                                                        </tr>
-                                                                                        <tr>
-                                                                                            <td>Garrett Winters</td>
-                                                                                            <td>abc123@gmail.com</td>
-                                                                                            <td>9989988988</td>
-                                                                                            <td><i class="fa fa-star" aria-hidden="true"></i></td>
-                                                                                            <td class="dropdown">
-                                                                                                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-cog" aria-hidden="true"></i></button>
-                                                                                                <div class="dropdown-menu dropdown-menu-right b-none contact-menu">
-                                                                                                    <a class="dropdown-item" href="#!"><i class="icofont icofont-edit"></i>Edit</a>
-                                                                                                    <a class="dropdown-item" href="#!"><i class="icofont icofont-ui-delete"></i>Delete</a>
-                                                                                                    <a class="dropdown-item" href="#!"><i class="icofont icofont-eye-alt"></i>View</a>
-                                                                                                    <a class="dropdown-item" href="#!"><i class="icofont icofont-tasks-alt"></i>Project</a>
-                                                                                                    <a class="dropdown-item" href="#!"><i class="icofont icofont-ui-note"></i>Notes</a>
-                                                                                                    <a class="dropdown-item" href="#!"><i class="icofont icofont-eye-alt"></i>Activity</a>
-                                                                                                    <a class="dropdown-item" href="#!"><i class="icofont icofont-badge"></i>Schedule</a>
-                                                                                                </div>
-                                                                                            </td>
-                                                                                        </tr>
-                                                                                        <tr>
-                                                                                            <td>Garrett Winters</td>
-                                                                                            <td>abc123@gmail.com</td>
-                                                                                            <td>9989988988</td>
-                                                                                            <td><i class="fa fa-star-o" aria-hidden="true"></i></td>
-                                                                                            <td class="dropdown">
-                                                                                                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-cog" aria-hidden="true"></i></button>
-                                                                                                <div class="dropdown-menu dropdown-menu-right b-none contact-menu">
-                                                                                                    <a class="dropdown-item" href="#!"><i class="icofont icofont-edit"></i>Edit</a>
-                                                                                                    <a class="dropdown-item" href="#!"><i class="icofont icofont-ui-delete"></i>Delete</a>
-                                                                                                    <a class="dropdown-item" href="#!"><i class="icofont icofont-eye-alt"></i>View</a>
-                                                                                                    <a class="dropdown-item" href="#!"><i class="icofont icofont-tasks-alt"></i>Project</a>
-                                                                                                    <a class="dropdown-item" href="#!"><i class="icofont icofont-ui-note"></i>Notes</a>
-                                                                                                    <a class="dropdown-item" href="#!"><i class="icofont icofont-eye-alt"></i>Activity</a>
-                                                                                                    <a class="dropdown-item" href="#!"><i class="icofont icofont-badge"></i>Schedule</a>
-                                                                                                </div>
-                                                                                            </td>
-                                                                                        </tr>
-                                                                                    </tbody>
-                                                                                </table>
+                                                                        <div class="card-block">
+                                                                            <div class="form-row">
+                                                                                <div class="form-group col-md-12">
+                                                                                    <div class="table-responsive" id="divListaAdelanto"></div>
+                                                                                </div>
                                                                             </div>
                                                                         </div>
                                                                     </div>
-                                                                    <!-- contact data table card end -->
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -508,135 +223,15 @@
                                                                 <div class="card-block">
                                                                     <div class="row">
                                                                         <div class="col-sm-12">
-                                                                            <!-- contact data table card start -->
                                                                             <div class="card">
-                                                                                <div class="card-block contact-details">
-                                                                                    <div class="data_table_main table-responsive dt-responsive">
-                                                                                        <table id="simpletable" class="table  table-striped table-bordered nowrap">
-                                                                                            <thead>
-                                                                                                <tr>
-                                                                                                    <th>Name</th>
-                                                                                                    <th>Email</th>
-                                                                                                    <th>Mobileno.</th>
-                                                                                                    <th>Favourite</th>
-                                                                                                    <th>Action</th>
-                                                                                                </tr>
-                                                                                            </thead>
-                                                                                            <tbody>
-                                                                                                <tr>
-                                                                                                    <td>Garrett Winters</td>
-                                                                                                    <td>abc123@gmail.com</td>
-                                                                                                    <td>9989988988</td>
-                                                                                                    <td><i class="fa fa-star-o" aria-hidden="true"></i></td>
-                                                                                                    <td class="dropdown">
-                                                                                                        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-cog" aria-hidden="true"></i></button>
-                                                                                                        <div class="dropdown-menu dropdown-menu-right b-none contact-menu">
-                                                                                                            <a class="dropdown-item" href="#!"><i class="icofont icofont-edit"></i>Edit</a>
-                                                                                                            <a class="dropdown-item" href="#!"><i class="icofont icofont-ui-delete"></i>Delete</a>
-                                                                                                            <a class="dropdown-item" href="#!"><i class="icofont icofont-eye-alt"></i>View</a>
-                                                                                                            <a class="dropdown-item" href="#!"><i class="icofont icofont-tasks-alt"></i>Project</a>
-                                                                                                            <a class="dropdown-item" href="#!"><i class="icofont icofont-ui-note"></i>Notes</a>
-                                                                                                            <a class="dropdown-item" href="#!"><i class="icofont icofont-eye-alt"></i>Activity</a>
-                                                                                                            <a class="dropdown-item" href="#!"><i class="icofont icofont-badge"></i>Schedule</a>
-                                                                                                        </div>
-                                                                                                    </td>
-                                                                                                </tr>
-                                                                                                <tr>
-                                                                                                    <td>Garrett Winters</td>
-                                                                                                    <td>abc123@gmail.com</td>
-                                                                                                    <td>9989988988</td>
-                                                                                                    <td><i class="fa fa-star" aria-hidden="true"></i></td>
-                                                                                                    <td class="dropdown">
-                                                                                                        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-cog" aria-hidden="true"></i></button>
-                                                                                                        <div class="dropdown-menu dropdown-menu-right b-none contact-menu">
-                                                                                                            <a class="dropdown-item" href="#!"><i class="icofont icofont-edit"></i>Edit</a>
-                                                                                                            <a class="dropdown-item" href="#!"><i class="icofont icofont-ui-delete"></i>Delete</a>
-                                                                                                            <a class="dropdown-item" href="#!"><i class="icofont icofont-eye-alt"></i>View</a>
-                                                                                                            <a class="dropdown-item" href="#!"><i class="icofont icofont-tasks-alt"></i>Project</a>
-                                                                                                            <a class="dropdown-item" href="#!"><i class="icofont icofont-ui-note"></i>Notes</a>
-                                                                                                            <a class="dropdown-item" href="#!"><i class="icofont icofont-eye-alt"></i>Activity</a>
-                                                                                                            <a class="dropdown-item" href="#!"><i class="icofont icofont-badge"></i>Schedule</a>
-                                                                                                        </div>
-                                                                                                    </td>
-                                                                                                </tr>
-                                                                                                <tr>
-                                                                                                    <td>Garrett Winters</td>
-                                                                                                    <td>abc123@gmail.com</td>
-                                                                                                    <td>9989988988</td>
-                                                                                                    <td><i class="fa fa-star-o" aria-hidden="true"></i></td>
-                                                                                                    <td class="dropdown">
-                                                                                                        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-cog" aria-hidden="true"></i></button>
-                                                                                                        <div class="dropdown-menu dropdown-menu-right b-none contact-menu">
-                                                                                                            <a class="dropdown-item" href="#!"><i class="icofont icofont-edit"></i>Edit</a>
-                                                                                                            <a class="dropdown-item" href="#!"><i class="icofont icofont-ui-delete"></i>Delete</a>
-                                                                                                            <a class="dropdown-item" href="#!"><i class="icofont icofont-eye-alt"></i>View</a>
-                                                                                                            <a class="dropdown-item" href="#!"><i class="icofont icofont-tasks-alt"></i>Project</a>
-                                                                                                            <a class="dropdown-item" href="#!"><i class="icofont icofont-ui-note"></i>Notes</a>
-                                                                                                            <a class="dropdown-item" href="#!"><i class="icofont icofont-eye-alt"></i>Activity</a>
-                                                                                                            <a class="dropdown-item" href="#!"><i class="icofont icofont-badge"></i>Schedule</a>
-                                                                                                        </div>
-                                                                                                    </td>
-                                                                                                </tr>
-                                                                                                <tr>
-                                                                                                    <td>Garrett Winters</td>
-                                                                                                    <td>abc123@gmail.com</td>
-                                                                                                    <td>9989988988</td>
-                                                                                                    <td><i class="fa fa-star" aria-hidden="true"></i></td>
-                                                                                                    <td class="dropdown">
-                                                                                                        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-cog" aria-hidden="true"></i></button>
-                                                                                                        <div class="dropdown-menu dropdown-menu-right b-none contact-menu">
-                                                                                                            <a class="dropdown-item" href="#!"><i class="icofont icofont-edit"></i>Edit</a>
-                                                                                                            <a class="dropdown-item" href="#!"><i class="icofont icofont-ui-delete"></i>Delete</a>
-                                                                                                            <a class="dropdown-item" href="#!"><i class="icofont icofont-eye-alt"></i>View</a>
-                                                                                                            <a class="dropdown-item" href="#!"><i class="icofont icofont-tasks-alt"></i>Project</a>
-                                                                                                            <a class="dropdown-item" href="#!"><i class="icofont icofont-ui-note"></i>Notes</a>
-                                                                                                            <a class="dropdown-item" href="#!"><i class="icofont icofont-eye-alt"></i>Activity</a>
-                                                                                                            <a class="dropdown-item" href="#!"><i class="icofont icofont-badge"></i>Schedule</a>
-                                                                                                        </div>
-                                                                                                    </td>
-                                                                                                </tr>
-                                                                                                <tr>
-                                                                                                    <td>Garrett Winters</td>
-                                                                                                    <td>abc123@gmail.com</td>
-                                                                                                    <td>9989988988</td>
-                                                                                                    <td><i class="fa fa-star" aria-hidden="true"></i></td>
-                                                                                                    <td class="dropdown">
-                                                                                                        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-cog" aria-hidden="true"></i></button>
-                                                                                                        <div class="dropdown-menu dropdown-menu-right b-none contact-menu">
-                                                                                                            <a class="dropdown-item" href="#!"><i class="icofont icofont-edit"></i>Edit</a>
-                                                                                                            <a class="dropdown-item" href="#!"><i class="icofont icofont-ui-delete"></i>Delete</a>
-                                                                                                            <a class="dropdown-item" href="#!"><i class="icofont icofont-eye-alt"></i>View</a>
-                                                                                                            <a class="dropdown-item" href="#!"><i class="icofont icofont-tasks-alt"></i>Project</a>
-                                                                                                            <a class="dropdown-item" href="#!"><i class="icofont icofont-ui-note"></i>Notes</a>
-                                                                                                            <a class="dropdown-item" href="#!"><i class="icofont icofont-eye-alt"></i>Activity</a>
-                                                                                                            <a class="dropdown-item" href="#!"><i class="icofont icofont-badge"></i>Schedule</a>
-                                                                                                        </div>
-                                                                                                    </td>
-                                                                                                </tr>
-                                                                                                <tr>
-                                                                                                    <td>Garrett Winters</td>
-                                                                                                    <td>abc123@gmail.com</td>
-                                                                                                    <td>9989988988</td>
-                                                                                                    <td><i class="fa fa-star-o" aria-hidden="true"></i></td>
-                                                                                                    <td class="dropdown">
-                                                                                                        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-cog" aria-hidden="true"></i></button>
-                                                                                                        <div class="dropdown-menu dropdown-menu-right b-none contact-menu">
-                                                                                                            <a class="dropdown-item" href="#!"><i class="icofont icofont-edit"></i>Edit</a>
-                                                                                                            <a class="dropdown-item" href="#!"><i class="icofont icofont-ui-delete"></i>Delete</a>
-                                                                                                            <a class="dropdown-item" href="#!"><i class="icofont icofont-eye-alt"></i>View</a>
-                                                                                                            <a class="dropdown-item" href="#!"><i class="icofont icofont-tasks-alt"></i>Project</a>
-                                                                                                            <a class="dropdown-item" href="#!"><i class="icofont icofont-ui-note"></i>Notes</a>
-                                                                                                            <a class="dropdown-item" href="#!"><i class="icofont icofont-eye-alt"></i>Activity</a>
-                                                                                                            <a class="dropdown-item" href="#!"><i class="icofont icofont-badge"></i>Schedule</a>
-                                                                                                        </div>
-                                                                                                    </td>
-                                                                                                </tr>
-                                                                                            </tbody>
-                                                                                        </table>
+                                                                                <div class="card-block">
+                                                                                    <div class="form-row">
+                                                                                        <div class="form-group col-md-12">
+                                                                                            <div class="table-responsive" id="divListaAdenda"></div>
+                                                                                        </div>
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
-                                                                            <!-- contact data table card end -->
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -645,137 +240,9 @@
                                                         <div class="tab-pane" id="cronograma" role="tabpanel">
                                                             <div class="card">
                                                                 <div class="card-block">
-                                                                    <div class="row">
-                                                                        <div class="col-sm-12">
-                                                                            <!-- contact data table card start -->
-                                                                            <div class="card">
-                                                                                <div class="card-block contact-details">
-                                                                                    <div class="data_table_main table-responsive dt-responsive">
-                                                                                        <table id="simpletable" class="table  table-striped table-bordered nowrap">
-                                                                                            <thead>
-                                                                                                <tr>
-                                                                                                    <th>Name</th>
-                                                                                                    <th>Email</th>
-                                                                                                    <th>Mobileno.</th>
-                                                                                                    <th>Favourite</th>
-                                                                                                    <th>Action</th>
-                                                                                                </tr>
-                                                                                            </thead>
-                                                                                            <tbody>
-                                                                                                <tr>
-                                                                                                    <td>Garrett Winters</td>
-                                                                                                    <td>abc123@gmail.com</td>
-                                                                                                    <td>9989988988</td>
-                                                                                                    <td><i class="fa fa-star-o" aria-hidden="true"></i></td>
-                                                                                                    <td class="dropdown">
-                                                                                                        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-cog" aria-hidden="true"></i></button>
-                                                                                                        <div class="dropdown-menu dropdown-menu-right b-none contact-menu">
-                                                                                                            <a class="dropdown-item" href="#!"><i class="icofont icofont-edit"></i>Edit</a>
-                                                                                                            <a class="dropdown-item" href="#!"><i class="icofont icofont-ui-delete"></i>Delete</a>
-                                                                                                            <a class="dropdown-item" href="#!"><i class="icofont icofont-eye-alt"></i>View</a>
-                                                                                                            <a class="dropdown-item" href="#!"><i class="icofont icofont-tasks-alt"></i>Project</a>
-                                                                                                            <a class="dropdown-item" href="#!"><i class="icofont icofont-ui-note"></i>Notes</a>
-                                                                                                            <a class="dropdown-item" href="#!"><i class="icofont icofont-eye-alt"></i>Activity</a>
-                                                                                                            <a class="dropdown-item" href="#!"><i class="icofont icofont-badge"></i>Schedule</a>
-                                                                                                        </div>
-                                                                                                    </td>
-                                                                                                </tr>
-                                                                                                <tr>
-                                                                                                    <td>Garrett Winters</td>
-                                                                                                    <td>abc123@gmail.com</td>
-                                                                                                    <td>9989988988</td>
-                                                                                                    <td><i class="fa fa-star" aria-hidden="true"></i></td>
-                                                                                                    <td class="dropdown">
-                                                                                                        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-cog" aria-hidden="true"></i></button>
-                                                                                                        <div class="dropdown-menu dropdown-menu-right b-none contact-menu">
-                                                                                                            <a class="dropdown-item" href="#!"><i class="icofont icofont-edit"></i>Edit</a>
-                                                                                                            <a class="dropdown-item" href="#!"><i class="icofont icofont-ui-delete"></i>Delete</a>
-                                                                                                            <a class="dropdown-item" href="#!"><i class="icofont icofont-eye-alt"></i>View</a>
-                                                                                                            <a class="dropdown-item" href="#!"><i class="icofont icofont-tasks-alt"></i>Project</a>
-                                                                                                            <a class="dropdown-item" href="#!"><i class="icofont icofont-ui-note"></i>Notes</a>
-                                                                                                            <a class="dropdown-item" href="#!"><i class="icofont icofont-eye-alt"></i>Activity</a>
-                                                                                                            <a class="dropdown-item" href="#!"><i class="icofont icofont-badge"></i>Schedule</a>
-                                                                                                        </div>
-                                                                                                    </td>
-                                                                                                </tr>
-                                                                                                <tr>
-                                                                                                    <td>Garrett Winters</td>
-                                                                                                    <td>abc123@gmail.com</td>
-                                                                                                    <td>9989988988</td>
-                                                                                                    <td><i class="fa fa-star-o" aria-hidden="true"></i></td>
-                                                                                                    <td class="dropdown">
-                                                                                                        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-cog" aria-hidden="true"></i></button>
-                                                                                                        <div class="dropdown-menu dropdown-menu-right b-none contact-menu">
-                                                                                                            <a class="dropdown-item" href="#!"><i class="icofont icofont-edit"></i>Edit</a>
-                                                                                                            <a class="dropdown-item" href="#!"><i class="icofont icofont-ui-delete"></i>Delete</a>
-                                                                                                            <a class="dropdown-item" href="#!"><i class="icofont icofont-eye-alt"></i>View</a>
-                                                                                                            <a class="dropdown-item" href="#!"><i class="icofont icofont-tasks-alt"></i>Project</a>
-                                                                                                            <a class="dropdown-item" href="#!"><i class="icofont icofont-ui-note"></i>Notes</a>
-                                                                                                            <a class="dropdown-item" href="#!"><i class="icofont icofont-eye-alt"></i>Activity</a>
-                                                                                                            <a class="dropdown-item" href="#!"><i class="icofont icofont-badge"></i>Schedule</a>
-                                                                                                        </div>
-                                                                                                    </td>
-                                                                                                </tr>
-                                                                                                <tr>
-                                                                                                    <td>Garrett Winters</td>
-                                                                                                    <td>abc123@gmail.com</td>
-                                                                                                    <td>9989988988</td>
-                                                                                                    <td><i class="fa fa-star" aria-hidden="true"></i></td>
-                                                                                                    <td class="dropdown">
-                                                                                                        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-cog" aria-hidden="true"></i></button>
-                                                                                                        <div class="dropdown-menu dropdown-menu-right b-none contact-menu">
-                                                                                                            <a class="dropdown-item" href="#!"><i class="icofont icofont-edit"></i>Edit</a>
-                                                                                                            <a class="dropdown-item" href="#!"><i class="icofont icofont-ui-delete"></i>Delete</a>
-                                                                                                            <a class="dropdown-item" href="#!"><i class="icofont icofont-eye-alt"></i>View</a>
-                                                                                                            <a class="dropdown-item" href="#!"><i class="icofont icofont-tasks-alt"></i>Project</a>
-                                                                                                            <a class="dropdown-item" href="#!"><i class="icofont icofont-ui-note"></i>Notes</a>
-                                                                                                            <a class="dropdown-item" href="#!"><i class="icofont icofont-eye-alt"></i>Activity</a>
-                                                                                                            <a class="dropdown-item" href="#!"><i class="icofont icofont-badge"></i>Schedule</a>
-                                                                                                        </div>
-                                                                                                    </td>
-                                                                                                </tr>
-                                                                                                <tr>
-                                                                                                    <td>Garrett Winters</td>
-                                                                                                    <td>abc123@gmail.com</td>
-                                                                                                    <td>9989988988</td>
-                                                                                                    <td><i class="fa fa-star" aria-hidden="true"></i></td>
-                                                                                                    <td class="dropdown">
-                                                                                                        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-cog" aria-hidden="true"></i></button>
-                                                                                                        <div class="dropdown-menu dropdown-menu-right b-none contact-menu">
-                                                                                                            <a class="dropdown-item" href="#!"><i class="icofont icofont-edit"></i>Edit</a>
-                                                                                                            <a class="dropdown-item" href="#!"><i class="icofont icofont-ui-delete"></i>Delete</a>
-                                                                                                            <a class="dropdown-item" href="#!"><i class="icofont icofont-eye-alt"></i>View</a>
-                                                                                                            <a class="dropdown-item" href="#!"><i class="icofont icofont-tasks-alt"></i>Project</a>
-                                                                                                            <a class="dropdown-item" href="#!"><i class="icofont icofont-ui-note"></i>Notes</a>
-                                                                                                            <a class="dropdown-item" href="#!"><i class="icofont icofont-eye-alt"></i>Activity</a>
-                                                                                                            <a class="dropdown-item" href="#!"><i class="icofont icofont-badge"></i>Schedule</a>
-                                                                                                        </div>
-                                                                                                    </td>
-                                                                                                </tr>
-                                                                                                <tr>
-                                                                                                    <td>Garrett Winters</td>
-                                                                                                    <td>abc123@gmail.com</td>
-                                                                                                    <td>9989988988</td>
-                                                                                                    <td><i class="fa fa-star-o" aria-hidden="true"></i></td>
-                                                                                                    <td class="dropdown">
-                                                                                                        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-cog" aria-hidden="true"></i></button>
-                                                                                                        <div class="dropdown-menu dropdown-menu-right b-none contact-menu">
-                                                                                                            <a class="dropdown-item" href="#!"><i class="icofont icofont-edit"></i>Edit</a>
-                                                                                                            <a class="dropdown-item" href="#!"><i class="icofont icofont-ui-delete"></i>Delete</a>
-                                                                                                            <a class="dropdown-item" href="#!"><i class="icofont icofont-eye-alt"></i>View</a>
-                                                                                                            <a class="dropdown-item" href="#!"><i class="icofont icofont-tasks-alt"></i>Project</a>
-                                                                                                            <a class="dropdown-item" href="#!"><i class="icofont icofont-ui-note"></i>Notes</a>
-                                                                                                            <a class="dropdown-item" href="#!"><i class="icofont icofont-eye-alt"></i>Activity</a>
-                                                                                                            <a class="dropdown-item" href="#!"><i class="icofont icofont-badge"></i>Schedule</a>
-                                                                                                        </div>
-                                                                                                    </td>
-                                                                                                </tr>
-                                                                                            </tbody>
-                                                                                        </table>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                            <!-- contact data table card end -->
+                                                                    <div class="form-row">
+                                                                        <div class="form-group col-md-12">
+                                                                            <div class="table-responsive" id="divListaCronograma"></div>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -789,6 +256,26 @@
                                     <div class="modal-footer">
                                         <button id="btnCancelar" class="btnCancelarForm" title="Cancelar"><i class="fa fa-undo" aria-hidden="true"></i>&nbsp;Cancelar</button>
                                         <button id="btnGuardar" class="btnGuardarForm bg-customer" title="Guardar datos"><span class="fa fa-save"></span>&nbsp;Grabar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="modal custom-modal" tabindex="-1" role="dialog" aria-hidden="true" id="divPopupContainerForm1" style="overflow-y:auto;">
+                            <div class="modal-dialog modal-lg bg-personalizado" id="divPopupWindowForm1" style="margin-top:30px;">
+                                <div class="modal-content">
+                                    <div id="divBarraForm1" class="modal-header bg-personalizado" style="cursor:move">
+                                        <h5 class="modal-title" id="nombreFormulario"></h5>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div id="divFormulario">
+
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button id="btnCancelarForm1" class="btnCancelarForm" title="Cancelar"><i class="fa fa-undo" aria-hidden="true"></i>&nbsp;Cancelar</button>
+                                        <button id="btnAgregar" class="btnGuardarForm bg-customer" title="Agrega"><span class="fa fa-save"></span>&nbsp;Agregar</button>
                                     </div>
                                 </div>
                             </div>

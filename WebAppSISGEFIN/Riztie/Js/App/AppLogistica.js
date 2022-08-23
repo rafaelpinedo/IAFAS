@@ -564,6 +564,11 @@ function configurarBotones() {
         divPopupContainer.style.display = 'block';
         limpiarForm("Popup");
 
+        let spnLoad = document.getElementById("spnLoad");
+        if (spnLoad != null) {
+            spnLoad.style.display='none';
+        }
+
         let tituloModal = document.getElementById("tituloModal");
         if (tituloModal != null) {
             tituloModal.innerText = "Nuevo Registro";
@@ -2084,7 +2089,6 @@ function obtenerDatosGrabar(clase) {
         switch (control.tagName) {
             case "INPUT":
                 if (control.id.substr(0, 3) == "txt") data += control.value;
-                if (control.id.substr(0, 3) == "num") data += control.value;
                 if (control.id.substr(0, 3) == "num") data += control.value;
                 if (control.id.substr(0, 3) == "dtt") {
                     if (control.value != "") {
