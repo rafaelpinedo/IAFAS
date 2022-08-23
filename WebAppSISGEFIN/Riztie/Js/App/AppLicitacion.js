@@ -28,7 +28,7 @@ window.onload = function () {
     getConfigMn();
     vista = window.sessionStorage.getItem("Vista");
     controller = window.sessionStorage.getItem("Controller");
-    if (vista == "PAC" || vista == "Contrato" || vista=="Prosel") {
+    if (vista == "PAC" || vista == "Contrato" || vista == "Prosel") {
         getListarLicitaPac();
     }
     else {
@@ -561,7 +561,7 @@ function eliminarRegistro(id) {
     if (vista == "Prosel") {
         data += '|' + txtAnioFiscal.value;
     }
-   // if (vista ="")
+    // if (vista ="")
 
     var frm = new FormData();
     frm.append("data", data);
@@ -598,7 +598,7 @@ function mostrarContrato(rpta) {
 
         var controlesSelectSearch = document.getElementsByClassName("SelectSearch");
         var nControlesSelectSearch = controlesSelectSearch.length;
-        
+
         var divPopupContainer = document.getElementById("divPopupContainer");
         if (divPopupContainer != null) { divPopupContainer.style.display = 'block'; };
         var controles = document.getElementsByClassName("Popup");
@@ -953,7 +953,9 @@ function configurarBotones() {
     if (tabGarantia != null) tabGarantia.onclick = function () {
         idTabActivo = "tabGarantia";
         var data = "";
-        Http.get("General/listarTabla?tbl=" + controller + vista + "Garantia&data=" + idRegistro, mostrarlistaTab);
+        if (idRegistro != "") { 
+            Http.get("General/listarTabla?tbl=" + controller + vista + "Garantia&data=" + idRegistro, mostrarlistaTab);
+        }
         btnNuevoForm.style.display = 'inline';
         btnEliminarForm.style.display = 'inline';
     }
@@ -962,7 +964,9 @@ function configurarBotones() {
     if (tabCronograma != null) tabCronograma.onclick = function () {
         idTabActivo = "tabCronograma";
         //var data = "";
-        Http.get("General/listarTabla?tbl=" + controller + vista + "Cronograma&data=" + idRegistro, mostrarlistaTab);
+        if (idRegistro != "") {
+            Http.get("General/listarTabla?tbl=" + controller + vista + "Cronograma&data=" + idRegistro, mostrarlistaTab);
+        }
         btnNuevoForm.style.display = 'inline';
         btnEliminarForm.style.display = 'inline';
     }
@@ -971,6 +975,32 @@ function configurarBotones() {
     if (btnNuevo != null) btnNuevo.onclick = function () {
         divPopupContainer.style.display = 'block';
         limpiarForm("Popup");
+
+        
+        let divContratoDetalle = document.getElementById("divContratoDetalle");
+        if (divContratoDetalle != null) {
+            divContratoDetalle.style.display = 'none';
+        }
+
+        let tbBodyListDetalleItemPac = document.getElementById("tbBodyListDetalleItemPac");
+        if (tbBodyListDetalleItemPac != null) {
+            tbBodyListDetalleItemPac.innerText = "";
+        }
+
+        let tbListDetalleItemPac = document.getElementById("tbListDetalleItemPac");
+        if (tbListDetalleItemPac != null) {
+            tbListDetalleItemPac.innerText = "";
+        }
+
+        let divListaGarantia = document.getElementById("divListaGarantia");
+        if (divListaGarantia != null) {
+            divListaGarantia.innerText = "";
+        }
+
+        let divListaCronograma = document.getElementById("divListaCronograma");
+        if (divListaCronograma != null) {
+            divListaCronograma.innerText = "";
+        }
 
         let tituloModal = document.getElementById("tituloModal");
         if (tituloModal != null) {
@@ -1241,15 +1271,15 @@ function configurarBotones() {
     var btnConsultar = document.getElementById("btnConsultar");
     if (btnConsultar != null) btnConsultar.onclick = function () {
 
-            if (vista == "PAC" || vista == "Contrato") {
-                getListarLicitaPac();
-            }
-            else {
-                getListar();
-            }
+        if (vista == "PAC" || vista == "Prosel"|| vista == "Contrato") {
+            getListarLicitaPac();
+        }
+        else {
+            getListar();
         }
     }
 }
+
 
 function mostrarlistaTab(rpta) {
     if (rpta) {
@@ -1267,7 +1297,7 @@ function mostrarlistaTab(rpta) {
             crearFormulario("PopupCrono", "RequeCrono");
         }
 
-      
+
         var nListas = listas.length;
         if (nListas > 2) {
             for (var i = 2; i < nListas; i++) {
@@ -1447,15 +1477,15 @@ function crearFormulario(clasePop, claseReque) {
         contenido += "</div>";
         document.getElementById("divFormulario").innerHTML = contenido;
     }
-        if (vista == "PAC" || vista == "Contrato" || vista == "Prosel" ) {
-            getListarLicitaPac();
-        }
-        else {
-            getListar();
-        }
+    if (vista == "PAC" || vista == "Contrato" || vista == "Prosel") {
+        getListarLicitaPac();
     }
-    
+    else {
+        getListar();
+    }
 }
+    
+
 
 
 function configurarCombos() {
@@ -1513,10 +1543,10 @@ function mostrarEliminarTab(rpta) {
         var mensaje = mensajeResul[1];
 
         if (idTabActivo == "tabGarantia") {
-        grillaGarantia = new GrillaScroll(lista, "divListaGarantia", 100, 6, vista, controller, null, false, null, null, 30, false, null);
+            grillaGarantia = new GrillaScroll(lista, "divListaGarantia", 100, 6, vista, controller, null, false, null, null, 30, false, null);
         }
         else if (idTabActivo == "tabCronograma") {
-            grillaCronograma= new GrillaScroll(lista, "divListaCronograma", 100, 6, vista, controller, null, false, null, null, 30, false, null);
+            grillaCronograma = new GrillaScroll(lista, "divListaCronograma", 100, 6, vista, controller, null, false, null, null, 30, false, null);
         }
 
         if (tipo == 'A') {
@@ -1993,7 +2023,6 @@ function puntajeEconomica() {
 }
 //**********************************************MENU EDICION  PROCESO TAB*******************************************//
 // next Menu
-
 function mostarResultadoItemProSel(rpta) {
     if (rpta) {
 
@@ -2108,6 +2137,7 @@ function mostarResultadoItemProSel(rpta) {
         mostrarMensaje("Datos no Guardados", "error");
     }
 }
+
 
 //============Calendario ============//
 function listarCalendarioProsel(rpta, tipo) {
@@ -2541,7 +2571,7 @@ function guardarTabEvaTecnicoProveedor() {
         }
         dataItem = dataItem.substr(0, dataItem.length - 1);
         var frm = new FormData();
-        var data = idProveedor + '¯' + dataItem + '¯' +'tabEvaTecnicoDet'
+        var data = idProveedor + '¯' + dataItem + '¯' + 'tabEvaTecnicoDet' + '¯' + txtIdRegistro.value;
         frm.append("data", data);
         idTextoEvaTec.innerText = "Evaluación Técnica  ";
         tbDetalleEvaTecnicaLista.innerHTML = "";
@@ -2562,7 +2592,7 @@ function tabEvaEconomicaProveedorListar(rpta) {
         for (var i = 0; i < nRegistros; i++) {
             camposDetalle = listaDet[i].split("|");
             aptoProceso = (camposDetalle[5] * 1)
-           
+
             if (aptoProceso >= (valorProceso * 1)) {
                 filaDetalle += "<tr class='FilaDatos' onclick='seleccionarFilaEvaluacion(this," + camposDetalle[0] + ",\"divListaEvaEconomia\",\"" + camposDetalle[4] + "\",5);'>";
                 filaDetalle += "<td style='white-space:pre-wrap;width:50px;display:none'>" + camposDetalle[0] + "</td> ";
@@ -2619,7 +2649,7 @@ function tabEvaEconomicogetProveedorListar(rpta) {
 
         for (var i = 0; i < nRegistros; i++) {
             camposDetalle = listaDet[i].split("|");
-            
+
             if (parseInt(camposDetalle[8]) == IdEvaEconomica) {
                 if (parseInt(camposDetalle[7]) == parseInt(camposDetalle[8])) {
                     filaDetalle += '<tr>';
@@ -2658,7 +2688,7 @@ function tabEvaEconomicogetProveedorListar(rpta) {
             }
         }
         tbDetalleEvaEconoLista.insertAdjacentHTML("beforeend", filaDetalle);
-         
+
     }
 }
 
@@ -2804,7 +2834,7 @@ function guardarTabBuenaPro() {
         for (var i = 0; i < nFilas; i++) {
             fila = tbDetalleBuenaPro.rows[i];
             dataItem += fila.cells[0].innerHTML + '|' + fila.cells[1].innerHTML + '|' + fila.cells[8].childNodes[0].value + '|';
-            dataItem += fila.cells[9].childNodes[0].value + '|' + fila.cells[10].childNodes[0].value+ '|' + fila.cells[3].innerHTML;
+            dataItem += fila.cells[9].childNodes[0].value + '|' + fila.cells[10].childNodes[0].value + '|' + fila.cells[3].innerHTML;
             dataItem += "¬";
         }
         dataItem = dataItem.substr(0, dataItem.length - 1);
