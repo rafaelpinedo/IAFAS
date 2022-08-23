@@ -26,6 +26,7 @@
                             <button class="input-group-inverse btn btn-inverse" id="btnConsultar" data-toggle="tooltip" data-placement="bottom"><i class="fa fa-search fa-lg" aria-hidden="true"></i></button>
                             <button class="input-group-inverse btn btn-primary" id="btnNuevo" data-toggle="tooltip" data-placement="bottom"><i class="fa fa-plus-circle fa-lg" aria-hidden="true"></i></button>
                             <button id="btnReporteExcel" class="input-group-inverse btn btn-success" data-toggle="tooltip" data-placement="bottom"><i class="fa fa-file-excel-o"></i></button>
+                            <button class="input-group-inverse btn btn-inverse" id="btnMenuRpt" data-toggle="tooltip" data-placement="bottom"><i class="fa fa-line-chart fa-lg" aria-hidden="true"></i></button>
                         </div>
                     </div>
                     <div class="form-row">
@@ -150,6 +151,35 @@
                                     <div class="modal-footer">
                                         <button class="btnCancelarForm" id="btnCancelarForm1" title="Cancelar"><i class="fa fa-undo" aria-hidden="true"></i>&nbsp;Cancelar</button>
                                         <button class="btnGuardarForm bg-customer" id="btnSeleccionarItems" title="btn btn-success" disabled><span class="fa fa-hand-o-left"></span>&nbsp;Agregar Items</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="modal custom-modal" tabindex="-1" role="dialog" aria-hidden="true" id="divPopupRpts" style="overflow-y:auto;display:none">
+                            <div class="modal-dialog modal-lg bg-personalizado" id="divPopupWindowForm2">
+                                <div class="modal-content">
+                                    <div id="divBarra3" class="modal-header bg-personalizado" style="cursor:move" draggable="true">
+                                        <h5 class="modal-title" id="tituloModal">Parametros de Reporte</h5>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="row">
+                                            <div class="form-group col-sm-6">
+                                                <label class="control-label">Anio</label>
+                                                <input type="number" id="txtAnioCN3" class="control-form" value="@ViewBag.AnioCN" readonly="readonly">
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-group col-sm-6">
+                                                <label class="control-label">Centro de Costo</label>
+                                                <select id="cboOficina3" class="control-form Popup"></select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button id="btnCancelar3" class="btnCancelarForm" title="Cancelar"><i class="fa fa-undo" aria-hidden="true"></i>&nbsp;Cancelar</button>
+                                        <button id="btnGuardar3" class="btnGuardarForm bg-customer" title="Listar datos"><span class="fa fa-save"></span>&nbsp;Listar</button>
                                     </div>
                                 </div>
                             </div>

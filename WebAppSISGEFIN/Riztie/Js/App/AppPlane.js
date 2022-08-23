@@ -139,6 +139,17 @@ function configurarBotones() {
         Http.get("General/getReporte/?tbl=" + controller + vista + "&data=" + anio, mostrarDatosExportar);
 
     }
+
+    var btnCancelar3 = document.getElementById("btnCancelar3");
+    if (btnCancelar3 != null) btnCancelar3.onclick = function () {
+        divPopupRpts.style.display = "none";
+    }
+
+    var btnMenuRpt = document.getElementById("btnMenuRpt");
+    if (btnMenuRpt != null) btnMenuRpt.onclick = function () {
+        Http.get("General/listarTabla?tbl=" + controller + vista + "AyuRpte&data=", mostrarAyudasReporte);
+        divPopupRpts.style.display = "block";
+    }
 }
 
 function seleccionarFila(fila, id, prefijo) {
@@ -1026,4 +1037,11 @@ function descargarArchivo(contenido, tipoMime) {
     enlace.download = archivo;
     enlace.click();
     document.removeChild(enlace);
+}
+
+function mostrarAyudasReporte(rpta) {
+    if (rpta) {
+        var listaOficinas = rpta.split('¬');
+        crearCombo(listaOficinas, "cboOficina3", "Seleccione");
+    }
 }
