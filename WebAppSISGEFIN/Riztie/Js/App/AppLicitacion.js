@@ -34,6 +34,45 @@ window.onload = function () {
     configurarCombos();
 }
 
+
+function tryNumberFormat(obj) {
+    var num = new NumberFormat();
+
+    num.setInputDecimal('.');
+
+    var data = txtValorreferencial.value;
+
+    //num.setNumber(obj.value); // obj.value is '1000'
+    num.setNumber(data);
+    num.setPlaces('2', false);
+    num.setCurrency(false);
+    num.setCurrencyPosition(num.LEFT_OUTSIDE);
+    num.setNegativeFormat(num.LEFT_DASH);
+    num.setNegativeRed(false);
+    num.setSeparators(false, ',', ',');
+    /*obj.value = num.toFormatted();*/
+    data = num.toFormatted();
+}
+function NumCheck(e, field) {
+    key = e.keyCode ? e.keyCode : e.which
+    // backspace
+    if (key == 8) return true
+    // 0-9
+    if (key > 47 && key < 58) {
+        if (field.value == "") return true
+        regexp = /^\d+(\.\d{0,2})?$/;
+        return (regexp.test(field.value))
+    }
+    // .
+    if (key == 46) {
+        if (field.value == "") return false
+        regexp = /^[0-9]+$/
+        return regexp.test(field.value)
+    }
+
+    return false
+}
+
 function getListar() {
     var data = "";
     Http.get("General/listarTabla?tbl=" + controller + vista + "&data=" + data, mostrarlistas);

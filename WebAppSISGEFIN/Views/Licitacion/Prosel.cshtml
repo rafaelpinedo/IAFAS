@@ -3,6 +3,8 @@
     ViewBag.Title = "Prosel";
     Layout = "~/Views/_LayoutPage.cshtml";
 }
+
+
 <div class="pcoded-content">
     <div class="pcoded-inner-content">
         <div class="main-body">
@@ -68,7 +70,7 @@
                                             </div>
                                             <div class="form-group col-sm-3">
                                                 <label class="control-label">Valor referencial</label>
-                                                <input type="number" step="any" id="txtValorreferencial" class="control-form Reque Popup" />
+                                                <input type="text" step="any" id="txtValorreferencial" class="control-form Reque Popup" onkeypress="return NumCheck(event, this)" onchange="tryNumberFormat(this.txtValorreferencial);"/>
                                             </div>
                                         </div>
                                         <div class="row">
@@ -527,3 +529,4 @@
 </div>
 <iframe name="print_frame" width="0" height="0" frameborder="0" src="about:blank"></iframe>
 <script src="~/Riztie/Js/App/AppLicitacion.js"></script>
+<script src="~/Riztie/Js/App/numberformat154.js"></script>
