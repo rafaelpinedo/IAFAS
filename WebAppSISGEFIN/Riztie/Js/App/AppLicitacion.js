@@ -334,6 +334,12 @@ function mostrarGrabarTab(rpta) {
         if (idTabActivo == "tabGarantia") {
             grillaGarantia = new GrillaScroll(lista, "divListaGarantia", 100, 6, vista, controller, null, false, true, null, 32, false, null);
         }
+        else if (idTabActivo == "tabAdelanto") {
+            grillaCronograma = new GrillaScroll(lista, "divListaAdelanto", 100, 6, vista, controller, null, false, true, null, 32, false, null);
+        }
+        else if (idTabActivo == "tabAdenda") {
+            grillaCronograma = new GrillaScroll(lista, "divListaAdenda", 100, 6, vista, controller, null, false, true, null, 32, false, null);
+        }
         else if (idTabActivo == "tabCronograma") {
             grillaCronograma = new GrillaScroll(lista, "divListaCronograma", 100, 6, vista, controller, null, false, true, null, 32, false, null);
         }
@@ -602,6 +608,15 @@ function eliminarRegistro(id) {
             }
             else if (vista == "Contrato" && idTabActivo == "tabCronograma") {
                 Http.post("General/eliminar/?tbl=" + controller + vista + 'Cronograma', mostrarEliminarTab, frm);
+            }
+            else if (vista == "Contrato" && idTabActivo == "tabCronograma") {
+                Http.post("General/eliminar/?tbl=" + controller + vista + 'Cronograma', mostrarEliminarTab, frm);
+            }
+            else if (vista == "Contrato" && idTabActivo == "tabAdelanto") {
+                Http.post("General/eliminar/?tbl=" + controller + vista + 'Adelanto', mostrarEliminarTab, frm);
+            }
+            else if (vista == "Contrato" && idTabActivo == "tabAdenda") {
+                Http.post("General/eliminar/?tbl=" + controller + vista + 'Adenda', mostrarEliminarTab, frm);
             }
             else {
                 Http.post("General/eliminar/?tbl=" + controller + vista, mostrarEliminar, frm);
@@ -972,6 +987,14 @@ function configurarBotones() {
             nombreFormulario.innerHTML = "Registro de Cronograma";
             limpiarForm("PopupCrono");
         }
+        else if (idTabActivo == "tabAdelanto") {
+            nombreFormulario.innerHTML = "Registro de Adelanto";
+            limpiarForm("PopupAdel");
+        }
+        else if (idTabActivo == "tabAdenda") {
+            nombreFormulario.innerHTML = "Registro de Adenda";
+            limpiarForm("PopupAdend");
+        }
     }
 
     var tabCompromiso = document.getElementById("tabCompromiso");
@@ -998,6 +1021,26 @@ function configurarBotones() {
         //var data = "";
         if (idRegistro != "") {
             Http.get("General/listarTabla?tbl=" + controller + vista + "Cronograma&data=" + idRegistro, mostrarlistaTab);
+        }
+        btnNuevoForm.style.display = 'inline';
+        btnEliminarForm.style.display = 'inline';
+    }
+
+    var tabAdelanto = document.getElementById("tabAdelanto");
+    if (tabAdelanto != null) tabAdelanto.onclick = function () {
+        idTabActivo = "tabAdelanto";
+        if (idRegistro != "") {
+            Http.get("General/listarTabla?tbl=" + controller + vista + "Adelanto&data=" + idRegistro, mostrarlistaTab);
+        }
+        btnNuevoForm.style.display = 'inline';
+        btnEliminarForm.style.display = 'inline';
+    }
+
+    var tabAdenda = document.getElementById("tabAdenda");
+    if (tabAdenda != null) tabAdenda.onclick = function () {
+        idTabActivo = "tabAdenda";
+        if (idRegistro != "") {
+            Http.get("General/listarTabla?tbl=" + controller + vista + "Adenda&data=" + idRegistro, mostrarlistaTab);
         }
         btnNuevoForm.style.display = 'inline';
         btnEliminarForm.style.display = 'inline';
@@ -1193,11 +1236,19 @@ function configurarBotones() {
 
     var btnAgregar = document.getElementById("btnAgregar");
     if (btnAgregar != null) btnAgregar.onclick = function () {
+        debugger;
         if (vista == "Contrato" && idTabActivo == "tabGarantia") {
             if (validarInformacion("RequeGar")) grabarDatosVarios("PopupGar", "Garantia");
         }
         else if (vista == "Contrato" && idTabActivo == "tabCronograma") {
             if (validarInformacion("RequeCrono")) grabarDatosVarios("PopupCrono", "Cronograma");
+        }
+        else if (vista == "Contrato" && idTabActivo == "tabAdelanto") {
+           if (validarInformacion("RequeAdel")) grabarDatosVarios("PopupAdel", "Adelanto");
+        }
+        else if (vista == "Contrato" && idTabActivo == "tabAdenda") {
+            debugger;
+            if (validarInformacion("RequeAdenda")) grabarDatosVarios("PopupAdend", "Adenda");
         }
     }
 
@@ -1322,6 +1373,16 @@ function mostrarlistaTab(rpta) {
             grillaGarantia = new GrillaScroll(lista, "divListaGarantia", 100, 6, vista, controller, null, false, null, null, 25, true, null);
             formulario = listas[1].split("¬");
             crearFormulario("PopupGar", "RequeGar");
+        }
+        else if (idTabActivo == "tabAdelanto") {
+            grillaGarantia = new GrillaScroll(lista, "divListaAdelanto", 100, 6, vista, controller, null, false, null, null, 25, true, null);
+            formulario = listas[1].split("¬");
+            crearFormulario("PopupAdel", "RequeAdel");
+        }
+        else if (idTabActivo == "tabAdenda") {
+            grillaGarantia = new GrillaScroll(lista, "divListaAdenda", 100, 6, vista, controller, null, false, null, null, 25, true, null);
+            formulario = listas[1].split("¬");
+            crearFormulario("PopupAdend", "RequeAdenda");
         }
         else {
             grillaGarantia = new GrillaScroll(lista, "divListaCronograma", 100, 6, vista, controller, null, false, null, null, 25, true, null);
@@ -1579,6 +1640,12 @@ function mostrarEliminarTab(rpta) {
         }
         else if (idTabActivo == "tabCronograma") {
             grillaCronograma = new GrillaScroll(lista, "divListaCronograma", 100, 6, vista, controller, null, false, null, null, 30, false, null);
+        }
+        else if (idTabActivo == "tabAdelanto") {
+            grillaCronograma = new GrillaScroll(lista, "divListaAdelanto", 100, 6, vista, controller, null, false, null, null, 30, false, null);
+        }
+        else if (idTabActivo == "tabAdenda") {
+            grillaCronograma = new GrillaScroll(lista, "divListaAdenda", 100, 6, vista, controller, null, false, null, null, 30, false, null);
         }
 
         if (tipo == 'A') {
