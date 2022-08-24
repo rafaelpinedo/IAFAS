@@ -4,6 +4,11 @@
     Layout = "~/Views/_LayoutPage.cshtml";
 }
 
+<style>
+    .clase-hiddeBuenapro {
+        display: none;
+    }
+</style>
 
 <div class="pcoded-content">
     <div class="pcoded-inner-content">
@@ -70,7 +75,8 @@
                                             </div>
                                             <div class="form-group col-sm-3">
                                                 <label class="control-label">Valor referencial</label>
-                                                <input type="text" step="any" id="txtValorreferencial" class="control-form Reque Popup" onkeypress="return NumCheck(event, this)" onchange="tryNumberFormat(this.txtValorreferencial);"/>
+                                                <input type="text" step="any" id="txtValorreferencial" class="control-form Reque Popup"
+                                                       onkeypress="return NumCheck(event, this)" autocomplete="off" />
                                             </div>
                                         </div>
                                         <div class="row">
@@ -181,7 +187,7 @@
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                                <div class="row">
+                                                                <div class="row buenapro">
                                                                     <div class="form-group col-sm-12">
                                                                         <button class="input-group-inverse btn btn-primary btn-sm float-right" id="btnCalendario" data-toggle="tooltip" data-placement="bottom" title="Siguiente" onclick="guardarCalendario()">
                                                                             <i class="fa fa-arrow-right fa-lg" aria-hidden="true"></i>
@@ -221,7 +227,7 @@
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                                <div class="row">
+                                                                <div class="row buenapro">
                                                                     <div class="col-sm-12">
                                                                         <button class="input-group-inverse btn btn-primary btn-sm float-right" data-toggle="tooltip" data-placement="bottom" title="Siguiente" onclick="guardarTabEvaTecEconomico()">
                                                                             <i class="fa fa-arrow-right fa-lg" aria-hidden="true"></i>
@@ -272,7 +278,7 @@
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                                <div class="row">
+                                                                <div class="row buenapro">
                                                                     <div class="col-sm-12">
                                                                         <button class="input-group-inverse btn btn-primary btn-sm float-right" id="btnRegistro" data-toggle="tooltip" data-placement="bottom" title="Siguiente" onclick="guardarTabRegistro()" style="margin-left: 15px;">
                                                                             <i class="fa fa-arrow-right fa-lg" aria-hidden="true"></i>
@@ -315,7 +321,7 @@
                                                                         <div class="form-group col-sm-6" style="padding-right: 2px;padding-left: 2px;">
                                                                             <fieldset class="fieldset">
                                                                                 <legend class="legend" id="idTextoEvaTec">Evaluación Técnica</legend>
-                                                                                <div class="col-sm-12">
+                                                                                <div class="col-sm-12 buenapro">
                                                                                     <button class="input-group-inverse btn btn-primary btn-sm float-right"  data-toggle="tooltip" data-placement="bottom" title="Siguiente" onclick="guardarTabEvaTecnicoProveedor()">
                                                                                         <i class="fa fa-save fa-lg" aria-hidden="true">&nbsp;&nbsp; Guardar</i>
                                                                                     </button>
@@ -346,7 +352,7 @@
 
                                                                 </div>
                                                                 <br />
-                                                                <div class="row">
+                                                                <div class="row buenapro">
                                                                     <div class="col-sm-12">
                                                                         <button class="input-group-inverse btn btn-primary btn-sm float-right"  data-toggle="tooltip" data-placement="bottom" title="Siguiente" onclick="tabProselSiguienteItem('tabEvaluacionTec')" style="margin-left: 15px;">
                                                                             <i class="fa fa-arrow-right fa-lg" aria-hidden="true"></i>
@@ -385,7 +391,7 @@
                                                                         <div class="form-group col-sm-6" style="padding-right: 2px;padding-left: 2px;">
                                                                             <fieldset class="fieldset">
                                                                                 <legend class="legend" id="idTextoEvaEco">Evaluación Económica</legend>
-                                                                                <div class="col-sm-12">
+                                                                                <div class="col-sm-12 buenapro">
                                                                                     <button class="input-group-inverse btn btn-primary btn-sm float-right" id="btnRegistro" data-toggle="tooltip" data-placement="bottom" title="Siguiente" onclick="guardarTabEvaEconomicaProveedor()">
                                                                                         <i class="fa fa-save fa-lg" aria-hidden="true">&nbsp;&nbsp; Guardar</i>
                                                                                     </button>
@@ -461,7 +467,7 @@
                                                                     <input type="hidden" id="txtProveedorEvaEcono" value="0" />
                                                                 </div>
                                                                 <br />
-                                                                <div class="row">
+                                                                <div class="row buenapro">
                                                                     <div class="col-sm-12">
                                                                         <button class="input-group-inverse btn btn-primary btn-sm float-right" id="btnRegistro" data-toggle="tooltip" data-placement="bottom" title="Siguiente" onclick="guardarTabBuenaPro()" style="margin-left: 15px;">
                                                                             <i class="fa fa-arrow-right fa-lg" aria-hidden="true"></i>

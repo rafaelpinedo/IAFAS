@@ -566,7 +566,7 @@ function configurarBotones() {
 
         let spnLoad = document.getElementById("spnLoad");
         if (spnLoad != null) {
-            spnLoad.style.display='none';
+            spnLoad.style.display = 'none';
         }
 
         let tituloModal = document.getElementById("tituloModal");
@@ -859,6 +859,46 @@ function configurarBotones() {
         }
     }
 
+    //Modificacion Reutilizar Form
+    var btnAgregar = document.getElementById("btnAgregar");
+    if (btnAgregar != null) btnAgregar.onclick = function () {
+        if (vista == "PedidoCompra") {
+            var data = "";
+            limpiarForm("PopupOfi");
+            Http.get("General/listarTabla?tbl=" + controller + "Oficina" + "&data=" + data, listarOficinaOrdenCompra);
+            divPopupContainerForm3.style.display = 'block';
+        }
+    }
+
+    var btnCancelarForm3 = document.getElementById("btnCancelarForm3");
+    if (btnCancelarForm3 != null) btnCancelarForm3.onclick = function () {
+        divPopupContainerForm3.style.display = 'none';
+    }
+
+    var btnGuardarForm3 = document.getElementById("btnGuardarForm3");
+    if (btnGuardarForm3 != null) btnGuardarForm3.onclick = function () {
+        var validar = false;
+
+        if (validarInformacion("RequeOfi") == true) {
+            validar = true;
+        }
+        if (validar === true) {
+            Swal.fire({
+                title: '¿Desea grabar la información?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Si',
+                cancelButtonText: 'No'
+            }).then((result) => {
+                if (result.value) {
+                    grabarDatosOficinaPedidoCompra();
+                }
+            })
+        }
+    }
+
     var btnSeleccionarItems = document.getElementById("btnSeleccionarItems");
     if (btnSeleccionarItems != null) btnSeleccionarItems.onclick = function () {
         var ids = grillaItems.obtenerIdsChecks();
@@ -961,6 +1001,71 @@ function configurarBotones() {
     }
 
 }
+
+function listarOficinaOrdenCompra(rpta) {
+    if (rpta) {
+        var listas = rpta.split("¯");
+        var listaEntidad = listas[1].split("¬");
+        var listaOficinaPadre = listas[2].split("¬");
+        var listaEstado = listas[3].split("¬");
+
+        crearCombo(listaEntidad, "cboEntidad", "Seleccione");
+        crearCombo(listaOficinaPadre, "cboOficinaPadre", "Primer Nivel");
+        crearCombo(listaEstado, "cboEstado", "Seleccione");
+
+        var cboEntidad = document.getElementById("cboEntidad");
+        if (cboEntidad != null) {
+            cboEntidad.value = 1;
+            cboEntidad.disabled = true;
+        }
+
+        var dtgEsFinal = document.getElementById("dtgEsFinal");
+        if (dtgEsFinal != null) {
+            $('#dtgEsFinal').bootstrapToggle('off')
+        }
+
+        var cboEstado = document.getElementById("cboEstado");
+        if (cboEstado != null) {
+            cboEstado.value = 1;
+            cboEstado.disabled = true;
+        }
+    }
+}
+
+function grabarDatosOficinaPedidoCompra() {
+    var data = ""
+    var frm = new FormData();
+    data = obtenerDatosGrabar("PopupOfi");
+    frm.append("data", data);
+    Http.post("General/guardar/?tbl=" + controller + "Oficina", OrdenCompraOficinaGrabar, frm);
+}
+
+function OrdenCompraOficinaGrabar(rpta) {
+
+    if (rpta) {
+        var listas = rpta.split("¯")
+        mensajeResul = listas[1].split("|");
+        var tipo = mensajeResul[0];
+        var mensaje = mensajeResul[1];
+       
+        if (vista == "PedidoCompra") {
+            document.getElementById('divPopupContainerForm3').style.display = 'none';
+            var listaOficinaPadre = listas[3].split("¬");
+            crearCombo(listaOficinaPadre, "cboOficina", "Seleccione");
+        }
+        if (tipo == 'A') {
+            mostrarMensaje(mensaje, "success");
+        }
+        else {
+            mostrarMensaje(mensaje, "error");
+        }
+    }
+    else {
+        mostrarMensaje("No se registro Oficina", "error");
+    }
+
+}
+
 
 function mostrarEnviarCorreo(rpta) {
     if (rpta) alert(rpta);
@@ -2118,8 +2223,6 @@ function obtenerDatosGrabar(clase) {
 
     return data;
 }
-
-
 
 function mostrarGrabarDetalleItem(rpta) {
     var mensajeResul = [];
