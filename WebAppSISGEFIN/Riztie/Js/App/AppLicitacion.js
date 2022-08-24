@@ -38,6 +38,27 @@ window.onload = function () {
     configurarCombos();
 }
 
+
+function NumCheck(e, field) {
+    key = e.keyCode ? e.keyCode : e.which
+    // backspace
+    if (key == 8) return true
+    // 0-9
+    if (key > 47 && key < 58) {
+        if (field.value == "") return true
+        regexp = /^\d+(\.\d{0,2})?$/;
+        return (regexp.test(field.value))
+    }
+    // .
+    if (key == 46) {
+        if (field.value == "") return false
+        regexp = /^[0-9]+$/
+        return regexp.test(field.value)
+    }
+
+    return false
+}
+
 function getListar() {
     var data = "";
     Http.get("General/listarTabla?tbl=" + controller + vista + "&data=" + data, mostrarlistas);
@@ -831,6 +852,17 @@ function mostrarRegistro(rpta) {
 
             var divPopupContainer = document.getElementById("divPopupContainer");
             if (divPopupContainer != null) { divPopupContainer.style.display = 'block'; };
+
+            var elemento = document.querySelectorAll(".buenapro");
+            for (var i = 0; i < elemento.length; i++) {
+                if (campos[5] == "3") {
+                    elemento[i].classList.add("clase-hiddeBuenapro");
+                }
+                else {
+                    elemento[i].classList.remove("clase-hiddeBuenapro");
+                }
+            }
+
             return;
         }
         else {
@@ -2241,7 +2273,7 @@ function tabEvaluacionTecnicaListar(rpta) {
                 }
 
                 filaDetalle += "<td style='white-space:pre-wrap;width:10px;'>";
-                filaDetalle += "<i class='fa fa-trash f-16 text-c-red' title='Quitar Item' onclick='tabEvalTecnicaEconomicaItem(this,\"";
+                filaDetalle += "<i class='fa fa-trash f-16 text-c-red buenapro' title='Quitar Item' onclick='tabEvalTecnicaEconomicaItem(this,\"";
                 filaDetalle += camposDetalle[1];
                 filaDetalle += "\");'></i>";
                 filaDetalle += "</td>";
@@ -2340,7 +2372,7 @@ function tabRegistroListar(rpta) {
             filaDetalle += '<td style="white-space:pre-wrap;width:50px;" colspan="1">' + camposDetalle[4] + '</td>';
 
             filaDetalle += "<td style='white-space:pre-wrap;width:10px;'>";
-            filaDetalle += "<i class='fa fa-trash f-16 text-c-red' title='Quitar Item' onclick='tabRegistroEliminarItem(this,3,\"";
+            filaDetalle += "<i class='fa fa-trash f-16 text-c-red buenapro' title='Quitar Item' onclick='tabRegistroEliminarItem(this,3,\"";
             filaDetalle += camposDetalle[0];
             filaDetalle += "\");'></i>";
             filaDetalle += "</td>";
@@ -2777,7 +2809,7 @@ function listarTabBuenaPro(rpta) {
                 filaDetalle += '<select class="control-form estadobuenapro RequeBuenaPro">' + estadoHtml + '</select>';
                 filaDetalle += '</td>';
                 filaDetalle += '<td>';
-                filaDetalle += '<i class="fa fa-trash f-16 text-c-red" title="Quitar Item" onclick="tabBuenaProEliminarItem(this);"></i>';
+                filaDetalle += '<i class="fa fa-trash f-16 text-c-red buenapro" title="Quitar Item" onclick="tabBuenaProEliminarItem(this);"></i>';
                 filaDetalle += '</td>';
                 filaDetalle += '</tr>';
             }

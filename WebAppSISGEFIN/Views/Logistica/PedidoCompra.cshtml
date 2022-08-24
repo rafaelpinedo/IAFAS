@@ -72,6 +72,9 @@
                                                             <label class="control-label">Requerido por</label>
                                                             <select class="SelectSearch control-form Reque Popup" id="cboOficina"></select>
                                                         </div>
+                                                        <div class="col-sm-1" style="padding-top: 25px;">
+                                                            <button class="input-group-inverse btn btn-primary" id="btnAgregar" data-toggle="tooltip" data-placement="bottom" title="Nuevo Oficina"><i class="fa fa-plus-circle fa-lg" aria-hidden="true"></i></button>
+                                                        </div>
                                                         <div class="col-sm-3">
                                                             <label class="control-label">Estado</label>
                                                             <label class="control-form" id="lblEstado"></label>
@@ -272,6 +275,66 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="form-row">
+                        <div class="modal custom-modal" tabindex="-1" role="dialog" aria-hidden="true" id="divPopupContainerForm3" style="overflow-y:auto;">
+                            <div class="modal-dialog modal-lg bg-personalizado" id="divPopupWindowForm3" style="margin-top:30px;">
+                                <div class="modal-content">
+                                    <div id="divBarraForm3" class="modal-header bg-personalizado" style="cursor:move">
+                                        <h5 class="modal-title" id="tituloModal">Nuevo Registro</h5>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="row">
+                                            <div class="form-group col-sm-6">
+                                                <input type="hidden" class="control-form PopupOfi" id="txtIdRegistroOficina" value="0">
+                                                <label class="control-label">Entidad</label>
+                                                <select id="cboEntidad" class="control-lectura RequeOfi PopupOfi"></select>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-group col-sm-6">
+                                                <label class="control-label">Id Padre</label>
+                                                <select id="cboOficinaPadre" class="control-form PopupOfi"></select>
+                                            </div>
+
+                                            <div class="form-group col-sm-6">
+                                                <label class="control-label">Codigo Oficina</label>
+                                                <input type="text" autocomplete="off" class="control-lectura PopupOfi" id="txtCodOficina" readonly>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-group col-sm-12">
+                                                <label class="control-label">Nombre</label>
+                                                <input type="text" autocomplete="off" class="control-form RequeOfi PopupOfi" id="txtNombre">
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-group col-sm-12">
+                                                <label class="control-label">Abreviatura</label>
+                                                <input type="text" autocomplete="off" class="control-form RequeOfi PopupOfi" id="txtNombre">
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-group col-sm-6">
+                                                <label class="control-label" for="dtgEsAgenteRetencion">Es Final</label>
+                                                <input type="checkbox" id="dtgEsFinal" class="PopupOfi" data-toggle="toggle" data-width="160px" data-on="SI" data-off="NO" data-onstyle="success" data-offstyle="danger">
+                                            </div>
+                                            <div class="form-group col-sm-6">
+                                                <label class="control-label">Estado</label>
+                                                <select id="cboEstado" class="control-lectura RequeOfi PopupOfi"></select>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button id="btnCancelarForm3" class="btnCancelarForm"  title="Cancelar"><i class="fa fa-undo" aria-hidden="true"></i>&nbsp;Cancelar</button>
+                                        <button id="btnGuardarForm3" class="btnGuardarForm bg-customer" title="Guardar datos"><span class="fa fa-save"></span>&nbsp;Grabar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
