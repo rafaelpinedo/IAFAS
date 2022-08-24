@@ -147,7 +147,9 @@ function configurarBotones() {
 
     var btnMenuRpt = document.getElementById("btnMenuRpt");
     if (btnMenuRpt != null) btnMenuRpt.onclick = function () {
-        Http.get("General/listarTabla?tbl=" + controller + vista + "AyuRpte&data=", mostrarAyudasReporte);
+        var txtAnioCN3 = document.getElementById("txtAnioCN3");
+        var data = txtAnioCN3.value;
+        Http.get("General/listarTabla?tbl=" + controller + vista + "AyuRpte&data=" + data, mostrarAyudasReporte);
         divPopupRpts.style.display = "block";
     }
 }
