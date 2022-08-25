@@ -1329,7 +1329,6 @@ function mostrarlistaTab(rpta) {
             crearFormulario("PopupCrono", "RequeCrono");
         }
 
-
         var nListas = listas.length;
         if (nListas > 2) {
             for (var i = 2; i < nListas; i++) {
@@ -1364,7 +1363,6 @@ function crearFormulario(clasePop, claseReque) {
             esObligatorio = (campos[3].indexOf(claseReque) > -1);
             esBuscar = (campos[3].indexOf("Buscar") > -1);
             esLectura = (campos[3].indexOf("Lectura") > -1);
-            esPopup = (campos[3].indexOf("Lectura") > -1);
             var dataValue = campos[1];
             if (cantCol == '0') {
                 contenido += "<div class='form-group row'>";
