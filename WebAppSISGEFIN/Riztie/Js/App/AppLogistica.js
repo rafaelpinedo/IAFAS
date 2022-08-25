@@ -38,6 +38,9 @@ window.onload = function () {
     else if (vista == "Articulo") {
         getListarArticulo('B')
     }
+    else if (vista == "Periodo") {
+        getListarPeriodo()
+    }
 
     else {
         getListar();
@@ -66,6 +69,11 @@ function getListarPedido() {
     var txtFechaFinal = document.getElementById("txtFechaFinal").value;
     data = txtFechaInicio + '|' + txtFechaFinal;
     Http.get("General/listarTabla/?tbl=" + controller + vista + "&data=" + data, mostrarlistas);
+}
+
+function getListarPeriodo() {
+    var anio= txtAnioFiscal.value
+    Http.get("General/listarTabla?tbl=" + controller + vista + "&data=" + anio, mostrarlistas);
 }
 
 function getListar() {
