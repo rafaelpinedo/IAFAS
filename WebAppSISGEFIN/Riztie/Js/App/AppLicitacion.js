@@ -966,6 +966,7 @@ function listarSelect2Item(lista, idCombo) {
 }
 
 function configurarBotones() {
+    debugger;
     var btnEliminarForm = document.getElementById("btnEliminarForm");
     if (btnEliminarForm != null) btnEliminarForm.onclick = function () {
         if (idRegistro == "") {
@@ -1013,6 +1014,7 @@ function configurarBotones() {
         }
         btnNuevoForm.style.display = 'inline';
         btnEliminarForm.style.display = 'inline';
+        return;
     }
 
     var tabCronograma = document.getElementById("tabCronograma");
@@ -1024,6 +1026,7 @@ function configurarBotones() {
         }
         btnNuevoForm.style.display = 'inline';
         btnEliminarForm.style.display = 'inline';
+        return;
     }
 
     var tabAdelanto = document.getElementById("tabAdelanto");
@@ -1034,6 +1037,7 @@ function configurarBotones() {
         }
         btnNuevoForm.style.display = 'inline';
         btnEliminarForm.style.display = 'inline';
+        return false;
     }
 
     var tabAdenda = document.getElementById("tabAdenda");
@@ -1044,6 +1048,7 @@ function configurarBotones() {
         }
         btnNuevoForm.style.display = 'inline';
         btnEliminarForm.style.display = 'inline';
+        return false;
     }
 
     var btnNuevo = document.getElementById("btnNuevo");
@@ -1569,7 +1574,8 @@ function crearFormulario(clasePop, claseReque) {
         document.getElementById("divFormulario").innerHTML = contenido;
     }
     if (vista == "PAC" || vista == "Contrato" || vista == "Prosel") {
-        getListarLicitaPac();
+        //Error lista Tab VFG   ==========================vfgError================================================================//
+       // getListarLicitaPac();
     }
     else {
         getListar();
@@ -1632,7 +1638,7 @@ function mostrarEliminarTab(rpta) {
         mensajeResul = listas[1].split("|");
         var tipo = mensajeResul[0];
         var mensaje = mensajeResul[1];
-
+        debugger;
         if (idTabActivo == "tabGarantia") {
             grillaGarantia = new GrillaScroll(lista, "divListaGarantia", 100, 6, vista, controller, null, false, null, null, 30, false, null);
         }
@@ -1640,10 +1646,10 @@ function mostrarEliminarTab(rpta) {
             grillaCronograma = new GrillaScroll(lista, "divListaCronograma", 100, 6, vista, controller, null, false, null, null, 30, false, null);
         }
         else if (idTabActivo == "tabAdelanto") {
-            grillaCronograma = new GrillaScroll(lista, "divListaAdelanto", 100, 6, vista, controller, null, false, null, null, 30, false, null);
+            grillaAdelanto = new GrillaScroll(lista, "divListaAdelanto", 100, 6, vista, controller, null, false, null, null, 30, false, null);
         }
         else if (idTabActivo == "tabAdenda") {
-            grillaCronograma = new GrillaScroll(lista, "divListaAdenda", 100, 6, vista, controller, null, false, null, null, 30, false, null);
+            grillaAdenda = new GrillaScroll(lista, "divListaAdenda", 100, 6, vista, controller, null, false, null, null, 30, false, null);
         }
 
         if (tipo == 'A') {
