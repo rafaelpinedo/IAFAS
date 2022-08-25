@@ -137,7 +137,6 @@ function configurarBotones() {
     if (btnReporteExcel != null) btnReporteExcel.onclick = function () {
         var anio = txtAnioCN.value;
         Http.get("General/getReporte/?tbl=" + controller + vista + "&data=" + anio, mostrarDatosExportar);
-
     }
 
     var btnCancelar3 = document.getElementById("btnCancelar3");
@@ -151,6 +150,15 @@ function configurarBotones() {
         var data = txtAnioCN3.value;
         Http.get("General/listarTabla?tbl=" + controller + vista + "AyuRpte&data=" + data, mostrarAyudasReporte);
         divPopupRpts.style.display = "block";
+    }
+
+    var btnExpExelRpt = document.getElementById("btnExpExelRpt");
+    if (btnExpExelRpt != null) btnExpExelRpt.onclick = function () {
+        var anio = txtAnioCN3.value;
+        var oficina = cboOficina3.value;
+        var tipoRpt = cboTipoRpte.value;
+        var data = anio + "|" + oficina + "|" + tipoRpt;
+        Http.get("General/getReporte/?tbl=" + controller + vista + "Consolidado&data=" + data, mostrarDatosExportar);
     }
 }
 
@@ -1045,6 +1053,8 @@ function descargarArchivo(contenido, tipoMime) {
 function mostrarAyudasReporte(rpta) {
     if (rpta) {
         var listaOficinas = rpta.split('¬');
+        var listaTipoRpte = ["1|Anexo 4.3: Bienes, servicios y obras","2|Anexo 3.1: Bienes Semestral","3|Anexo: CN Bienes Trimestral"];
         crearCombo(listaOficinas, "cboOficina3", "Seleccione");
+        crearCombo(listaTipoRpte, "cboTipoRpte", "Seleccione");
     }
 }
