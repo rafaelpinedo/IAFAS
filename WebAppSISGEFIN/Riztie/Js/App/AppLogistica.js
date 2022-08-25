@@ -862,10 +862,15 @@ function configurarBotones() {
     //Modificacion Reutilizar Form
     var btnAgregar = document.getElementById("btnAgregar");
     if (btnAgregar != null) btnAgregar.onclick = function () {
+        var data = "";
         if (vista == "PedidoCompra") {
-            var data = "";
             limpiarForm("PopupOfi");
             Http.get("General/listarTabla?tbl=" + controller + "Oficina" + "&data=" + data, listarOficinaOrdenCompra);
+            divPopupContainerForm3.style.display = 'block';
+        }
+        else if (vista == "Cotizacion") {
+            limpiarForm("PopupProv");
+            Http.get("General/listarTabla?tbl=" + controller + "Proveedor" + "&data=" + data, listarOficinaOrdenCompra);
             divPopupContainerForm3.style.display = 'block';
         }
     }
@@ -878,10 +883,22 @@ function configurarBotones() {
     var btnGuardarForm3 = document.getElementById("btnGuardarForm3");
     if (btnGuardarForm3 != null) btnGuardarForm3.onclick = function () {
         var validar = false;
-
-        if (validarInformacion("RequeOfi") == true) {
-            validar = true;
+        var  clase_form = "",vista_proc="";
+        if (vista == "PedidoCompra") {
+            if (validarInformacion("RequeOfi") == true) {
+                validar = true;
+                clase_form = "PopupOfi";
+                vista_proc = "Oficina";
+            }
         }
+        else if (vista == "Cotizacion") {
+            if (validarInformacion("RequeProv") == true) {
+                validar = true;
+                clase_form = "PopupProv";
+                vista_proc = "Proveedor";
+            }
+        }
+        
         if (validar === true) {
             Swal.fire({
                 title: '¿Desea grabar la información?',
@@ -893,7 +910,7 @@ function configurarBotones() {
                 cancelButtonText: 'No'
             }).then((result) => {
                 if (result.value) {
-                    grabarDatosOficinaPedidoCompra();
+                    grabarDatosOficinaPedidoCompra(clase_form, vista_proc);
                 }
             })
         }
@@ -1005,20 +1022,43 @@ function configurarBotones() {
 function listarOficinaOrdenCompra(rpta) {
     if (rpta) {
         var listas = rpta.split("¯");
-        var listaEntidad = listas[1].split("¬");
-        var listaOficinaPadre = listas[2].split("¬");
-        var listaEstado = listas[3].split("¬");
 
-        crearCombo(listaEntidad, "cboEntidad", "Seleccione");
-        crearCombo(listaOficinaPadre, "cboOficinaPadre", "Primer Nivel");
-        crearCombo(listaEstado, "cboEstado", "Seleccione");
+        if (vista == "PedidoCompra") {
+            var listaEntidad = listas[1].split("¬");
+            var listaOficinaPadre = listas[2].split("¬");
+            var listaEstado = listas[3].split("¬");
+
+            crearCombo(listaEntidad, "cboEntidad", "Seleccione");
+            crearCombo(listaOficinaPadre, "cboOficinaPadre", "Primer Nivel");
+            crearCombo(listaEstado, "cboEstado", "Seleccione");
+        }
+        else if (vista == "Cotizacion") {
+            var listaDocumento = listas[1].split("¬");
+            var listaBanco = listas[2].split("¬");
+            var listaEstado = listas[3].split("¬");
+            listaUbigeo = listas[4].split("¬");
+            listarDepartamentos();
+
+            crearCombo(listaDocumento, "cboTipoDocumento", "Seleccione");
+            crearCombo(listaBanco, "cboBanco", "Seleccione");
+            crearCombo(listaEstado, "cboEstado", "Seleccione");
+        }
+        
 
         var cboEntidad = document.getElementById("cboEntidad");
         if (cboEntidad != null) {
             cboEntidad.value = 1;
             cboEntidad.disabled = true;
         }
+        var cboTipoDocumento = document.getElementById("cboTipoDocumento");
+        if (cboTipoDocumento != null) {
+            cboTipoDocumento.value = 4;
+        }
 
+        var dtgEsAgenteRetencion = document.getElementById("dtgEsAgenteRetencion");
+        if (dtgEsAgenteRetencion != null) {
+            $('#dtgEsAgenteRetencion').bootstrapToggle('off')
+        }
         var dtgEsFinal = document.getElementById("dtgEsFinal");
         if (dtgEsFinal != null) {
             $('#dtgEsFinal').bootstrapToggle('off')
@@ -1029,15 +1069,16 @@ function listarOficinaOrdenCompra(rpta) {
             cboEstado.value = 1;
             cboEstado.disabled = true;
         }
+
     }
 }
 
-function grabarDatosOficinaPedidoCompra() {
+function grabarDatosOficinaPedidoCompra(clase_frm,vista_proc) {
     var data = ""
     var frm = new FormData();
-    data = obtenerDatosGrabar("PopupOfi");
+    data = obtenerDatosGrabar(clase_frm);
     frm.append("data", data);
-    Http.post("General/guardar/?tbl=" + controller + "Oficina", OrdenCompraOficinaGrabar, frm);
+    Http.post("General/guardar/?tbl=" + controller + vista_proc, OrdenCompraOficinaGrabar, frm);
 }
 
 function OrdenCompraOficinaGrabar(rpta) {
@@ -1052,7 +1093,14 @@ function OrdenCompraOficinaGrabar(rpta) {
             document.getElementById('divPopupContainerForm3').style.display = 'none';
             var listaOficinaPadre = listas[3].split("¬");
             crearCombo(listaOficinaPadre, "cboOficina", "Seleccione");
+            
         }
+        else if (vista == "Cotizacion") {
+            document.getElementById('divPopupContainerForm3').style.display = 'none';
+            var listaProveedor = listas[2].split("¬");
+            crearCombo(listaProveedor, "cboProveedor", "Seleccione");
+        }
+
         if (tipo == 'A') {
             mostrarMensaje(mensaje, "success");
         }
@@ -1061,7 +1109,7 @@ function OrdenCompraOficinaGrabar(rpta) {
         }
     }
     else {
-        mostrarMensaje("No se registro Oficina", "error");
+        mostrarMensaje("No se registro Datos", "error");
     }
 
 }
