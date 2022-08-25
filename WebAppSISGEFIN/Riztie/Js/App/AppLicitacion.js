@@ -335,10 +335,10 @@ function mostrarGrabarTab(rpta) {
             grillaGarantia = new GrillaScroll(lista, "divListaGarantia", 100, 6, vista, controller, null, false, true, null, 32, false, null);
         }
         else if (idTabActivo == "tabAdelanto") {
-            grillaCronograma = new GrillaScroll(lista, "divListaAdelanto", 100, 6, vista, controller, null, false, true, null, 32, false, null);
+            grillaAdelanto= new GrillaScroll(lista, "divListaAdelanto", 100, 6, vista, controller, null, false, true, null, 32, false, null);
         }
         else if (idTabActivo == "tabAdenda") {
-            grillaCronograma = new GrillaScroll(lista, "divListaAdenda", 100, 6, vista, controller, null, false, true, null, 32, false, null);
+            grillaAdenda = new GrillaScroll(lista, "divListaAdenda", 100, 6, vista, controller, null, false, true, null, 32, false, null);
         }
         else if (idTabActivo == "tabCronograma") {
             grillaCronograma = new GrillaScroll(lista, "divListaCronograma", 100, 6, vista, controller, null, false, true, null, 32, false, null);
