@@ -179,6 +179,7 @@
     <Content Include="Riztie\Images\navbar-img-6.jpg" />
     <Content Include="Riztie\Images\NOFOTO.jpg" />
     <Content Include="Riztie\Images\user-bg.jpg" />
+    <Content Include="Riztie\Js\App\AppContabilidad.js" />
     <Content Include="Riztie\Js\App\AppLicitacion.js" />
     <Content Include="Riztie\Js\App\AppRRHH.js" />
     <Content Include="Riztie\Js\App\AppInventario.js" />
@@ -229,6 +230,7 @@
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AdmonController.cs" />
+    <Compile Include="Controllers\ContabilidadController.cs" />
     <Compile Include="Controllers\GeneralController.cs" />
     <Compile Include="Controllers\IngresosController.cs" />
     <Compile Include="Controllers\InventarioController.cs" />
@@ -319,6 +321,7 @@
     <Content Include="Views\Licitacion\Contrato.cshtml" />
     <Content Include="Views\Licitacion\Comite.cshtml" />
     <Content Include="Views\Inventario\Pendiente.cshtml" />
+    <Content Include="Views\Contabilidad\PlanContable.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -1,6 +1,5 @@
-﻿
-@{
-    ViewBag.Title = "Grupo";
+﻿@{
+    ViewBag.Title = "PlanContable";
     Layout = "~/Views/_LayoutPage.cshtml";
 }
 <div class="pcoded-content">
@@ -8,7 +7,7 @@
         <div class="main-body">
             <div class="card">
                 <div class="card-header bg-primary">
-                    <h3><i class="fa fa-users" aria-hidden="true"></i> GRUPO</h3>
+                    <h3><i class="fa fa-users" aria-hidden="true"></i> PLAN CONTABLE GUBERNAMENTAL</h3>
                 </div>
                 <div class="card-block">
                     <div class="form-row">
@@ -29,39 +28,47 @@
                                         <h5 class="modal-title" id="tituloModal">Nuevo Registro</h5>
                                     </div>
                                     <div class="modal-body">
-                                        <div id="divValidaInterno" style="display:none" class="alert background">
-                                            <span id="btncloseVal" class="closebtn">&times;</span>
-                                            <strong>Advertencia!</strong><br />Los campos remarcados en rojo son obligatorios.
-                                        </div>
                                         <div class="row">
                                             <div class="form-group col-sm-6">
                                                 <input type="hidden" class="control-form Popup" id="txtIdRegistro">
-                                                <label class="control-label">Tipo Bien</label>
-                                                <select id="cboTipoBien" class="control-form Reque Popup"></select>
+                                                <label class="control-label">Entidad</label>
+                                                <select id="cboEntidad" class="control-lectura Reque Popup"></select>
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="form-group col-sm-6">
-                                                <label class="control-label">Codigo Grupo</label>
-                                                <input type="text" autocomplete="off" class="control-form Reque Popup" maxlength="5" id="txtCodigoGrupo">
+                                                <label class="control-label">Id Padre</label>
+                                                <select id="cboOficinaPadre" class="control-form Popup"></select>
                                             </div>
+
+                                            <div class="form-group col-sm-6">
+                                                <label class="control-label">Codigo Oficina</label>
+                                                <input type="text" autocomplete="off" class="control-lectura Popup" id="txtCodOficina" readonly>
+                                            </div>
+                                        </div>
+                                        <div class="row">
                                             <div class="form-group col-sm-12">
-                                                <label class="control-label">Grupo</label>
-                                                <input type="text" autocomplete="off" class="control-form Reque Popup" max="150" id="txtGrupo">
+                                                <label class="control-label">Nombre</label>
+                                                <input type="text" autocomplete="off" class="control-form Reque Popup" id="txtNombre">
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-group col-sm-12">
+                                                <label class="control-label">Abreviatura</label>
+                                                <input type="text" autocomplete="off" class="control-form Reque Popup" id="txtNombre">
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="form-group col-sm-6">
-                                                <label class="control-label">Cuenta Contable</label>
-                                                <select id="cboCuentaContable" class="control-form Reque Popup"></select>
+                                                <label class="control-label" for="dtgEsAgenteRetencion">Es Final</label>
+                                                <input type="checkbox" id="dtgEsFinal" class="Popup" data-toggle="toggle" data-width="160px" data-on="SI" data-off="NO" data-onstyle="success" data-offstyle="danger">
                                             </div>
-                                        </div>
-                                        <div class="row">
                                             <div class="form-group col-sm-6">
                                                 <label class="control-label">Estado</label>
                                                 <select id="cboEstado" class="control-lectura Reque Popup"></select>
                                             </div>
                                         </div>
+
                                     </div>
                                     <div class="modal-footer">
                                         <button id="btnCancelar" class="btnCancelarForm" title="Cancelar"><i class="fa fa-undo" aria-hidden="true"></i>&nbsp;Cancelar</button>
@@ -77,5 +84,5 @@
     </div>
 </div>
 <iframe name="print_frame" width="0" height="0" frameborder="0" src="about:blank"></iframe>
-<script src="~/Riztie/Js/App/AppLogistica.js"></script>
+<script src="~/Riztie/Js/App/AppContabilidad.js"></script>
 

@@ -26,8 +26,11 @@ window.onload = function () {
     getConfigMn();
     vista = window.sessionStorage.getItem("Vista");
     controller = window.sessionStorage.getItem("Controller");
-    if (vista == "PedidoCompra" || vista == "SolicitudCompra" || vista == "Cotizacion" || vista == "CuadroCompara" || vista == "OrdenCompra") {
+    if (vista == "PedidoCompra" || vista == "SolicitudCompra" || vista == "Cotizacion" || vista == "CuadroCompara") {
         getListarPedido();
+    }
+    else if (vista == "OrdenCompra") {
+        getListarOrden(1);
     }
     else if (vista == "PAC") {
         getListarLicita();
@@ -47,6 +50,14 @@ window.onload = function () {
 function getListarLicita() {
     var anioFiscal = document.getElementById("txtAnioFiscal").value;
     Http.get("General/listarTabla/?tbl=" + controller + vista + "&data=" + anioFiscal, mostrarlistas);
+}
+
+function getListarOrden(tipo) {
+    var data = "";
+    var txtFechaInicio = document.getElementById("txtFechaInicio").value;
+    var txtFechaFinal = document.getElementById("txtFechaFinal").value;
+    data = txtFechaInicio + '|' + txtFechaFinal + '|' + tipo;
+    Http.get("General/listarTabla/?tbl=" + controller + vista + "&data=" + data, mostrarlistas);
 }
 
 function getListarPedido() {
@@ -249,11 +260,13 @@ function mostrarConfiguracion(rpta) {
         var igv = listas[3].split('|');
         var direccion = listas[4].split('|');
         var jelog = listas[5].split('|');
-        var jelogAlma = listas[6].split('|');
-        var jefealma = listas[7].split('|');
+        var adquisicion = listas[6].split('|');
+        var jelogAlma = listas[7].split('|');
+        var jefealma = listas[8].split('|');
 
         crearCombo(listaPersonal, "cboDirector", "Seleccione");
         crearCombo(listaPersonal, "cboJelog", "Seleccione");
+        crearCombo(listaPersonal, "cboAdquisicion", "Seleccione");
         crearCombo(listaPersonal, "cboJelogAlma", "Seleccione");
         crearCombo(listaPersonal, "cboJefeAlmacen", "Seleccione");
 
@@ -271,6 +284,9 @@ function mostrarConfiguracion(rpta) {
 
         cboJelog.value = jelog[1] * 1;
         cboJelog.setAttribute('data-id', jelog[0]);
+
+        cboAdquisicion.value = adquisicion[1] * 1;
+        cboAdquisicion.setAttribute('data-id', adquisicion[0]);
 
         cboJelogAlma.value = jelogAlma[1] * 1;
         cboJelogAlma.setAttribute('data-id', jelogAlma[0]);
@@ -524,6 +540,19 @@ function configurarCombos() {
 }
 
 function configurarBotones() {
+
+    var tabOrdCompra = document.getElementById("tabOrdCompra");
+    if (tabOrdCompra != null) tabOrdCompra.onclick = function () {
+        getListarOrden(1);
+        idTabActivo = "tabOrdCompra";
+    }
+
+    var tabOrdServicio = document.getElementById("tabOrdServicio");
+    if (tabOrdServicio != null) tabOrdServicio.onclick = function () {
+        idTabActivo = "tabOrdServicio";
+        getListarOrden(2);
+    }
+
     var tabParametro = document.getElementById("tabParametro");
     if (tabParametro != null) tabParametro.onclick = function () {
         idTabActivo = "tabParametro";
@@ -566,7 +595,7 @@ function configurarBotones() {
 
         let spnLoad = document.getElementById("spnLoad");
         if (spnLoad != null) {
-            spnLoad.style.display='none';
+            spnLoad.style.display = 'none';
         }
 
         let tituloModal = document.getElementById("tituloModal");
@@ -859,6 +888,63 @@ function configurarBotones() {
         }
     }
 
+    //Modificacion Reutilizar Form
+    var btnAgregar = document.getElementById("btnAgregar");
+    if (btnAgregar != null) btnAgregar.onclick = function () {
+        var data = "";
+        if (vista == "PedidoCompra") {
+            limpiarForm("PopupOfi");
+            Http.get("General/listarTabla?tbl=" + controller + "Oficina" + "&data=" + data, listarOficinaOrdenCompra);
+            divPopupContainerForm3.style.display = 'block';
+        }
+        else if (vista == "Cotizacion") {
+            limpiarForm("PopupProv");
+            Http.get("General/listarTabla?tbl=" + controller + "Proveedor" + "&data=" + data, listarOficinaOrdenCompra);
+            divPopupContainerForm3.style.display = 'block';
+        }
+    }
+
+    var btnCancelarForm3 = document.getElementById("btnCancelarForm3");
+    if (btnCancelarForm3 != null) btnCancelarForm3.onclick = function () {
+        divPopupContainerForm3.style.display = 'none';
+    }
+
+    var btnGuardarForm3 = document.getElementById("btnGuardarForm3");
+    if (btnGuardarForm3 != null) btnGuardarForm3.onclick = function () {
+        var validar = false;
+        var  clase_form = "",vista_proc="";
+        if (vista == "PedidoCompra") {
+            if (validarInformacion("RequeOfi") == true) {
+                validar = true;
+                clase_form = "PopupOfi";
+                vista_proc = "Oficina";
+            }
+        }
+        else if (vista == "Cotizacion") {
+            if (validarInformacion("RequeProv") == true) {
+                validar = true;
+                clase_form = "PopupProv";
+                vista_proc = "Proveedor";
+            }
+        }
+        
+        if (validar === true) {
+            Swal.fire({
+                title: '¿Desea grabar la información?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Si',
+                cancelButtonText: 'No'
+            }).then((result) => {
+                if (result.value) {
+                    grabarDatosOficinaPedidoCompra(clase_form, vista_proc);
+                }
+            })
+        }
+    }
+
     var btnSeleccionarItems = document.getElementById("btnSeleccionarItems");
     if (btnSeleccionarItems != null) btnSeleccionarItems.onclick = function () {
         var ids = grillaItems.obtenerIdsChecks();
@@ -961,6 +1047,102 @@ function configurarBotones() {
     }
 
 }
+
+function listarOficinaOrdenCompra(rpta) {
+    if (rpta) {
+        var listas = rpta.split("¯");
+
+        if (vista == "PedidoCompra") {
+            var listaEntidad = listas[1].split("¬");
+            var listaOficinaPadre = listas[2].split("¬");
+            var listaEstado = listas[3].split("¬");
+
+            crearCombo(listaEntidad, "cboEntidad", "Seleccione");
+            crearCombo(listaOficinaPadre, "cboOficinaPadre", "Primer Nivel");
+            crearCombo(listaEstado, "cboEstado", "Seleccione");
+        }
+        else if (vista == "Cotizacion") {
+            var listaDocumento = listas[1].split("¬");
+            var listaBanco = listas[2].split("¬");
+            var listaEstado = listas[3].split("¬");
+            listaUbigeo = listas[4].split("¬");
+            listarDepartamentos();
+
+            crearCombo(listaDocumento, "cboTipoDocumento", "Seleccione");
+            crearCombo(listaBanco, "cboBanco", "Seleccione");
+            crearCombo(listaEstado, "cboEstado", "Seleccione");
+        }
+        
+
+        var cboEntidad = document.getElementById("cboEntidad");
+        if (cboEntidad != null) {
+            cboEntidad.value = 1;
+            cboEntidad.disabled = true;
+        }
+        var cboTipoDocumento = document.getElementById("cboTipoDocumento");
+        if (cboTipoDocumento != null) {
+            cboTipoDocumento.value = 4;
+        }
+
+        var dtgEsAgenteRetencion = document.getElementById("dtgEsAgenteRetencion");
+        if (dtgEsAgenteRetencion != null) {
+            $('#dtgEsAgenteRetencion').bootstrapToggle('off')
+        }
+        var dtgEsFinal = document.getElementById("dtgEsFinal");
+        if (dtgEsFinal != null) {
+            $('#dtgEsFinal').bootstrapToggle('off')
+        }
+
+        var cboEstado = document.getElementById("cboEstado");
+        if (cboEstado != null) {
+            cboEstado.value = 1;
+            cboEstado.disabled = true;
+        }
+
+    }
+}
+
+function grabarDatosOficinaPedidoCompra(clase_frm,vista_proc) {
+    var data = ""
+    var frm = new FormData();
+    data = obtenerDatosGrabar(clase_frm);
+    frm.append("data", data);
+    Http.post("General/guardar/?tbl=" + controller + vista_proc, OrdenCompraOficinaGrabar, frm);
+}
+
+function OrdenCompraOficinaGrabar(rpta) {
+
+    if (rpta) {
+        var listas = rpta.split("¯")
+        mensajeResul = listas[1].split("|");
+        var tipo = mensajeResul[0];
+        var mensaje = mensajeResul[1];
+
+        if (vista == "PedidoCompra") {
+            document.getElementById('divPopupContainerForm3').style.display = 'none';
+            var listaOficinaPadre = listas[3].split("¬");
+            crearCombo(listaOficinaPadre, "cboOficina", "Seleccione");
+            
+        }
+        else if (vista == "Cotizacion") {
+            document.getElementById('divPopupContainerForm3').style.display = 'none';
+            var listaProveedor = listas[2].split("¬");
+            crearCombo(listaProveedor, "cboProveedor", "Seleccione");
+        }
+
+        if (tipo == 'A') {
+            mostrarMensaje(mensaje, "success");
+        }
+        else {
+            mostrarMensaje(mensaje, "error");
+        }
+    }
+    else {
+        mostrarMensaje("No se registro Datos", "error");
+    }
+
+}
+
 
 function mostrarEnviarCorreo(rpta) {
     if (rpta) alert(rpta);
@@ -1800,7 +1982,7 @@ function mostrarRegistro(rpta) {
             txtIdRegistro.value = cabecera[0];
             lblNumero.innerHTML = cabecera[1];
             lblTipo.innerHTML = cabecera[3];
-            lblFechaEmision.innerHTML = cabecera[4];
+            txtFechaEmision.value = cabecera[4];
             idProveedor = cabecera[5];
             lblProveedor.innerHTML = cabecera[6];
             lblCotizacion.innerHTML = cabecera[7];
@@ -1827,7 +2009,8 @@ function mostrarRegistro(rpta) {
             lblIGV.innerHTML = formatoNumeroDecimal(cabecera[18]);
             lblTotal.innerHTML = formatoNumeroDecimal(cabecera[19]);
             lblGarantia.innerHTML = cabecera[21];
-
+            lblUsuarioCreacion.innerHTML = cabecera[22];
+            lblFechaCreacion.innerHTML = cabecera[23];
             idSolCompra = cabecera[20];
             if (cabecera[12] != "GENERADA") {
                 btnGuardar.style.display = 'none';
@@ -2119,8 +2302,6 @@ function obtenerDatosGrabar(clase) {
     return data;
 }
 
-
-
 function mostrarGrabarDetalleItem(rpta) {
     var mensajeResul = [];
     var tipo = "";
@@ -2285,10 +2466,17 @@ function aprobarPedido() {
 
 function eliminarRegistro(id) {
     var data = "";
-    if (vista == "PedidoCompra" || vista == "SolicitudCompra" || vista == "Cotizacion" || vista == "CuadroCompara" || vista == "OrdenCompra") {
+    if (vista == "PedidoCompra" || vista == "SolicitudCompra" || vista == "Cotizacion" || vista == "CuadroCompara" ) {
         var fechaInicio = txtFechaInicio.value;
         var fechaFinal = txtFechaFinal.value;
         data = id + '|' + fechaInicio + '|' + fechaFinal;
+    }
+    else if (vista == "OrdenCompra") {
+        var idTipo;
+        if (idTabActivo == "tabOrdCompra") { idTipo = 1; } else { idTipo = 2; }
+        var fechaInicio = txtFechaInicio.value;
+        var fechaFinal = txtFechaFinal.value;
+        data = id + '|' + fechaInicio + '|' + fechaFinal + '|' + idTipo;
     }
     else {
         data = id;
@@ -2361,7 +2549,8 @@ function getReporte(id) {
 
 function mostrarReporte(rpta) {
     if (rpta) {
-
+        var listaDetallePedido;
+        var listaDetalleReporte;
         var tipoOrden;
         var IdEmpresa;
         var listaReporte = rpta.split("¯");
@@ -2373,12 +2562,7 @@ function mostrarReporte(rpta) {
             tdFechaEmision.innerHTML = Cabecera[0];
             tdArea.innerHTML = Cabecera[1];
             tdEvaluadorCC.innerHTML = Cabecera[3];
-            spnGrado.innerHTML = Cabecera[4];
-            spnCargo.innerHTML = Cabecera[5];
-            spnNombre.innerHTML = Cabecera[6];
-            spnCIP.innerHTML = Cabecera[7];
-            spnBuenaPro.innerHTML = Cabecera[8];
-            tdPresupuesto.innerHTML = Cabecera[9];
+            tdPresupuesto.innerHTML = Cabecera[4];
             generarPivotCC(detalle);
         }
         else if (vista == "PedidoCompra") {
@@ -2388,6 +2572,7 @@ function mostrarReporte(rpta) {
             tdFechaRequerida.innerHTML = Cabecera[3];
             tdJustificacion.innerHTML = Cabecera[4];
             tdDocumento.innerHTML = Cabecera[7];
+            tdElaborado.innerHTML = Cabecera[9];
             tdEstado.innerHTML = Cabecera[6];
             spnPromotor.innerHTML = "SOLICITANTE: " + Cabecera[8] + "<br />";
             if (Cabecera[5] != 1) {
@@ -2396,6 +2581,12 @@ function mostrarReporte(rpta) {
             else {
                 tdEtiquetaEstado.innerHTML = "PENDIENTE DE APROBACION";
             }
+        }
+        else if (vista == "SolicitudCompra") {
+            tdNroSolicitud.innerHTML = Cabecera[0];
+            tdTipoSolicitud.innerHTML = Cabecera[1];
+            tdFechaPedido.innerHTML = Cabecera[2];
+            tdEstado.innerHTML = Cabecera[3];
         }
         else if (vista == "Cotizacion") {
             tdNroSolicitud.innerHTML = Cabecera[0];
@@ -2455,7 +2646,36 @@ function mostrarReporte(rpta) {
         }
 
         var contenido = "";
-        listaDetalleReporte = listaReporte[1].split("¬");
+        var html = "";
+        if (vista == "SolicitudCompra") {
+            listaDetallePedido = listaReporte[1].split("¬");
+            listaDetalleReporte = listaReporte[2].split("¬");
+            var nregistros = listaDetallePedido.length;
+            if (nregistros > 0 && listaDetallePedido[0] != "") {
+                var campos = [];
+                for (var i = 0; i < nregistros; i++) {
+                    campos = listaDetallePedido[i].split("|");
+                    html += "<tr>";
+                    html += "<td style='vertical-align:top;text-align: center;border: black 1px solid;'>";
+                    html += campos[0];
+                    html += "</td > ";
+                    html += "<td style='vertical-align:top;text-align: left;border: black 1px solid;'>";
+                    html += campos[1];
+                    html += "</td > ";
+                    html += "<td style='text-align: left;max-width:500px;white-space: pre-wrap;white-space: -moz-pre-wrap;white-space: -o-pre-wrap;border: black 1px solid;'>";
+                    html += campos[2];
+                    html += "</td > ";
+                    html += "<td style='vertical-align:top;text-align: left;border: black 1px solid;'>";
+                    html += campos[3];
+                    html += "</td > ";
+                    html += "</tr>";
+                }
+                tblDetallePedido.innerHTML = html;
+            }
+        }
+        else {
+            listaDetalleReporte = listaReporte[1].split("¬");
+        }
         var nregistros = listaDetalleReporte.length;
         if (nregistros > 0 && listaDetalleReporte[0] != "") {
             var campos = [];
@@ -2534,6 +2754,30 @@ function mostrarReporte(rpta) {
             }
             else if (vista == "PedidoCompra") {
 
+                for (var i = 0; i < nregistros; i++) {
+                    campos = listaDetalleReporte[i].split("|");
+                    contenido += "<tr>";
+                    contenido += "<td style='vertical-align:top;text-align: center;border: black 1px solid;'>";
+                    contenido += i + 1;
+                    contenido += "</td > ";
+                    contenido += "<td style='vertical-align:top;text-align: center;border: black 1px solid;'>";
+                    contenido += campos[1];
+                    contenido += "</td > ";
+                    contenido += "<td style='text-align: left;max-width:500px;white-space: pre-wrap;white-space: -moz-pre-wrap;white-space: -o-pre-wrap;border: black 1px solid;'>";
+                    contenido += campos[2];
+                    contenido += "</td > ";
+                    contenido += "<td style='vertical-align:top;text-align: center;border: black 1px solid;'>";
+                    contenido += campos[3];
+                    contenido += "</td > ";
+                    contenido += "<td style='vertical-align:top;text-align: right;border: black 1px solid;'>";
+                    contenido += formatoNumeroDecimal(campos[4] * 1);
+                    contenido += "</td > ";
+                    contenido += "</tr>";
+                }
+                tblDetalleReporte.innerHTML = contenido;
+
+            }
+            else if (vista == "SolicitudCompra") {
                 for (var i = 0; i < nregistros; i++) {
                     campos = listaDetalleReporte[i].split("|");
                     contenido += "<tr>";
@@ -3189,6 +3433,180 @@ function grabarProforma() {
         btnActualizar.disabled = true;
     }
 }
+
+function generarPivotCC(detalle) {
+    var nDetalles = detalle.length;
+    var productos = [];
+    var proveedores = [];
+    var rucs = [];
+    var correos = [];
+    var contactos = [];
+    var telefonos = [];
+    var campos = [];
+    for (var i = 3; i < nDetalles; i++) {
+        campos = detalle[i].split('|');
+        if (proveedores.indexOf(campos[0]) == -1) {
+            proveedores.push(campos[0]);
+            window[campos[0] + "_SubTotal"] = 0;
+        }
+        if (rucs.indexOf(campos[1]) == -1) {
+            rucs.push(campos[1]);
+        }
+        if (correos.indexOf(campos[2]) == -1) {
+            correos.push(campos[2]);
+        }
+        if (contactos.indexOf(campos[3]) == -1) {
+            contactos.push(campos[3]);
+        }
+        if (telefonos.indexOf(campos[4]) == -1) {
+            telefonos.push(campos[4]);
+        }
+        if (productos.indexOf(campos[5]) == -1) {
+            productos.push(campos[5]);
+        }
+
+        window[campos[5] + "_Unidad"] = campos[6];
+        window[campos[5] + "_Cantidad"] = formatoNumeroDecimal(campos[7] * 1);
+        window[campos[0] + "_" + campos[5] + "_Plazo"] = SoloNumeros(formatoNumeroEntero(campos[8] * 1)) + '(' + formatoNumeroEntero(campos[8] * 1) + ') DIAS';
+        window[campos[0] + "_" + campos[5] + "_Precio"] = formatoNumeroDecimal(campos[9] * 1);
+        window[campos[0] + "_" + campos[5] + "_SubTotal"] = formatoNumeroDecimal(campos[10] * 1);
+        window[campos[0] + "_SubTotal"] += (campos[10] * 1);
+    }
+    var html = "";
+    html += "<thead>";
+    html += "<tr>";
+    html += "<th colspan='3' style='border: 1px solid black;width:300px;text-align:left'>INFORMACION DE PROPUESTAS</th>";
+    var nProveedores = proveedores.length;
+    for (var i = 0; i < nProveedores; i++) {
+        html += "<th colspan='3' style='border: 1px solid black;width:150px'>";
+        html += 'PROVEEDOR ' + (i + 1);
+        html += "</th>";
+    }
+    html += "</tr>";
+    html += "<tr>";
+    html += "<th colspan='3' style='border: 1px solid black;width:300px;text-align:left'>RAZON SOCIAL</th>";
+    var nProveedores = proveedores.length;
+    for (var i = 0; i < nProveedores; i++) {
+        html += "<th colspan='3' style='border: 1px solid black;width:150px'>";
+        html += proveedores[i];
+        html += "</th>";
+    }
+    html += "</tr>";
+    html += "<tr>";
+    html += "<th colspan='3' style='border: 1px solid black;width:300px;text-align:left'>RUC</th>";
+    var nRucs = rucs.length;
+    for (var i = 0; i < nRucs; i++) {
+        html += "<th colspan='3' style='border: 1px solid black;width:150px'>";
+        html += rucs[i];
+        html += "</th>";
+    }
+    html += "</tr>";
+    html += "<tr>";
+    html += "<th colspan='3' style='border: 1px solid black;width:300px;text-align:left'>CORREO ELECTRONICO</th>";
+    var nCorreos = correos.length;
+    for (var i = 0; i < nCorreos; i++) {
+        html += "<th colspan='3' style='border: 1px solid black;width:150px'>";
+        html += correos[i];
+        html += "</th>";
+    }
+    html += "</tr>";
+    html += "<tr>";
+    html += "<th colspan='3' style='border: 1px solid black;width:300px;text-align:left'>CONTACTO</th>";
+    var nContactos = contactos.length;
+    for (var i = 0; i < nContactos; i++) {
+        html += "<th colspan='3' style='border: 1px solid black;width:150px'>";
+        html += contactos[i];
+        html += "</th>";
+    }
+    html += "</tr>";
+    html += "<tr>";
+    html += "<th colspan='3' style='border: 1px solid black;width:300px;text-align:left'>TELEFONO MOVIL</th>";
+    var nTelefonos = telefonos.length;
+    for (var i = 0; i < nTelefonos; i++) {
+        html += "<th colspan='3' style='border: 1px solid black;width:150px'>";
+        html += telefonos[i];
+        html += "</th>";
+    }
+    html += "</tr>";
+    html += "<tr>";
+    html += "<th style='border: 1px solid black;width:300px;line-height:20px'>Descripción</th>";
+    html += "<th style='border: 1px solid black;width:75px;line-height:20px'>Unidad</th>";
+    html += "<th style='border: 1px solid black;width:75px;line-height:20px'>Cantidad</th>";
+    var nProveedores = proveedores.length;
+    for (var i = 0; i < nProveedores; i++) {
+        html += "<th style='border: 1px solid black;width:75px;line-height:20px'>";
+        html += "Plazo Compra";
+        html += "</th>";
+        html += "<th style='border: 1px solid black;width:75px;line-height:20px'>";
+        html += "Precio Unitario";
+        html += "</th>";
+        html += "<th style='border: 1px solid black;width:75px;line-height:20px'>";
+        html += "Precio Total";
+        html += "</th>";
+    }
+    html += "</tr>";
+    html += "</thead>";
+    html += "<tbody>";
+    var nProductos = productos.length;
+    for (var i = 0; i < nProductos; i++) {
+        html += "<tr>";
+        html += "<td style='border: 1px solid black;white-space: pre-wrap;white-space: -moz-pre-wrap;white-space: -o-pre-wrap;text-align:left;width:300px;line-height:20px'>";
+        html += productos[i];
+        html += "</td>";
+        html += "<td style='border: 1px solid black;width:75px;line-height:20px'>";
+        html += window[productos[i] + "_Unidad"];
+        html += "</td>";
+        html += "<td style='border: 1px solid black;text-align:right;width:75px;line-height:20px'>";
+        html += window[productos[i] + "_Cantidad"];
+        html += "</td>";
+        for (var j = 0; j < nProveedores; j++) {
+            html += "<td style='border: 1px solid black;width:75px;line-height:20px'>";
+            html += window[proveedores[j] + "_" + productos[i] + "_Plazo"];
+            html += "</td>";
+            html += "<td style='border: 1px solid black;text-align:right;width:75px;line-height:20px'>";
+            html += window[proveedores[j] + "_" + productos[i] + "_Precio"];
+            html += "</td>";
+            html += "<td style='border: 1px solid black;text-align:right;font-weight:bold;width:75px;line-height:20px'>";
+            html += window[proveedores[j] + "_" + productos[i] + "_SubTotal"];
+            html += "</td>";
+        }
+        html += "</tr>";
+    }
+    html += "<tr>";
+    html += "<td colspan='3' style='border: 1px solid black;text-align:right;font-weight:bold;width:300px;line-height:20px'>";
+    html += "TOTALES:";
+    html += "</td>";
+    for (var j = 0; j < nProveedores; j++) {
+        html += "<td style='border: 1px solid black;width:75px;line-height:20px'>";
+        html += "";
+        html += "</td>";
+        html += "<td style='border: 1px solid black;width:75px;line-height:20px'>";
+        html += "";
+        html += "</td>";
+        html += "<td style='border: 1px solid black;text-align:right;width:75px;line-height:20px' id='tdSubTotal";
+        html += j;
+        html += "'>";
+        html += formatoNumeroDecimal(window[proveedores[j] + "_SubTotal"]);
+        html += "</td>";
+    }
+    html += "</tr>";
+    html += "</tbody>";
+    tblGenerarCC.innerHTML = html;
+    var minSubTotal = 100000000;
+    var posMin = -1;
+    for (var j = 0; j < nProveedores; j++) {
+        if (window[proveedores[j] + "_SubTotal"] < minSubTotal) {
+            minSubTotal = window[proveedores[j] + "_SubTotal"];
+            posMin = j;
+        }
+    }
+    if (posMin > -1) {
+        var celda = document.getElementById("tdSubTotal" + posMin);
+        if (celda != null) celda.style.fontWeight = 'bold';
+        if (celda != null) celda.style.fontSize = '12px';
+    }
+}
+
 function generarPivot(detalle, div) {
     var nDetalles = detalle.length;
     var productos = [];
