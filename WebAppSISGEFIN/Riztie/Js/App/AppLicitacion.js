@@ -38,6 +38,27 @@ window.onload = function () {
     configurarCombos();
 }
 
+
+function NumCheck(e, field) {
+    key = e.keyCode ? e.keyCode : e.which
+    // backspace
+    if (key == 8) return true
+    // 0-9
+    if (key > 47 && key < 58) {
+        if (field.value == "") return true
+        regexp = /^\d+(\.\d{0,2})?$/;
+        return (regexp.test(field.value))
+    }
+    // .
+    if (key == 46) {
+        if (field.value == "") return false
+        regexp = /^[0-9]+$/
+        return regexp.test(field.value)
+    }
+
+    return false
+}
+
 function getListar() {
     var data = "";
     Http.get("General/listarTabla?tbl=" + controller + vista + "&data=" + data, mostrarlistas);
@@ -313,6 +334,12 @@ function mostrarGrabarTab(rpta) {
         if (idTabActivo == "tabGarantia") {
             grillaGarantia = new GrillaScroll(lista, "divListaGarantia", 100, 6, vista, controller, null, false, true, null, 32, false, null);
         }
+        else if (idTabActivo == "tabAdelanto") {
+            grillaAdelanto= new GrillaScroll(lista, "divListaAdelanto", 100, 6, vista, controller, null, false, true, null, 32, false, null);
+        }
+        else if (idTabActivo == "tabAdenda") {
+            grillaAdenda = new GrillaScroll(lista, "divListaAdenda", 100, 6, vista, controller, null, false, true, null, 32, false, null);
+        }
         else if (idTabActivo == "tabCronograma") {
             grillaCronograma = new GrillaScroll(lista, "divListaCronograma", 100, 6, vista, controller, null, false, true, null, 32, false, null);
         }
@@ -582,6 +609,15 @@ function eliminarRegistro(id) {
             else if (vista == "Contrato" && idTabActivo == "tabCronograma") {
                 Http.post("General/eliminar/?tbl=" + controller + vista + 'Cronograma', mostrarEliminarTab, frm);
             }
+            else if (vista == "Contrato" && idTabActivo == "tabCronograma") {
+                Http.post("General/eliminar/?tbl=" + controller + vista + 'Cronograma', mostrarEliminarTab, frm);
+            }
+            else if (vista == "Contrato" && idTabActivo == "tabAdelanto") {
+                Http.post("General/eliminar/?tbl=" + controller + vista + 'Adelanto', mostrarEliminarTab, frm);
+            }
+            else if (vista == "Contrato" && idTabActivo == "tabAdenda") {
+                Http.post("General/eliminar/?tbl=" + controller + vista + 'Adenda', mostrarEliminarTab, frm);
+            }
             else {
                 Http.post("General/eliminar/?tbl=" + controller + vista, mostrarEliminar, frm);
             }
@@ -831,6 +867,17 @@ function mostrarRegistro(rpta) {
 
             var divPopupContainer = document.getElementById("divPopupContainer");
             if (divPopupContainer != null) { divPopupContainer.style.display = 'block'; };
+
+            var elemento = document.querySelectorAll(".buenapro");
+            for (var i = 0; i < elemento.length; i++) {
+                if (campos[5] == "3") {
+                    elemento[i].classList.add("clase-hiddeBuenapro");
+                }
+                else {
+                    elemento[i].classList.remove("clase-hiddeBuenapro");
+                }
+            }
+
             return;
         }
         else {
@@ -940,6 +987,14 @@ function configurarBotones() {
             nombreFormulario.innerHTML = "Registro de Cronograma";
             limpiarForm("PopupCrono");
         }
+        else if (idTabActivo == "tabAdelanto") {
+            nombreFormulario.innerHTML = "Registro de Adelanto";
+            limpiarForm("PopupAdel");
+        }
+        else if (idTabActivo == "tabAdenda") {
+            nombreFormulario.innerHTML = "Registro de Adenda";
+            limpiarForm("PopupAdend");
+        }
     }
 
     var tabCompromiso = document.getElementById("tabCompromiso");
@@ -966,6 +1021,26 @@ function configurarBotones() {
         //var data = "";
         if (idRegistro != "") {
             Http.get("General/listarTabla?tbl=" + controller + vista + "Cronograma&data=" + idRegistro, mostrarlistaTab);
+        }
+        btnNuevoForm.style.display = 'inline';
+        btnEliminarForm.style.display = 'inline';
+    }
+
+    var tabAdelanto = document.getElementById("tabAdelanto");
+    if (tabAdelanto != null) tabAdelanto.onclick = function () {
+        idTabActivo = "tabAdelanto";
+        if (idRegistro != "") {
+            Http.get("General/listarTabla?tbl=" + controller + vista + "Adelanto&data=" + idRegistro, mostrarlistaTab);
+        }
+        btnNuevoForm.style.display = 'inline';
+        btnEliminarForm.style.display = 'inline';
+    }
+
+    var tabAdenda = document.getElementById("tabAdenda");
+    if (tabAdenda != null) tabAdenda.onclick = function () {
+        idTabActivo = "tabAdenda";
+        if (idRegistro != "") {
+            Http.get("General/listarTabla?tbl=" + controller + vista + "Adenda&data=" + idRegistro, mostrarlistaTab);
         }
         btnNuevoForm.style.display = 'inline';
         btnEliminarForm.style.display = 'inline';
@@ -1161,11 +1236,19 @@ function configurarBotones() {
 
     var btnAgregar = document.getElementById("btnAgregar");
     if (btnAgregar != null) btnAgregar.onclick = function () {
+        debugger;
         if (vista == "Contrato" && idTabActivo == "tabGarantia") {
             if (validarInformacion("RequeGar")) grabarDatosVarios("PopupGar", "Garantia");
         }
         else if (vista == "Contrato" && idTabActivo == "tabCronograma") {
             if (validarInformacion("RequeCrono")) grabarDatosVarios("PopupCrono", "Cronograma");
+        }
+        else if (vista == "Contrato" && idTabActivo == "tabAdelanto") {
+           if (validarInformacion("RequeAdel")) grabarDatosVarios("PopupAdel", "Adelanto");
+        }
+        else if (vista == "Contrato" && idTabActivo == "tabAdenda") {
+            debugger;
+            if (validarInformacion("RequeAdenda")) grabarDatosVarios("PopupAdend", "Adenda");
         }
     }
 
@@ -1291,12 +1374,21 @@ function mostrarlistaTab(rpta) {
             formulario = listas[1].split("¬");
             crearFormulario("PopupGar", "RequeGar");
         }
+        else if (idTabActivo == "tabAdelanto") {
+            grillaGarantia = new GrillaScroll(lista, "divListaAdelanto", 100, 6, vista, controller, null, false, null, null, 25, true, null);
+            formulario = listas[1].split("¬");
+            crearFormulario("PopupAdel", "RequeAdel");
+        }
+        else if (idTabActivo == "tabAdenda") {
+            grillaGarantia = new GrillaScroll(lista, "divListaAdenda", 100, 6, vista, controller, null, false, null, null, 25, true, null);
+            formulario = listas[1].split("¬");
+            crearFormulario("PopupAdend", "RequeAdenda");
+        }
         else {
             grillaGarantia = new GrillaScroll(lista, "divListaCronograma", 100, 6, vista, controller, null, false, null, null, 25, true, null);
             formulario = listas[1].split("¬");
             crearFormulario("PopupCrono", "RequeCrono");
         }
-
 
         var nListas = listas.length;
         if (nListas > 2) {
@@ -1332,7 +1424,6 @@ function crearFormulario(clasePop, claseReque) {
             esObligatorio = (campos[3].indexOf(claseReque) > -1);
             esBuscar = (campos[3].indexOf("Buscar") > -1);
             esLectura = (campos[3].indexOf("Lectura") > -1);
-            esPopup = (campos[3].indexOf("Lectura") > -1);
             var dataValue = campos[1];
             if (cantCol == '0') {
                 contenido += "<div class='form-group row'>";
@@ -1547,6 +1638,12 @@ function mostrarEliminarTab(rpta) {
         }
         else if (idTabActivo == "tabCronograma") {
             grillaCronograma = new GrillaScroll(lista, "divListaCronograma", 100, 6, vista, controller, null, false, null, null, 30, false, null);
+        }
+        else if (idTabActivo == "tabAdelanto") {
+            grillaCronograma = new GrillaScroll(lista, "divListaAdelanto", 100, 6, vista, controller, null, false, null, null, 30, false, null);
+        }
+        else if (idTabActivo == "tabAdenda") {
+            grillaCronograma = new GrillaScroll(lista, "divListaAdenda", 100, 6, vista, controller, null, false, null, null, 30, false, null);
         }
 
         if (tipo == 'A') {
@@ -2241,7 +2338,7 @@ function tabEvaluacionTecnicaListar(rpta) {
                 }
 
                 filaDetalle += "<td style='white-space:pre-wrap;width:10px;'>";
-                filaDetalle += "<i class='fa fa-trash f-16 text-c-red' title='Quitar Item' onclick='tabEvalTecnicaEconomicaItem(this,\"";
+                filaDetalle += "<i class='fa fa-trash f-16 text-c-red buenapro' title='Quitar Item' onclick='tabEvalTecnicaEconomicaItem(this,\"";
                 filaDetalle += camposDetalle[1];
                 filaDetalle += "\");'></i>";
                 filaDetalle += "</td>";
@@ -2340,7 +2437,7 @@ function tabRegistroListar(rpta) {
             filaDetalle += '<td style="white-space:pre-wrap;width:50px;" colspan="1">' + camposDetalle[4] + '</td>';
 
             filaDetalle += "<td style='white-space:pre-wrap;width:10px;'>";
-            filaDetalle += "<i class='fa fa-trash f-16 text-c-red' title='Quitar Item' onclick='tabRegistroEliminarItem(this,3,\"";
+            filaDetalle += "<i class='fa fa-trash f-16 text-c-red buenapro' title='Quitar Item' onclick='tabRegistroEliminarItem(this,3,\"";
             filaDetalle += camposDetalle[0];
             filaDetalle += "\");'></i>";
             filaDetalle += "</td>";
@@ -2777,7 +2874,7 @@ function listarTabBuenaPro(rpta) {
                 filaDetalle += '<select class="control-form estadobuenapro RequeBuenaPro">' + estadoHtml + '</select>';
                 filaDetalle += '</td>';
                 filaDetalle += '<td>';
-                filaDetalle += '<i class="fa fa-trash f-16 text-c-red" title="Quitar Item" onclick="tabBuenaProEliminarItem(this);"></i>';
+                filaDetalle += '<i class="fa fa-trash f-16 text-c-red buenapro" title="Quitar Item" onclick="tabBuenaProEliminarItem(this);"></i>';
                 filaDetalle += '</td>';
                 filaDetalle += '</tr>';
             }

@@ -2,79 +2,13 @@
     ViewBag.Title = "Orden de Compra";
     Layout = "~/Views/_LayoutPage.cshtml";
 }
-<style>
-    .switchBtn {
-        position: relative;
-        display: inline-block;
-        width: 110px;
-        height: 34px;
-    }
 
-        .switchBtn input {
-            display: none;
-        }
-
-    .slide {
-        position: absolute;
-        cursor: pointer;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background-color: #ccc;
-        -webkit-transition: .4s;
-        transition: .4s;
-        padding: 8px;
-        color: #fff;
-    }
-
-        .slide:before {
-            position: absolute;
-            content: "";
-            height: 26px;
-            width: 26px;
-            left: 78px;
-            bottom: 4px;
-            background-color: white;
-            -webkit-transition: .4s;
-            transition: .4s;
-        }
-
-    input:checked + .slide {
-        background-color: #8CE196;
-        padding-left: 40px;
-    }
-
-    input:focus + .slide {
-        box-shadow: 0 0 1px #01aeed;
-    }
-
-    input:checked + .slide:before {
-        -webkit-transform: translateX(26px);
-        -ms-transform: translateX(26px);
-        transform: translateX(26px);
-        left: -20px;
-    }
-
-    .slide.round {
-        border-radius: 34px;
-    }
-
-        .slide.round:before {
-            border-radius: 50%;
-        }
-</style>
 <div class="pcoded-content">
     <div class="pcoded-inner-content">
         <div class="main-body">
             <div class="card">
                 <div class="card-header bg-primary">
-                    <h3><i class="fa fa-file" aria-hidden="true"></i> Ordenes de Compra</h3>
-                    <div class="card-header-right">
-                        <ul class="list-unstyled card-option">
-                            <li><i class="fa fa-window-maximize full-card" style="color:white"></i></li>
-                        </ul>
-                    </div>
+                    <h3><i class="fa fa-file" aria-hidden="true"></i> Listado de Ordenes</h3>
                 </div>
                 <div class="card-block">
                     <div class="form-row">
@@ -93,8 +27,32 @@
                         </div>
                     </div>
                     <div class="form-row">
-                        <div class="form-group col-md-12">
-                            <div class="table-responsive dt-responsive" id="divLista"></div>
+                        <div class="col-lg-12">
+                            <div class="tab-header card">
+                                <ul class="nav nav-tabs md-tabs tab-timeline" role="tablist" id="mytab">
+                                    <li class="nav-item">
+                                        <a class="nav-link active" id="tabOrdCompra" data-toggle="tab" href="#items" role="tab">Ordenes de Compra</a>
+                                        <div class="slide"></div>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="tabOrdServicio" data-toggle="tab" href="#items" role="tab">Ordenes de Servicios</a>
+                                        <div class="slide"></div>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="items" role="tabpanel">
+                                    <div class="card">
+                                        <div class="card-block">
+                                            <div class="form-row">
+                                                <div class="form-group col-md-12">
+                                                    <div class="table-responsive dt-responsive" id="divLista"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="form-row">
@@ -532,7 +490,7 @@
                                                         </div>
                                                         <div class="col-sm-4">
                                                             <label class="control-label">Fecha Emisión</label>
-                                                            <label class="control-lectura" id="lblFechaEmision"></label>
+                                                            <input type="date" class="control-form popup" id="txtFechaEmision" disabled/>
                                                         </div>
                                                     </div>
                                                     <div class="row">
@@ -572,14 +530,14 @@
                                                         </div>
                                                     </div>
                                                     @*<div class="row">
-                                                            <div class="col-sm-4">
-                                                                <label class="control-label">Incluye IGV</label>
-                                                                <div class="custom-control custom-switch">
-                                                                    <input type="checkbox" class="custom-control-input" checked id="chkIgv">
-                                                                    <label class="control-label custom-control-label " for="chkIgv" id="lblChkIgv">SI</label>
-                                                                </div>
-                                                            </div>
-                                                        </div>*@
+                                            <div class="col-sm-4">
+                                                <label class="control-label">Incluye IGV</label>
+                                                <div class="custom-control custom-switch">
+                                                    <input type="checkbox" class="custom-control-input" checked id="chkIgv">
+                                                    <label class="control-label custom-control-label " for="chkIgv" id="lblChkIgv">SI</label>
+                                                </div>
+                                            </div>
+                                        </div>*@
                                                 </fieldset>
                                             </div>
                                             <div class="col-sm-6">
@@ -602,6 +560,16 @@
                                                             <textarea class="control-form" id="ttaJustificacion" maxlength="250" rows="2"></textarea>
                                                         </div>
                                                     </div>
+                                                    <div class="form-group row">
+                                                        <div class="col-sm-6">
+                                                            <label class="control-label">Usuario Creación</label>
+                                                            <label class="control-lectura" id="lblUsuarioCreacion"></label>
+                                                        </div>
+                                                        <div class="col-sm-6">
+                                                            <label class="control-label">Fecha Creación</label>
+                                                            <label class="control-lectura" id="lblFechaCreacion"></label>
+                                                        </div>
+                                                    </div>
                                                     <div class="row">
                                                         <div class="col-sm-12 text-right">
                                                             <button class="btnCancelarForm" id="btnCancelarForm1" title="Cancelar"><i class="fa fa-undo" aria-hidden="true"></i>&nbsp;Cancelar</button>
@@ -613,7 +581,7 @@
                                         </div>
                                         <hr />
                                         <div class="row">
-                                            <div class="col-sm-10">
+                                            <div class="col-lg-10">
                                                 <div class="table-responsive" style="height:330px">
                                                     <table class='grilla bordered table-fija'>
                                                         <thead>
