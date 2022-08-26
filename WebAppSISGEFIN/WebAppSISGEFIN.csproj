@@ -323,6 +323,8 @@
     <Content Include="Views\Inventario\Pendiente.cshtml" />
     <Content Include="Views\Contabilidad\PlanContable.cshtml" />
     <Content Include="Views\Logistica\Periodo.cshtml" />
+    <Content Include="Views\Logistica\ReporteOrdenes.cshtml" />
+    <Content Include="Views\Logistica\Asigpre.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

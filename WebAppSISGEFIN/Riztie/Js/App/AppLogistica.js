@@ -22,11 +22,15 @@ var botonesProceso = [
     { "cabecera": "Anular", "clase": "fa fa-minus-circle btn btn-danger btnCirculo", "id": "Eliminar" },
 ];
 
+var botonesAsignar = [
+    { "cabecera": "Editar", "clase": "fa fa-money btn btn-info btnCirculo", "id": "Editar" },
+];
+
 window.onload = function () {
     getConfigMn();
     vista = window.sessionStorage.getItem("Vista");
     controller = window.sessionStorage.getItem("Controller");
-    if (vista == "PedidoCompra" || vista == "SolicitudCompra" || vista == "Cotizacion" || vista == "CuadroCompara") {
+    if (vista == "PedidoCompra" || vista == "SolicitudCompra" || vista == "Cotizacion" || vista == "CuadroCompara" || vista == "Asigpre") {
         getListarPedido();
     }
     else if (vista == "OrdenCompra") {
@@ -38,7 +42,7 @@ window.onload = function () {
     else if (vista == "Articulo") {
         getListarArticulo('B')
     }
-    else if (vista == "Periodo") {
+    else if (vista == "Periodo" || vista == "ReporteOrdenes") {
         getListarPeriodo()
     }
 
@@ -72,7 +76,7 @@ function getListarPedido() {
 }
 
 function getListarPeriodo() {
-    var anio= txtAnioFiscal.value
+    var anio = document.getElementById("txtAnioFiscal").value;
     Http.get("General/listarTabla?tbl=" + controller + vista + "&data=" + anio, mostrarlistas);
 }
 
@@ -198,9 +202,7 @@ function mostrarlistas(rpta) {
             crearCombo(listaTipoBien, "cboTipoBien", "Seleccione");
             crearCombo(listaEstado, "cboEstado", "Seleccione");
         }
-
         else if (vista == "Familia") {
-
             grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
             var listaTipo = listas[1].split("¬");
             listaGrupoItem = listas[2].split("¬");
@@ -253,6 +255,16 @@ function mostrarlistas(rpta) {
 
             listarDepartamentos();
             listarItemInventario();
+        }
+        else if (vista == "ReporteOrdenes") {
+            grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, null, 38, false, null);
+        }
+        else if (vista == "Asigpre") {
+            var listaFteFto = listas[1].split('¬');
+            var listaMes = listas[2].split('¬');
+            grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botonesAsignar, 38, false, null);
+            crearCombo(listaMes, "cboMes", "Seleccione");
+            crearCombo(listaFteFto, "cboFteFto", "Seleccione");
         }
         else {
             grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
@@ -486,6 +498,11 @@ function listarFamiliaItem() {
 }
 
 function configurarCombos() {
+    var cboMeta = document.getElementById("cboMeta");
+    if (cboMeta != null) cboMeta.onchange = function () {
+        listarSubMeta();
+    }
+
     var cboTipoBien = document.getElementById("cboTipoBien");
     if (cboTipoBien != null) cboTipoBien.onchange = function () {
         listarGrupoItem();
@@ -550,6 +567,77 @@ function configurarCombos() {
 }
 
 function configurarBotones() {
+    var btnAgregarPartida = document.getElementById("btnAgregarPartida");
+    if (btnAgregarPartida != null) btnAgregarPartida.onclick = function () {
+        meta = cboMeta.value;
+        subMeta = cboSubMeta.value;
+        clasificador = cboClasificador.value;
+
+        if (meta == "") {
+            mostrarMensaje("Seleccione Meta", "error");
+            cboMeta.focus();
+            return false;
+        }
+        else if (subMeta == "") {
+            mostrarMensaje("Seleccione Sub-Meta", "error");
+            cboSubMeta.focus();
+            return false;
+        }
+        else if (clasificador == "") {
+            mostrarMensaje("Seleccione Partida", "error");
+            cboClasificador.focus();
+            return false;
+        }
+        else {
+            meta = cboMeta.value;
+            subMeta = cboSubMeta.value;
+            clasificador = cboClasificador.value;
+            filaDetalle.cells[1].innerHTML = meta;
+            filaDetalle.cells[2].innerHTML = subMeta;
+            filaDetalle.cells[3].innerHTML = clasificador;
+            divPopupContainerDetalleItem.style.display = 'none';
+        }
+    }
+
+    var btnAgregarTodos = document.getElementById("btnAgregarTodos");
+    if (btnAgregarTodos != null) btnAgregarTodos.onclick = function () {
+        meta = cboMeta.value;
+        subMeta = cboSubMeta.value;
+        clasificador = cboClasificador.value;
+
+        if (meta == "") {
+            mostrarMensaje("Seleccione Meta", "error");
+            cboMeta.focus();
+            return false;
+        }
+        else if (subMeta == "") {
+            mostrarMensaje("Seleccione Sub-Meta", "error");
+            cboSubMeta.focus();
+            return false;
+        }
+        else if (clasificador == "") {
+            mostrarMensaje("Seleccione Partida", "error");
+            cboClasificador.focus();
+            return false;
+        }
+        else {
+            var nFilas = tbDetalleOrden.rows.length;
+            var fila;
+            for (var i = 0; i < nFilas; i++) {
+                fila = tbDetalleOrden.rows[i];
+                fila.cells[1].innerHTML = meta;
+                fila.cells[2].innerHTML = subMeta;
+                fila.cells[3].innerHTML = clasificador;
+            }
+            divPopupContainerDetalleItem.style.display = 'none';
+        }
+    }
+
+
+    var btnConfirmarPeriodo = document.getElementById("btnConfirmarPeriodo");
+    if (btnConfirmarPeriodo != null) btnConfirmarPeriodo.onclick = function () {
+        grabarPeriodo();
+    }
 
     var tabOrdCompra = document.getElementById("tabOrdCompra");
     if (tabOrdCompra != null) tabOrdCompra.onclick = function () {
@@ -832,6 +920,11 @@ function configurarBotones() {
         }
     }
 
+    var btnReporte = document.getElementById("btnReporte");
+    if (btnReporte != null) btnReporte.onclick = function () {
+        getReporteAyudas();
+    }
+
     var btnMostrarCorreo = document.getElementById("btnMostrarCorreo");
     if (btnMostrarCorreo != null) btnMostrarCorreo.onclick = function () {
         if (idRegistro == "") {
@@ -1058,6 +1151,25 @@ function configurarBotones() {
 
 }
 
+function getReporteAyudas() {
+    var anio = numAnio.value;
+    Http.get("General/listarTabla/?tbl=" + tabla + "AyudaItem&data=" + anio, mostrarReporteAyudas);
+}
+
+function mostrarReporteAyudas(rpta) {
+    if (rpta) {
+        var divPopupContainerItem = document.getElementById("divPopupContainerForm1");
+        if (divPopupContainerItem != null) divPopupContainerForm1.style.display = 'block';
+        var listas = rpta.split('¯');
+        var listaItems = listas[0].split('¬');
+        var listaMes = listas[1].split('¬');
+        var listaProv = listas[2].split('¬');
+        crearCombo(listaItems, "cboArticulo", "Seleccionar");
+        //crearCombo(listaMes, "cboMes", "Todos");
+        crearCombo(listaProv, "cboProveedor", "Seleccionar");
+    }
+}
+
 function listarOficinaOrdenCompra(rpta) {
     if (rpta) {
         var listas = rpta.split("¯");
@@ -1152,7 +1264,6 @@ function OrdenCompraOficinaGrabar(rpta) {
     }
 
 }
-
 
 function mostrarEnviarCorreo(rpta) {
     if (rpta) alert(rpta);
@@ -1694,7 +1805,6 @@ function seleccionarBoton(idGrilla, idRegistro, idBoton) {
             if (txtIdPac != null) {
                 txtIdPac.value = "0";
             }
-
             editarRegistro(idRegistro);
         }
         if (idBoton == "Eliminar") {
@@ -2037,6 +2147,70 @@ function mostrarRegistro(rpta) {
                 ttaJustificacion.disabled = false;
             }
             generarDetalleOrdenCompra(detalle);
+        }
+        else if (vista == "Asigpre") {
+            document.getElementById("divPopupContainer").style.display = 'block';
+            var listas = rpta.split('¯');
+            var cabecera = listas[0].split('|');
+            var detalle = listas[1];
+            txtIdRegistro.value = cabecera[0];
+            lblNumero.innerHTML = cabecera[1];
+            lblTipo.innerHTML = cabecera[3];
+            lblFechaEmision.innerHTML = cabecera[4];
+            idProveedor = cabecera[5];
+            lblProveedor.innerHTML = cabecera[6];
+            lblCotizacion.innerHTML = cabecera[7];
+            lblProforma.innerHTML = cabecera[8];
+            lblDiasEntrega.innerHTML = cabecera[9];
+            lblCondicionCompra.innerHTML = cabecera[11];
+            lblEstado.innerHTML = cabecera[12];
+            ttaPedidos.value = cabecera[14];
+          //  cboEmpresa.value = cabecera[15];
+           // listarFteFto();
+            cboFteFto.value = cabecera[15];
+            ttaJustificacion.value = cabecera[16];
+           
+
+            lblSubTotal.innerHTML = formatoNumeroDecimal(cabecera[17]);
+            lblIGV.innerHTML = formatoNumeroDecimal(cabecera[18]);
+            lblTotal.innerHTML = formatoNumeroDecimal(cabecera[19]);
+            idSolCompra = cabecera[20];
+            lblGarantia.innerHTML = cabecera[23];
+            //txtProceso.value = cabecera[25];
+            //txtEcofin.value = cabecera[26];
+            if (cabecera[21] == "") {
+                txtAnioFiscal.value = cabecera[24];
+            } else {
+                txtAnioFiscal.value = cabecera[21];
+            }
+            cboMes.value = cabecera[25];
+            cboMes.disabled = true;
+
+            if (cabecera[12] != "GENERADA") {
+                btnGuardar.style.display = 'none';
+                btnGuardar.disabled = true;
+             //   cboEmpresa.disabled = true;
+                cboFteFto.disabled = true;
+                ttaJustificacion.disabled = true;
+                btnConfirmarPeriodo.style.display = 'none';
+                btnConfirmarPeriodo.disabled = true;
+            }
+            else {
+                btnGuardar.style.display = 'inline';
+                btnGuardar.disabled = false;
+                //cboEmpresa.disabled = false;
+                cboFteFto.disabled = false;
+                ttaJustificacion.disabled = false;
+                btnConfirmarPeriodo.style.display = 'inline';
+                btnConfirmarPeriodo.disabled = false;
+            }
+
+            if (cabecera[25] != "" && cabecera[12] == "GENERADA") {
+                generarDetalleOrdenCompraAsig(detalle, 2);
+            }
+            else {
+                generarDetalleOrdenCompraAsig(detalle, 1);
+            }
         }
         else if (vista == "CuadroCompara") {
             document.getElementById("divPopupContainerForm1").style.display = 'block';
@@ -4059,4 +4233,191 @@ function retirarItemPCA(col, id) {
 
     tbDetalleItemPac.innerHTML = "";
     listasDetalleItemPacProcesos(dataItem);
+}
+
+
+function generarDetalleOrdenCompraAsig(datos, tipo) {
+    var contenido = "";
+    tbDetalleOrden.innerHTML = "";
+    var lista = datos.split('¬');
+    var nRegistros = lista.length;
+    var campos = [];
+    var item = 0;
+    var total = 0;
+    var subTotal = 0;
+    for (var i = 0; i < nRegistros; i++) {
+        campos = lista[i].split("|");
+        item++;
+        if (tipo == 1) {
+            contenido += "<tr>";
+        }
+        else {
+            contenido += "<tr class='FilaDatos' ondblclick='seleccionarFilaItem(this, \"";
+            contenido += campos[0];
+            contenido += "\"); '>";
+        }
+        contenido += "<td style='display:none'>";
+        contenido += campos[0];
+        contenido += "</td> ";
+        contenido += "<td style='width:50px;vertical-align:top'>";
+        contenido += campos[1];
+        contenido += "</td> ";
+        contenido += "<td style='width:80px;vertical-align:top'>";
+        contenido += campos[2];
+        contenido += "</td> ";
+        contenido += "<td style='width:80px;vertical-align:top'>";
+        contenido += campos[3];
+        contenido += "</td> ";
+        contenido += "<td style='width:50px;vertical-align:top;text-align:right'>";
+        contenido += formatoNumeroDecimal(campos[4]);
+        contenido += "</td> ";
+        contenido += "<td style='width:50px;vertical-align:top;text-align:right'>";
+        contenido += formatoNumeroDecimal(campos[5]);
+        contenido += "</td> ";
+        contenido += "<td style='width:50px;vertical-align:top;text-align:right'>";
+        contenido += formatoNumeroDecimal(campos[6]);
+        contenido += "</td> ";
+        contenido += "<td style='width:350px;white-space:pre-wrap;white-space: -moz-pre-wrap;white-space: -o-pre-wrap;vertical-align:top'>";
+        contenido += campos[7];
+        contenido += "</td>";
+        contenido += "<td style='width:50px;vertical-align:top;'>";
+        contenido += campos[8];
+        contenido += "</td> ";
+        contenido += "</tr>";
+        total = total + (campos[6] * 1);
+    }
+
+    //  subTotal = total / 1.18;
+    tbDetalleOrden.innerHTML = contenido;
+    //lblSubTotal.innerHTML = formatoNumero(subTotal);
+    //lblIGV.innerHTML = formatoNumero(total - subTotal);
+    //lblTotal.innerHTML = formatoNumero(total);
+}
+
+
+function seleccionarFilaItem(fila, id) {
+    filaDetalle = fila;
+    //if (fila!= null) fila.className = "FilaDatos";
+    //fila.className = "FilaSeleccionada";
+    // fila = fila;
+    limpiarForm("asignar");
+    var data = "";
+    var anioFiscal = txtAnioFiscal.value;
+    var idMes = cboMes.value;
+    var idFteFto = cboFteFto.value;
+    var idRegistro = txtIdRegistro.value;
+
+    if (anioFiscal == "") {
+        txtAnioFiscal.focus();
+        mostrarMensaje("Ingrese año fiscal", "error");
+        return false;
+    }
+    else if (idMes == "") {
+        cboMes.focus();
+        mostrarMensaje("Seleccione Mes", "error");
+        return false;
+    }
+     else if (idFteFto == "") {
+        cboFteFto.focus();
+        mostrarMensaje("Seleccione Fuente Financimiento", "error");
+        return false;
+    }
+    else {
+        data = anioFiscal + '|' + idMes + '|' + idFteFto + '|' + idRegistro;
+        Http.get("General/listarTabla/?tbl=" + controller + vista + "Ayudas&data=" + data, mostrarAsignarAyudas);
+    }
+}
+
+
+function mostrarAsignarAyudas(rpta) {
+    if (rpta) {
+        divPopupContainerForm1.style.display = 'block';
+        var listas = rpta.split('¯');
+        var listaPCA = listas[0].split('¬');
+        var listaMeta = listas[1].split('¬');
+        listaSubMeta = listas[2].split('¬');
+        var listaPartida = listas[3].split('¬');
+        crearCombo(listaPCA, "cboPCA", null);
+        crearCombo(listaMeta, "cboMeta", "Seleccionar");
+        cboSubMeta.disabled = true;
+        cboSubMeta.innerHTML = "";
+        crearCombo(listaPartida, "cboClasificador", "Seleccionar");
+    }
+    else {
+        mostrarMensaje("No se obtuvo respuesta de las ayudas", "error")
+    }
+}
+
+
+function grabarPeriodo() {
+    var anioFiscal = txtAnioFiscal.value;
+    var idMes = cboMes.value;
+    var idFteFto = cboFteFto.value;
+    var idRegistro = txtIdRegistro.value;
+
+    if (anioFiscal == "") {
+        txtAnioFiscal.focus();
+        mostrarMensaje("Ingrese año fiscal", "error");
+        return false;
+    }
+    else if (idMes == "") {
+        cboMes.focus();
+        mostrarMensaje("Seleccione Mes", "error");
+        return false;
+    }
+    else if (idFteFto == "") {
+        cboFteFto.focus();
+        mostrarMensaje("Seleccione Fuente Financimiento", "error");
+        return false;
+    }
+    var data = "";
+    data = anioFiscal + '|' + idMes +  '|' + idFteFto + '|' + idRegistro;
+    var frm = new FormData();
+    frm.append("data", data);
+    Http.post("General/guardar/?tbl=" + controller + vista + "Periodo", mostrarGrabarPeriodo, frm);
+}
+
+function mostrarGrabarPeriodo(rpta) {
+    var mensajeResul = [];
+    if (rpta) {
+        var listas = rpta.split('¯');
+        mensajeResul = listas[0].split('|');
+        var listaDetalle = listas[1];
+
+        var tipo = mensajeResul[0];
+        var mensaje = mensajeResul[1];
+        if (tipo == 'A') {
+            mostrarMensaje(mensaje, 'success');
+        }
+        else {
+            mostrarMensaje(mensaje, 'error');
+        }
+        generarDetalleOrdenCompraAsig(listaDetalle, 2);
+    }
+}
+
+
+function listarSubMeta() {
+    var nRegistros = listaSubMeta.length;
+    var campos = [];
+    var contenido = "<option value=''>Seleccione</option>";
+    var idMeta, idSubMeta, nombre, idxMeta;
+    var idMeta = document.getElementById("cboMeta").value;
+    for (var i = 0; i < nRegistros; i++) {
+        campos = listaSubMeta[i].split('|');
+        idSubMeta = campos[0];
+        nombre = campos[1];
+        idxMeta = campos[2];
+
+        if (idxMeta == idMeta) {
+            contenido += "<option value='";
+            contenido += idSubMeta;
+            contenido += "'>";
+            contenido += nombre;
+            contenido += "</option>";
+        }
+    }
+    document.getElementById("cboSubMeta").disabled = false;
+    var cbo = document.getElementById("cboSubMeta");
+    if (cbo != null) cbo.innerHTML = contenido;
 }
