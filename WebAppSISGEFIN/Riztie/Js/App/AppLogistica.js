@@ -21,6 +21,9 @@ var botonesProceso = [
     { "cabecera": "Editar", "clase": "fa fa-pencil btn btn-info btnCirculo", "id": "Editar" },
     { "cabecera": "Anular", "clase": "fa fa-minus-circle btn btn-danger btnCirculo", "id": "Eliminar" },
 ];
+var botonesPeriodo = [
+    { "cabecera": "Extornar", "clase": "fa fa-arrow-left btn btn-danger btnCirculo", "id": "Eliminar" },
+];
 
 var botonesAsignar = [
     { "cabecera": "Editar", "clase": "fa fa-money btn btn-info btnCirculo", "id": "Editar" },
@@ -95,6 +98,7 @@ function getListarArticulo(tipo) {
 }
 
 function mostrarlistas(rpta) {
+    debugger;
     if (rpta) {
         var listas = rpta.split("¯");
         var lista = listas[0].split("¬");
@@ -265,6 +269,13 @@ function mostrarlistas(rpta) {
             grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botonesAsignar, 38, false, null);
             crearCombo(listaMes, "cboMes", "Seleccione");
             crearCombo(listaFteFto, "cboFteFto", "Seleccione");
+        }
+        else if (vista == "Periodo") {
+            var listaMesActual = listas[1].split("¬");
+            grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botonesPeriodo, 38, false, null);
+
+            crearCombo(listaMesActual, "cboPeriodoActual", "Seleccione");
+            crearCombo(listaMesActual, "cboPeriodoSiguiente", "Seleccione");
         }
         else {
             grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
@@ -681,6 +692,9 @@ function configurarBotones() {
         if (vista == "PedidoCompra" || vista == "SolicitudCompra" || vista == "Cotizacion" || vista == "CuadroCompara" || vista == "OrdenCompra") {
             getListarPedido();
         }
+        else if (vista == "Periodo") {
+            getListarPeriodo();
+        }
         else {
             getListar();
         }
@@ -783,6 +797,11 @@ function configurarBotones() {
         var select2cboFamilia = document.getElementById("select2-cboFamilia-container");
         if (select2cboFamilia != null) select2cboFamilia.innerHTML = "Seleccione";
 
+        if (vista == "Periodo") {
+            //Logica
+            var data = "";
+            Http.get("General/listarTabla/?tbl=" + controller + vista +"Actual&data=" + data, mostrarListadoPeriodo);
+        }
     }
 
     var btnActualizar = document.getElementById("btnActualizar");
@@ -1149,6 +1168,19 @@ function configurarBotones() {
 
     }
 
+}
+function mostrarListadoPeriodo(rpta) {
+    if (rpta) {
+        var listas = rpta.split("|");
+        var listaAnio = listas[0];
+        var listaMesActual = listas[1];
+        var listaMesSiguiente = listas[2];
+        console.log(listas);
+
+        txtAnio.value = listaAnio;
+        cboPeriodoActual.value = listaMesActual;
+        cboPeriodoSiguiente.value = listaMesSiguiente;
+    }
 }
 
 function getReporteAyudas() {
@@ -2442,6 +2474,9 @@ function grabarDatos() {
     var data = ""
     var frm = new FormData();
     data = obtenerDatosGrabar("Popup");
+    if (vista == "Periodo") {
+        data += data+'¯' + txtAnioFiscal.value;
+    }
     frm.append("data", data);
     Http.post("General/guardar/?tbl=" + controller + vista, mostrarGrabar, frm);
 }
@@ -2567,6 +2602,9 @@ function mostrarGrabar(rpta) {
             document.getElementById('divPopupContainerForm1').style.display = 'none';
             botones = botonesProceso;
         }
+        else if (vista == "Periodo") {
+            botones = botonesPeriodo;
+        }
 
         grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
 
@@ -2650,6 +2688,7 @@ function aprobarPedido() {
 
 function eliminarRegistro(id) {
     var data = "";
+    var titulomsg = '¿Desea anular el registro?';
     if (vista == "PedidoCompra" || vista == "SolicitudCompra" || vista == "Cotizacion" || vista == "CuadroCompara" ) {
         var fechaInicio = txtFechaInicio.value;
         var fechaFinal = txtFechaFinal.value;
@@ -2662,6 +2701,9 @@ function eliminarRegistro(id) {
         var fechaFinal = txtFechaFinal.value;
         data = id + '|' + fechaInicio + '|' + fechaFinal + '|' + idTipo;
     }
+    else if (vista == "Periodo") {
+        titulomsg = '¿Desea Extornar El Período ?';
+    }
     else {
         data = id;
     }
@@ -2670,7 +2712,7 @@ function eliminarRegistro(id) {
     frm.append("data", data);
 
     Swal.fire({
-        title: '¿Desea anular el registro?',
+        title: titulomsg,
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',

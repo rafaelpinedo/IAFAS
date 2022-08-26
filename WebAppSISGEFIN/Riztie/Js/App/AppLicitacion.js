@@ -1380,17 +1380,17 @@ function mostrarlistaTab(rpta) {
             crearFormulario("PopupGar", "RequeGar");
         }
         else if (idTabActivo == "tabAdelanto") {
-            grillaGarantia = new GrillaScroll(lista, "divListaAdelanto", 100, 6, vista, controller, null, false, null, null, 25, true, null);
+            grillaAdelanto = new GrillaScroll(lista, "divListaAdelanto", 100, 6, vista, controller, null, false, null, null, 25, true, null);
             formulario = listas[1].split("¬");
             crearFormulario("PopupAdel", "RequeAdel");
         }
         else if (idTabActivo == "tabAdenda") {
-            grillaGarantia = new GrillaScroll(lista, "divListaAdenda", 100, 6, vista, controller, null, false, null, null, 25, true, null);
+            grillaAdenda = new GrillaScroll(lista, "divListaAdenda", 100, 6, vista, controller, null, false, null, null, 25, true, null);
             formulario = listas[1].split("¬");
             crearFormulario("PopupAdend", "RequeAdenda");
         }
         else {
-            grillaGarantia = new GrillaScroll(lista, "divListaCronograma", 100, 6, vista, controller, null, false, null, null, 25, true, null);
+            grillaCronograma = new GrillaScroll(lista, "divListaCronograma", 100, 6, vista, controller, null, false, null, null, 25, true, null);
             formulario = listas[1].split("¬");
             crearFormulario("PopupCrono", "RequeCrono");
         }

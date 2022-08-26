@@ -8,7 +8,7 @@
         <div class="main-body">
             <div class="card">
                 <div class="card-header bg-primary">
-                    <h3><i class="fa fa-file-archive" aria-hidden="true"></i> Periodo</h3>
+                    <h3><i class="fa fa-file-archive" aria-hidden="true"></i> Período</h3>
                 </div>
                 <div class="card-block">
                     <div class="form-row">
@@ -35,28 +35,31 @@
                                     </div>
                                     <div class="modal-body">
                                         <div class="row">
-                                            <div class="form-group col-sm-10">
+                                            <div class="form-group col-sm-11">
                                                 <label class="control-label">Año Fiscal</label>
                                                 <input type="hidden" class="control-form Popup" id="txtIdRegistro">
-                                                <input type="number" id="txtAnio" class="control-form Reque Popup" value="@ViewBag.Anio" />
+                                                <input type="number" id="txtAnio" class="control-lectura Reque Popup" value="@ViewBag.Anio" readonly />
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="form-group col-sm-10">
+                                            <div class="form-group col-sm-11">
                                                 <label class="control-label">Periodo actual</label>
-                                                <label id="lblPeriodoActual" class="control-lectura">Agosto</label>
+                                                @*<label id="lblPeriodoActual" class="control-lectura">Agosto</label>*@
+                                                <select id="cboPeriodoActual" class="control-lectura Reque Popup" disabled></select>
+                                                @*<label id="lblPeriodoActual" class="control-lectura">Agosto</label>*@
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="form-group col-sm-10">
+                                            <div class="form-group col-sm-11">
                                                 <label class="control-label">Periodo nuevo</label>
-                                                <label id="lblPeriodoNuevo" class="control-lectura">Setiembre</label>
+                                                <select id="cboPeriodoSiguiente" class="control-lectura Reque Popup" disabled></select>
+                                                @*<label id="lblPeriodoNuevo" class="control-lectura">Setiembre</label>*@
                                             </div>
                                         </div>
                                     </div>
                                     <div class="modal-footer">
                                         <button id="btnCancelar" class="btnCancelarForm" title="Cancelar"><i class="fa fa-undo" aria-hidden="true"></i>&nbsp;Cancelar</button>
-                                        <button id="btnGuardar" class="btnGuardarForm bg-customer" title="Guardar datos"><span class="fa fa-save"></span>&nbsp;Cerrar Periodo</button>
+                                        <button id="btnGuardar" class="btnGuardarForm bg-customer" title="Cerrar Periodo"><span class="fa fa-save"></span>&nbsp;Cerrar Periodo</button>
                                     </div>
                                 </div>
                             </div>
