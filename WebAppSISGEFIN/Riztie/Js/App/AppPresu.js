@@ -15,7 +15,7 @@ window.onload = function () {
     getConfigMn();
     vista = window.sessionStorage.getItem("Vista");
     controller = window.sessionStorage.getItem("Controller");
-    if (vista == "PCA") {
+    if (vista == "PCA" || vista == "MarcoPresu" ) {
         getListarProgramacion();
     }
     else {
@@ -118,8 +118,9 @@ function mostrarlistas(rpta) {
             var pia = listaPresup[0].split("|")[0];
             totalsumAnho.innerText = "Total S/ : " + formatoNumeroDecimal(pia)
         }
-
-
+        else if (vista == "MarcoPresu") {
+            grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, null, 38, false, null);
+        }
         else {
               grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
         }

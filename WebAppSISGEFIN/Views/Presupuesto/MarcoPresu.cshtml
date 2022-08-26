@@ -14,8 +14,13 @@
                 </div>
                 <div class="card-block">
                     <div class="form-row">
-                        <div class="form-group col-sm-2">
-                            <button class="input-group-inverse btn btn-primary" id="btnNuevo">Nuevo <i class="fa fa-plus-circle fa-lg" aria-hidden="true"></i></button>
+                        <div class="form-group col-sm-3">
+                            <label class="control-label">Año Fiscal</label>
+                            <input type="number" id="txtAnioFiscal" class="control-form" value="@ViewBag.AnhoActual">
+                        </div>
+                        <div class="form-group col-md-5">
+                            <button class="input-group-inverse btn btn-inverse" id="btnConsultar" data-toggle="tooltip" data-placement="bottom" title="Consultar"><i class="fa fa-search fa-lg" aria-hidden="true"></i></button>
+                            <button class="input-group-inverse btn btn-primary" id="btnNuevo" data-toggle="tooltip" data-placement="bottom" title="Nuevo"><i class="fa fa-plus-circle fa-lg" aria-hidden="true"></i></button>
                         </div>
                     </div>
                     <div class="form-row">
@@ -25,40 +30,49 @@
                     </div>
                     <div class="form-row">
                         <div class="modal custom-modal" tabindex="-1" role="dialog" aria-hidden="true" id="divPopupContainer" style="overflow-y:auto;">
-                            <div class="modal-dialog modal-lg bg-personalizado" id="divPopupWindow" style="margin-top:30px;">
+                            <div class="modal-dialog modal-lg bg-personalizado" id="divPopupWindow" style="margin-top:1px;">
                                 <div class="modal-content">
                                     <div id="divBarra" class="modal-header bg-personalizado" style="cursor:move">
-                                        <h5 class="modal-title" id="tituloModal">Nuevo Registro</h5>
+                                        <h5 class="modal-title">Registrar Marco</h5>
+                                        <button type="button" id="btnCerrarFormato" class="close"><span aria-hidden="true">&times;</span><span class="sr-only"></span></button>
                                     </div>
                                     <div class="modal-body">
-                                        <div class="row">
-                                            <div class="form-group col-sm-10">
-                                                <input type="hidden" class="control-form Popup" id="txtIdRegistro">
-                                                <label class="control-label">Empresa</label>
-                                                <select id="cboEmpresa" class="control-form Reque Popup" style="background-color: #FCFAC5"></select>
-                                            </div>
-                                        </div>
-                                        <div class="row">
+                                        <div class="form-row">
                                             <div class="form-group col-sm-12">
-                                                <label class="control-label">Nombre</label>
-                                                <input type="text" autocomplete="off" maxlength="150" class="control-form Reque Popup" id="txtNombre">
+                                                <label class="control-label">P.C.A.</label>
+                                                <select id="cboPCA" class="control-form"></select>
                                             </div>
                                         </div>
-                                        <div class="row">
-                                            <div class="form-group col-sm-6">
-                                                <label class="control-label">Abreviatura</label>
-                                                <input type="text" autocomplete="off" maxlength="20" class="control-form Reque Popup" id="txtAbreviatura">
-                                            </div>
-                                            <div class="form-group col-sm-6">
-                                                <label class="control-label">Estado</label>
-                                                <select id="cboEstado" class="control-lectura Reque Popup"></select>
+                                        <div class="form-row">
+                                            <div class="form-group col-sm-12">
+                                                <label class="control-label">Meta</label>
+                                                <select id="cboMeta" class="SelectSearch control-form"></select>
                                             </div>
                                         </div>
-                                        
+                                        <div class="form-row">
+                                            <div class="form-group col-sm-12">
+                                                <label class="control-label">Sub-Meta</label>
+                                                <select id="cboSubMeta" class="SelectSearch control-form"></select>
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group col-sm-12">
+                                                <label class="control-label">Clasificador</label>
+                                                <select id="cboClasificador" class="SelectSearch control-form"></select>
+                                            </div>
+                                        </div>
+                                        @*<div class="row m-2">
+                            <div class="col-sm-12">
+                                <fieldset class="fieldset">
+                                    <legend class="legend">Clasificador de Gasto</legend>
+                                    <div class="table-responsive" id="listaClasificador" style="height:185px;"></div>
+                                </fieldset>
+                            </div>
+                        </div>*@
                                     </div>
                                     <div class="modal-footer">
-                                        <button id="btnCancelar" class="btnCancelarForm" title="Cancelar"><i class="fa fa-undo" aria-hidden="true"></i>&nbsp;Cancelar</button>
-                                        <button id="btnGuardar" class="btnGuardarForm bg-customer" title="Guardar datos"><span class="fa fa-save"></span>&nbsp;Grabar</button>
+                                        <button class="btnCancelarForm" id="btnCancelar" title="Cancelar"><i class="fa fa-undo" aria-hidden="true"></i>&nbsp;Cancelar</button>
+                                        <button class="btnGuardarForm bg-customer" id="btnGuardar" title="Guardar"><span class="fa fa-save"></span>&nbsp;Guardar</button>
                                     </div>
                                 </div>
                             </div>
