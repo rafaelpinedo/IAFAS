@@ -800,7 +800,7 @@ function configurarBotones() {
         if (vista == "Periodo") {
             //Logica
             var data = "";
-            Http.get("General/listarTabla/?tbl=" + controller + vista +"Actual&data=" + data, mostrarListadoPeriodo);
+            Http.get("General/listarTabla/?tbl=" + controller + vista + "Actual&data=" + data, mostrarListadoPeriodo);
         }
     }
 
@@ -1034,7 +1034,7 @@ function configurarBotones() {
     var btnGuardarForm3 = document.getElementById("btnGuardarForm3");
     if (btnGuardarForm3 != null) btnGuardarForm3.onclick = function () {
         var validar = false;
-        var  clase_form = "",vista_proc="";
+        var clase_form = "", vista_proc = "";
         if (vista == "PedidoCompra") {
             if (validarInformacion("RequeOfi") == true) {
                 validar = true;
@@ -1049,7 +1049,7 @@ function configurarBotones() {
                 vista_proc = "Proveedor";
             }
         }
-        
+
         if (validar === true) {
             Swal.fire({
                 title: '¿Desea grabar la información?',
@@ -1226,7 +1226,7 @@ function listarOficinaOrdenCompra(rpta) {
             crearCombo(listaBanco, "cboBanco", "Seleccione");
             crearCombo(listaEstado, "cboEstado", "Seleccione");
         }
-        
+
 
         var cboEntidad = document.getElementById("cboEntidad");
         if (cboEntidad != null) {
@@ -1256,7 +1256,7 @@ function listarOficinaOrdenCompra(rpta) {
     }
 }
 
-function grabarDatosOficinaPedidoCompra(clase_frm,vista_proc) {
+function grabarDatosOficinaPedidoCompra(clase_frm, vista_proc) {
     var data = ""
     var frm = new FormData();
     data = obtenerDatosGrabar(clase_frm);
@@ -1276,7 +1276,7 @@ function OrdenCompraOficinaGrabar(rpta) {
             document.getElementById('divPopupContainerForm3').style.display = 'none';
             var listaOficinaPadre = listas[3].split("¬");
             crearCombo(listaOficinaPadre, "cboOficina", "Seleccione");
-            
+
         }
         else if (vista == "Cotizacion") {
             document.getElementById('divPopupContainerForm3').style.display = 'none';
@@ -2197,11 +2197,11 @@ function mostrarRegistro(rpta) {
             lblCondicionCompra.innerHTML = cabecera[11];
             lblEstado.innerHTML = cabecera[12];
             ttaPedidos.value = cabecera[14];
-          //  cboEmpresa.value = cabecera[15];
-           // listarFteFto();
+            //  cboEmpresa.value = cabecera[15];
+            // listarFteFto();
             cboFteFto.value = cabecera[15];
             ttaJustificacion.value = cabecera[16];
-           
+
 
             lblSubTotal.innerHTML = formatoNumeroDecimal(cabecera[17]);
             lblIGV.innerHTML = formatoNumeroDecimal(cabecera[18]);
@@ -2221,7 +2221,7 @@ function mostrarRegistro(rpta) {
             if (cabecera[12] != "GENERADA") {
                 btnGuardar.style.display = 'none';
                 btnGuardar.disabled = true;
-             //   cboEmpresa.disabled = true;
+                //   cboEmpresa.disabled = true;
                 cboFteFto.disabled = true;
                 ttaJustificacion.disabled = true;
                 btnConfirmarPeriodo.style.display = 'none';
@@ -2475,7 +2475,7 @@ function grabarDatos() {
     var frm = new FormData();
     data = obtenerDatosGrabar("Popup");
     if (vista == "Periodo") {
-        data += data+'¯' + txtAnioFiscal.value;
+        data += data + '¯' + txtAnioFiscal.value;
     }
     frm.append("data", data);
     Http.post("General/guardar/?tbl=" + controller + vista, mostrarGrabar, frm);
@@ -2689,7 +2689,7 @@ function aprobarPedido() {
 function eliminarRegistro(id) {
     var data = "";
     var titulomsg = '¿Desea anular el registro?';
-    if (vista == "PedidoCompra" || vista == "SolicitudCompra" || vista == "Cotizacion" || vista == "CuadroCompara" ) {
+    if (vista == "PedidoCompra" || vista == "SolicitudCompra" || vista == "Cotizacion" || vista == "CuadroCompara") {
         var fechaInicio = txtFechaInicio.value;
         var fechaFinal = txtFechaFinal.value;
         data = id + '|' + fechaInicio + '|' + fechaFinal;
@@ -2711,19 +2711,61 @@ function eliminarRegistro(id) {
     var frm = new FormData();
     frm.append("data", data);
 
-    Swal.fire({
-        title: titulomsg,
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Si',
-        cancelButtonText: 'No'
-    }).then((result) => {
-        if (result.value) {
-            Http.post("General/eliminar/?tbl=" + controller + vista, mostrarEliminar, frm);
-        }
-    })
+    if (vista == 'OrdenCompra') {
+        Swal.fire({
+            title: 'Justificación de Anulación',
+            icon: 'question',
+            input: 'text',
+            inputAttributes: {
+                autocapitalize: 'off'
+            },
+            showCancelButton: true,
+          //  / confirmButtonText: 'Look up', /
+            showLoaderOnConfirm: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Si',
+            cancelButtonText: 'No',
+            preConfirm: (login) => {
+                console.log(login);
+                return fetch(`//api.github.com/users/${login}`)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(response.statusText)
+                        }
+                        return response.json()
+                    })
+                    .catch(error => {
+                        Swal.showValidationMessage(
+                            `Request failed: ${error}`
+                        )
+                    })
+            },
+            allowOutsideClick: () => !Swal.isLoading()
+        }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                   // / title: `${result.value.login}'s avatar`, /
+                    title: 'Mensage de Retorno',
+                })
+}
+        })
+    }
+    else {
+        Swal.fire({
+            title: titulomsg,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Si',
+            cancelButtonText: 'No'
+        }).then((result) => {
+            if (result.value) {
+                Http.post("General/eliminar/?tbl=" + controller + vista, mostrarEliminar, frm);
+            }
+        })
+    }
 }
 function mostrarEliminar(rpta) {
     var mensajeResul = [];
@@ -2846,6 +2888,14 @@ function mostrarReporte(rpta) {
             var datosJelog = Cabecera[18].split('-');
             tdJelog.innerHTML = datosJelog[0];
             tdDNIJelog.innerHTML = datosJelog[1];
+
+            if (Cabecera[19] == 5) {
+                tdAnulacion.style.display = 'inline';
+                tdMotivoAnulado.innerHTML = Cabecera[20];
+            }
+            else {
+                tdAnulacion.style.display = 'none';
+            }
 
             var contenido = ""
             if (tipoOrden == "SERVICIOS") {
@@ -4359,7 +4409,7 @@ function seleccionarFilaItem(fila, id) {
         mostrarMensaje("Seleccione Mes", "error");
         return false;
     }
-     else if (idFteFto == "") {
+    else if (idFteFto == "") {
         cboFteFto.focus();
         mostrarMensaje("Seleccione Fuente Financimiento", "error");
         return false;
@@ -4413,7 +4463,7 @@ function grabarPeriodo() {
         return false;
     }
     var data = "";
-    data = anioFiscal + '|' + idMes +  '|' + idFteFto + '|' + idRegistro;
+    data = anioFiscal + '|' + idMes + '|' + idFteFto + '|' + idRegistro;
     var frm = new FormData();
     frm.append("data", data);
     Http.post("General/guardar/?tbl=" + controller + vista + "Periodo", mostrarGrabarPeriodo, frm);
