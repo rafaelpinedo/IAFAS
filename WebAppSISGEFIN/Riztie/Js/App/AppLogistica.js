@@ -91,6 +91,7 @@ function getListarArticulo(tipo) {
 }
 
 function mostrarlistas(rpta) {
+    debugger;
     if (rpta) {
         var listas = rpta.split("¯");
         var lista = listas[0].split("¬");
@@ -253,6 +254,14 @@ function mostrarlistas(rpta) {
 
             listarDepartamentos();
             listarItemInventario();
+        }
+        else if (vista == "Periodo") {
+            var listaMesActual = listas[1].split("¬");
+           // var listaMesSiguiente = listas[2].split("¬");
+            grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
+
+            crearCombo(listaMesActual, "cboPeriodoActual", "Seleccione");
+            crearCombo(listaMesActual, "cboPeriodoSiguiente", "Seleccione");
         }
         else {
             grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
@@ -593,6 +602,9 @@ function configurarBotones() {
         if (vista == "PedidoCompra" || vista == "SolicitudCompra" || vista == "Cotizacion" || vista == "CuadroCompara" || vista == "OrdenCompra") {
             getListarPedido();
         }
+        else if (vista == "Periodo") {
+            getListarPeriodo();
+        }
         else {
             getListar();
         }
@@ -695,6 +707,11 @@ function configurarBotones() {
         var select2cboFamilia = document.getElementById("select2-cboFamilia-container");
         if (select2cboFamilia != null) select2cboFamilia.innerHTML = "Seleccione";
 
+        if (vista == "Periodo") {
+            //Logica
+            var data = "";
+            Http.get("General/listarTabla/?tbl=" + controller + vista +"Actual&data=" + data, mostrarListadoPeriodo);
+        }
     }
 
     var btnActualizar = document.getElementById("btnActualizar");
@@ -1056,6 +1073,19 @@ function configurarBotones() {
 
     }
 
+}
+function mostrarListadoPeriodo(rpta) {
+    if (rpta) {
+        var listas = rpta.split("|");
+        var listaAnio = listas[0];
+        var listaMesActual = listas[1];
+        var listaMesSiguiente = listas[2];
+        console.log(listas);
+
+        txtAnio.value = listaAnio;
+        cboPeriodoActual.value = listaMesActual;
+        cboPeriodoSiguiente.value = listaMesSiguiente;
+    }
 }
 
 function listarOficinaOrdenCompra(rpta) {
@@ -2268,6 +2298,9 @@ function grabarDatos() {
     var data = ""
     var frm = new FormData();
     data = obtenerDatosGrabar("Popup");
+    if (vista == "Periodo") {
+        data += data+'¯' + txtAnioFiscal.value;
+    }
     frm.append("data", data);
     Http.post("General/guardar/?tbl=" + controller + vista, mostrarGrabar, frm);
 }
