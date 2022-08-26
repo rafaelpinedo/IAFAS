@@ -21,6 +21,9 @@ var botonesProceso = [
     { "cabecera": "Editar", "clase": "fa fa-pencil btn btn-info btnCirculo", "id": "Editar" },
     { "cabecera": "Anular", "clase": "fa fa-minus-circle btn btn-danger btnCirculo", "id": "Eliminar" },
 ];
+var botonesPeriodo = [
+    { "cabecera": "Extornar", "clase": "fa fa-arrow-left btn btn-danger btnCirculo", "id": "Eliminar" },
+];
 
 window.onload = function () {
     getConfigMn();
@@ -257,8 +260,7 @@ function mostrarlistas(rpta) {
         }
         else if (vista == "Periodo") {
             var listaMesActual = listas[1].split("¬");
-           // var listaMesSiguiente = listas[2].split("¬");
-            grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
+            grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botonesPeriodo, 38, false, null);
 
             crearCombo(listaMesActual, "cboPeriodoActual", "Seleccione");
             crearCombo(listaMesActual, "cboPeriodoSiguiente", "Seleccione");
@@ -2426,6 +2428,9 @@ function mostrarGrabar(rpta) {
             document.getElementById('divPopupContainerForm1').style.display = 'none';
             botones = botonesProceso;
         }
+        else if (vista == "Periodo") {
+            botones = botonesPeriodo;
+        }
 
         grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
 
@@ -2509,6 +2514,7 @@ function aprobarPedido() {
 
 function eliminarRegistro(id) {
     var data = "";
+    var titulomsg = '¿Desea anular el registro?';
     if (vista == "PedidoCompra" || vista == "SolicitudCompra" || vista == "Cotizacion" || vista == "CuadroCompara" ) {
         var fechaInicio = txtFechaInicio.value;
         var fechaFinal = txtFechaFinal.value;
@@ -2521,6 +2527,9 @@ function eliminarRegistro(id) {
         var fechaFinal = txtFechaFinal.value;
         data = id + '|' + fechaInicio + '|' + fechaFinal + '|' + idTipo;
     }
+    else if (vista == "Periodo") {
+        titulomsg = '¿Desea Extornar El Período ?';
+    }
     else {
         data = id;
     }
@@ -2529,7 +2538,7 @@ function eliminarRegistro(id) {
     frm.append("data", data);
 
     Swal.fire({
-        title: '¿Desea anular el registro?',
+        title: titulomsg,
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
