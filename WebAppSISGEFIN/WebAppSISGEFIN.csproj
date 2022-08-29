@@ -181,7 +181,7 @@
     <Content Include="Riztie\Images\user-bg.jpg" />
     <Content Include="Riztie\Js\App\AppContabilidad.js" />
     <Content Include="Riztie\Js\App\AppLicitacion.js" />
-    <Content Include="Riztie\Js\App\AppRRHH.js" />
+    <Content Include="Riztie\Js\App\AppConfig.js" />
     <Content Include="Riztie\Js\App\AppInventario.js" />
     <Content Include="Riztie\Js\App\AppLogistica.js" />
     <Content Include="Riztie\Js\App\AppPlane.js" />
@@ -230,6 +230,7 @@
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AdmonController.cs" />
+    <Compile Include="Controllers\ConfiguracionController.cs" />
     <Compile Include="Controllers\ContabilidadController.cs" />
     <Compile Include="Controllers\GeneralController.cs" />
     <Compile Include="Controllers\IngresosController.cs" />
@@ -307,8 +308,6 @@
     <Content Include="Views\Inventario\Almacen.cshtml" />
     <Content Include="Views\Inventario\InventarioInicial.cshtml" />
     <Content Include="Views\General\Inicio.cshtml" />
-    <Content Include="Views\Logistica\Configuracion.cshtml" />
-    <Content Include="Views\RRHH\Personal.cshtml" />
     <Content Include="Views\Presupuesto\PCA.cshtml" />
     <Content Include="Views\Presupuesto\CentroCosto.cshtml" />
     <Content Include="Views\Presupuesto\MarcoPresu.cshtml" />
@@ -322,9 +321,11 @@
     <Content Include="Views\Licitacion\Comite.cshtml" />
     <Content Include="Views\Inventario\Pendiente.cshtml" />
     <Content Include="Views\Contabilidad\PlanContable.cshtml" />
-    <Content Include="Views\Logistica\Periodo.cshtml" />
     <Content Include="Views\Logistica\ReporteOrdenes.cshtml" />
     <Content Include="Views\Logistica\Asigpre.cshtml" />
+    <Content Include="Views\Configuracion\Configuracion.cshtml" />
+    <Content Include="Views\Configuracion\Periodo.cshtml" />
+    <Content Include="Views\Configuracion\Persona.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -1503,6 +1503,7 @@ function mostrarDatosSunat(rpta) {
     if (rpta != "") {
         var obj = JSON.parse(rpta);
         if (obj.success) {
+            spnDocumento.innerHTML = "";
             var ttaDireccion = document.getElementById("ttaDireccion");
             if (ttaDireccion != null) ttaDireccion.value = obj.data.direccion_completa;
             var txtNombre = document.getElementById("txtNombre");
@@ -2820,7 +2821,6 @@ function mostrarReporte(rpta) {
         var listaDetallePedido;
         var listaDetalleReporte;
         var tipoOrden;
-        var IdEmpresa;
         var listaReporte = rpta.split("¯");
         var Cabecera = listaReporte[0].split("|");
 

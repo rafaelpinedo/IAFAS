@@ -35,28 +35,7 @@ namespace WebAppSISGEFIN.Controllers
             return View();
         }
 
-        [FiltroAutenticacion]
-        public ActionResult Configuracion()
-        {
-            int Anio = DateTime.Now.Year;
-            string[] Data = Session["DataUsuario"].ToString().Split('|');
-            string IdPerfil = Data[3];
-            ViewBag.Menu = new Menu().Listar(IdPerfil);
-            ViewBag.Anio = Anio;
-            ViewBag.AnioCN = Anio+1;
-            return View();
-        }
-
-        [FiltroAutenticacion]
-        public ActionResult Periodo()
-        {
-            string[] Data = Session["DataUsuario"].ToString().Split('|');
-            string IdPerfil = Data[3];
-            ViewBag.Menu = new Menu().Listar(IdPerfil);
-            int Anio = DateTime.Now.Year;
-            ViewBag.Anio = Anio;
-            return View();
-        }
+       
 
         [FiltroAutenticacion]
         public ActionResult Proveedor()
