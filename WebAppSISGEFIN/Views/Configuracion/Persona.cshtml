@@ -1,5 +1,5 @@
 ﻿@{
-    ViewBag.Title = "Persona";
+    ViewBag.Title = "Proveedor";
     Layout = "~/Views/_LayoutPage.cshtml";
 }
 <div class="pcoded-content">
@@ -7,7 +7,7 @@
         <div class="main-body">
             <div class="card">
                 <div class="card-header bg-primary">
-                    <h3><i class="fa fa-users" aria-hidden="true"></i> LISTADO DE PERSONA</h3>
+                    <h3><i class="fa fa-users" aria-hidden="true"></i> PERSONA</h3>
                 </div>
                 <div class="card-block">
                     <div class="form-row">
@@ -20,38 +20,101 @@
                             <div class="table-responsive" id="divLista"></div>
                         </div>
                     </div>
-
                     <div class="form-row">
                         <div class="modal custom-modal" tabindex="-1" role="dialog" aria-hidden="true" id="divPopupContainer" style="overflow-y:auto;">
-                            <div class="modal-dialog modal-lg bg-personalizado" id="divPopupWindow" style="margin-top:30px;">
+                            <div class="modal-dialog modal-xl bg-personalizado" id="divPopupWindow" style="margin-top:30px;">
                                 <div class="modal-content">
                                     <div id="divBarra" class="modal-header bg-personalizado" style="cursor:move">
                                         <h5 class="modal-title" id="tituloModal">Nuevo Registro</h5>
                                     </div>
                                     <div class="modal-body">
                                         <div class="row">
-                                            <div class="form-group col-sm-12">
+                                            <div class="form-group col-sm-4">
+                                                <input type="hidden" class="control-form Popup" id="txtIdRegistro">
+                                                <label class="control-label">Tipo Documento</label>
+                                                <select id="cboTipoDocumento" class="control-form Reque Popup"></select>
+                                            </div>
+                                            <div class="form-group col-sm-3">
+                                                <label class="control-label">Tipo de contribuyente</label>
+                                                <select id="cboTipoContribuyente" class="control-form Popup"></select>
+                                            </div>
+                                            <div class="form-group col-sm-5"  style="margin-bottom: 1px;padding-left: 2px;padding-right: 2px;">
                                                 <fieldset class="fieldset">
                                                     <legend class="legend">Tipo de Persona</legend>
                                                     <div class="row">
-                                                        <div class="form-check form-check-inline">
-                                                            <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1">
-                                                            <label class="form-check-label" for="inlineCheckbox1">Empleado</label>
+                                                        <div class="form-check form-check-inline" style="left: 5px;">
+                                                            <input class="form-check-input Popup" type="checkbox" id="chkEsEmpleado">
+                                                            <label class="form-check-label" for="chkEsEmpleado">Empleado</label>
                                                         </div>
                                                         <div class="form-check form-check-inline">
-                                                            <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2">
-                                                            <label class="form-check-label" for="inlineCheckbox2">Proveedor</label>
+                                                            <input class="form-check-input Popup" type="checkbox" id="chkEsProveedor">
+                                                            <label class="form-check-label" for="chkEsProveedor">Proveedor</label>
                                                         </div>
                                                         <div class="form-check form-check-inline">
-                                                            <input class="form-check-input" type="checkbox" id="inlineCheckbox3" value="option2">
-                                                            <label class="form-check-label" for="inlineCheckbox3">Asegurado</label>
+                                                            <input class="form-check-input Popup" type="checkbox" id="chkEsAsegurado">
+                                                            <label class="form-check-label" for="chkEsAsegurado">Asegurado</label>
                                                         </div>
                                                         <div class="form-check form-check-inline">
-                                                            <input class="form-check-input" type="checkbox" id="inlineCheckbox4" value="option2">
-                                                            <label class="form-check-label" for="inlineCheckbox4">Otros</label>
+                                                            <input class="form-check-input Popup" type="checkbox" id="chkEsFamiliar">
+                                                            <label class="form-check-label" for="chkEsFamiliar">Familiar</label>
+                                                        </div>
+                                                        <div class="form-check form-check-inline">
+                                                            <input class="form-check-input Popup" type="checkbox" id="chkEsOtros">
+                                                            <label class="form-check-label" for="chkEsOtros">Otros</label>
                                                         </div>
                                                     </div>
                                                 </fieldset>
+                                            </div>
+                                        </div>
+                                        <div id="tipoPersonaJuridica">
+                                          <div class="row" >
+                                                <div class="form-group col-sm-3">
+                                                    <label class="control-label">
+                                                        RUC   <span id="spnLoad" style="color: rgb(33, 67, 253); border-color: black; font-weight: bold; display:none;">
+                                                            <b>Sunat..</b>
+                                                            <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
+                                                        </span>
+                                                    </label>
+                                                    <input type="text" autocomplete="off" maxlength="11" class="control-form Reque Popup" id="txtRUC" title="Ingrese RUC y presione ENTER" onkeypress="return NumCheck(event, this)">
+                                                    <span id="spnDocumento"></span>
+                                                </div>
+                                                <div class="form-group col-sm-6 personaJuridica">
+                                                    <label class="control-label">Razón Social</label>
+                                                    <input type="text"  class="control-form Reque Popup" id="txtRazonSocial" autocomplete="off">
+                                                </div>
+                                          </div>
+                                        </div>
+                                        <div id="tipoPersonaNatural">
+                                            <div class="row">
+                                                <div class="form-group col-sm-3">
+                                                    <label class="control-label">Número Documento</label>
+                                                    <input type="text" autocomplete="off" maxlength="8" class="control-form Reque Popup" id="txtNroDocumento" onkeypress="return NumCheck(event, this)">
+                                                    <span id="spnDniDocumento"></span>
+                                                </div>
+                                                <div class="form-group col-sm-3">
+                                                    <label class="control-label">Apellido Paterno</label>
+                                                    <input type="text" autocomplete="off" class="control-form Reque Popup" id="txtApePaterno">
+                                                </div>
+                                                <div class="form-group col-sm-3">
+                                                    <label class="control-label">Apellido Materno</label>
+                                                    <input type="text" autocomplete="off" class="control-form Reque Popup" id="txtApeMaterno">
+                                                </div>
+                                                <div class="form-group col-sm-3">
+                                                    <label class="control-label">Nombres</label>
+                                                    <input type="text" autocomplete="off" class="control-form Reque Popup" id="txtNombres">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="divEstadoSunat" style="display:none">
+                                            <div class="row">
+                                                <div class="form-group col-sm-4">
+                                                    <label class="control-label">Estado Sunat</label>
+                                                    <label class="control-lectura" id="lblEstadoSunat"></label>
+                                                </div>
+                                                <div class="form-group col-sm-4">
+                                                    <label class="control-label">Condición Sunat</label>
+                                                    <label class="control-lectura" id="lblCondicionSunat"></label>
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="row">
@@ -60,19 +123,27 @@
                                                 <div class="tab-header card">
                                                     <ul class="nav nav-tabs md-tabs tab-timeline" role="tablist" id="mytab">
                                                         <li class="nav-item">
-                                                            <a class="nav-link active" data-toggle="tab" href="#datosgeneral" role="tab">Datos generales</a>
+                                                            <a class="nav-link active" data-toggle="tab" href="#datosgeneral" role="tab">Datos Generales</a>
                                                             <div class="slide"></div>
                                                         </li>
                                                         <li class="nav-item">
-                                                            <a class="nav-link" data-toggle="tab" href="#datosaseguradora" role="tab">Datos Aseguradora</a>
+                                                            <a class="nav-link" data-toggle="tab" href="#direccion" role="tab">Dirección</a>
                                                             <div class="slide"></div>
                                                         </li>
                                                         <li class="nav-item">
-                                                            <a class="nav-link" data-toggle="tab" href="#datostributario" role="tab">Datos Tributarios</a>
+                                                            <a class="nav-link" data-toggle="tab" href="#datosMilitares" role="tab">Datos Militares</a>
                                                             <div class="slide"></div>
                                                         </li>
                                                         <li class="nav-item">
-                                                            <a class="nav-link" data-toggle="tab" href="#bancario" role="tab">Bancarios</a>
+                                                            <a class="nav-link" data-toggle="tab" href="#datosTributarios" role="tab">Datos Tributarios</a>
+                                                            <div class="slide"></div>
+                                                        </li>
+                                                        <li class="nav-item">
+                                                            <a class="nav-link" data-toggle="tab" href="#datosAseguradora" role="tab">Datos Aseguradora</a>
+                                                            <div class="slide"></div>
+                                                        </li>
+                                                        <li class="nav-item">
+                                                            <a class="nav-link" data-toggle="tab" href="#bancario" role="tab">Datos Bancarios</a>
                                                             <div class="slide"></div>
                                                         </li>
                                                     </ul>
@@ -81,123 +152,108 @@
                                                     <div class="tab-pane active" id="datosgeneral" role="tabpanel">
                                                         <div class="card">
                                                             <div class="card-block">
-
                                                                 <div class="row">
-                                                                    <div class="form-group col-sm-6">
-                                                                        <input type="hidden" class="control-form Popup" id="txtIdRegistro">
-                                                                        <label class="control-label">Tipo Documento</label>
-                                                                        <select id="cboTipoDocumento" class="control-form Reque Popup"></select>
-                                                                    </div>
-
-                                                                    <div class="form-group col-sm-6">
-                                                                        <label class="control-label">N° Documento</label>
-                                                                        <input type="text" autocomplete="off" class="control-form Reque Popup" id="txtDocumento">
-                                                                    </div>
-                                                                </div>
-                                                                <div class="row">
-                                                                    <div class="form-group col-sm-6">
-                                                                        <label class="control-label">Apellido Paterno</label>
-                                                                        <input type="text" autocomplete="off" class="control-form Reque Popup" id="txtApellPaterno">
-                                                                    </div>
-
-                                                                    <div class="form-group col-sm-6">
-                                                                        <label class="control-label">Apellido Materno</label>
-                                                                        <input type="text" autocomplete="off" class="control-form Reque Popup" id="txtApellMaterno">
-                                                                    </div>
-                                                                </div>
-                                                                <div class="row">
-                                                                    <div class="form-group col-sm-12">
-                                                                        <label class="control-label">Nombres</label>
-                                                                        <input type="text" autocomplete="off" id="txtNombres" class="control-form Reque Popup" />
-                                                                    </div>
-
-                                                                </div>
-                                                                <div class="row">
-                                                                    <div class="form-group col-sm-5">
-                                                                        <label class="control-label">Pais</label>
-                                                                        <select id="cboPais" class="SelectSearch control-form Reque Popup"></select>
-                                                                    </div>
                                                                     <div class="form-group col-sm-3">
                                                                         <label class="control-label">Teléfono</label>
                                                                         <input type="number" id="txtTelefono" autocomplete="off" class="control-form Popup" />
                                                                     </div>
-                                                                    <div class="form-group col-sm-4">
+                                                                    <div class="form-group col-sm-3">
                                                                         <label class="control-label">Correo Electrónico</label>
                                                                         <input type="email" id="txtCorreo" autocomplete="off" class="control-form Popup" />
                                                                     </div>
-                                                                </div>
-                                                                <div class="row">
-                                                                    <div class="form-group col-sm-6">
-                                                                        <label class="control-label">Entidad</label>
-                                                                        <select id="cboEntidad" class="SelectSearch control-form Reque Popup"></select>
+                                                                    <div class="form-group col-sm-3">
+                                                                        <label class="control-label">Fecha Nacimiento</label>
+                                                                        <input type="date" id="txtFechaNacimiento" autocomplete="off" class="control-form Popup" />
                                                                     </div>
-                                                                    <div class="form-group col-sm-6">
-                                                                        <label class="control-label">Oficina</label>
-                                                                        <select id="cboOficina" class="SelectSearch control-form Reque Popup"></select>
+                                                                    <div class="form-group col-sm-3">
+                                                                        <label class="control-label">Fecha Ingreso</label>
+                                                                        <input type="date" id="txtFechaIngreso" autocomplete="off" class="control-form Popup" />
                                                                     </div>
                                                                 </div>
                                                                 <div class="row">
-                                                                    <div class="form-group col-sm-5">
+                                                                    <div class="form-group col-sm-3">
+                                                                        <label class="control-label">Sexo</label>
+                                                                        <select id="cboSexo" class="control-form Reque Popup"></select>
+                                                                    </div>
+                                                                    <div class="form-group col-sm-3">
+                                                                        <label class="control-label">Estado Civil</label>
+                                                                        <select id="cboEstadoCivil" class="control-form Reque Popup"></select>
+                                                                    </div>
+                                                                    <div class="form-group col-sm-3">
                                                                         <label class="control-label">Estado</label>
                                                                         <select id="cboEstado" class="control-lectura Reque Popup"></select>
                                                                     </div>
                                                                 </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="tab-pane" id="direccion" role="tabpanel">
+                                                        <div class="card">
+                                                            <div class="card-block">
                                                                 <div class="row">
-                                                                    <div class="form-group col-sm-12">
-                                                                        <fieldset class="fieldset">
-                                                                            <legend class="legend">Dirección</legend>
-                                                                            <div class="row">
-                                                                                <div class="form-group col-sm-4">
-                                                                                    <label class="control-label">Departamento</label>
-                                                                                    <select id="cboDepartamento" class="SelectSearch control-form Popup"></select>
-                                                                                </div>
-                                                                                <div class="form-group col-sm-4">
-                                                                                    <label class="control-label">Provincia</label>
-                                                                                    <select id="cboProvincia" class="SelectSearch control-form Popup"></select>
-                                                                                </div>
-                                                                                <div class="form-group col-sm-4">
-                                                                                    <label class="control-label">Distrito</label>
-                                                                                    <select id="cboDistrito" class="SelectSearch control-form Popup"></select>
-                                                                                </div>
-                                                                            </div>
-                                                                            @*<div class="row">
-                                                                                    <div class="form-group col-sm-6">
-                                                                                        <label class="control-label">Provincia</label>
-                                                                                        <select id="cboProvincia" class="SelectSearch control-form Popup"></select>
-                                                                                    </div>
-                                                                                    <div class="form-group col-sm-6">
-                                                                                        <label class="control-label">Distrito</label>
-                                                                                        <select id="cboDistrito" class="SelectSearch control-form Popup"></select>
-                                                                                    </div>
-                                                                                </div>*@
-                                                                            <div class="row ">
-                                                                                <div class="form-group col-sm-12">
-                                                                                    <label class="control-label">Dirección</label>
-                                                                                    <textarea class="control-form Reque Popup" rows="2" id="ttaDireccion"></textarea>
-                                                                                </div>
-                                                                            </div>
-
-                                                                        </fieldset>
+                                                                    <div class="form-group col-sm-4">
+                                                                        <label class="control-label">Departamento</label>
+                                                                        <select id="cboDepartamento" class="SelectSearch control-form Popup"></select>
+                                                                    </div>
+                                                                    <div class="form-group col-sm-4">
+                                                                        <label class="control-label">Provincia</label>
+                                                                        <select id="cboProvincia" class="SelectSearch control-form Popup"></select>
+                                                                    </div>
+                                                                    <div class="form-group col-sm-4">
+                                                                        <label class="control-label">Distrito</label>
+                                                                        <select id="cboDistrito" class="SelectSearch control-form Popup"></select>
                                                                     </div>
                                                                 </div>
-
+                                                                <div class="row ">
+                                                                    <div class="form-group col-sm-12">
+                                                                        <label class="control-label">Dirección</label>
+                                                                        <textarea class="control-form Reque Popup" rows="2" id="ttaDireccion"></textarea>
+                                                                    </div>
+                                                                </div>
                                                             </div>
-                                                            <!-- end of card-block -->
                                                         </div>
-
-                                                        <!-- personal card end-->
                                                     </div>
-                                                    <div class="tab-pane" id="datosaseguradora" role="tabpanel">
+                                                    <div class="tab-pane" id="datosMilitares" role="tabpanel">
+                                                        <div class="card">
+                                                            <div class="card-block">
+                                                                <div class="row">
+                                                                    <div class="form-group col-sm-4">
+                                                                        <label class="control-label">Grado</label>
+                                                                        <select id="cboGrado" class="SelectSearch control-form Popup"></select>
+                                                                    </div>
+                                                                    <div class="form-group col-sm-4">
+                                                                        <label class="control-label">Situación</label>
+                                                                        <select id="cboSituacion" class="control-form Popup"></select>
+                                                                    </div>
+                                                                    <div class="form-group col-sm-4">
+                                                                        <label class="control-label">CIP</label>
+                                                                        <input id="txtCIP" class="control-form Popup" autocomplete="off" />
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="tab-pane" id="datosAseguradora" role="tabpanel">
                                                         <div class="card">
                                                             <div class="card-block">
 
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class="tab-pane" id="datostributario" role="tabpanel">
+                                                    <div class="tab-pane" id="datosTributarios" role="tabpanel">
                                                         <div class="card">
                                                             <div class="card-block">
+                                                                <div class="row">
 
+                                                                    <div class="form-group col-sm-5">
+                                                                        <label class="control-label">Contacto</label>
+                                                                        <input id="txtContacto" class="control-form Popup" />
+                                                                    </div>
+                                                                    <div class="form-group col-sm-3">
+                                                                        <label class="control-label" for="dtgEsAgenteRetencion">Es agente retención:</label>
+                                                                        <input type="checkbox" id="dtgEsAgenteRetencion" class="Popup" data-toggle="toggle" data-width="160px" data-on="SI" data-off="NO" data-onstyle="success" data-offstyle="danger">
+                                                                    </div>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -245,4 +301,3 @@
 </div>
 <iframe name="print_frame" width="0" height="0" frameborder="0" src="about:blank"></iframe>
 <script src="~/Riztie/Js/App/AppConfig.js"></script>
-
