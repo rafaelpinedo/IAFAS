@@ -43,30 +43,30 @@
                                                     <legend class="legend">Tipo de Persona</legend>
                                                     <div class="row">
                                                         <div class="form-check form-check-inline" style="left: 5px;">
-                                                            <input class="form-check-input Popup" type="checkbox" id="chkEsEmpleado">
+                                                            <input class="form-check-input chkTipoPersonaId Popup" type="checkbox" id="chkEsEmpleado">
                                                             <label class="form-check-label" for="chkEsEmpleado">Empleado</label>
                                                         </div>
                                                         <div class="form-check form-check-inline">
-                                                            <input class="form-check-input Popup" type="checkbox" id="chkEsProveedor">
+                                                            <input class="form-check-input chkTipoPersonaId Popup" type="checkbox" id="chkEsProveedor">
                                                             <label class="form-check-label" for="chkEsProveedor">Proveedor</label>
                                                         </div>
                                                         <div class="form-check form-check-inline">
-                                                            <input class="form-check-input Popup" type="checkbox" id="chkEsAsegurado">
+                                                            <input class="form-check-input chkTipoPersonaId Popup" type="checkbox" id="chkEsAsegurado">
                                                             <label class="form-check-label" for="chkEsAsegurado">Asegurado</label>
                                                         </div>
-                                                        <div class="form-check form-check-inline">
-                                                            <input class="form-check-input Popup" type="checkbox" id="chkEsFamiliar">
+                                                        <div class="form-check form-check-inline" style="display:none">
+                                                            <input class="form-check-input chkTipoPersonaId Popup" type="checkbox" id="chkEsFamiliar">
                                                             <label class="form-check-label" for="chkEsFamiliar">Familiar</label>
                                                         </div>
                                                         <div class="form-check form-check-inline">
-                                                            <input class="form-check-input Popup" type="checkbox" id="chkEsOtros">
+                                                            <input class="form-check-input chkTipoPersonaId Popup" type="checkbox" id="chkEsOtros">
                                                             <label class="form-check-label" for="chkEsOtros">Otros</label>
                                                         </div>
                                                     </div>
                                                 </fieldset>
                                             </div>
                                         </div>
-                                        <div id="tipoPersonaJuridica">
+                                        <div>
                                           <div class="row" >
                                                 <div class="form-group col-sm-3">
                                                     <label class="control-label">
@@ -78,7 +78,7 @@
                                                     <input type="text" autocomplete="off" maxlength="11" class="control-form Reque Popup" id="txtRUC" title="Ingrese RUC y presione ENTER" onkeypress="return NumCheck(event, this)">
                                                     <span id="spnDocumento"></span>
                                                 </div>
-                                                <div class="form-group col-sm-6 personaJuridica">
+                                                <div class="form-group col-sm-6 personaJuridica" id="tipoPersonaJuridica">
                                                     <label class="control-label">Razón Social</label>
                                                     <input type="text"  class="control-form Reque Popup" id="txtRazonSocial" autocomplete="off">
                                                 </div>
@@ -127,6 +127,10 @@
                                                             <div class="slide"></div>
                                                         </li>
                                                         <li class="nav-item">
+                                                            <a class="nav-link" data-toggle="tab" href="#laborales" role="tab">Datos Laborales</a>
+                                                            <div class="slide"></div>
+                                                        </li>
+                                                        <li class="nav-item">
                                                             <a class="nav-link" data-toggle="tab" href="#direccion" role="tab">Dirección</a>
                                                             <div class="slide"></div>
                                                         </li>
@@ -154,6 +158,10 @@
                                                             <div class="card-block">
                                                                 <div class="row">
                                                                     <div class="form-group col-sm-3">
+                                                                        <label class="control-label">Pais</label>
+                                                                        <select id="cboPais" class="control-form Popup"></select>
+                                                                    </div>
+                                                                    <div class="form-group col-sm-3">
                                                                         <label class="control-label">Teléfono</label>
                                                                         <input type="number" id="txtTelefono" autocomplete="off" class="control-form Popup" />
                                                                     </div>
@@ -165,23 +173,43 @@
                                                                         <label class="control-label">Fecha Nacimiento</label>
                                                                         <input type="date" id="txtFechaNacimiento" autocomplete="off" class="control-form Popup" />
                                                                     </div>
-                                                                    <div class="form-group col-sm-3">
-                                                                        <label class="control-label">Fecha Ingreso</label>
-                                                                        <input type="date" id="txtFechaIngreso" autocomplete="off" class="control-form Popup" />
-                                                                    </div>
                                                                 </div>
                                                                 <div class="row">
                                                                     <div class="form-group col-sm-3">
                                                                         <label class="control-label">Sexo</label>
-                                                                        <select id="cboSexo" class="control-form Reque Popup"></select>
+                                                                        <select id="cboSexo" class="control-form Popup"></select>
                                                                     </div>
                                                                     <div class="form-group col-sm-3">
                                                                         <label class="control-label">Estado Civil</label>
-                                                                        <select id="cboEstadoCivil" class="control-form Reque Popup"></select>
+                                                                        <select id="cboEstadoCivil" class="control-form Popup"></select>
                                                                     </div>
                                                                     <div class="form-group col-sm-3">
                                                                         <label class="control-label">Estado</label>
                                                                         <select id="cboEstado" class="control-lectura Reque Popup"></select>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="tab-pane" id="laborales" role="tabpanel">
+                                                        <div class="card">
+                                                            <div class="card-block">
+                                                                <div id="chklaborales" style="display:none">
+                                                                    <div class="row">
+                                                                        <div class="form-group col-sm-6">
+                                                                            <label class="control-label">Entidad</label>
+                                                                            <select id="cboEntidad" class="control-lectura Popup"></select>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="row ">
+                                                                        <div class="form-group col-sm-6">
+                                                                            <label class="control-label">Oficina</label>
+                                                                            <select id="cboOficina" class="control-form Popup"></select>
+                                                                        </div>
+                                                                        <div class="form-group col-sm-4">
+                                                                            <label class="control-label">Fecha Ingreso</label>
+                                                                            <input type="date" id="txtFechaIngreso" autocomplete="off" class="control-form Popup" />
+                                                                        </div>
                                                                     </div>
                                                                 </div>
                                                             </div>
