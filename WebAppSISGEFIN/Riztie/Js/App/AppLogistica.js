@@ -33,6 +33,7 @@ window.onload = function () {
     getConfigMn();
     vista = window.sessionStorage.getItem("Vista");
     controller = window.sessionStorage.getItem("Controller");
+    mostrarLoading("divLista");
     if (vista == "PedidoCompra" || vista == "SolicitudCompra" || vista == "Cotizacion" || vista == "CuadroCompara" || vista == "Asigpre") {
         getListarPedido();
     }
@@ -52,6 +53,7 @@ window.onload = function () {
     else {
         getListar();
     }
+    
     configurarBotones();
     configurarConsultas();
     configurarCombos();
