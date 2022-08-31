@@ -9,6 +9,7 @@ var formulario = [];
 var idRegistro = "";
 var operacion = 0;
 var listaOficina_VG = [];
+var listaUbigeo = [];
 
 window.onload = function () {
     getConfigMn();
@@ -17,6 +18,27 @@ window.onload = function () {
     getListar();
     configurarBotones();
     configurarCombos();
+    configurarConsultas();
+}
+
+function NumCheck(e, field) {
+    key = e.keyCode ? e.keyCode : e.which
+    // backspace
+    if (key == 8) return true
+    // 0-9
+    if (key > 47 && key < 58) {
+        if (field.value == "") return true
+        regexp = /^\d+(\.\d{0,2})?$/;
+        return (regexp.test(field.value))
+    }
+    // .
+    //if (key == 46) {
+    //    if (field.value == "") return false
+    //    regexp = /^[0-9]+$/
+    //    return regexp.test(field.value)
+    //}
+
+    return false
 }
 
 function getListar() {
@@ -37,8 +59,6 @@ function mostrarlistas(rpta) {
             var listaEstado = listas[5].split("¬");
           
             grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
-           
-
             crearCombo(listaTipoDocumento, "cboTipoDocumento", "Seleccione");
             listarSelect2Item(listaPais, "cboPais");
             listarSelect2Item(listaEntidad, "cboEntidad");
@@ -46,6 +66,29 @@ function mostrarlistas(rpta) {
             listarOficinaItem();
             crearCombo(listaEstado, "cboEstado", "Seleccione");
         }
+        else if (vista == "Persona") {
+            var listaDocumento = listas[1].split("¬");
+            var listaTipoContr = listas[2].split("¬");
+            var listaSexo = listas[3].split("¬");
+            var listaEstadoCivil = listas[4].split("¬");
+            var listaEstado = listas[5].split("¬");
+            listaUbigeo = listas[6].split("¬");
+            listarDepartamentos();
+            var listaGradoMil = listas[7].split("¬");
+            var listaSituacionMil = listas[8].split("¬");
+            var listaBanco = listas[9].split("¬");
+            grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
+            crearCombo(listaDocumento, "cboTipoDocumento", "Seleccione");
+            crearCombo(listaTipoContr, "cboTipoContribuyente", "Seleccione");
+            crearCombo(listaSexo, "cboSexo", "Seleccione");
+            crearCombo(listaEstadoCivil, "cboEstadoCivil", "Seleccione");
+            crearCombo(listaEstado, "cboEstado", "Seleccione");
+            crearCombo(listaGradoMil, "cboGrado", "Seleccione");
+            crearCombo(listaSituacionMil, "cboSituacion", "Seleccione");
+            crearCombo(listaBanco, "cboBanco", "Seleccione");
+           
+        }
+
 
         else {
               grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
@@ -84,6 +127,7 @@ function grabarDatos() {
     var frm = new FormData();
     data = obtenerDatosGrabar("Popup");
     frm.append("data", data);
+    console.log(data);
     Http.post("General/guardar/?tbl=" + controller + vista, mostrarGrabar, frm);
 }
 
@@ -239,9 +283,57 @@ function mostrarRegistro(rpta) {
             cboOficina.value = campos[10];
             document.getElementById('select2-cboOficina-container').innerHTML = cboOficina.options[cboOficina.selectedIndex].text;
             cboEstado.value = campos[11];
-            
+
         }
-        
+
+        else if (vista =="Persona") {
+            txtIdRegistro.value = campos[0];
+            cboTipoDocumento.value = campos[1];
+            cboTipoContribuyente.value = campos[2];
+            chkEsEmpleado.value = campos[3];
+            chkEsProveedor.value = campos[4];
+            chkEsAsegurado.value = campos[5];
+            chkEsFamiliar.value = campos[6];
+            chkEsOtros.value = campos[7];
+            txtRUC.value = campos[8];
+            txtRazonSocial.value = campos[9];
+            txtNroDocumento.value = campos[10];
+            txtApePaterno.value = campos[11];
+            txtApeMaterno.value = campos[12];
+            txtNombres.value = campos[13];
+
+            txtTelefono.value = campos[14];
+            txtCorreo.value = campos[15];
+            txtFechaNacimiento.value = campos[16];
+            txtFechaIngreso.value = campos[17];
+            cboSexo.value = campos[18];
+            cboEstadoCivil.value = campos[19];
+            cboEstado.value = campos[20];
+
+            listarDepartamentos();
+            cboDepartamento.value = campos[21];
+           // document.getElementById('select2-cboDepartamento-container').innerHTML = cboDepartamento.options[cboDepartamento.selectedIndex].text;
+            listarProvincias();
+            cboProvincia.value = campos[22];
+            //document.getElementById('select2-cboProvincia-container').innerHTML = cboProvincia.options[cboProvincia.selectedIndex].text;
+            listarDistritos();
+            cboDistrito.value = campos[23];
+           // document.getElementById('select2-cboDistrito-container').innerHTML = cboDistrito.options[cboDistrito.selectedIndex].text;
+
+            ttaDireccion.value = campos[24];
+            cboGrado.value = campos[25];
+           // document.getElementById('select2-cboGrado-container').innerHTML = cboGrado.options[cboGrado.selectedIndex].text;
+            cboSituacion.value = campos[26];
+            txtCIP.value = campos[27];
+            txtContacto.value = campos[28];
+            dtgEsAgenteRetencion.value = campos[29];
+
+            cboBanco.value = campos[29];
+            txtNroCuenta.value = campos[30];
+            txtCCI.value = campos[31];
+            txtNroCuenta.value = campos[32];
+
+        }
 
 
         var divPopupContainer = document.getElementById("divPopupContainer");
@@ -337,6 +429,11 @@ function configurarBotones() {
             cboEstado.disabled = true;
         }
 
+        var cboTipoDocumento = document.getElementById("cboTipoDocumento");
+        if (cboTipoDocumento != null) {
+            cboTipoDocumento.value = 4;
+        }
+
         var select2cboPais = document.getElementById("select2-cboPais-container");
         if (select2cboPais != null) select2cboPais.innerHTML = "Seleccione";
 
@@ -346,6 +443,24 @@ function configurarBotones() {
         var select2cboOficina = document.getElementById("select2-cboOficina-container");
         if (select2cboOficina != null) select2cboOficina.innerHTML = "Seleccione";
 
+        var dtgEsAgenteRetencion = document.getElementById("dtgEsAgenteRetencion");
+        if (dtgEsAgenteRetencion != null) {
+            $('#dtgEsAgenteRetencion').bootstrapToggle('off')
+        }
+
+        
+
+        var select2cboDepartamento = document.getElementById("select2-cboDepartamento-container");
+        if (select2cboDepartamento != null) select2cboDepartamento.innerHTML = "Seleccione";
+
+        var select2cboProvincia = document.getElementById("select2-cboProvincia-container");
+        if (select2cboProvincia != null) select2cboProvincia.innerHTML = "Seleccione";
+
+        var select2cboDistrito = document.getElementById("select2-cboDistrito-container");
+        if (select2cboDistrito != null) select2cboDistrito.innerHTML = "Seleccione";
+
+        var select2cboGrado = document.getElementById("select2-cboGrado-container");
+        if (select2cboGrado != null) select2cboGrado.innerHTML = "Seleccione";
         //var txtFechaPedido = document.getElementById("txtFechaPedido");
         //if (txtFechaPedido != null) txtFechaPedido.value = txtFechaPedido.getAttribute("data-fecha");
     }
@@ -354,11 +469,36 @@ function configurarBotones() {
     var btnGuardar = document.getElementById("btnGuardar");
     if (btnGuardar != null) btnGuardar.onclick = function () {
         var validar = false;
-
-        if (vista == "PedidoCompra" && validarPedido() == true) {
-            validar = true;
+        debugger
+        if (vista == "Persona") {
+            let dni = txtNroDocumento.value;
+            if (cboTipoDocumento.value == "4" && cboTipoContribuyente.value == "3") {
+                txtRazonSocial.value = txtApePaterno.value + ' ' + txtApeMaterno.value + ', ' + txtNombres.value;
+                document.getElementById("txtRUC").classList.remove("Reque");
+                document.getElementById("txtRazonSocial").classList.remove("Reque");
+                //if (dni.length != 8) {
+                //    spnDniDocumento.innerHTML = "Nro de Documento Incorrecto";
+                //    spnDniDocumento.style.color = "red";
+                //}
+            }
+            else if (cboTipoDocumento.value == "4" && cboTipoContribuyente.value == "2") {
+                document.getElementById("txtNroDocumento").classList.remove("Reque");
+                document.getElementById("txtApePaterno").classList.remove("Reque");
+                document.getElementById("txtApeMaterno").classList.remove("Reque");
+                document.getElementById("txtNombres").classList.remove("Reque");
+            }
+            else {
+                document.getElementById("txtRUC").classList.add("Reque");
+                document.getElementById("txtRazonSocial").classList.add("Reque");
+                document.getElementById("txtNroDocumento").classList.add("Reque");
+                document.getElementById("txtApePaterno").classList.add("Reque");
+                document.getElementById("txtApeMaterno").classList.add("Reque");
+                document.getElementById("txtNombres").classList.add("Reque");
+            }
+           
         }
-        else if (validarInformacion("Reque") == true) {
+
+        if (validarInformacion("Reque") == true) {
             validar = true;
         }
         if (validar == true) {
@@ -401,12 +541,86 @@ function configurarBotones() {
     }
 }
 
+function configurarConsultas() {
+    var txtRUC = document.getElementById("txtRUC");
+    if (txtRUC != null) {
+        txtRUC.onkeyup = function (event) {
+            if (this.value != "" && this.value.length == 11 || (event.keyCode == 13)) {
+                spnLoad.style.display = 'block';
+                Http.get("General/consultaRucSunat/?ruc=" + this.value, mostrarDatosSunat);
+            }
+
+        }
+    }
+}
+
+
+function mostrarDatosSunat(rpta) {
+    if (rpta != "") {
+        var obj = JSON.parse(rpta);
+        if (obj.success) {
+            spnDocumento.innerHTML = "";
+            var ttaDireccion = document.getElementById("ttaDireccion");
+            if (ttaDireccion != null) ttaDireccion.value = obj.data.direccion_completa;
+            var txtNombre = document.getElementById("txtNombre");
+            if (txtNombre != null) txtNombre.value = obj.data.nombre_o_razon_social;
+            divEstadoSunat.style.display = 'inline';
+            lblEstadoSunat.innerHTML = obj.data.estado;
+            lblCondicionSunat.innerHTML = obj.data.condicion;
+            if (obj.data.es_agente_de_retencion == "NO") {
+                $('#dtgEsAgenteRetencion').bootstrapToggle('off')
+            }
+            else {
+                $('#dtgEsAgenteRetencion').bootstrapToggle('on')
+            }
+            spnLoad.style.display = 'none';
+        }
+        else {
+            spnDocumento.innerHTML = "Nro de Documento no encontrado";
+            spnDocumento.style.color = "red";
+            spnLoad.style.display = 'none';
+        }
+    }
+    else {
+        spnDocumento.innerHTML = "Documento incorrecto o no existe enlace con SUNAT";
+        spnDocumento.style.color = "red";
+        spnLoad.style.display = 'none';
+    }
+}
+
 function configurarCombos() {
     var cboEntidad = document.getElementById("cboEntidad");
     if (cboEntidad != null) cboEntidad.onchange = function () {
         listarOficinaItem();
     }
 
+    var cboDepartamento = document.getElementById("cboDepartamento")
+    if (cboDepartamento != null) cboDepartamento.onchange = function () {
+        listarProvincias();
+    }
+
+    var cboProvincia = document.getElementById("cboProvincia")
+    if (cboProvincia != null) cboProvincia.onchange = function () {
+        listarDistritos();
+    }
+
+    var cboTipoContribuyente = document.getElementById("cboTipoContribuyente")
+    if (cboTipoContribuyente != null) cboTipoContribuyente.onchange = function () {
+        if (cboTipoDocumento.value == "4") {
+            if (cboTipoContribuyente.value == "2") {
+                tipoPersonaNatural.style.display = "none";
+                tipoPersonaJuridica.style.display = "block";
+            }
+            else if (cboTipoContribuyente.value == "3") {
+                tipoPersonaJuridica.style.display = "none";
+                tipoPersonaNatural.style.display = "block";
+            }
+            else {
+                tipoPersonaJuridica.style.display = "block";
+                tipoPersonaNatural.style.display = "block";
+            }
+        }
+    }
 
 }
 
@@ -456,4 +670,77 @@ function seleccionarFila(fila, id, prefijo) {
     if (window["fila" + prefijo] != null) window["fila" + prefijo].className = "FilaDatos";
     fila.className = "FilaSeleccionada";
     window["fila" + prefijo] = fila;
+}
+
+
+function listarDepartamentos() {
+    var nRegistros = listaUbigeo.length;
+    var contenido = "<option value=''>Seleccione</option>";
+    var idDpto, idProv, idDist, nombre, ubigeo;
+    for (var i = 0; i < nRegistros; i++) {
+        ubigeo = listaUbigeo[i];
+        idDpto = ubigeo.substr(0, 2);
+        idProv = ubigeo.substr(2, 2);
+        idDist = ubigeo.substr(4, 2);
+        if (idDpto != "00" && idProv == "00" && idDist == "00") {
+            nombre = ubigeo.substr(6, ubigeo.length - 6);
+            contenido += "<option value='";
+            contenido += idDpto;
+            contenido += "'>";
+            contenido += nombre;
+            contenido += "</option>";
+        }
+    }
+    var cbo = document.getElementById("cboDepartamento");
+    if (cbo != null) cbo.innerHTML = contenido;
+    listarProvincias();
+}
+
+function listarProvincias() {
+    var nRegistros = listaUbigeo.length;
+
+    var contenido = "<option value=''>Seleccione</option>";
+    var idDpto, idProv, idDist, nombre, ubigeo;
+    var idDptoSel = document.getElementById("cboDepartamento").value;
+    for (var i = 0; i < nRegistros; i++) {
+        ubigeo = listaUbigeo[i];
+        idDpto = ubigeo.substr(0, 2);
+        idProv = ubigeo.substr(2, 2);
+        idDist = ubigeo.substr(4, 2);
+        if (idDpto == idDptoSel && idProv != "00" && idDist == "00") {
+            nombre = ubigeo.substr(6, ubigeo.length - 6);
+            contenido += "<option value='";
+            contenido += idProv;
+            contenido += "'>";
+            contenido += nombre;
+            contenido += "</option>";
+        }
+    }
+    var cbo = document.getElementById("cboProvincia");
+    if (cbo != null) cbo.innerHTML = contenido;
+    listarDistritos();
+}
+
+function listarDistritos() {
+    var nRegistros = listaUbigeo.length;
+    var contenido = "<option value=''>Seleccione</option>";
+    var idDpto, idProv, idDist, nombre, ubigeo;
+    var idDptoSel = document.getElementById("cboDepartamento").value;
+    var idProvSel = document.getElementById("cboProvincia").value;
+    for (var i = 0; i < nRegistros; i++) {
+        ubigeo = listaUbigeo[i];
+        idDpto = ubigeo.substr(0, 2);
+        idProv = ubigeo.substr(2, 2);
+        idDist = ubigeo.substr(4, 2);
+        if (idDpto == idDptoSel && idProv == idProvSel && idDist != "00") {
+            nombre = ubigeo.substr(6, ubigeo.length - 6);
+            contenido += "<option value='";
+            contenido += idDist;
+            contenido += "'>";
+            contenido += nombre;
+            contenido += "</option>";
+        }
+    }
+    var cbo = document.getElementById("cboDistrito");
+    if (cbo != null) cbo.innerHTML = contenido;
 }
