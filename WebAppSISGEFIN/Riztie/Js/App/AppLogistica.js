@@ -57,6 +57,7 @@ window.onload = function () {
     configurarBotones();
     configurarConsultas();
     configurarCombos();
+    configurarOptions();
 }
 
 function getListarLicita() {
@@ -579,6 +580,49 @@ function configurarCombos() {
 }
 
 function configurarBotones() {
+    var btnReporteExcel = document.getElementById("btnReporteExcel");
+    if (btnReporteExcel != null) btnReporteExcel.onclick = function () {
+        var data = "";
+        var anio = numAnio.value;
+        var idItem = cboArticulo.value;
+        var idProveedor = cboProveedor.value;
+        spnLoad.style.display = 'inline';
+        if (optItems.checked) {
+            if (idItem != "") {
+                archivo = "ORDEN COMPRA POR ITEMS.xlsx";
+                data = anio + '|' + idItem;
+                Http.getDownload("General/exportarOnline/?ori=V&tbl=" + tabla + "PorItems&idx=" + data, mostrarExportar)
+            }
+            else {
+                mostrarMensaje("Seleccione Items", "error");
+                cboArticulo.focus();
+            }
+        }
+        else if (optRecordProv.checked) {
+            archivo = "RECORD POR PROVEEDOR.xlsx";
+            Http.getDownload("General/exportarOnline/?ori=V&tbl=" + tabla + "ResumenProveedor&idx=" + anio, mostrarExportar)
+        }
+        else if (optOCProv.checked) {
+            if (idProveedor != "") {
+                archivo = "ORDENES POR PROVEEDOR.xlsx";
+                spnLoad.style.display = 'inline';
+                data = anio + '|' + idProveedor;
+                Http.getDownload("General/exportarOnline/?ori=V&tbl=" + tabla + "PorProveedor&idx=" + data, mostrarExportar)
+            }
+            else {
+                mostrarMensaje("Seleccione Proveedor", "error");
+                cboProveedor.focus();
+            }
+
+        }
+        //else if (optEntradas.checked) {
+        //    spnLoad.style.display = 'inline';
+        //    get("Inventario/getReporte/?tbl=" + tabla + "Entradas&data=" + anio, mostrarDatosExportar);
+        //}
+
+    }
+
+
     var btnAgregarPartida = document.getElementById("btnAgregarPartida");
     if (btnAgregarPartida != null) btnAgregarPartida.onclick = function () {
         meta = cboMeta.value;
@@ -1185,14 +1229,14 @@ function mostrarListadoPeriodo(rpta) {
 }
 
 function getReporteAyudas() {
-    var anio = numAnio.value;
-    Http.get("General/listarTabla/?tbl=" + tabla + "AyudaItem&data=" + anio, mostrarReporteAyudas);
+    var anio = txtAnioFiscal.value;
+    Http.get("General/listarTabla/?tbl=" + controller + vista + "AyudaItem&data=" + anio, mostrarReporteAyudas);
 }
 
 function mostrarReporteAyudas(rpta) {
     if (rpta) {
-        var divPopupContainerItem = document.getElementById("divPopupContainerForm1");
-        if (divPopupContainerItem != null) divPopupContainerForm1.style.display = 'block';
+        var divPopupContainer = document.getElementById("divPopupContainer");
+        if (divPopupContainer != null) divPopupContainer.style.display = 'block';
         var listas = rpta.split('¯');
         var listaItems = listas[0].split('¬');
         var listaMes = listas[1].split('¬');
@@ -1200,6 +1244,9 @@ function mostrarReporteAyudas(rpta) {
         crearCombo(listaItems, "cboArticulo", "Seleccionar");
         //crearCombo(listaMes, "cboMes", "Todos");
         crearCombo(listaProv, "cboProveedor", "Seleccionar");
+    }
+    else {
+        mostrarMensaje('No se encuentra el reporte disponible','error')
     }
 }
 
@@ -4512,4 +4559,24 @@ function listarSubMeta() {
     document.getElementById("cboSubMeta").disabled = false;
     var cbo = document.getElementById("cboSubMeta");
     if (cbo != null) cbo.innerHTML = contenido;
+}
+
+function configurarOptions() {
+    var optRecordProv = document.getElementById("optRecordProv");
+    if (optRecordProv != null) optRecordProv.onclick = function () {
+        divProveedor.style.display = 'none';
+        divItems.style.display = 'none';
+    }
+
+    var optItems = document.getElementById("optItems");
+    if (optItems != null) optItems.onclick = function () {
+        divItems.style.display = 'block';
+        divProveedor.style.display = 'none';
+    }
+
+    var optOCProv = document.getElementById("optOCProv");
+    if (optOCProv != null) optOCProv.onclick = function () {
+        divProveedor.style.display = 'block';
+        divItems.style.display = 'none';
+    }
 }

@@ -100,7 +100,45 @@ namespace WebAppTurnera.Controllers
             return rpta;
         }
 
-        public void exportar(string orienta, string nombreArchivo)
+        public void exportarOnline(string tbl, string idx, string ori)
+        {
+            string rpta;
+            string data;
+            string nombreArchivo;
+            string subTitulo = "";
+            string sProducto = "";
+            bool isTotal = false;
+            string colSum = "";
+            daSQL odaSQL = new daSQL("conSISLOG");
+            rpta = odaSQL.EjecutarComando("uspAdmon" + tbl + "ReporteCsv", "@Data", idx);
+
+            string[] Listas = rpta.Split('¯');
+            nombreArchivo = Listas[0];
+            data = Listas[1];
+            var nListas = Listas.Length;
+            if (nListas > 2)
+            {
+                if (Listas[2] != null || Listas[2] != "")
+                {
+                    string[] configuracion = Listas[2].Split('|');
+                    subTitulo = configuracion[0];
+                    if (configuracion[1] == "1")
+                    {
+                        isTotal = true;
+                    }
+                    colSum = configuracion[2];
+                }
+            }
+
+            nombreArchivo = nombreArchivo.Replace(" ", "_");
+            nombreArchivo = nombreArchivo + ".xlsx";
+            if (data != null || data != "")
+            {
+                crearArchivoBajar(nombreArchivo, data, ori, subTitulo, sProducto, isTotal, colSum);
+            }
+        }
+
+        public void exportar(string orienta, string nombreArchivo, string stitulo = "", string sProducto = "", bool isTotal = false)
         {
             string data = "";
             nombreArchivo = nombreArchivo.Replace(" ", "_");
@@ -110,12 +148,15 @@ namespace WebAppTurnera.Controllers
                 Stream flujo = Request.InputStream;
                 StreamReader sr = new StreamReader(flujo);
                 data = sr.ReadToEnd();
-                crearArchivoBajar(nombreArchivo, data, orienta);
+                crearArchivoBajar(nombreArchivo, data, orienta, stitulo, sProducto, isTotal);
+                //crearArchivoBajar(nombreArchivo, data, orienta);
             }
         }
 
-        private void crearArchivoBajar(string nombreArchivo, string data, string orienta)
-        {
+        //private void crearArchivoBajar(string nombreArchivo, string data, string orienta)
+
+        private void crearArchivoBajar(string nombreArchivo, string data, string orienta, string stitulo = "", string sProducto = "", bool isTotal = false, string colSuma = "")
+                {
             string[] Data = Session["DataUsuario"].ToString().Split('|');
             string usuario = Data[1];
             string tipoMime = "";
@@ -135,6 +176,9 @@ namespace WebAppTurnera.Controllers
                 case ".xlsx":
                     buffer = Epplus.Excel(table, nombre, tituloReporte, usuarioNombre, nombreSistema);
                     break;
+                //case ".xlsx":
+                //    buffer = Epplus.Excel(data, nombre, tituloReporte, usuarioNombre, nombreSistema, stitulo, sProducto, isTotal, colSuma);
+                //    break;
                 case ".pdf":
                     string ruta = Server.MapPath("~/Riztie/Images");
                     string img1 = io.Path.Combine(ruta, "logoReporte.png");
