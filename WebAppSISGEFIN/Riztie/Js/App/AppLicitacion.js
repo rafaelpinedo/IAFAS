@@ -310,8 +310,8 @@ function grabarDatos() {
         data += '¯' + detalle;
     }
     if (vista == "PAC") {
-        var txtIdPacPr = document.getElementById("txtIdPac").value;
-        if (txtIdPacPr == "0") {
+        var txtIdRegistro = document.getElementById("txtIdRegistro").value;
+        if (txtIdRegistro != null) {
             data += '|' + txtAnioFiscal.value;
         }
     }
@@ -352,7 +352,7 @@ function mostrarGrabarTab(rpta) {
                 showConfirmButton: true,
                 timer: 2000
             })
-            alerta = 'success';
+            
         }
         else {
             Swal.fire({
@@ -436,7 +436,6 @@ function mostrarGrabar(rpta) {
                 showConfirmButton: true,
                 timer: 2000
             })
-            alerta = 'success';
         }
         else {
             Swal.fire({
@@ -966,7 +965,6 @@ function listarSelect2Item(lista, idCombo) {
 }
 
 function configurarBotones() {
-    debugger;
     var btnEliminarForm = document.getElementById("btnEliminarForm");
     if (btnEliminarForm != null) btnEliminarForm.onclick = function () {
         if (idRegistro == "") {
@@ -1241,7 +1239,6 @@ function configurarBotones() {
 
     var btnAgregar = document.getElementById("btnAgregar");
     if (btnAgregar != null) btnAgregar.onclick = function () {
-        debugger;
         if (vista == "Contrato" && idTabActivo == "tabGarantia") {
             if (validarInformacion("RequeGar")) grabarDatosVarios("PopupGar", "Garantia");
         }
@@ -1252,7 +1249,6 @@ function configurarBotones() {
            if (validarInformacion("RequeAdel")) grabarDatosVarios("PopupAdel", "Adelanto");
         }
         else if (vista == "Contrato" && idTabActivo == "tabAdenda") {
-            debugger;
             if (validarInformacion("RequeAdenda")) grabarDatosVarios("PopupAdend", "Adenda");
         }
     }
@@ -1638,7 +1634,6 @@ function mostrarEliminarTab(rpta) {
         mensajeResul = listas[1].split("|");
         var tipo = mensajeResul[0];
         var mensaje = mensajeResul[1];
-        debugger;
         if (idTabActivo == "tabGarantia") {
             grillaGarantia = new GrillaScroll(lista, "divListaGarantia", 100, 6, vista, controller, null, false, null, null, 30, false, null);
         }
