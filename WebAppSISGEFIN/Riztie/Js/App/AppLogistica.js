@@ -184,10 +184,8 @@ function mostrarlistas(rpta) {
             grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
             var listaTipoBien = listas[1].split("¬");
             var listaEstado = listas[2].split("¬");
-            var listaCuentaContable = listas[3].split("¬");
             crearCombo(listaTipoBien, "cboTipoBien", "Seleccione");
             crearCombo(listaEstado, "cboEstado", "Seleccione");
-            crearCombo(listaCuentaContable, "cboCuentaContable", "Seleccione");
         }
         else if (vista == "UniMed") {
 
@@ -800,6 +798,15 @@ function configurarBotones() {
             //Logica
             var data = "";
             Http.get("General/listarTabla/?tbl=" + controller + vista + "Actual&data=" + data, mostrarListadoPeriodo);
+        }
+
+        var dtgSbn = document.getElementById("dtgSbn");
+        if (dtgSbn != null) {
+            $('#dtgSbn').bootstrapToggle('off')
+        }
+        var dtgActivo = document.getElementById("dtgActivo");
+        if (dtgActivo != null) {
+            $('#dtgActivo').bootstrapToggle('off')
         }
     }
 
@@ -2276,7 +2283,7 @@ function mostrarRegistro(rpta) {
             cboEstado.value = campos[9];
         }
         else if (vista == "Clase") {
-            document.getElementById("divPopupContainer").style.display = 'block';
+            
             cboTipoBien.value = campos[0];
             listarGrupoItem();
             cboGrupo.value = campos[1];
@@ -2284,10 +2291,14 @@ function mostrarRegistro(rpta) {
             txtIdRegistro.value = campos[2];
             txtCodigo.value = campos[2];
             txtNombre.value = campos[3];
-            cboEstado.value = campos[4];
+            dtgSbn.value = campos[4];
+            dtgActivo.value = campos[5];
+            cboEstado.value = campos[6];
+            if (dtgSbn.value == "1") { $('#dtgSbn').bootstrapToggle('on') } else { $('#dtgSbn').bootstrapToggle('off') }
+            if (dtgActivo.value == "1") { $('#dtgActivo').bootstrapToggle('on') } else { $('#dtgActivo').bootstrapToggle('off') }
+            document.getElementById("divPopupContainer").style.display = 'block';
         }
         else if (vista == "Familia") {
-            document.getElementById("divPopupContainer").style.display = 'block';
             txtIdRegistro.value = campos[3];
             cboTipoBien.value = campos[0];
             listarGrupoItem();
@@ -2296,87 +2307,28 @@ function mostrarRegistro(rpta) {
             listarClaseItem();
             cboClase.value = campos[2];
             document.getElementById('select2-cboClase-container').innerHTML = cboClase.options[cboClase.selectedIndex].text;
+            txtCodigo.value = campos[3];
             txtNombre.value = campos[4];
-            cboEstado.value = campos[5];
+            dtgSbn.value = campos[5];
+            dtgActivo.value = campos[6];
+            cboEstado.value = campos[7];
+            if (dtgSbn.value == "1") { $('#dtgSbn').bootstrapToggle('on') } else { $('#dtgSbn').bootstrapToggle('off') }
+            if (dtgActivo.value == "1") { $('#dtgActivo').bootstrapToggle('on') } else { $('#dtgActivo').bootstrapToggle('off') }
+            document.getElementById("divPopupContainer").style.display = 'block';
+
         }
-        //else if (vista == "PAC") {
-        //    var txtIdPacPr = document.getElementById("txtIdPac").value;
-        //    if (txtIdPacPr != "0") {
-
-        //        if (campos[0] != '0¯0') {
-        //            var listaCabe = rpta.split("¯")[0];
-        //            var listaDetalle = rpta.split("¯")[1];
-        //            campos = listaCabe.split("|");
-
-        //            txtIdPac.value = campos[0];
-        //            txtIdPacProceso.value = campos[1];
-        //            cboTipoItem.value = campos[2];
-        //            cboTipoCompra.value = campos[3];
-        //            txtEntidadConv.value = campos[4];
-        //            cboTipo.value = campos[5];
-        //            cboTipoProceso.value = campos[6];
-        //            cboObjetoContratacion.value = campos[7];
-        //            cboAntecedentes.value = campos[8];
-        //            txtComentarioAntecedente.value = campos[9];
-        //            txtDescripcionServicio.value = campos[10];
-        //            cboFuenteFto.value = campos[11];
-        //            cboOficinaProceso.value = campos[12];
-        //            cboFechaPrevista.value = campos[13];
-
-        //            listarDepartamentos();
-        //            cboDepartamento.value = campos[14];
-        //            document.getElementById('select2-cboDepartamento-container').innerHTML = cboDepartamento.options[cboDepartamento.selectedIndex].text;
-        //            listarProvincias();
-        //            cboProvincia.value = campos[15];
-        //            document.getElementById('select2-cboProvincia-container').innerHTML = cboProvincia.options[cboProvincia.selectedIndex].text;
-        //            listarDistritos();
-        //            cboDistrito.value = campos[16];
-        //            document.getElementById('select2-cboDistrito-container').innerHTML = cboDistrito.options[cboDistrito.selectedIndex].text;
-        //            cboTipoMoneda.value = campos[17];
-        //            txtTipoCambio.value = campos[18];
-        //            txtObservaciones.value = campos[19];
-
-        //            let comentarioAntecedente = document.getElementById("txtComentarioAntecedente");
-        //            if (campos[9] == "") {
-        //                comentarioAntecedente.readOnly = true;
-        //            }
-        //            else {
-        //                comentarioAntecedente.readOnly = false;
-        //            }
-        //            //Detalle
-        //            tbDetalleItemPac.innerHTML = "";
-        //            listasDetalleItemPacProcesos(listaDetalle);
-
-        //        }
-        //        else {
-        //            var idpac = txtIdPac.value;
-        //            limpiarForm("Popuproceso");
-        //            tbDetalleItemPac.innerHTML = "";
-        //            tbBodyDetalleItemPac.innerHTML = "";
-        //            txtIdPac.value = idpac;
-        //            listarDepartamentos();
-        //            document.getElementById("txtComentarioAntecedente").readOnly = true;
-
-        //        }
-
-        //        listarItemInventario();
-        //        var divPopupContainerForm1 = document.getElementById("divPopupContainerForm1");
-        //        if (divPopupContainerForm1 != null) { divPopupContainerForm1.style.display = 'block'; };
-        //    }
-        //    else {
-
-        //        txtIdRegistro.value = campos[0];
-        //        cboEntidadPAC.value = campos[1];
-        //        txtAnioPAC.value = campos[2];
-        //        txtVersion.value = campos[3];
-        //        txtAprobacion.value = campos[4];
-        //        cboEstado.value = campos[5];
-
-        //        var divPopupContainer = document.getElementById("divPopupContainer");
-        //        if (divPopupContainer != null) { divPopupContainer.style.display = 'block'; };
-        //    }
-
-        //}
+        else if (vista == "Grupo") {
+            txtIdRegistro.value = campos[0];
+            cboTipoBien.value = campos[1];
+            txtCodigoGrupo.value = campos[2];
+            txtGrupo.value = campos[3];
+            dtgSbn.value = campos[4];
+            dtgActivo.value = campos[5];
+            cboEstado.value = campos[6]; 
+            if (dtgSbn.value == "1") { $('#dtgSbn').bootstrapToggle('on') } else { $('#dtgSbn').bootstrapToggle('off') }
+            if (dtgActivo.value == "1") { $('#dtgActivo').bootstrapToggle('on') } else { $('#dtgActivo').bootstrapToggle('off') }
+            document.getElementById("divPopupContainer").style.display = 'block';
+        }
         else {
             var divPopupContainer = document.getElementById("divPopupContainer");
             if (divPopupContainer != null) { divPopupContainer.style.display = 'block'; };
