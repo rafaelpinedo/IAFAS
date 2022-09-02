@@ -422,10 +422,13 @@ function mostrarGrabar(rpta) {
 
         if (vista == "PAC") {
             divPopupContainerForm1.style.display = 'none';
-            botones = botonesProceso;
+            grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botonesProceso, 38, false, null);
+        }
+        else {
+            grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
         }
 
-        grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
+        
 
 
         if (tipo == 'A') {
@@ -563,11 +566,10 @@ function mostrarDetallesProceso(rpta) {
 }
 
 function mostrarDetalles(rpta) {
-
     if (rpta) {
         divPopupContainerForm1.style.display = 'block'
         var lista = rpta.split('¬');
-        grillaItem = new GrillaScroll(lista, "divListaPAC", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
+        grillaItemPac = new GrillaScroll(lista, "divListaPAC", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
     }
 }
 
@@ -733,7 +735,6 @@ function mostrarRegistro(rpta) {
         else if (vista == "PAC") {
             var txtIdPacPr = document.getElementById("txtIdPac").value;
             if (txtIdPacPr != "0") {
-
                 if (campos[0] != '0¯0') {
                     var listaCabe = rpta.split("¯")[0];
                     var listaDetalle = rpta.split("¯")[1];
@@ -809,10 +810,7 @@ function mostrarRegistro(rpta) {
         }
         else if (vista == "Prosel") {
             var dataH = rpta.split('¯')[0];
-
-
             campos = dataH.split('|');
-
             txtIdRegistro.value = campos[0];
             txtAnioFiscalModal.value = campos[1];
             cboSolicitudCompra.value = campos[2];
@@ -1273,6 +1271,15 @@ function configurarBotones() {
 
             tbDetalleItemPac.innerHTML = "";
             tbBodyDetalleItemPac.innerHTML = "";
+
+            var select2cboDepartamento = document.getElementById("select2-cboDepartamento-container");
+            if (select2cboDepartamento != null) select2cboDepartamento.innerHTML = "Seleccione";
+
+            var select2cboProvincia = document.getElementById("select2-cboProvincia-container");
+            if (select2cboProvincia != null) select2cboProvincia.innerHTML = "Seleccione";
+
+            var select2cboDistrito = document.getElementById("select2-cboDistrito-container");
+            if (select2cboDistrito != null) select2cboDistrito.innerHTML = "Seleccione";
         }
 
         var btnMostrarItems = document.getElementById("btnMostrarItems");
@@ -1682,10 +1689,12 @@ function mostrarEliminar(rpta) {
         var mensaje = mensajeResul[1];
 
         if (vista == "PAC") {
-            botones = botonesProceso;
+            grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, null, botonesProceso, 38, false, null);
         }
-        grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, null, botones, 38, false, null);
-
+        else {
+            grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, null, botones, 38, false, null);
+        }
+        
         var cbo = document.getElementById("cboPadre");
         if (cbo != null) {
             var listaPadre = listas[2].split("¬");
@@ -2203,10 +2212,11 @@ function mostarResultadoItemProSel(rpta) {
             listarTabBuenaPro(dataBuenaPro);
         }
         else if (tabid == "tabEvaEconomicoDet") {
+            dataBuenaPro = rpta.split("¯")[2];
             document.getElementById("tabEvaluacionEco").classList.add("active");
             document.getElementById("pane_evaleconomica").classList.add("active");
             tbDetalleBuenaPro.innerHTML = "";
-            listarTabBuenaPro(dataDatos);
+            listarTabBuenaPro(dataBuenaPro);
         }
 
         else if (tabid == "tabItemRegistro") {
