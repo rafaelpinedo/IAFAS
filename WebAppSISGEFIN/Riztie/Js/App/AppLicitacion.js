@@ -127,6 +127,7 @@ function mostrarlistas(rpta) {
 
             listarDepartamentos();
             listarItemInventario();
+
         }
         else if (vista == "Prosel") {
             var listaSolicitud = listas[1].split("¬");
@@ -310,8 +311,8 @@ function grabarDatos() {
         data += '¯' + detalle;
     }
     if (vista == "PAC") {
-        var txtIdPacPr = document.getElementById("txtIdPac").value;
-        if (txtIdPacPr == "0") {
+        var txtIdRegistro = document.getElementById("txtIdRegistro").value;
+        if (txtIdRegistro != null) {
             data += '|' + txtAnioFiscal.value;
         }
     }
@@ -352,7 +353,7 @@ function mostrarGrabarTab(rpta) {
                 showConfirmButton: true,
                 timer: 2000
             })
-            alerta = 'success';
+            
         }
         else {
             Swal.fire({
@@ -422,10 +423,13 @@ function mostrarGrabar(rpta) {
 
         if (vista == "PAC") {
             divPopupContainerForm1.style.display = 'none';
-            botones = botonesProceso;
+            grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botonesProceso, 38, false, null);
+        }
+        else {
+            grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
         }
 
-        grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
+        
 
 
         if (tipo == 'A') {
@@ -436,7 +440,6 @@ function mostrarGrabar(rpta) {
                 showConfirmButton: true,
                 timer: 2000
             })
-            alerta = 'success';
         }
         else {
             Swal.fire({
@@ -477,7 +480,7 @@ function seleccionarBoton(idGrilla, idRegistro, idBoton) {
             eliminarRegistro(idRegistro)
         }
         if (idBoton == "Proceso") {
-
+            divListaDetalle.style.display = 'none';
             let txtIdPac = document.getElementById("txtIdPac");
             if (txtIdPac != null) {
                 txtIdPac.value = idRegistro;
@@ -564,11 +567,10 @@ function mostrarDetallesProceso(rpta) {
 }
 
 function mostrarDetalles(rpta) {
-
     if (rpta) {
         divPopupContainerForm1.style.display = 'block'
         var lista = rpta.split('¬');
-        grillaItem = new GrillaScroll(lista, "divListaPAC", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
+        grillaItemPac = new GrillaScroll(lista, "divListaPAC", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
     }
 }
 
@@ -734,7 +736,6 @@ function mostrarRegistro(rpta) {
         else if (vista == "PAC") {
             var txtIdPacPr = document.getElementById("txtIdPac").value;
             if (txtIdPacPr != "0") {
-
                 if (campos[0] != '0¯0') {
                     var listaCabe = rpta.split("¯")[0];
                     var listaDetalle = rpta.split("¯")[1];
@@ -810,10 +811,7 @@ function mostrarRegistro(rpta) {
         }
         else if (vista == "Prosel") {
             var dataH = rpta.split('¯')[0];
-
-
             campos = dataH.split('|');
-
             txtIdRegistro.value = campos[0];
             txtAnioFiscalModal.value = campos[1];
             cboSolicitudCompra.value = campos[2];
@@ -966,7 +964,6 @@ function listarSelect2Item(lista, idCombo) {
 }
 
 function configurarBotones() {
-    debugger;
     var btnEliminarForm = document.getElementById("btnEliminarForm");
     if (btnEliminarForm != null) btnEliminarForm.onclick = function () {
         if (idRegistro == "") {
@@ -1241,7 +1238,6 @@ function configurarBotones() {
 
     var btnAgregar = document.getElementById("btnAgregar");
     if (btnAgregar != null) btnAgregar.onclick = function () {
-        debugger;
         if (vista == "Contrato" && idTabActivo == "tabGarantia") {
             if (validarInformacion("RequeGar")) grabarDatosVarios("PopupGar", "Garantia");
         }
@@ -1252,7 +1248,6 @@ function configurarBotones() {
            if (validarInformacion("RequeAdel")) grabarDatosVarios("PopupAdel", "Adelanto");
         }
         else if (vista == "Contrato" && idTabActivo == "tabAdenda") {
-            debugger;
             if (validarInformacion("RequeAdenda")) grabarDatosVarios("PopupAdend", "Adenda");
         }
     }
@@ -1277,6 +1272,15 @@ function configurarBotones() {
 
             tbDetalleItemPac.innerHTML = "";
             tbBodyDetalleItemPac.innerHTML = "";
+
+            var select2cboDepartamento = document.getElementById("select2-cboDepartamento-container");
+            if (select2cboDepartamento != null) select2cboDepartamento.innerHTML = "Seleccione";
+
+            var select2cboProvincia = document.getElementById("select2-cboProvincia-container");
+            if (select2cboProvincia != null) select2cboProvincia.innerHTML = "Seleccione";
+
+            var select2cboDistrito = document.getElementById("select2-cboDistrito-container");
+            if (select2cboDistrito != null) select2cboDistrito.innerHTML = "Seleccione";
         }
 
         var btnMostrarItems = document.getElementById("btnMostrarItems");
@@ -1298,21 +1302,40 @@ function configurarBotones() {
                     mostrarMensaje("No se Puede Agregar Mas Item", "warning")
                 }
                 else {
-                    //Limpiar Formulario
-                    var cboCatalogoItem = document.getElementById("select2-cboCatalogoItem-container");
-                    if (cboCatalogoItem != null) cboCatalogoItem.innerHTML = "Seleccione";
-                    cboUnidadMedida.value = "";
-                    txtCantidad.value = "";
-                    txtValorEstimado.value = "";
-                    var divPopupContainerForm2 = document.getElementById("divPopupContainerForm2");
-                    if (divPopupContainerForm2 != null) { divPopupContainerForm2.style.display = 'block'; };
+                    if (idObjetoContra == "1") {
+                        idObjetoContra = "B";
+                    }
+                    else if (idObjetoContra == "2" || idObjetoContra =="4") {
+                        idObjetoContra = "S";
+                    }
+                    else {
+                        idObjetoContra = "O";
+                    }
+                   Http.get("General/listarTabla?tbl=" + controller + vista + "Inventario" + "&data=" + idObjetoContra, mostrarlistasInventario); 
                 }
             }
         }
 
         var btnAgregarPacItems = document.getElementById("btnAgregarPacItems");
         if (btnAgregarPacItems != null) btnAgregarPacItems.onclick = function () {
-            validarPCAItems();
+            var ids = grillaItems.obtenerIdsChecks();
+            var data = "";
+            var idInv = "", IdUnidad = "";
+            for (var i = 0; i < ids.length; i++) {
+                fila = grillaItems.obtenerFilaCheckPorId(ids[i]);
+                if (fila.length > 0) {
+                    id = fila[0];
+                    nombre = fila[1];
+                    unidad = fila[2];
+                   // codigo = fila[3];
+                    idInv = id.split("¥")[0];
+                    IdUnidad = id.split("¥")[1];
+                    data += (idInv + "|" + IdUnidad + "|" + nombre + "|" + unidad);
+                    if (i < ids.length - 1) data += "¬";
+                }
+            }
+            obtenerItems(data);
+          //  validarPCAItems();
         }
 
         var btnGuardarProceso = document.getElementById("btnGuardarProceso");
@@ -1368,6 +1391,211 @@ function configurarBotones() {
     }
 }
 
+
+function obtenerItems(datos) {
+    var lista = datos.split('¬');
+    var nRegistros = lista.length;
+    for (var i = 0; i < nRegistros; i++) {
+        adicionarItem(lista[i]);
+    }
+}
+
+function adicionarItem(datos) {
+    var campos = datos.split('|');
+    var item = campos[0];
+    var codigo = campos[1];
+    var nombre = campos[2];
+    var unimed = campos[3];
+    
+
+    var nFilas = tbDetalleItemPac.rows.length;
+    var existe = false;
+    for (var i = 0; i < nFilas; i++) {
+        if (tbDetalleItemPac.rows[i].cells[0].innerHTML == item) {
+            existe = true;
+            break;
+        }
+    }
+
+    if (!existe) {
+        let datos = item + '|' + codigo + '|' + item + '' + codigo + '|' + nombre + '|' + unimed+'|'+'|'
+        listasDetalPacProcesos(datos);
+    }
+    else mostrarMensaje("Existen Items ya agregados- verificar", "error");
+    spnNroItems.innerHTML = "Items: " + (nFilas + 1);
+   // configurarEnterCantidad(tbDetalleItemPac, 8);
+}
+
+
+function retirarItemPCA(col, id) {
+    var filaRemove = col.parentNode.parentNode;
+    tbDetalleItemPac.removeChild(filaRemove);
+
+    var dataItem = "";
+    var nFilas = 0;
+    nFilas = tbDetalleItemPac.rows.length;
+    spnNroItems.innerHTML = "Items: " + (nFilas);
+
+    var fila;
+    for (var i = 0; i < nFilas; i++) {
+        fila = tbDetalleItemPac.rows[i];
+        dataItem += fila.cells[0].innerHTML + '|' + fila.cells[1].innerHTML + '|';
+        dataItem += fila.cells[2].innerHTML + '|' + fila.cells[3].innerHTML + '|' + fila.cells[4].innerHTML + '|';
+        dataItem += (fila.cells[5].childNodes[0].value).replace(/,/g, '') + '|';
+        dataItem += (fila.cells[6].childNodes[0].value).replace(/,/g, '');
+        dataItem += "¬";
+    }
+    dataItem = dataItem.substr(0, dataItem.length - 1);
+    tbDetalleItemPac.innerHTML = "";
+    listasDetalPacProcesos(dataItem);
+}
+
+function listasDetalPacProcesos(listaDetalle) {
+    if (listaDetalle) {
+        var listaDet = listaDetalle.split('¬');
+        var nRegistros = listaDet.length;
+        var camposDetalle = [];
+        var cantoTotal = 0;
+        var filaDetalle = '';
+        let cantidadProd = "", precioProd = "",subTotal="";
+        for (var i = 0; i < nRegistros; i++) {
+            camposDetalle = listaDet[i].split("|");
+            cantoTotal = (camposDetalle[5] * 1) * (camposDetalle[6] * 1);
+            cantidadProd = formatoNumeroDecimal(camposDetalle[5]);
+            precioProd = formatoNumeroDecimal(camposDetalle[6]);
+            subTotal = formatoNumeroDecimal(cantoTotal);
+
+            if (cantidadProd == "-") {
+                cantidadProd = "";
+            }
+            if (precioProd == "-") {
+                precioProd = "";
+            }
+            if (subTotal == "-") {
+                subTotal = "";
+            }
+            filaDetalle += "<tr data-pos='" + camposDetalle[0]+"'>";
+            filaDetalle += "<td style='white-space:pre-wrap;width:50px;display:none'>";
+            filaDetalle += camposDetalle[0];
+            filaDetalle += "</td>";
+            filaDetalle += "<td style='white-space:pre-wrap;width:50px;display:none'>";
+            filaDetalle += camposDetalle[1];
+            filaDetalle += "</td>";
+            filaDetalle += "<td style='white-space:pre-wrap;width:100px;vertical-align:top;'>";
+            filaDetalle += camposDetalle[2];
+            filaDetalle += "</td>";
+            filaDetalle += "<td style='width:500px;white-space:pre-wrap;white-space: -moz-pre-wrap;white-space: -o-pre-wrap;'>";
+            filaDetalle += camposDetalle[3];
+            filaDetalle += "</td>";
+            filaDetalle += "<td style='white-space:pre-wrap;width:80px;vertical-align:top;'>";
+            filaDetalle += camposDetalle[4];
+            filaDetalle += "</td> ";
+            filaDetalle += "<td style='white-space:pre-wrap;width:70px;vertical-align:top;padding:0px'>";
+            filaDetalle += "<input type='text' class='RequeProc' style='text-align:right;width:100%;border:1px solid blue;height:25px;padding:0px' min=1 value='" + cantidadProd + "' onkeyup='importesPCA(this)' onkeypress='return NumCheck(event, this)'>";
+            filaDetalle += "</td>";
+            filaDetalle += "<td style='white-space:pre-wrap;width:70px;vertical-align:top;padding:0px'>";
+            filaDetalle += "<input type='text' class='RequeProc' style='text-align:right;width:100%;border:1px solid blue;height:25px;padding:0px' min=1 value='" + precioProd + "' onkeyup='importesPCA(this)' onkeypress='return NumCheck(event, this)'>";
+            filaDetalle += "</td>";
+            filaDetalle += "<td style='white-space:pre-wrap;width:70px;vertical-align:top;'>";
+            filaDetalle += subTotal;
+            filaDetalle += "</td>";
+            filaDetalle += "<td style='white-space:pre-wrap;width:10px;vertical-align:top;'>";
+            filaDetalle += "<i class='fa fa-trash f-16 text-c-red' title='Quitar Item' onclick='retirarItemPCA(this,\"";
+            filaDetalle += camposDetalle[0];
+            filaDetalle += "\");'></i>";
+            filaDetalle += "</td> ";
+            filaDetalle += "</tr>";
+        }
+        tbDetalleItemPac.insertAdjacentHTML("beforeend", filaDetalle);
+
+        var nFilas = tbDetalleItemPac.rows.length;
+        tbBodyDetalleItemPac.innerHTML = "";
+
+        if ((nFilas * 1) > 1) {
+            listarResumenDetallePac();
+        }
+        spnNroItems.innerHTML = "Items: " + (nFilas);
+    }
+}
+
+function listarResumenDetallePac() {
+    var nFilas = tbDetalleItemPac.rows.length;
+    tbBodyDetalleItemPac.innerHTML = "";
+
+    var totalCantidad = 0;
+    var totalMonto = 0;
+    var sumaTotal = 0;
+
+    var fila, itemCant = 0, itemMonto = 0, itemTotal = 0;
+    for (var i = 0; i < nFilas; i++) {
+        fila = tbDetalleItemPac.rows[i];
+        itemCant = (fila.cells[5].childNodes[0].value).replace(/,/g, '');
+        itemMonto = (fila.cells[6].childNodes[0].value).replace(/,/g, '');
+        itemTotal = (fila.cells[7].innerText).replace(/,/g, '');
+        totalCantidad = totalCantidad + (itemCant * 1);
+        totalMonto = totalMonto + (itemMonto * 1);
+        sumaTotal += (itemTotal * 1);
+    }
+
+    var tbBodyResumen = "";
+    tbBodyResumen += '<tr>';
+    tbBodyResumen += '<td colspan="3" class="text-right">TOTAL</td>';
+    tbBodyResumen += '<td>' + formatoNumeroDecimal(totalCantidad) + '</td>';
+    tbBodyResumen += '<td>' + formatoNumeroDecimal(totalMonto) + '</td>';
+    tbBodyResumen += '<td colspan="2">' + formatoNumeroDecimal(sumaTotal) + '</td>';
+    tbBodyResumen += '</tr>';
+    tbBodyDetalleItemPac.innerHTML = tbBodyResumen;
+}
+
+function importesPCA(col) {
+    var fila = col.parentNode.parentNode;
+    fila.childNodes[7].style.textAlign = "center";
+    fila.childNodes[7].style.fontWeight = "bold";
+    fila.childNodes[6].style.textAlign = "center";
+    fila.childNodes[6].style.fontWeight = "bold";
+    fila.childNodes[8].style.textAlign = "center";
+    fila.childNodes[8].style.fontWeight = "bold";
+
+    var elemento = fila.getElementsByTagName('input');
+    var nroElemento = elemento.length;
+    var subTot = 0;
+    var valorElemento = 0;
+    var valor = 0;
+    let val1 = 0, val2 = 0;
+    for (var i = 0; i < nroElemento; i++) {
+        valorElemento = (elemento[i].value).replace(/,/g, '');
+        if (valorElemento == "") {
+            valor = 0;
+        }
+        else {
+            valor = valorElemento * 1;
+        }
+        if (i == 1) {
+            val1 = valor;
+        }
+        else {
+            val2 = valor;
+        }
+        
+    }
+    subTot =( val1 * val2);
+    fila.childNodes[8].innerText = subTot.toFixed(2).toString();
+    listarResumenDetallePac();
+}
+
+
+function mostrarlistasInventario(rpta) {
+    if (rpta) {
+        var listas = rpta.split("¯");
+        var lista = listas[0].split("¬");
+
+        if (vista == "PAC") {
+            grillaItems = new GrillaScroll(lista, "divListaInventario", 1000, 3, "divListaInventarios", controller, null, null, null, null, 25, false, true);
+            var divPopupContainerForm2 = document.getElementById("divPopupContainerForm2");
+            if (divPopupContainerForm2 != null) { divPopupContainerForm2.style.display = 'block'; };
+        }
+    }
+}
 
 function mostrarlistaTab(rpta) {
     if (rpta) {
@@ -1581,10 +1809,7 @@ function crearFormulario(clasePop, claseReque) {
         getListar();
     }
 }
-    
-
-
-
+ 
 function configurarCombos() {
 
     var cboDepartamento = document.getElementById("cboDepartamento")
@@ -1638,7 +1863,6 @@ function mostrarEliminarTab(rpta) {
         mensajeResul = listas[1].split("|");
         var tipo = mensajeResul[0];
         var mensaje = mensajeResul[1];
-        debugger;
         if (idTabActivo == "tabGarantia") {
             grillaGarantia = new GrillaScroll(lista, "divListaGarantia", 100, 6, vista, controller, null, false, null, null, 30, false, null);
         }
@@ -1687,10 +1911,12 @@ function mostrarEliminar(rpta) {
         var mensaje = mensajeResul[1];
 
         if (vista == "PAC") {
-            botones = botonesProceso;
+            grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, null, botonesProceso, 38, false, null);
         }
-        grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, null, botones, 38, false, null);
-
+        else {
+            grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, null, botones, 38, false, null);
+        }
+        
         var cbo = document.getElementById("cboPadre");
         if (cbo != null) {
             var listaPadre = listas[2].split("¬");
@@ -1851,9 +2077,9 @@ function grabarDatosPacProcesos() {
         dataItem += "|";
         dataItem += fila.cells[1].innerHTML; //unidad medida
         dataItem += "|";
-        dataItem += fila.cells[5].innerHTML.replace(/,/g, ''); //Cantidad
+        dataItem += (fila.cells[5].childNodes[0].value).replace(/,/g, ''); //Cantidad
         dataItem += "|";
-        dataItem += (fila.cells[6].innerHTML).replace(/,/g, ''); //Precio
+        dataItem += (fila.cells[6].childNodes[0].value).replace(/,/g, ''); //Precio
         dataItem += "¬";
     }
     dataItem = dataItem.substr(0, dataItem.length - 1);
@@ -1863,6 +2089,7 @@ function grabarDatosPacProcesos() {
     data += "¯" + dataItem;
     frm.append("data", data);
     Http.post("General/guardar/?tbl=" + controller + vista + 'Proceso', mostrarDetallesProceso, frm);
+    divListaDetalle.style.display = 'none';
 }
 
 
@@ -1943,9 +2170,9 @@ function listasDetalleItemPacProcesos(rpta) {
             camposDetalle = listaDet[i].split("|");
             cantoTotal = (camposDetalle[5] * 1) * (camposDetalle[6] * 1);
             filaDetalle += '<tr>';
+            filaDetalle += "<td style='white-space:pre-wrap;width:50px;display:none'>" + camposDetalle[0] + "</td> ";
             filaDetalle += "<td style='white-space:pre-wrap;width:50px;display:none'>" + camposDetalle[1] + "</td> ";
-            filaDetalle += "<td style='white-space:pre-wrap;width:50px;display:none'>" + camposDetalle[2] + "</td> ";
-            filaDetalle += '<td style="white-space:pre-wrap;width:50px;" colspan="1">' + camposDetalle[0] + '</td>';
+            filaDetalle += '<td style="white-space:pre-wrap;width:50px;" colspan="1">' + camposDetalle[2] + '</td>';
             filaDetalle += '<td style="white-space:pre-wrap;width:50px;" colspan="1">' + camposDetalle[3] + '</td>';
             filaDetalle += '<td style="white-space:pre-wrap;width:50px;" colspan="1">' + camposDetalle[4] + '</td>';
             filaDetalle += '<td style="white-space:pre-wrap;width:50px;" colspan="1" class="text-center">' + formatoNumeroDecimal(camposDetalle[5]) + '</td>';
@@ -1956,7 +2183,6 @@ function listasDetalleItemPacProcesos(rpta) {
             totalCantidad = totalCantidad + (camposDetalle[5] * 1);
             totalMonto = totalMonto + (camposDetalle[6] * 1);
             sumaTotal = sumaTotal + (cantoTotal * 1);
-
         }
 
         tbListDetalleItemPac.insertAdjacentHTML("beforeend", filaDetalle);
@@ -1977,93 +2203,6 @@ function listasDetalleItemPacProcesos(rpta) {
     }
 }
 
-
-function listasDetalPacProcesos(listaDetalle) {
-    //Detalle
-    if (listaDetalle) {
-        var listaDet = listaDetalle.split('¬');
-        var nRegistros = listaDet.length;
-        var camposDetalle = [];
-        var cantoTotal = 0;
-        var filaDetalle = '';
-        for (var i = 0; i < nRegistros; i++) {
-            camposDetalle = listaDet[i].split("|");
-            cantoTotal = (camposDetalle[5] * 1) * (camposDetalle[6] * 1);
-            // item++;
-            filaDetalle += '<tr>';
-            filaDetalle += "<td style='white-space:pre-wrap;width:50px;display:none'>" + camposDetalle[1] + "</td> ";
-            filaDetalle += "<td style='white-space:pre-wrap;width:50px;display:none'>" + camposDetalle[2] + "</td> ";
-            filaDetalle += '<td style="white-space:pre-wrap;width:50px;" colspan="1">' + camposDetalle[0] + '</td>';
-            filaDetalle += '<td style="white-space:pre-wrap;width:50px;" colspan="1">' + camposDetalle[3] + '</td>';
-            filaDetalle += '<td style="white-space:pre-wrap;width:50px;" colspan="1">' + camposDetalle[4] + '</td>';
-            filaDetalle += '<td style="white-space:pre-wrap;width:50px;" colspan="1" class="text-center">' + formatoNumeroDecimal(camposDetalle[5]) + '</td>';
-            filaDetalle += '<td style="white-space:pre-wrap;width:50px;" colspan="1" class="text-center">' + formatoNumeroDecimal(camposDetalle[6]) + '</td>';
-            filaDetalle += '<td style="white-space:pre-wrap;width:50px;" colspan="1" class="text-center">' + formatoNumeroDecimal(cantoTotal) + '</td>';
-            filaDetalle += "<td style='white-space:pre-wrap;width:10px;vertical-align:top;'>";
-            filaDetalle += "<i class='fa fa-trash f-16 text-c-red' title='Quitar Item' onclick='retirarItemPCA(this,\"";
-            filaDetalle += camposDetalle[0];
-            filaDetalle += "\");'></i>";
-            filaDetalle += "</td>";
-            filaDetalle += '</tr>';
-        }
-        tbDetalleItemPac.insertAdjacentHTML("beforeend", filaDetalle);
-
-        var nFilas = tbDetalleItemPac.rows.length;
-        tbBodyDetalleItemPac.innerHTML = "";
-
-        if ((nFilas * 1) > 1) {
-
-            var totalCantidad = 0;
-            var totalMonto = 0;
-            var sumaTotal = 0;
-
-            var fila, itemCant = 0, itemMonto = 0, itemTotal = 0;
-            for (var i = 0; i < nFilas; i++) {
-                fila = tbDetalleItemPac.rows[i];
-
-                itemCant = (fila.cells[5].innerText).replace(/,/g, '');
-                itemMonto = (fila.cells[6].innerText).replace(/,/g, '');
-                itemTotal = (fila.cells[7].innerText).replace(/,/g, '');
-                totalCantidad = totalCantidad + (itemCant * 1);
-                totalMonto = totalMonto + (itemMonto * 1);
-                sumaTotal += (itemTotal * 1);
-            }
-
-            var tbBodyResumen = "";
-            tbBodyResumen += '<tr>';
-            tbBodyResumen += '<td colspan="3" class="text-right">TOTAL</td>';
-            tbBodyResumen += '<td>' + formatoNumeroDecimal(totalCantidad) + '</td>';
-            tbBodyResumen += '<td>' + formatoNumeroDecimal(totalMonto) + '</td>';
-            tbBodyResumen += '<td colspan="2">' + formatoNumeroDecimal(sumaTotal) + '</td>';
-            tbBodyResumen += '</tr>';
-            tbBodyDetalleItemPac.innerHTML = tbBodyResumen;
-        }
-    }
-}
-
-function retirarItemPCA(col, id) {
-
-    var filaRemove = col.parentNode.parentNode;
-    tbDetalleItemPac.removeChild(filaRemove);
-
-    var dataItem = "";
-    var nFilas = tbDetalleItemPac.rows.length;
-    var fila, item = 0;
-    for (var i = 0; i < nFilas; i++) {
-        item += 1;
-        fila = tbDetalleItemPac.rows[i];
-        dataItem += item + '|' + fila.cells[0].innerHTML + '|';
-        dataItem += fila.cells[1].innerHTML + '|' + fila.cells[3].innerHTML + '|';
-        dataItem += fila.cells[4].innerHTML + '|';
-        dataItem += (fila.cells[5].innerHTML).replace(/,/g, '') + '|';
-        dataItem += (fila.cells[6].innerHTML).replace(/,/g, '');
-        dataItem += "¬";
-    }
-    dataItem = dataItem.substr(0, dataItem.length - 1);
-
-    tbDetalleItemPac.innerHTML = "";
-    listasDetalPacProcesos(dataItem);
-}
 
 
 function vizualizarComite() {
@@ -2208,10 +2347,11 @@ function mostarResultadoItemProSel(rpta) {
             listarTabBuenaPro(dataBuenaPro);
         }
         else if (tabid == "tabEvaEconomicoDet") {
+            dataBuenaPro = rpta.split("¯")[2];
             document.getElementById("tabEvaluacionEco").classList.add("active");
             document.getElementById("pane_evaleconomica").classList.add("active");
             tbDetalleBuenaPro.innerHTML = "";
-            listarTabBuenaPro(dataDatos);
+            listarTabBuenaPro(dataBuenaPro);
         }
 
         else if (tabid == "tabItemRegistro") {
