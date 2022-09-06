@@ -1418,7 +1418,7 @@ function adicionarItem(datos) {
     }
 
     if (!existe) {
-        let datos = item + '|' + codigo + '|' + item + '' + codigo + '|' + nombre + '|' + unimed+'|0'+'|0'
+        let datos = item + '|' + codigo + '|' + item + '' + codigo + '|' + nombre + '|' + unimed+'|'+'|'
         listasDetalPacProcesos(datos);
     }
     else mostrarMensaje("Existen Items ya agregados- verificar", "error");
@@ -1446,24 +1446,35 @@ function retirarItemPCA(col, id) {
         dataItem += "¬";
     }
     dataItem = dataItem.substr(0, dataItem.length - 1);
-
     tbDetalleItemPac.innerHTML = "";
     listasDetalPacProcesos(dataItem);
 }
 
 function listasDetalPacProcesos(listaDetalle) {
-    //Detalle
     if (listaDetalle) {
         var listaDet = listaDetalle.split('¬');
         var nRegistros = listaDet.length;
         var camposDetalle = [];
         var cantoTotal = 0;
         var filaDetalle = '';
+        let cantidadProd = "", precioProd = "",subTotal="";
         for (var i = 0; i < nRegistros; i++) {
             camposDetalle = listaDet[i].split("|");
             cantoTotal = (camposDetalle[5] * 1) * (camposDetalle[6] * 1);
+            cantidadProd = formatoNumeroDecimal(camposDetalle[5]);
+            precioProd = formatoNumeroDecimal(camposDetalle[6]);
+            subTotal = formatoNumeroDecimal(cantoTotal);
 
-            filaDetalle +="<tr>";
+            if (cantidadProd == "-") {
+                cantidadProd = "";
+            }
+            if (precioProd == "-") {
+                precioProd = "";
+            }
+            if (subTotal == "-") {
+                subTotal = "";
+            }
+            filaDetalle += "<tr data-pos='" + camposDetalle[0]+"'>";
             filaDetalle += "<td style='white-space:pre-wrap;width:50px;display:none'>";
             filaDetalle += camposDetalle[0];
             filaDetalle += "</td>";
@@ -1480,13 +1491,13 @@ function listasDetalPacProcesos(listaDetalle) {
             filaDetalle += camposDetalle[4];
             filaDetalle += "</td> ";
             filaDetalle += "<td style='white-space:pre-wrap;width:70px;vertical-align:top;padding:0px'>";
-            filaDetalle += "<input type='number' style='text-align:right;width:100%;border:1px solid blue;height:25px;padding:0px' min=1 value='" + formatoNumeroDecimal(camposDetalle[5])+"'>";
+            filaDetalle += "<input type='text' class='RequeProc' style='text-align:right;width:100%;border:1px solid blue;height:25px;padding:0px' min=1 value='" + cantidadProd + "' onkeyup='importesPCA(this)' onkeypress='return NumCheck(event, this)'>";
             filaDetalle += "</td>";
             filaDetalle += "<td style='white-space:pre-wrap;width:70px;vertical-align:top;padding:0px'>";
-            filaDetalle += "<input type='number' style='text-align:right;width:100%;border:1px solid blue;height:25px;padding:0px' min=1 value='" + formatoNumeroDecimal(camposDetalle[6]) + "'>";
+            filaDetalle += "<input type='text' class='RequeProc' style='text-align:right;width:100%;border:1px solid blue;height:25px;padding:0px' min=1 value='" + precioProd + "' onkeyup='importesPCA(this)' onkeypress='return NumCheck(event, this)'>";
             filaDetalle += "</td>";
             filaDetalle += "<td style='white-space:pre-wrap;width:70px;vertical-align:top;'>";
-            filaDetalle += formatoNumeroDecimal(cantoTotal);
+            filaDetalle += subTotal;
             filaDetalle += "</td>";
             filaDetalle += "<td style='white-space:pre-wrap;width:10px;vertical-align:top;'>";
             filaDetalle += "<i class='fa fa-trash f-16 text-c-red' title='Quitar Item' onclick='retirarItemPCA(this,\"";
@@ -1501,34 +1512,77 @@ function listasDetalPacProcesos(listaDetalle) {
         tbBodyDetalleItemPac.innerHTML = "";
 
         if ((nFilas * 1) > 1) {
-            var totalCantidad = 0;
-            var totalMonto = 0;
-            var sumaTotal = 0;
-
-            var fila, itemCant = 0, itemMonto = 0, itemTotal = 0;
-            for (var i = 0; i < nFilas; i++) {
-                fila = tbDetalleItemPac.rows[i];
-
-                itemCant = (fila.cells[5].childNodes[0].value).replace(/,/g, '');
-                itemMonto = (fila.cells[6].childNodes[0].value).replace(/,/g, '');
-                itemTotal = (fila.cells[7].innerText).replace(/,/g, '');
-                totalCantidad = totalCantidad + (itemCant * 1);
-                totalMonto = totalMonto + (itemMonto * 1);
-                sumaTotal += (itemTotal * 1);
-            }
-
-            var tbBodyResumen = "";
-            tbBodyResumen += '<tr>';
-            tbBodyResumen += '<td colspan="3" class="text-right">TOTAL</td>';
-            tbBodyResumen += '<td>' + formatoNumeroDecimal(totalCantidad) + '</td>';
-            tbBodyResumen += '<td>' + formatoNumeroDecimal(totalMonto) + '</td>';
-            tbBodyResumen += '<td colspan="2">' + formatoNumeroDecimal(sumaTotal) + '</td>';
-            tbBodyResumen += '</tr>';
-            tbBodyDetalleItemPac.innerHTML = tbBodyResumen;
+            listarResumenDetallePac();
         }
         spnNroItems.innerHTML = "Items: " + (nFilas);
     }
 }
+
+function listarResumenDetallePac() {
+    var nFilas = tbDetalleItemPac.rows.length;
+    tbBodyDetalleItemPac.innerHTML = "";
+
+    var totalCantidad = 0;
+    var totalMonto = 0;
+    var sumaTotal = 0;
+
+    var fila, itemCant = 0, itemMonto = 0, itemTotal = 0;
+    for (var i = 0; i < nFilas; i++) {
+        fila = tbDetalleItemPac.rows[i];
+        itemCant = (fila.cells[5].childNodes[0].value).replace(/,/g, '');
+        itemMonto = (fila.cells[6].childNodes[0].value).replace(/,/g, '');
+        itemTotal = (fila.cells[7].innerText).replace(/,/g, '');
+        totalCantidad = totalCantidad + (itemCant * 1);
+        totalMonto = totalMonto + (itemMonto * 1);
+        sumaTotal += (itemTotal * 1);
+    }
+
+    var tbBodyResumen = "";
+    tbBodyResumen += '<tr>';
+    tbBodyResumen += '<td colspan="3" class="text-right">TOTAL</td>';
+    tbBodyResumen += '<td>' + formatoNumeroDecimal(totalCantidad) + '</td>';
+    tbBodyResumen += '<td>' + formatoNumeroDecimal(totalMonto) + '</td>';
+    tbBodyResumen += '<td colspan="2">' + formatoNumeroDecimal(sumaTotal) + '</td>';
+    tbBodyResumen += '</tr>';
+    tbBodyDetalleItemPac.innerHTML = tbBodyResumen;
+}
+
+function importesPCA(col) {
+    var fila = col.parentNode.parentNode;
+    fila.childNodes[7].style.textAlign = "center";
+    fila.childNodes[7].style.fontWeight = "bold";
+    fila.childNodes[6].style.textAlign = "center";
+    fila.childNodes[6].style.fontWeight = "bold";
+    fila.childNodes[8].style.textAlign = "center";
+    fila.childNodes[8].style.fontWeight = "bold";
+
+    var elemento = fila.getElementsByTagName('input');
+    var nroElemento = elemento.length;
+    var subTot = 0;
+    var valorElemento = 0;
+    var valor = 0;
+    let val1 = 0, val2 = 0;
+    for (var i = 0; i < nroElemento; i++) {
+        valorElemento = (elemento[i].value).replace(/,/g, '');
+        if (valorElemento == "") {
+            valor = 0;
+        }
+        else {
+            valor = valorElemento * 1;
+        }
+        if (i == 1) {
+            val1 = valor;
+        }
+        else {
+            val2 = valor;
+        }
+        
+    }
+    subTot =( val1 * val2);
+    fila.childNodes[8].innerText = subTot.toFixed(2).toString();
+    listarResumenDetallePac();
+}
+
 
 function mostrarlistasInventario(rpta) {
     if (rpta) {
