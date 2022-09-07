@@ -1007,7 +1007,7 @@ function configurarBotones() {
     var tabGarantia = document.getElementById("tabGarantia");
     if (tabGarantia != null) tabGarantia.onclick = function () {
         idTabActivo = "tabGarantia";
-        var data = "";
+        var idRegistro = txtIdRegistro.value;
         if (idRegistro != "") { 
             Http.get("General/listarTabla?tbl=" + controller + vista + "Garantia&data=" + idRegistro, mostrarlistaTab);
         }
@@ -1019,7 +1019,7 @@ function configurarBotones() {
     var tabCronograma = document.getElementById("tabCronograma");
     if (tabCronograma != null) tabCronograma.onclick = function () {
         idTabActivo = "tabCronograma";
-        //var data = "";
+        var idRegistro = txtIdRegistro.value;
         if (idRegistro != "") {
             Http.get("General/listarTabla?tbl=" + controller + vista + "Cronograma&data=" + idRegistro, mostrarlistaTab);
         }
@@ -1031,6 +1031,7 @@ function configurarBotones() {
     var tabAdelanto = document.getElementById("tabAdelanto");
     if (tabAdelanto != null) tabAdelanto.onclick = function () {
         idTabActivo = "tabAdelanto";
+        var idRegistro = txtIdRegistro.value;
         if (idRegistro != "") {
             Http.get("General/listarTabla?tbl=" + controller + vista + "Adelanto&data=" + idRegistro, mostrarlistaTab);
         }
@@ -1042,6 +1043,7 @@ function configurarBotones() {
     var tabAdenda = document.getElementById("tabAdenda");
     if (tabAdenda != null) tabAdenda.onclick = function () {
         idTabActivo = "tabAdenda";
+        var idRegistro = txtIdRegistro.value;
         if (idRegistro != "") {
             Http.get("General/listarTabla?tbl=" + controller + vista + "Adenda&data=" + idRegistro, mostrarlistaTab);
         }
