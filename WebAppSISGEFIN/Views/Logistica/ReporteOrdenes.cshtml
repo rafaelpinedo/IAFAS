@@ -34,12 +34,11 @@
                             <div class="table-responsive dt-responsive" id="divLista"></div>
                         </div>
                     </div>
-                    <div class="modal custom-modal" tabindex="-1" role="dialog" aria-hidden="true" id="divPopupContainerItem" style="overflow-y:auto;">
-                        <div class="modal-dialog bg-personalizado" id="divPopupWindowItem">
+                    <div class="modal custom-modal" tabindex="-1" role="dialog" aria-hidden="true" id="divPopupContainer" style="overflow-y:auto;">
+                        <div class="modal-dialog modal-lg bg-personalizado" id="divPopupWindow">
                             <div class="modal-content">
-                                <div id="divBarraItem" class="modal-header bg-personalizado" style="cursor:move;">
+                                <div id="divBarra" class="modal-header bg-personalizado" style="cursor:move;">
                                     <h5 class="modal-title">Reporte</h5>
-                                    <button type="button" id="btnCerrarItem" class="close"><span aria-hidden="true">&times;</span><span class="sr-only"></span></button>
                                 </div>
                                 <div class="modal-body">
                                     @*<div class="row">
@@ -87,6 +86,7 @@
                                     <hr />
                                     <div class="row">
                                         <div class="form-group col-sm-4 text-left">
+                                            <button id="btnCancelar" class="btnCancelarForm" title="Cancelar"><i class="fa fa-undo" aria-hidden="true"></i>&nbsp;Cancelar</button>
                                             <button class="btn btn-sm btn-danger" id="btnReportePdf" style="display:none" title="Generar Reporte PDF"><span class="fa fa-file-pdf-o"></span>&nbsp;PDF</button>
                                             <button class="btn btn-sm btn-success" id="btnReporteExcel" title="Generar Reporte EXCEL"><span class="fa fa-file-excel-o"></span>&nbsp;EXCEL</button>
                                         </div>

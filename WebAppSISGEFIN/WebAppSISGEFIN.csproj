@@ -184,6 +184,7 @@
     <Content Include="Riztie\Js\App\AppConfig.js" />
     <Content Include="Riztie\Js\App\AppInventario.js" />
     <Content Include="Riztie\Js\App\AppLogistica.js" />
+    <Content Include="Riztie\Js\App\AppPatrimonio.js" />
     <Content Include="Riztie\Js\App\AppPlane.js" />
     <Content Include="Riztie\Js\App\AppPresu.js" />
     <Content Include="Riztie\Js\App\AppSecurity.js" />
@@ -326,6 +327,14 @@
     <Content Include="Views\Configuracion\Configuracion.cshtml" />
     <Content Include="Views\Configuracion\Periodo.cshtml" />
     <Content Include="Views\Configuracion\Persona.cshtml" />
+    <Content Include="Views\Patrimonio\InventarioInicial.cshtml" />
+    <Content Include="Views\Patrimonio\Marca.cshtml" />
+    <Content Include="Views\Patrimonio\DashPatrimonio.cshtml" />
+    <Content Include="Views\Patrimonio\Altas.cshtml" />
+    <Content Include="Views\Patrimonio\Bajas.cshtml" />
+    <Content Include="Views\Patrimonio\Devoluciones.cshtml" />
+    <Content Include="Views\Patrimonio\CausalBaja.cshtml" />
+    <Content Include="Views\Patrimonio\TipoPatrimonio.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -338,7 +347,6 @@
     <Folder Include="App_Data\" />
     <Folder Include="Riztie\Manual\" />
     <Folder Include="Views\Ingresos\" />
-    <Folder Include="Views\Patrimonio\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

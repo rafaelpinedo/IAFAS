@@ -21,7 +21,6 @@
                         </div>
                         <div class="form-group col-md-4 m-3">
                             <button class="input-group-inverse btn btn-inverse" id="btnConsultar" data-toggle="tooltip" data-placement="bottom" title="Consultar"><i class="fa fa-search fa-lg" aria-hidden="true"></i></button>
-                            @*<button class="btn btn-out waves-effect waves-light btn-info btn-square" id="btnImprimir" disabled data-toggle="tooltip" data-placement="bottom" title="Imprimir Orden"><i class="fa fa-print fa-lg" aria-hidden="true"></i></button>*@
                         </div>
                     </div>
                     <div class="form-row">
@@ -92,46 +91,43 @@
                                                         </div>
                                                     </div>
                                                     <div class="row">
-                                                        <label class="col-sm-3 control-label">Justificación:</label>
-                                                        <div class="col-sm-9">
+                                                        <div class="col-sm-6">
+                                                            <label class="control-label">Justificación:</label>
                                                             <textarea class="control-lectura" id="ttaJustificacion" maxlength="250" rows="2"></textarea>
+                                                        </div>
+                                                        <div class="col-sm-6">
+                                                            <label class="control-label">Documento Referencia:</label>
+                                                            <textarea class="control-lectura" style="font-size:13px" readonly id="ttaPedidos" maxlength="250" rows="2"></textarea>
                                                         </div>
                                                     </div>
                                                 </fieldset>
                                             </div>
                                             <div class="col-sm-6">
-                                                <fieldset class="fieldset">
-                                                    <div class="row">
-                                                        <label class="col-sm-3 control-label">Documento Referencia:</label>
-                                                        <div class="col-sm-9">
-                                                            <textarea class="control-lectura" style="font-size:13px" readonly id="ttaPedidos" maxlength="250" rows="2"></textarea>
+                                                <fieldset class="fieldset m-2">
+                                                    <legend class="legend">Periodo</legend>
+                                                    <div class="form-group row">
+                                                        <div class="col-sm-2">
+                                                            <label class="control-label">Año</label>
+                                                            <input type="number" class="control-lectura" readonly id="txtAnioFiscal" />
+                                                        </div>
+                                                        <div class="col-sm-3">
+                                                            <label class="control-label">Mes</label>
+                                                            <select class="control-form" id="cboMes"></select>
                                                         </div>
                                                     </div>
-                                                    <fieldset class="fieldset m-2">
-                                                        <legend class="legend">Presupuesto</legend>
-                                                        <div class="row">
-                                                            <div class="col-sm-2">
-                                                                <label class="control-label">Año</label>
-                                                                <input type="number" class="control-lectura" readonly id="txtAnioFiscal"/>
-                                                            </div>
-                                                            <div class="col-sm-3">
-                                                                <label class="control-label">Mes</label>
-                                                                <select class="control-form" id="cboMes"></select>
-                                                            </div>
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-2 control-label">Centro Costo:</label>
+                                                        <div class="col-sm-8">
+                                                            <select class="control-form" id="cboCentroCosto"></select>
                                                         </div>
-                                                        <div class="row">
-                                                            <label class="col-sm-2 control-label">Fuente Fto:</label>
-                                                            <div class="col-sm-7">
-                                                                <select class="control-form" id="cboFteFto"></select>
-                                                            </div>
-                                                            <div class="col-sm-3" style="display:none">
-                                                                <label class="control-label">&nbsp;</label>
-                                                                <button class="btn btn-success btn-sm" id="btnConfirmarPeriodo"><i class="fa fa-check"></i> Confirmar Periodo</button>
-                                                            </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-2 control-label">Fuente Fto:</label>
+                                                        <div class="col-sm-7">
+                                                            <select class="control-form" id="cboFteFto"></select>
                                                         </div>
-                                                       
-                                                    </fieldset>
-                                                    <div class="row">
+                                                    </div>
+                                                    <div class="form-group row">
                                                         <div class="col-sm-8">
                                                             <button class="btnCancelarForm" id="btnCancelar" title="Cancelar"><i class="fa fa-undo" aria-hidden="true"></i>&nbsp;Cancelar</button>
                                                             <button class="btnGuardarForm bg-customer" id="btnGuardar" title="Guardar Orden"><span class="fa fa-save"></span>&nbsp;Guardar</button>
@@ -140,7 +136,6 @@
                                                 </fieldset>
                                             </div>
                                         </div>
-
                                         <hr />
                                         <div class="row">
                                             <div class="col-sm-11">
