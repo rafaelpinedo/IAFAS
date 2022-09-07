@@ -718,7 +718,7 @@ function mostrarRegistro(rpta) {
             campos = dataH.split('|');
 
             txtIdRegistro.value = campos[0];
-            txtAnhio.value = campos[1];
+            txtAnio.value = campos[1];
             txtNumResol.value = campos[2];
             txtObjContrat.value = campos[3];
             var dFechaReque = campos[4].split("/");
@@ -837,11 +837,13 @@ function mostrarRegistro(rpta) {
             var dataDetallEvaTecnica = rpta.split('¯')[2];
             var dataDetallRegistro = rpta.split('¯')[3];
             var dataDetallBuenaPro = rpta.split('¯')[4];
-
+            var dataDetallSolicitud = rpta.split('¯')[5];
             var camposHCal = "";
+          
 
             tabProsel.style.display = "block";
             limpiarTablesTabProcesoSeleccion();
+            tabSolicitudCompraDetalle(dataDetallSolicitud);
             if (dataCabeCal != "") {
                 camposHCal = dataCabeCal.split('|');
                 txtIdCal.value = camposHCal[0];
@@ -1088,6 +1090,12 @@ function configurarBotones() {
         if (txtAnio != null) {
             var anio = txtAnio.getAttribute('value');
             txtAnio.value = anio;
+        }
+
+        var txtAnioFiscalModal = document.getElementById("txtAnioFiscalModal");
+        if (txtAnioFiscalModal != null) {
+            var anio = txtAnioFiscalModal.getAttribute('value');
+            txtAnioFiscalModal.value = anio;
         }
 
         var cboEstado = document.getElementById("cboEstado");
@@ -3113,6 +3121,32 @@ function limpiarTablesTabProcesoSeleccion() {
     tbDetalleEvaEconomica.innerHTML = "";
     tbDetalleEvaEconoLista.innerHTML = "";
     tbDetalleBuenaPro.innerHTML = "";
+    tbDetalleItemProcesoCalen.innerHTML = "";
+}
+
+
+function tabSolicitudCompraDetalle(rpta) {
+    if (rpta) {
+        var listaDet = rpta.split('¬');
+        var nRegistros = listaDet.length;
+        var camposDetalle = [];
+        var filaDetalle = '', tipoCondicion;
+
+        for (var i = 0; i < nRegistros; i++) {
+            camposDetalle = listaDet[i].split("|");
+
+            filaDetalle += '<tr>';
+            filaDetalle += "<td style='white-space:pre-wrap;width:50px;display:none'>" + camposDetalle[0] + "</td> ";
+            filaDetalle += '<td style="white-space:pre-wrap;width:50px;display:none">' + camposDetalle[1] + '</td>';
+            filaDetalle += '<td style="white-space:pre-wrap;width:50px;">' + camposDetalle[2] + '</td>';
+            filaDetalle += '<td style="white-space:pre-wrap;width:50px;">' + camposDetalle[3] + '</td>';
+            filaDetalle += '<td style="white-space:pre-wrap;width:50px;">' + camposDetalle[4] + '</td>';
+            filaDetalle += '<td style="white-space:pre-wrap;width:50px;">' + formatoNumeroDecimal(camposDetalle[5]) + '</td>';
+            filaDetalle += '<td style="white-space:pre-wrap;width:50px;">' + formatoNumeroDecimal(camposDetalle[6]) + '</td>';
+            filaDetalle += '</tr>';
+        }
+        tbDetalleItemProcesoCalen.insertAdjacentHTML("beforeend", filaDetalle);
+    }
 }
 
 function seleccionarFilaItem(fila, id, prefijo) {
