@@ -30,6 +30,7 @@ window.onload = function () {
 function getListarInformacion() {
     var tipo = "";
     var data = "";
+    optIngreso.checked = true;
     if (vista == "GenerarNP") {
         if (optIngreso.checked) { tipo = "NEA"; } else { tipo = "PECOSA"; }
     }
@@ -116,11 +117,6 @@ function mostrarlistas(rpta) {
             crearCombo(listaEstado, "cboEstadoSalidaNuevo", "Seleccionar");
             crearCombo(listaProveedor, "cboProveedorSalidaNuevo", "Seleccionar");
             crearCombo(listaAlmacen, "cboAlmacenSalidaNuevo", "Seleccionar");
-        }
-        else if (vista == "GenerarNP") {
-            grilla = new GrillaScroll(lista, "divLista", 500, 10, tabla, "Inventario", null, null, null, true, 27, false, null);
-            btnNuevolista.style.display = 'none';
-            configurarBotones();
         }
         else {
             grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
@@ -245,6 +241,7 @@ function mostrarGrabar(rpta) {
         var tipo = mensajeResul[0];
         var mensaje = mensajeResul[1];
         divPopupContainer.style.display = 'none';
+        divPopupContainerForm1.style.display = 'none';
 
         grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
 
@@ -275,6 +272,9 @@ function mostrarGrabar(rpta) {
 
     btnGuardar.innerHTML = "<i class='fa fa-save'></i> Grabar";
     btnGuardar.disabled = false;
+
+    btnGenerar.innerHTML = "<i class='fa fa-save'></i> Grabar";
+    btnGenerar.disabled = false;
 }
 
 function seleccionarBoton(idGrilla, idRegistro, idBoton) {
@@ -533,6 +533,75 @@ function mostrarRegistro(rpta) {
 }
 
 function configurarBotones() {
+    var btnImprimir = document.getElementById("btnImprimir");
+    if (btnImprimir != null) btnImprimir.onclick = function () {
+        if (idRegistro == "") {
+            mostrarMensaje("Seleccione fila de la lista", "error");
+        }
+        else if (vista == "CierreInventario") {
+            spnLoad.style.display = 'inline';
+            Http.get("General/getreporte/?tbl=" + controller + vista + '&data=' + idRegistro, mostrarReporteCierre);
+        }
+        else {
+            getReporte(idRegistro);
+        }
+    }
+
+    var btnGenerar = document.getElementById("btnGenerar");
+    if (btnGenerar != null) btnGenerar.onclick = function () {
+
+        if (vista == "CierreInventario") {
+            Swal.fire({
+                title: '¿Desea procesar información?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Si',
+                cancelButtonText: 'No'
+            }).then((result) => {
+                if (result.value) {
+                    Http.get("General/listarTabla/?tbl=Procesar&data=", mostrarProcesar);
+                    Swal.fire({
+                        title: 'Procesando...',
+                        allowEscapeKey: false,
+                        allowOutsideClick: false,
+                        onOpen: () => {
+                            Swal.showLoading()
+                        }
+                    })
+                }
+            })
+        }
+        else {
+            var tipo = "";
+            if (optIngreso.checked) { tipo = "Ingreso"; } else { tipo = "Salida"; }
+            var validar = false;
+
+            if (vista == "Pendiente" && tipo == "Ingreso" && validarGenerar() == true) {
+                validar = true;
+            }
+
+            if (validar == true) {
+                Swal.fire({
+                    title: '¿Desea grabar la información?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Si',
+                    cancelButtonText: 'No'
+                }).then((result) => {
+                    if (result.value) {
+                        if (vista == "Pendiente" && tipo == "Ingreso") {
+                            grabarIngreso();
+                        }
+                    }
+                })
+            }
+        }
+    }
+
     var btnMostrar = document.getElementById("btnMostrar");
     if (btnMostrar != null) btnMostrar.onclick = function () {
         if (vista == "Pendiente" || vista == "GenerarNP") {
@@ -1098,12 +1167,12 @@ function mostrarRegistroPendiente(rpta) {
                 var dFecha = cabecera[6].split("/");
                 ddtFechaNuevo.value = dFecha[2] + "-" + dFecha[1] + "-" + dFecha[0];
                 // divArea.style.display = 'none';
-                lblTituloOrden.innerHTML = "Orden Compra";
+            //    lblTituloOrden.innerHTML = "Orden Compra";
                 var listaDocumento = listas[2].split('¬');
                 crearCombo(listaDocumento, "cboTipoDocumento", "Seleccionar")
-                cboTipoDocumento.value = 5;
+                cboTipoDocumento.value = 9;
                 var idOrden = cabecera[9];
-                divAreaNuevo.style.display = 'none';
+               // divAreaNuevo.style.display = 'none';
                 divRecepcion.style.display = 'none';
                 generarDetallePendiente(detalle, 1, idOrden);
 
@@ -1123,6 +1192,343 @@ function mostrarRegistroPendiente(rpta) {
                 ddtFechaSalidaNuevo.value = dFecha[2] + "-" + dFecha[1] + "-" + dFecha[0];
                 lblNroPendienteSalidaNuevo.innerHTML = cabecera[8];
                 generarDetalleSalida(detalle, 1);
+            }
+        }
+    }
+}
+
+
+function validarGenerar() {
+    if (optIngreso.checked) {
+        var idTipoDocumento = cboTipoDocumento.value;
+        var nroGuia = txtNroGuia.value.trim();
+        var fechaGuia = ddtFechaGuia.value;
+        var justificacion = ttaJustificacion.value.trim();
+
+        if (idTipoDocumento == "") {
+            mostrarMensaje("Seleccione Tipo de documento", "error");
+            cboTipoDocumento.focus();
+            return false;
+        }
+        else if (nroGuia == "") {
+            mostrarMensaje("Ingrese número de documento", "error");
+            txtNroGuia.focus();
+            return false;
+        }
+        else if (fechaGuia == "") {
+            mostrarMensaje("Ingrese fecha del documento", "error");
+            ddtFechaGuia.focus();
+            return false;
+        }
+        else if (justificacion == "") {
+            mostrarMensaje("Ingrese justificacion", "error");
+            ttaJustificacion.focus();
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+    else {
+        var tipoOperacion = cboTipoOperacionSalidaNuevo.value;
+        var justificacionSalidaNuevo = ttaJustificacionSalidaNuevo.value.trim();
+        var recepcion = cboRecepcion.value;
+
+        if (tipoOperacion == "") {
+            mostrarMensaje("Seleccione el tipo de operación", "error");
+            cboTipoOperacionSalidaNuevo.focus();
+            return false;
+        }
+        else if (justificacionSalidaNuevo == "") {
+            mostrarMensaje("Ingrese la justificación", "error");
+            ttaJustificacionSalidaNuevo.focus();
+            return false;
+        }
+
+        else if (recepcion == "") {
+            mostrarMensaje("Seleccione quien recepciona los artículos", "error");
+            cboRecepcion.focus();
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+}
+
+
+function grabarIngreso() {
+    var data = "";
+    var idES = txtIdES.value;
+    var idRegistro = txtIdRegistro.value;
+    var idTipoDocumento = cboTipoDocumento.value;
+    var nroGuia = txtNroGuia.value;
+    var fechaGuia = ddtFechaGuia.value;
+    var justificacion = ttaJustificacion.value;
+
+    if (optIngreso.checked) { tipo = 1; } else { tipo = 2; }
+
+    data = idES;
+    data += "|";
+    data += idRegistro;
+    data += "|";
+    data += idTipoDocumento;
+    data += "|";
+    data += nroGuia
+    data += "|";
+    data += fechaGuia
+    data += "|";
+    data += justificacion
+    data += "|";
+    data += tipo
+    data += "¯";
+    var nfilas = tbDetalleGenerar.rows.length;
+    var fila;
+    for (var i = 0; i < nfilas; i++) {
+        fila = tbDetalleGenerar.rows[i];
+        if (fila.cells[9].childNodes[0].value > 0) {
+            data += fila.cells[0].innerHTML; //IdItem
+            data += "|";
+            data += fila.cells[5].innerHTML.replace(/,/g, ''); //Precio
+            data += "|";
+            data += fila.cells[9].childNodes[0].value; //Cantidad
+            data += "¬";
+        }
+    }
+    data = data.substr(0, data.length - 1);
+
+    var txtFechaInicio = document.getElementById("txtFechaInicio").value;
+    var txtFechaFinal = document.getElementById("txtFechaFinal").value;
+
+    data = data + '¯' + txtFechaInicio + '|' + txtFechaFinal
+
+    var frm = new FormData();
+    frm.append("data", data);
+    Http.post("General/guardar?tbl=" + controller + 'GenerarNP', mostrarGrabar, frm);
+
+    btnGenerar.innerHTML = "Procesando información <i class='fa fa-circle-o-notch fa-spin' style='color:white'></i>";
+    btnGenerar.disabled = true;
+}
+
+function getReporte(id) {
+    var tipo = "";
+    if (tabla == "GenerarNP") {
+        if (optIngreso.checked) { tipo = "NEA"; } else { tipo = "PECOSA"; }
+    }
+
+    Http.get("General/obtenerReporteId/?tbl=" + controller + vista + tipo + '&id=' + id, mostrarReporte);
+}
+
+
+function mostrarReporteCierre(rpta) {
+    spnLoad.style.display = 'none';
+    if (rpta) {
+        var listas = rpta.split('¯');
+        tituloReporte = listas[0];
+        var lista = listas[1].split("¬");
+        contenidoExporta = listas[1];
+        crearTablaReporte(lista, 5, 5, "tblListaDatosResumen");
+        listaDatos = listas[1];
+        var fecha = listas[3];
+        var hora = listas[4];
+        var doc = new jsPDF()
+        var totalPagesExp = '{total_pages_count_string}';
+        doc.autoTable({
+            html: '#tblListaDatosResumen',
+            styles: { cellPadding: 0.5, fontSize: 9 },
+            theme: 'grid',
+            headerStyles: {
+                fillColor: [0, 0, 0],
+                fontSize: 9,
+                halign: 'center',
+            },
+            columnStyles: {
+                1: { halign: 'center' },
+                5: { halign: 'right' },
+                6: { halign: 'right' },
+                7: { halign: 'right' },
+            },
+            margin: { top: 41 },
+            didDrawPage: function (data) {
+                // Header
+                doc.setFontSize(20)
+                doc.setTextColor(40)
+                if (base64Img) {
+                    doc.addImage(base64Img, 'JPEG', 25, 6, 10, 10)
+                }
+                doc.setFontSize(6);
+                doc.text('IAFAS de la Marina de Guerra del Perú', 14, 18)
+                doc.text('SISGEFIN', 14, 21)
+                doc.text('Fecha: ' + fecha, 170, 21)
+                doc.text('Usuario: ' + spnUsuario.innerHTML, 14, 23)
+                doc.text('Hora: ' + hora, 170, 23)
+                doc.setFontSize(13);
+                doc.text(tituloReporte, data.settings.margin.left + 80, 32)
+                doc.setFontSize(12);
+                doc.text('FECHA CIERRE: ' + ordenCompra, data.settings.margin.left + 75, 37)
+
+                // Footer
+                var str = 'Página ' + doc.internal.getNumberOfPages()
+                if (typeof doc.putTotalPages === 'function') {
+                    str = str + ' de ' + totalPagesExp
+                }
+                doc.setFontSize(10)
+
+                var pageSize = doc.internal.pageSize
+                var pageHeight = pageSize.height ? pageSize.height : pageSize.getHeight()
+                doc.text(str, data.settings.margin.left, pageHeight - 5)
+            },
+
+        })
+
+        if (typeof doc.putTotalPages === 'function') {
+            doc.putTotalPages(totalPagesExp)
+        }
+
+        doc.setProperties({
+            title: 'SISGEFIN: ' + tituloReporte,
+            subject: 'IAFAS-FOSMAR',
+            author: spnUsuario.innerHTML
+        });
+        var blob = doc.output("blob");
+        window.open(URL.createObjectURL(blob));
+
+        //document.getElementById("output").data = doc.output('datauristring');
+        //var divPopupContainerItem = document.getElementById("divPopupContainerItem");
+        //if (divPopupContainerItem != null) divPopupContainerItem.style.display = 'block';
+    }
+    else {
+        mostrarMensaje("No se generó ningún reporte", "error")
+    }
+}
+
+function mostrarReporte(rpta) {
+    if (rpta) {
+        if (tabla == "GenerarNP") {
+            if (optIngreso.checked) {
+                var listaDetalleReporte = "";
+                var listaReporte = rpta.split("¯");
+                var Cabecera = listaReporte[0].split("|");
+                tdNumeroNEA.innerHTML = Cabecera[0];
+                tdFechaNEA.innerHTML = Cabecera[1];
+                tdProveedorNEA.innerHTML = Cabecera[3];
+                tdOrdenNEA.innerHTML = Cabecera[4];
+                tdPedido.innerHTML = Cabecera[6];
+                tdGuiaNEA.innerHTML = Cabecera[5];
+                tdUsuarioNEA.innerHTML = Cabecera[7];
+                spnObservacionesNEA.innerHTML = Cabecera[2];
+                spnEncargadoGradoNEA.innerHTML = Cabecera[8];
+                spnEncargadoNombreNEA.innerHTML = Cabecera[10];
+                spnEncargadoCIPNEA.innerHTML = Cabecera[11];
+                spnJefeGradoNEA.innerHTML = Cabecera[12];
+                spnJefeNombreNEA.innerHTML = Cabecera[14];
+                spnJefeCIPNEA.innerHTML = Cabecera[15];
+                spnAdmonGradoNEA.innerHTML = Cabecera[16];
+                spnAdmonNombreNEA.innerHTML = Cabecera[18];
+                spnAdmonCIPNEA.innerHTML = Cabecera[19];
+
+                var total = 0;
+                var contenido = "";
+                listaDetalleReporte = listaReporte[1].split("¬");
+                var nregistros = listaDetalleReporte.length;
+                if (nregistros > 0 && listaDetalleReporte[0] != "") {
+                    var campos = [];
+                    for (var i = 0; i < nregistros; i++) {
+                        campos = listaDetalleReporte[i].split("|");
+                        contenido += "<tr>";
+                        contenido += "<td style='vertical-align:top;text-align: center;'>";
+                        contenido += i + 1;
+                        contenido += "</td > ";
+                        contenido += "<td colspan='2' style='vertical-align:top;text-align: left;width:350px;max-width:350px;white-space: pre-wrap;white-space: -moz-pre-wrap;white-space: -o-pre-wrap;'>";
+                        contenido += campos[2];
+                        contenido += "</td > ";
+                        contenido += "<td style='vertical-align:top;text-align: center;'>";
+                        contenido += campos[1];
+                        contenido += "</td > ";
+                        contenido += "<td style='vertical-align:top;text-align: right;'>";
+                        contenido += formatoNumero(campos[3] * 1);
+                        contenido += "</td > ";
+                        contenido += "<td style='vertical-align:top;text-align: right;'>";
+                        contenido += formatoNumero(campos[4] * 1);
+                        contenido += "</td > ";
+                        contenido += "<td style='vertical-align:top;text-align: right;'>";
+                        contenido += formatoNumero(campos[5] * 1);
+                        contenido += "</td > ";
+                        contenido += "<td style='vertical-align:top;text-align: right;'>";
+                        contenido += formatoNumero(campos[6] * 1);
+                        total = total + (campos[6] * 1);
+                        contenido += "</td > ";
+                        contenido += "</tr>";
+                    }
+                    tdTotalNEA.innerHTML = "TOTAL: " + formatoNumero(total);
+                    tblDetalleNEA.innerHTML = contenido;
+                }
+                imprimir(divReporte.innerHTML);
+            }
+            else {
+                var listaDetalleReporte = "";
+                var listaReporte = rpta.split("¯");
+                var Cabecera = listaReporte[0].split("|");
+                tdNroPecosa.innerHTML = "PEDIDO-COMPROBANTE DE SALIDA Nº " + Cabecera[0];
+                tdDiaPecosa.innerHTML = Cabecera[1];
+                tdMesPecosa.innerHTML = Cabecera[2];
+                tdAnioPecosa.innerHTML = Cabecera[3];
+                tdJustificacion.innerHTML = Cabecera[4];
+                tdPedidoPecosa.innerHTML = Cabecera[25];
+                spnSolicitaGrado.innerHTML = Cabecera[17];
+                spnSolicitaCargo.innerHTML = Cabecera[18];
+                spnSolicitaNombre.innerHTML = Cabecera[19];
+                spnSolicitaCIP.innerHTML = Cabecera[20];
+                spnJefeAbaGrado.innerHTML = Cabecera[21];
+                spnJefeAbaNombre.innerHTML = Cabecera[23];
+                spnJefeAbaCIP.innerHTML = Cabecera[24];
+
+                spnRecibidoGrado.innerHTML = Cabecera[13];
+                spnRecibidoNombre.innerHTML = Cabecera[15];
+                spnRecibidoCIP.innerHTML = Cabecera[16];
+
+                spnEntregadoGrado.innerHTML = Cabecera[9];
+                spnEntregadoNombre.innerHTML = Cabecera[11];
+                spnEntregadoCIP.innerHTML = Cabecera[12];
+
+                spnJefeAlmacenGrado.innerHTML = Cabecera[5];
+                spnJefeAlmacenNombre.innerHTML = Cabecera[7];
+                spnJefeAlmacenCIP.innerHTML = Cabecera[8];
+
+                var contenido = "";
+                listaDetalleReporte = listaReporte[1].split("¬");
+                var nregistros = listaDetalleReporte.length;
+                if (nregistros > 0 && listaDetalleReporte[0] != "") {
+                    var campos = [];
+                    for (var i = 0; i < nregistros; i++) {
+                        campos = listaDetalleReporte[i].split("|");
+                        contenido += "<tr>";
+                        contenido += "<td style='vertical-align:top;text-align: center;'>";
+                        contenido += i + 1;
+                        contenido += "</td > ";
+                        contenido += "<td style='vertical-align:top;text-align: center;'>";
+                        contenido += campos[1];
+                        contenido += "</td > ";
+                        contenido += "<td colspan='2' style='vertical-align:top;text-align: left;max-width:500px;white-space: pre-wrap;white-space: -moz-pre-wrap;white-space: -o-pre-wrap;'>";
+                        contenido += campos[2];
+                        contenido += "</td > ";
+                        contenido += "<td style='vertical-align:top;text-align: center;'>";
+                        contenido += campos[3];
+                        contenido += "</td > ";
+                        contenido += "<td style='vertical-align:top;text-align: right;'>";
+                        contenido += formatoNumero(campos[4] * 1);
+                        contenido += "</td > ";
+                        contenido += "<td style='vertical-align:top;text-align: right;'>";
+                        contenido += formatoNumero(campos[5] * 1);
+                        contenido += "</td > ";
+                        contenido += "<td></td>";
+                        contenido += "<tdcolspan='3'></td>";
+                        contenido += "</tr>";
+                    }
+                    tblDetallePecosa.innerHTML = contenido;
+                }
+
+                imprimir(divReportePECOSA.innerHTML);
             }
         }
     }

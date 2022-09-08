@@ -477,6 +477,13 @@ function configurarBotones() {
             txtEjecutado.value = 0;
             txtDisponible.value = 0;
         }
+
+        if (vista == 'MarcoPresu') {
+            var anioFiscal = txtAnioFiscal.value;
+            document.getElementById("select2-cboSubMeta-container").innerHTML = "";
+            Http.get("General/listarTabla/?tbl=" + controller + vista + 'Clasificador&data=' + anioFiscal, mostrarListasMarco);
+        }
+
         //var txtFechaPedido = document.getElementById("txtFechaPedido");
         //if (txtFechaPedido != null) txtFechaPedido.value = txtFechaPedido.getAttribute("data-fecha");
     }
@@ -594,4 +601,17 @@ function seleccionarFila(fila, id, prefijo) {
     if (window["fila" + prefijo] != null) window["fila" + prefijo].className = "FilaDatos";
     fila.className = "FilaSeleccionada";
     window["fila" + prefijo] = fila;
+}
+
+function mostrarListasMarco(rpta) {
+    var listas = rpta.split('¯');
+    var listaPCA = listas[0].split('¬');
+    var listaMeta = listas[1].split('¬');
+    listaSubMeta = listas[2].split('¬');
+    var listaClasificador = listas[3].split('¬');
+
+    crearCombo(listaPCA, "cboPCA", "Seleccionar");
+    crearCombo(listaMeta, "cboMeta", "Seleccionar");
+    cboSubMeta.disabled = true;
+    crearCombo(listaClasificador, "cboClasificador", "Seleccionar");
 }

@@ -28,7 +28,7 @@ window.onload = function () {
     getConfigMn();
     vista = window.sessionStorage.getItem("Vista");
     controller = window.sessionStorage.getItem("Controller");
-    if (vista == "PAC" || vista == "Contrato" || vista == "Prosel") {
+    if (vista == "PAC" || vista == "Contrato" || vista == "Prosel" || vista == "Tipoproceso") {
         getListarLicitaPac();
     }
     else {
@@ -162,6 +162,9 @@ function mostrarlistas(rpta) {
             crearCombo(listaEstado, "cboEstado", "Seleccione");
             crearCombo(listaMoneda, "cboMoneda", "Seleccione");
             crearCombo(listaProveedor, "cboProveedor", "Seleccione");
+        }
+        else if (vista == "Tipoproceso") {
+                grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, null, 38, false, null);
         }
         else {
             grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
@@ -2103,6 +2106,7 @@ function listasDetalleContrato(rpta) {
         var nRegistros = listaDet.length;
         var camposDetalle = [];
 
+        alert(listaDet);
         var totalCantidad = 0;
         var totalMonto = 0;
         var sumaTotal = 0;
@@ -2150,9 +2154,7 @@ function listasDetalleContrato(rpta) {
 }
 
 function listasDetalleItemPacProcesos(rpta) {
-
     if (rpta) {
-
         tbListDetalleItemPac.innerHTML = "";
         tbBodyListDetalleItemPac.innerHTML = "";
         var lista = rpta.split('¯')[1];

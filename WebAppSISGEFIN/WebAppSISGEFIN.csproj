@@ -335,6 +335,7 @@
     <Content Include="Views\Patrimonio\Devoluciones.cshtml" />
     <Content Include="Views\Patrimonio\CausalBaja.cshtml" />
     <Content Include="Views\Patrimonio\TipoPatrimonio.cshtml" />
+    <Content Include="Views\Inventario\GenerarNP.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

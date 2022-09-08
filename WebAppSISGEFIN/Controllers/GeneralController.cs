@@ -109,8 +109,8 @@ namespace WebAppTurnera.Controllers
             string sProducto = "";
             bool isTotal = false;
             string colSum = "";
-            daSQL odaSQL = new daSQL("conSISLOG");
-            rpta = odaSQL.EjecutarComando("uspAdmon" + tbl + "ReporteCsv", "@Data", idx);
+            daSQL odaSQL = new daSQL("conSISGEFIN");
+            rpta = odaSQL.EjecutarComando("usp" + tbl + "ReporteCsv", "@Data", idx);
 
             string[] Listas = rpta.Split('¯');
             nombreArchivo = Listas[0];
@@ -162,7 +162,7 @@ namespace WebAppTurnera.Controllers
             string tipoMime = "";
             string tipo = System.IO.Path.GetExtension(nombreArchivo).ToLower();
             string nombre = Path.GetFileNameWithoutExtension(nombreArchivo).ToLower();
-            string tituloReporte = "LISTADO DE " + nombre.ToUpper();
+            string tituloReporte = nombre.ToUpper();
             var usuarioNombre = "Usuario: " + usuario;
             var nombreSistema = "SISGEFIN";
 

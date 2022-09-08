@@ -17,7 +17,7 @@ var listaItemInventario = [];
 var idTabActivo = "";
 
 var botonesProceso = [
-    { "cabecera": "Editar", "clase": "fa fa-plus-circle btn btn-primary btnCirculo", "id": "Proceso" },
+    { "cabecera": "Proceso", "clase": "fa fa-plus-circle btn btn-primary btnCirculo", "id": "Proceso" },
     { "cabecera": "Editar", "clase": "fa fa-pencil btn btn-info btnCirculo", "id": "Editar" },
     { "cabecera": "Anular", "clase": "fa fa-minus-circle btn btn-danger btnCirculo", "id": "Eliminar" },
 ];
@@ -585,43 +585,38 @@ function configurarBotones() {
     var btnReporteExcel = document.getElementById("btnReporteExcel");
     if (btnReporteExcel != null) btnReporteExcel.onclick = function () {
         var data = "";
-        var anio = numAnio.value;
+        var anio = txtAnioFiscal.value;
         var idItem = cboArticulo.value;
         var idProveedor = cboProveedor.value;
+        var fechaInicio = txtFechaInicio.value;
+        var fechaFinal = txtFechaFinal.value;
+        var tipoOrden = cboTipoOrden.value;
+        data = fechaInicio + '|' + fechaFinal + '|' + tipoOrden + '|' + idProveedor;
+
         spnLoad.style.display = 'inline';
-        if (optItems.checked) {
-            if (idItem != "") {
-                archivo = "ORDEN COMPRA POR ITEMS.xlsx";
-                data = anio + '|' + idItem;
-                Http.getDownload("General/exportarOnline/?ori=V&tbl=" + tabla + "PorItems&idx=" + data, mostrarExportar)
-            }
-            else {
-                mostrarMensaje("Seleccione Items", "error");
-                cboArticulo.focus();
-            }
+        if (optOrdenes.checked) {
+            archivo = "LISTADO GENERAL DE ORDENES.xlsx";
+            Http.getDownloadBytes("General/exportarOnline/?ori=V&tbl=" + controller + vista + "General&idx=" + data, mostrarExportar)
+        }
+        else if (optItems.checked) {
+            archivo = "ORDEN COMPRA POR ITEMS.xlsx";
+            data = data + '|' + idItem;
+            Http.getDownloadBytes("General/exportarOnline/?ori=V&tbl=" + controller + vista + "PorItems&idx=" + data, mostrarExportar)
         }
         else if (optRecordProv.checked) {
             archivo = "RECORD POR PROVEEDOR.xlsx";
-            Http.getDownload("General/exportarOnline/?ori=V&tbl=" + tabla + "ResumenProveedor&idx=" + anio, mostrarExportar)
+            Http.getDownloadBytes("General/exportarOnline/?ori=V&tbl=" + controller + vista + "ResumenProveedor&idx=" + data, mostrarExportar)
         }
         else if (optOCProv.checked) {
-            if (idProveedor != "") {
-                archivo = "ORDENES POR PROVEEDOR.xlsx";
-                spnLoad.style.display = 'inline';
-                data = anio + '|' + idProveedor;
-                Http.getDownload("General/exportarOnline/?ori=V&tbl=" + tabla + "PorProveedor&idx=" + data, mostrarExportar)
-            }
-            else {
-                mostrarMensaje("Seleccione Proveedor", "error");
-                cboProveedor.focus();
-            }
-
+            archivo = "ORDENES POR PROVEEDOR.xlsx";
+            spnLoad.style.display = 'inline';
+            Http.getDownloadBytes("General/exportarOnline/?ori=V&tbl=" + controller + vista + "PorProveedor&idx=" + data, mostrarExportar)
         }
-        //else if (optEntradas.checked) {
-        //    spnLoad.style.display = 'inline';
-        //    get("Inventario/getReporte/?tbl=" + tabla + "Entradas&data=" + anio, mostrarDatosExportar);
-        //}
-
+        else if (optPorInternar.checked) {
+            archivo = "ORDENES COMPRA PENDIENTE INTERNAMIENTO.xlsx";
+            spnLoad.style.display = 'inline';
+            Http.getDownloadBytes("General/exportarOnline/?ori=V&tbl=" + controller + vista + "PendienteInternar&idx=" + data, mostrarExportar)
+        }
     }
 
 
@@ -1268,9 +1263,9 @@ function mostrarReporteAyudas(rpta) {
         var listaItems = listas[0].split('¬');
         var listaMes = listas[1].split('¬');
         var listaProv = listas[2].split('¬');
-        crearCombo(listaItems, "cboArticulo", "Seleccionar");
+        crearCombo(listaItems, "cboArticulo", "Todos");
         //crearCombo(listaMes, "cboMes", "Todos");
-        crearCombo(listaProv, "cboProveedor", "Seleccionar");
+        crearCombo(listaProv, "cboProveedor", "Todos");
     }
     else {
         mostrarMensaje('No se encuentra el reporte disponible', 'error')
@@ -2246,9 +2241,10 @@ function mostrarRegistro(rpta) {
             lblFechaCreacion.innerHTML = cabecera[23];
             cboCentroCosto.value = cabecera[25];
             idSolCompra = cabecera[20];
-
+            btnEmitir.style.display = 'none';
             if (cabecera[24] == '2') {
                 document.getElementById("txtFechaEmision").disabled = false;
+                btnEmitir.style.display = 'inline';
             }
 
             if (cabecera[24] != 1) {
@@ -2259,11 +2255,13 @@ function mostrarRegistro(rpta) {
                 ttaJustificacion.disabled = true;
             }
             else if (cabecera[24] != 2) {
+
                 btnGenerar.style.display = 'none';
                 btnGenerar.disabled = true;
                 cboCentroCosto.disabled = true;
                 cboFteFto.disabled = true;
                 ttaJustificacion.disabled = true;
+
             }
 
             else {
@@ -2363,7 +2361,7 @@ function mostrarRegistro(rpta) {
             cboEstado.value = campos[9];
         }
         else if (vista == "Clase") {
-            
+
             cboTipoBien.value = campos[0];
             listarGrupoItem();
             cboGrupo.value = campos[1];
@@ -2404,7 +2402,7 @@ function mostrarRegistro(rpta) {
             txtGrupo.value = campos[3];
             dtgSbn.value = campos[4];
             dtgActivo.value = campos[5];
-            cboEstado.value = campos[6]; 
+            cboEstado.value = campos[6];
             if (dtgSbn.value == "1") { $('#dtgSbn').bootstrapToggle('on') } else { $('#dtgSbn').bootstrapToggle('off') }
             if (dtgActivo.value == "1") { $('#dtgActivo').bootstrapToggle('on') } else { $('#dtgActivo').bootstrapToggle('off') }
             document.getElementById("divPopupContainer").style.display = 'block';
@@ -2656,7 +2654,11 @@ function mostrarGrabar(rpta) {
             if (divPopupContainerForm1 != null) divPopupContainerForm1.style.display = 'none';
 
             var btnActualizar = document.getElementById('btnActualizar');
-            if (btnActualizar != null) btnActualizar.innerHTML = "<i class='fa fa-envelope'></i> Actualizar";
+            if (btnActualizar != null) {
+                btnActualizar.innerHTML = "<i class='fa fa-envelope'></i> Actualizar";
+                btnActualizar.disabled = false;
+            }
+
         }
 
         if (tipo == 'A') {
@@ -4567,19 +4569,25 @@ function listarSubMeta() {
 function configurarOptions() {
     var optRecordProv = document.getElementById("optRecordProv");
     if (optRecordProv != null) optRecordProv.onclick = function () {
-        divProveedor.style.display = 'none';
+        //  divProveedor.style.display = 'none';
+        divItems.style.display = 'none';
+    }
+
+    var optRecordProv = document.getElementById("optRecordProv");
+    if (optRecordProv != null) optRecordProv.onclick = function () {
+        //  divProveedor.style.display = 'none';
         divItems.style.display = 'none';
     }
 
     var optItems = document.getElementById("optItems");
     if (optItems != null) optItems.onclick = function () {
         divItems.style.display = 'block';
-        divProveedor.style.display = 'none';
+        //  divProveedor.style.display = 'none';
     }
 
     var optOCProv = document.getElementById("optOCProv");
     if (optOCProv != null) optOCProv.onclick = function () {
-        divProveedor.style.display = 'block';
+        // divProveedor.style.display = 'block';
         divItems.style.display = 'none';
     }
 }
@@ -4680,4 +4688,40 @@ function emitirOrden() {
     }
 
 
+}
+
+
+function mostrarExportar(rpta) {
+    spnLoad.style.display = 'none';
+    descargarArchivo(rpta, obtenerMime());
+}
+
+function obtenerMime() {
+    var campos = archivo.split('.');
+    var n = campos.length;
+    var extension = campos[n - 1].toLowerCase();
+    switch (extension) {
+        case "xlsx":
+            tipoMime = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+            break;
+        case "docx":
+            tipoMime = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+            break;
+        case "pdf":
+            tipoMime = "aplication/pdf";
+            break;
+        default:
+            tipoMime = "aplication/octect-stream";
+            break;
+    }
+    return tipoMime;
+}
+
+function descargarArchivo(contenido, tipoMime) {
+    var blob = new Blob([contenido], { "type": tipoMime });
+    var enlace = document.createElement("a");
+    enlace.href = URL.createObjectURL(blob);
+    enlace.download = archivo;
+    enlace.click();
+    document.removeChild(enlace);
 }
