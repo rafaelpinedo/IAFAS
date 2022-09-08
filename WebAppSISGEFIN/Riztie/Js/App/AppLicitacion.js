@@ -3134,19 +3134,20 @@ function tabSolicitudCompraDetalle(rpta) {
         var listaDet = rpta.split('¬');
         var nRegistros = listaDet.length;
         var camposDetalle = [];
-        var filaDetalle = '', tipoCondicion;
+        var filaDetalle = '', subtotal=0;
 
         for (var i = 0; i < nRegistros; i++) {
             camposDetalle = listaDet[i].split("|");
-
+            subtotal = (camposDetalle[5] * 1) * (camposDetalle[6] * 1);
             filaDetalle += '<tr>';
             filaDetalle += "<td style='white-space:pre-wrap;width:50px;display:none'>" + camposDetalle[0] + "</td> ";
             filaDetalle += '<td style="white-space:pre-wrap;width:50px;display:none">' + camposDetalle[1] + '</td>';
             filaDetalle += '<td style="white-space:pre-wrap;width:50px;">' + camposDetalle[2] + '</td>';
             filaDetalle += '<td style="white-space:pre-wrap;width:50px;">' + camposDetalle[3] + '</td>';
             filaDetalle += '<td style="white-space:pre-wrap;width:50px;">' + camposDetalle[4] + '</td>';
-            filaDetalle += '<td style="white-space:pre-wrap;width:50px;">' + formatoNumeroDecimal(camposDetalle[5]) + '</td>';
-            filaDetalle += '<td style="white-space:pre-wrap;width:50px;">' + formatoNumeroDecimal(camposDetalle[6]) + '</td>';
+            filaDetalle += '<td style="white-space:pre-wrap;width:50px;" class="text-center">' + formatoNumeroDecimal(camposDetalle[5]) + '</td>';
+            filaDetalle += '<td style="white-space:pre-wrap;width:50px;" class="text-center">' + formatoNumeroDecimal(camposDetalle[6]) + '</td>';
+            filaDetalle += '<td style="white-space:pre-wrap;width:50px;" class="text-center">' + formatoNumeroDecimal(subtotal) + '</td>';
             filaDetalle += '</tr>';
         }
         tbDetalleItemProcesoCalen.insertAdjacentHTML("beforeend", filaDetalle);

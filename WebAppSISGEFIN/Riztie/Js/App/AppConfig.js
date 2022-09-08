@@ -247,7 +247,7 @@ function eliminarRegistro(id) {
     frm.append("data", data);
 
     Swal.fire({
-        title: '¿Desea eliminar el registro?',
+        title: '¿Desea anular el registro?',
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
@@ -559,8 +559,8 @@ function configurarBotones() {
                 document.getElementById("txtNombres").classList.remove("Reque");
             }
             else {
-                document.getElementById("txtRUC").classList.add("Reque");
-                document.getElementById("txtRazonSocial").classList.add("Reque");
+                //document.getElementById("txtRUC").classList.add("Reque");
+                //document.getElementById("txtRazonSocial").classList.add("Reque");
                 document.getElementById("txtNroDocumento").classList.add("Reque");
                 document.getElementById("txtApePaterno").classList.add("Reque");
                 document.getElementById("txtApeMaterno").classList.add("Reque");
@@ -711,7 +711,6 @@ function configurarCombos() {
             document.getElementById("txtRUC").classList.remove("Reque");
         }
     }
-
 
 
 }
