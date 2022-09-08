@@ -247,7 +247,7 @@ function eliminarRegistro(id) {
     frm.append("data", data);
 
     Swal.fire({
-        title: '¿Desea eliminar el registro?',
+        title: '¿Desea anular el registro?',
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
@@ -502,10 +502,24 @@ function configurarBotones() {
         var select2cboGrado = document.getElementById("select2-cboGrado-container");
         if (select2cboGrado != null) select2cboGrado.innerHTML = "Seleccione";
 
-        var chkEsEmpleado = document.getElementById("chkEsEmpleado")
-        if (chkEsEmpleado != null) chklaborales.style.display = "none";
-        //var txtFechaPedido = document.getElementById("txtFechaPedido");
-        //if (txtFechaPedido != null) txtFechaPedido.value = txtFechaPedido.getAttribute("data-fecha");
+        //var chkEsEmpleado = document.getElementById("chkEsEmpleado")
+        //if (chkEsEmpleado != null) {
+        //    chklaborales.style.display = "none";
+        //}
+        
+        if (vista == "Persona") {
+            tipoPersonaNatural.style.display = "block";
+            tipoPersonaJuridica.style.display = "block";
+            chklaborales.style.display = "none";
+
+            document.getElementById("txtRUC").classList.remove("Reque");
+            document.getElementById("txtRazonSocial").classList.remove("Reque");
+            document.getElementById("txtNroDocumento").classList.remove("Reque");
+            document.getElementById("txtApePaterno").classList.remove("Reque");
+            document.getElementById("txtApeMaterno").classList.remove("Reque");
+            document.getElementById("txtNombres").classList.remove("Reque");
+
+        }
     }
 
 
@@ -543,8 +557,8 @@ function configurarBotones() {
                 document.getElementById("txtNombres").classList.remove("Reque");
             }
             else {
-                document.getElementById("txtRUC").classList.add("Reque");
-                document.getElementById("txtRazonSocial").classList.add("Reque");
+                //document.getElementById("txtRUC").classList.add("Reque");
+                //document.getElementById("txtRazonSocial").classList.add("Reque");
                 document.getElementById("txtNroDocumento").classList.add("Reque");
                 document.getElementById("txtApePaterno").classList.add("Reque");
                 document.getElementById("txtApeMaterno").classList.add("Reque");
@@ -682,12 +696,17 @@ function configurarCombos() {
         var checked = chkEsEmpleado.checked;
         if (checked) {
             chklaborales.style.display = "block";
+            tipoPersonaJuridica.style.display = "none";
+            document.getElementById("txtRUC").classList.remove("Reque");
+            document.getElementById("txtRazonSocial").classList.remove("Reque");
+            //cboTipoDocumento.value = 2;
+            //cboTipoContribuyente.value = 1;
         }
         else {
             chklaborales.style.display = "none";
+            tipoPersonaJuridica.style.display = "block";
         }
     }
-
 
 
 }
