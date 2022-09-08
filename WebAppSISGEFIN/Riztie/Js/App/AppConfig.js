@@ -82,7 +82,7 @@ function mostrarlistas(rpta) {
             var listaOficina = listas[12].split("¬");
             grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
             crearCombo(listaDocumento, "cboTipoDocumento", "Seleccione");
-            crearCombo(listaTipoContr, "cboTipoContribuyente", "Seleccione");
+            crearCombo(listaTipoContr, "cboTipoContribuyente", null);
             crearCombo(listaSexo, "cboSexo", "Seleccione");
             crearCombo(listaEstadoCivil, "cboEstadoCivil", "Seleccione");
             crearCombo(listaEstado, "cboEstado", "Seleccione");
@@ -506,6 +506,22 @@ function configurarBotones() {
         if (chkEsEmpleado != null) chklaborales.style.display = "none";
         //var txtFechaPedido = document.getElementById("txtFechaPedido");
         //if (txtFechaPedido != null) txtFechaPedido.value = txtFechaPedido.getAttribute("data-fecha");
+
+        if (vista == "Persona") {
+            tipoPersonaNatural.style.display = "block";
+            tipoPersonaJuridica.style.display = "block";
+            chklaborales.style.display = "none";
+            cboTipoContribuyente.value = 1;
+            cboTipoDocumento.value = 2;
+            document.getElementById("txtRUC").classList.remove("Reque");
+            document.getElementById("txtRazonSocial").classList.remove("Reque");
+            document.getElementById("txtNroDocumento").classList.remove("Reque");
+            document.getElementById("txtApePaterno").classList.remove("Reque");
+            document.getElementById("txtApeMaterno").classList.remove("Reque");
+            document.getElementById("txtNombres").classList.remove("Reque");
+
+        }
+
     }
 
 
@@ -682,9 +698,17 @@ function configurarCombos() {
         var checked = chkEsEmpleado.checked;
         if (checked) {
             chklaborales.style.display = "block";
+            tipoPersonaJuridica.style.display = "none";
+            document.getElementById("txtRUC").classList.remove("Reque");
+            document.getElementById("txtRazonSocial").classList.remove("Reque");
+            //cboTipoDocumento.value = 2;
+            //cboTipoContribuyente.value = 1;
+
         }
         else {
             chklaborales.style.display = "none";
+            tipoPersonaJuridica.style.display = "block";
+            document.getElementById("txtRUC").classList.remove("Reque");
         }
     }
 

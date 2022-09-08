@@ -2116,13 +2116,13 @@ function listasDetalleContrato(rpta) {
         var nRegistros = listaDet.length;
         var camposDetalle = [];
 
-        alert(listaDet);
         var totalCantidad = 0;
         var totalMonto = 0;
         var sumaTotal = 0;
 
         var cantoTotal = 0;
         var filaDetalle = '';
+        if (listaDet != "") { 
         for (var i = 0; i < nRegistros; i++) {
             camposDetalle = listaDet[i].split("|");
             cantoTotal = (camposDetalle[5] * 1) * (camposDetalle[6] * 1);
@@ -2144,7 +2144,7 @@ function listasDetalleContrato(rpta) {
             sumaTotal = sumaTotal + (cantoTotal * 1);
 
         }
-
+        }
         tbListDetalleItemPac.insertAdjacentHTML("beforeend", filaDetalle);
         var nFilas = tbListDetalleItemPac.rows.length;
 

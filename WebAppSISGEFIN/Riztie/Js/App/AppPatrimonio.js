@@ -167,7 +167,7 @@ function eliminarRegistro(id) {
     frm.append("data", data);
 
     Swal.fire({
-        title: '¿Desea eliminar el registro?',
+        title: '¿Desea anular el registro?',
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',

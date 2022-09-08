@@ -4481,7 +4481,7 @@ function mostrarAsignarAyudas(rpta) {
         var listaMeta = listas[1].split('¬');
         listaSubMeta = listas[2].split('¬');
         var listaPartida = listas[3].split('¬');
-        crearCombo(listaPCA, "cboPCA", null);
+        crearCombo(listaPCA, "cboPCA", "Seleccionar");
         crearCombo(listaMeta, "cboMeta", "Seleccionar");
         cboSubMeta.disabled = true;
         cboSubMeta.innerHTML = "";
