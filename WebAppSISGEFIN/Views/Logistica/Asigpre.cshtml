@@ -1,0 +1,328 @@
+﻿@{
+    ViewBag.Title = "Asigpre";
+    Layout = "~/Views/_LayoutPage.cshtml";
+}
+<div class="pcoded-content">
+    <div class="pcoded-inner-content">
+        <div class="main-body">
+            <div class="card">
+                <div class="card-header bg-primary">
+                    <h3><i class="fa fa-file" aria-hidden="true"></i> Asignación Presupuestal</h3>
+                </div>
+                <div class="card-block">
+                    <div class="form-row">
+                        <div class="form-group col-sm-2">
+                            <label class="control-label">Fecha Inicio</label>
+                            <input type="date" id="txtFechaInicio" class="control-form" value="@ViewBag.FechaInicial">
+                        </div>
+                        <div class="form-group col-sm-2">
+                            <label class="control-label">Fecha Final</label>
+                            <input type="date" id="txtFechaFinal" class="control-form" value="@ViewBag.Fecha">
+                        </div>
+                        <div class="form-group col-md-4 m-3">
+                            <button class="input-group-inverse btn btn-inverse" id="btnConsultar" data-toggle="tooltip" data-placement="bottom" title="Consultar"><i class="fa fa-search fa-lg" aria-hidden="true"></i></button>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <div class="table-responsive dt-responsive" id="divLista"></div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="modal custom-modal" tabindex="-1" role="dialog" aria-hidden="true" id="divPopupContainer" style="overflow-y:auto;">
+                            <div class="modal-dialog modal-xl bg-personalizado" id="divPopupWindow" style="margin-top:1px;max-width:95%">
+                                <div class="modal-content">
+                                    <div id="divBarra" class="modal-header bg-personalizado" style="cursor:move">
+                                        <h5 class="modal-title">Asignación presupuestal</h5>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <fieldset class="fieldset">
+                                                    <div class="row">
+                                                        <div class="col-sm-4">
+                                                            <input type="hidden" id="txtIdRegistro">
+                                                            <label class="control-label">Número</label>
+                                                            <label class="control-lectura" id="lblNumero"></label>
+                                                        </div>
+                                                        <div class="col-sm-4">
+                                                            <label class="control-label">Tipo</label>
+                                                            <label class="control-lectura" id="lblTipo"></label>
+                                                        </div>
+                                                        <div class="col-sm-4">
+                                                            <label class="control-label">Fecha Emisión</label>
+                                                            <label class="control-lectura" id="lblFechaEmision"></label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <label class="col-sm-2 control-label">Proveedor:</label>
+                                                        <div class="col-sm-10">
+                                                            <label class="control-lectura" id="lblProveedor" data-id=""></label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-sm-4">
+                                                            <label class="control-label">Nº Cotización</label>
+                                                            <label class="control-lectura" id="lblCotizacion"></label>
+                                                        </div>
+                                                        <div class="col-sm-5">
+                                                            <label class="control-label">Nº Proforma</label>
+                                                            <label class="control-lectura" id="lblProforma"></label>
+                                                        </div>
+                                                        <div class="col-sm-3">
+                                                            <label class="control-label">Días Entrega</label>
+                                                            <label class="control-lectura" id="lblDiasEntrega"></label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <label class="col-sm-2 control-label">Garantía:</label>
+                                                        <div class="col-sm-10">
+                                                            <label class="control-lectura" id="lblGarantia"></label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <label class="col-sm-3 control-label">Condición de Compra:</label>
+                                                        <div class="col-sm-5">
+                                                            <label class="control-lectura" id="lblCondicionCompra"></label>
+                                                        </div>
+                                                        <label class="col-sm-2 control-label">Estado:</label>
+                                                        <div class="col-sm-2">
+                                                            <label class="control-lectura" id="lblEstado"></label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-sm-6">
+                                                            <label class="control-label">Justificación:</label>
+                                                            <textarea class="control-lectura" id="ttaJustificacion" maxlength="250" rows="2"></textarea>
+                                                        </div>
+                                                        <div class="col-sm-6">
+                                                            <label class="control-label">Documento Referencia:</label>
+                                                            <textarea class="control-lectura" style="font-size:13px" readonly id="ttaPedidos" maxlength="250" rows="2"></textarea>
+                                                        </div>
+                                                    </div>
+                                                </fieldset>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <fieldset class="fieldset m-2">
+                                                    <legend class="legend">Periodo</legend>
+                                                    <div class="form-group row">
+                                                        <div class="col-sm-2">
+                                                            <label class="control-label">Año</label>
+                                                            <input type="number" class="control-lectura" readonly id="txtAnioFiscal" />
+                                                        </div>
+                                                        <div class="col-sm-3">
+                                                            <label class="control-label">Mes</label>
+                                                            <select class="control-form" id="cboMes"></select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-2 control-label">Centro Costo:</label>
+                                                        <div class="col-sm-8">
+                                                            <select class="control-form" id="cboCentroCosto"></select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-2 control-label">Fuente Fto:</label>
+                                                        <div class="col-sm-7">
+                                                            <select class="control-form" id="cboFteFto"></select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <div class="col-sm-8">
+                                                            <button class="btnCancelarForm" id="btnCancelar" title="Cancelar"><i class="fa fa-undo" aria-hidden="true"></i>&nbsp;Cancelar</button>
+                                                            <button class="btnGuardarForm bg-customer" id="btnGuardar" title="Guardar Orden"><span class="fa fa-save"></span>&nbsp;Guardar</button>
+                                                        </div>
+                                                    </div>
+                                                </fieldset>
+                                            </div>
+                                        </div>
+                                        <hr />
+                                        <div class="row">
+                                            <div class="col-sm-11">
+                                                <div class="table-responsive" style="height:265px">
+                                                    <table class='grilla bordered table-fija'>
+                                                        <thead>
+                                                            <tr class='FilaHead'>
+                                                                <th style="white-space: pre-wrap; width: 50px;">Meta</th>
+                                                                <th style="white-space: pre-wrap; width: 80px;">Sub-Meta</th>
+                                                                <th style="white-space: pre-wrap; width: 80px;">Clasificador</th>
+                                                                <th style="white-space: pre-wrap; width: 50px;">Cantidad</th>
+                                                                <th style="white-space: pre-wrap; width: 50px;">Precio con IGV</th>
+                                                                <th Style="white-space: pre-wrap; width: 50px;">Sub Total</th>
+                                                                <th style="white-space: pre-wrap; width: 350px;">Descripción</th>
+                                                                <th style="white-space: pre-wrap; width: 50px;">Unidad Medida</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody id="tbDetalleOrden"></tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-1">
+                                                <div class="row">
+                                                    <div class="col-sm-12">
+                                                        <label class="control-label">Sub Total</label>
+                                                        <label class="control-lectura text-right" id="lblSubTotal"></label>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-sm-12">
+                                                        <label class="control-label">I.G.V.</label>
+                                                        <label class="control-lectura text-right" id="lblIGV"></label>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-sm-12">
+                                                        <label class="control-label">Total</label>
+                                                        <label class="control-lectura text-right" id="lblTotal"></label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="divReporte" style="overflow:hidden;width:auto;display:none">
+                                <table style="max-width: 2480px;width: 100%;font-family: Gotham, Helvetica Neue, Helvetica, Arial,' sans-serif';
+    " cellpadding="0" cellspacing="0">
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <table width="100%" cellpadding="0" cellspacing="0" style="border: 1px solid black">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>&nbsp;</td>
+                                                            <td colspan="3" style="font-size: 10px;text-align:right;font-weight: bold;vertical-align: top; padding:3px">
+                                                                SISGEAFIN-MÓDULO DE LOGISTICA
+                                                            </td>
+                                                        </tr>
+                                                        <tr height="130px">
+                                                            <td style="font-size: 10px;text-align: left;font-weight: bold;vertical-align: top;">
+                                                                IAFAS DE LA MARINA DE GUERRA EL PERU<br>
+                                                                OFICINA DE LOGÍSTICA
+                                                            </td>
+                                                            <td colspan="5" style="text-align: right;
+        vertical-align: top;
+        padding: 1px">
+                                                                <table style="border: 1px solid black;">
+                                                                    <tr>
+                                                                        <td style="font-size: 14px;text-align: center;font-weight: bold">SOLICITUD DE COTIZACION</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td style="font-size: 14px;text-align: center;font-weight: bold" id="tdNroSolicitud"></td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td style="font-size: 14px;text-align: center;font-weight: bold" id="tdFechaEmision"></td>
+                                                                    </tr>
+                                                                </table>
+                                                            </td>
+                                                        </tr>
+                                                        <tr height="30px">
+                                                            <td colspan="3" style="font-size: 18px;font-weight: bold; padding:5px" id="tdProveedor">
+                                                            </td>
+                                                            <td colspan="3" style="font-size: 18px;font-weight: bold; padding:5px" id="tdRUC"></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <table width="100%" style="border: 1px solid black" cellspacing="5">
+                                                    <tr>
+                                                        <td colspan="4" style="font-size: 18px;text-align:justify;padding:3px">
+                                                            <p>
+                                                                Sírvase cotizar a nombre de este Nosocomio en moneda nacional y condición de compra crédito comercial lo siguiente, en un plazo no mayor a 2 días hábiles a partir de la recepción de esta Solicitud.
+                                                            </p>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <br>
+                                                <table width="100%" cellpadding="0" cellspacing="0" style="font-size: 12px;border: 1px solid black;border-collapse: collapse;">
+                                                    <thead>
+                                                        <tr>
+                                                            <th style="border: black 1px solid;padding:5px">ITEM</th>
+                                                            <th style="border: black 1px solid;">DESCRIPCION</th>
+                                                            <th style="border: black 1px solid;padding: 5px">UNIDAD</th>
+                                                            <th style="border: black 1px solid;padding: 5px">CANTIDAD</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="tblDetalleReporte"></tbody>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <br /><br />
+                                                <table width="100%" cellspacing="5">
+                                                    <tr>
+                                                        <td colspan="4" style="font-size: 16px;text-align:Left;padding:1px">
+                                                            <p>
+                                                                Atentamente,<br /><br />
+                                                                <span id="spnUserAdquisicones"></span><br />
+                                                                <span>Email: disamar.logistica@marina.pe</span><br />
+                                                            </p>
+                                                        </td>
+
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </div>
+                        <div class="modal custom-modal" tabindex="-1" role="dialog" aria-hidden="true" id="divPopupContainerForm1" style="overflow-y:auto;">
+                            <div class="modal-dialog modal-lg bg-personalizado" id="divPopupWindowForm1" style="margin-top:1px">
+                                <div class="modal-content">
+                                    <div id="divBarraForm1" class="modal-header bg-personalizado" style="cursor:move">
+                                        <h5 class="modal-title">Asignar Presupuesto</h5>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="form-row">
+                                            <div class="form-group col-sm-12">
+                                                <label class="control-label">P.C.A.</label>
+                                                <select id="cboPCA" class="control-form"></select>
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group col-sm-12">
+                                                <label class="control-label">Meta</label>
+                                                <select id="cboMeta" class="SelectSearch control-form asignar"></select>
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group col-sm-12">
+                                                <label class="control-label">Sub-Meta</label>
+                                                <select id="cboSubMeta" class="SelectSearch control-form asignar"></select>
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group col-sm-12">
+                                                <label class="control-label">Clasificador Gasto</label>
+                                                <select id="cboClasificador" class="SelectSearch control-form asignar"></select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button class="btn btn-sm btn-dark" id="btnAgregarTodos" title="Agregar a todos"><span class="fa fa-exchange"></span>&nbsp;Asignar a todos</button>
+                                        <button class="btnGuardarForm bg-customer" id="btnAgregarPartida" title="AgregarPartida"><span class="fa fa-download"></span>&nbsp;Asignar</button>
+                                        <button class="btnCancelarForm" id="btnCancelarForm1" title="Cancelar"><i class="fa fa-undo" aria-hidden="true"></i>&nbsp;Cancelar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="styleSelector">
+            </div>
+        </div>
+    </div>
+</div>
+<iframe name="print_frame" width="0" height="0" frameborder="0" src="about:blank"></iframe>
+<script src="~/Riztie/Js/App/AppLogistica.js"></script>

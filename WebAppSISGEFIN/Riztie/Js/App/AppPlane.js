@@ -137,7 +137,28 @@ function configurarBotones() {
     if (btnReporteExcel != null) btnReporteExcel.onclick = function () {
         var anio = txtAnioCN.value;
         Http.get("General/getReporte/?tbl=" + controller + vista + "&data=" + anio, mostrarDatosExportar);
+    }
 
+    var btnCancelar3 = document.getElementById("btnCancelar3");
+    if (btnCancelar3 != null) btnCancelar3.onclick = function () {
+        divPopupRpts.style.display = "none";
+    }
+
+    var btnMenuRpt = document.getElementById("btnMenuRpt");
+    if (btnMenuRpt != null) btnMenuRpt.onclick = function () {
+        var txtAnioCN3 = document.getElementById("txtAnioCN3");
+        var data = txtAnioCN3.value;
+        Http.get("General/listarTabla?tbl=" + controller + vista + "AyuRpte&data=" + data, mostrarAyudasReporte);
+        divPopupRpts.style.display = "block";
+    }
+
+    var btnExpExelRpt = document.getElementById("btnExpExelRpt");
+    if (btnExpExelRpt != null) btnExpExelRpt.onclick = function () {
+        var anio = txtAnioCN3.value;
+        var oficina = cboOficina3.value;
+        var tipoRpt = cboTipoRpte.value;
+        var data = anio + "|" + oficina + "|" + tipoRpt;
+        Http.get("General/getReporte/?tbl=" + controller + vista + "Consolidado&data=" + data, mostrarDatosExportar);
     }
 }
 
@@ -234,10 +255,13 @@ function mostrarAyudas(rpta) {
         var listaTipo = listas[1].split("¬");
         var listaEstado = listas[2].split("¬");
         var listaPersonal = listas[3].split("¬");
+        var fechaActual = new Date;
         crearCombo(listaOficina, "cboOficina", "Seleccione");
         crearCombo(listaTipo, "cboTipoBien", "Seleccione");
         crearCombo(listaEstado, "cboEstado", null);
         crearCombo(listaPersonal, "cboPersonal", "Seleccione");
+        var dttFechaRegistro = document.getElementById("dttFechaRegistro");
+        dttFechaRegistro.value = fechaActual.toLocaleDateString("en-CA");
     }
 }
 
@@ -291,6 +315,15 @@ function adicionarItem(datos, secuencia) {
     if (!existe) {
         var nroMatriz = "";
         if (secuencia == undefined) {
+            var tituloModal = document.getElementById("tituloModal");
+            tituloModal = tituloModal.innerText.substr(0, 1);
+            tituloModal = tituloModal.toLowerCase() == "n" ? true : false;
+            if (tituloModal) {
+                var cboOficina = document.getElementById("cboOficina");
+                cboOficina.setAttribute("disabled","");
+                var cboTipoBien = document.getElementById("cboTipoBien");
+                cboTipoBien.setAttribute("disabled","");
+            }
             var matriz = [];
             nroMatriz = matrixDeta.length;
             matriz[nroMatriz] = new Array(21);
@@ -403,6 +436,12 @@ function retirarItem(col, id) {
     tbDetalleCN.removeChild(fila);
     var nFilas = 0;
     nFilas = tbDetalleCN.rows.length;
+    if (nFilas == 0) {
+        var cboOficina = document.getElementById("cboOficina");
+        if (cboOficina.hasAttribute("disabled")) cboOficina.removeAttribute("disabled");
+        var cboTipoBien = document.getElementById("cboTipoBien");
+        if (cboTipoBien.hasAttribute("disabled")) cboTipoBien.removeAttribute("disabled");
+    }
     spnNroItems.innerHTML = "Items: " + (nFilas);
     var divPopupContainer = document.getElementById("divPopupContainer");
     var esUpdate = (divPopupContainer.hasAttribute("nuevo")) ? true : false;
@@ -577,7 +616,19 @@ function grabarCN() {
     if (data != "") {
         var frm = new FormData();
         frm.append("data", data);
-        Http.post("General/guardar?tbl=" + controller + vista, mostrarGrabar, frm);
+        Swal.fire({
+            title: '¿Desea Grabar el registro?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Si',
+            cancelButtonText: 'No'
+        }).then((result) => {
+            if (result.value) {
+                Http.post("General/guardar?tbl=" + controller + vista, mostrarGrabar, frm);
+            }
+        })
     }
 
     //btnGuardar.innerHTML = "Guardando <i class='fa fa-circle-o-notch fa-spin' style='color:white'></i>";
@@ -740,8 +791,21 @@ function mostrarRegistro(rpta) {
 function eliminarRegistro(id) {
     var frm = new FormData();
     frm.append("data", id);
-    Http.post("General/eliminar?tbl=" + controller + vista, mostrarGrabar, frm);
+    Swal.fire({
+        title: '¿Desea eliminar el registro?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Si',
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.value) {
+            Http.post("General/eliminar?tbl=" + controller + vista, mostrarGrabar, frm);
+        }
+    })
 }
+
 function edicionRegistroRecuperado(rpta) {
     limpiarGrilla();
     crearCombo([], "cboOficina", null);
@@ -907,7 +971,7 @@ function grabarCNEditData() {
             for (var j = 4; j < 19; j++) {
                 nulos +=  matrixDeta[i][j] * 1;
             }
-            if (matrixDeta[i][6] == undefined || matrixDeta[i][6] == "" || (matrixDeta[i][6] < 1 && nulos > 0)) {
+            if (matrixDeta[i][6] == undefined || matrixDeta[i][6] == "" || (matrixDeta[i][6]*1 < 1 && Math.abs(nulos) > 0)) {
                 Swal.fire({
                     title: 'Advertencia!',
                     text: "El subTotal debe ser mayor a cero.",
@@ -983,4 +1047,14 @@ function descargarArchivo(contenido, tipoMime) {
     enlace.download = archivo;
     enlace.click();
     document.removeChild(enlace);
+}
+
+
+function mostrarAyudasReporte(rpta) {
+    if (rpta) {
+        var listaOficinas = rpta.split('¬');
+        var listaTipoRpte = ["1|Anexo 4.3: Bienes, servicios y obras","2|Anexo 3.1: Bienes Semestral","3|Anexo: CN Bienes Trimestral"];
+        crearCombo(listaOficinas, "cboOficina3", "Seleccione");
+        crearCombo(listaTipoRpte, "cboTipoRpte", "Seleccione");
+    }
 }

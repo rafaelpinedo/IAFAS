@@ -31,48 +31,47 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="BouncyCastle.Crypto, Version=1.8.9.0, Culture=neutral, PublicKeyToken=0e99375e54769942, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Portable.BouncyCastle.1.8.9\lib\net40\BouncyCastle.Crypto.dll</HintPath>
+    <Reference Include="BouncyCastle.Crypto">
+      <HintPath>..\..\DLL\BouncyCastle.Crypto.dll</HintPath>
     </Reference>
-    <Reference Include="EPPlus, Version=5.8.7.0, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\EPPlus.5.8.7\lib\net45\EPPlus.dll</HintPath>
+    <Reference Include="EPPlus">
+      <HintPath>..\..\DLL\EPPlus.dll</HintPath>
     </Reference>
-    <Reference Include="General.Librerias.EntidadesNegocio, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\General.Librerias.EntidadesNegocio\bin\Debug\General.Librerias.EntidadesNegocio.dll</HintPath>
+    <Reference Include="General.Librerias.EntidadesNegocio">
+      <HintPath>..\..\DLL\General.Librerias.EntidadesNegocio.dll</HintPath>
     </Reference>
-    <Reference Include="itext.barcodes, Version=7.2.1.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\itext7.7.2.1\lib\net461\itext.barcodes.dll</HintPath>
+    <Reference Include="itext.barcodes">
+      <HintPath>..\..\DLL\itext.barcodes.dll</HintPath>
     </Reference>
-    <Reference Include="itext.commons, Version=7.2.1.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\itext7.commons.7.2.1\lib\net461\itext.commons.dll</HintPath>
+    <Reference Include="itext.commons">
+      <HintPath>..\..\DLL\itext.commons.dll</HintPath>
     </Reference>
-    <Reference Include="itext.forms, Version=7.2.1.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\itext7.7.2.1\lib\net461\itext.forms.dll</HintPath>
+    <Reference Include="itext.forms">
+      <HintPath>..\..\DLL\itext.forms.dll</HintPath>
     </Reference>
     <Reference Include="itext.html2pdf">
-      <HintPath>..\..\..\..\..\SIGEA ENAMM\WebAppSIGEA\WebAppSIGEA\bin\itext.html2pdf.dll</HintPath>
+      <HintPath>..\..\DLL\itext.html2pdf.dll</HintPath>
     </Reference>
-    <Reference Include="itext.io, Version=7.2.1.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\itext7.7.2.1\lib\net461\itext.io.dll</HintPath>
+    <Reference Include="itext.io">
+      <HintPath>..\..\DLL\itext.io.dll</HintPath>
     </Reference>
-    <Reference Include="itext.kernel, Version=7.2.1.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\itext7.7.2.1\lib\net461\itext.kernel.dll</HintPath>
+    <Reference Include="itext.kernel">
+      <HintPath>..\..\DLL\itext.kernel.dll</HintPath>
     </Reference>
-    <Reference Include="itext.layout, Version=7.2.1.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\itext7.7.2.1\lib\net461\itext.layout.dll</HintPath>
+    <Reference Include="itext.layout">
+      <HintPath>..\..\DLL\itext.layout.dll</HintPath>
     </Reference>
-    <Reference Include="itext.pdfa, Version=7.2.1.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\itext7.7.2.1\lib\net461\itext.pdfa.dll</HintPath>
+    <Reference Include="itext.pdfa">
+      <HintPath>..\..\DLL\itext.pdfa.dll</HintPath>
     </Reference>
-    <Reference Include="itext.sign, Version=7.2.1.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\itext7.7.2.1\lib\net461\itext.sign.dll</HintPath>
+    <Reference Include="itext.sign">
+      <HintPath>..\..\DLL\itext.sign.dll</HintPath>
     </Reference>
-    <Reference Include="itext.styledxmlparser, Version=7.2.1.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\itext7.7.2.1\lib\net461\itext.styledxmlparser.dll</HintPath>
+    <Reference Include="itext.styledxmlparser">
+      <HintPath>..\..\DLL\itext.styledxmlparser.dll</HintPath>
     </Reference>
-    <Reference Include="itext.svg, Version=7.2.1.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\itext7.7.2.1\lib\net461\itext.svg.dll</HintPath>
+    <Reference Include="itext.svg">
+      <HintPath>..\..\DLL\itext.svg.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=5.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Microsoft.Bcl.AsyncInterfaces.5.0.0\lib\net461\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
@@ -135,7 +134,7 @@
     </Reference>
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Mvc">
-      <HintPath>..\..\..\..\..\SIGEA ENAMM\WebAppSIGEA\Librerias\General.Librerias.CodigoUsuario\bin\Debug\System.Web.Mvc.dll</HintPath>
+      <HintPath>..\..\WebAppSISGEFIN\bin\System.Web.Mvc.dll</HintPath>
     </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -144,7 +143,7 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
     <Reference Include="zxing">
-      <HintPath>F:\PROYECTO ECAMBIO\AppECambio\Librerias\General.Librerias.CodigoUsuario\bin\Debug\zxing.dll</HintPath>
+      <HintPath>..\..\DLL\zxing.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

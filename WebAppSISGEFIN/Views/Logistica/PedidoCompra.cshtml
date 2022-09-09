@@ -8,7 +8,7 @@
         <div class="main-body">
             <div class="card">
                 <div class="card-header bg-primary">
-                    <h3><i class="fa fa-file-o" aria-hidden="true"></i> PEDIDO DE BIENES Y SERVICIOS</h3>
+                    <h3><i class="fa fa-file-o" aria-hidden="true"></i> REQUERIMIENTO DE AREAS USUARIAS</h3>
                     <div class="card-header-right">
                         <ul class="list-unstyled card-option">
                             <li><i class="fa fa-window-maximize full-card" style="color:white"></i></li>
@@ -50,12 +50,12 @@
                                                 <fieldset class="fieldset">
                                                     <div class="row">
                                                         <div class="col-sm-3">
-                                                            <label class="control-label">Tipo Solicitud</label>
+                                                            <label class="control-label">Tipo Requerimiento</label>
                                                             <input type="hidden" class="control-form Popup" id="txtIdRegistro">
                                                             <select class="control-form Reque Popup" id="cboTipoSolicitud"></select>
                                                         </div>
                                                         <div class="col-sm-3">
-                                                            <label class="control-label">Nro. Pedido</label>
+                                                            <label class="control-label">Nro. Requerimiento</label>
                                                             <input type="text" autocomplete="off" readonly="readonly" class="control-lectura Popup" id="txtNroPedido">
                                                         </div>
                                                         <div class="col-sm-3">
@@ -72,22 +72,30 @@
                                                             <label class="control-label">Requerido por</label>
                                                             <select class="SelectSearch control-form Reque Popup" id="cboOficina"></select>
                                                         </div>
+                                                        <div class="col-sm-1" style="padding-top: 25px;">
+                                                            <button class="input-group-inverse btn btn-primary" id="btnAgregar" data-toggle="tooltip" data-placement="bottom" title="Nuevo Oficina"><i class="fa fa-plus-circle fa-lg" aria-hidden="true"></i></button>
+                                                        </div>
                                                         <div class="col-sm-3">
                                                             <label class="control-label">Estado</label>
                                                             <label class="control-form" id="lblEstado"></label>
                                                         </div>
                                                     </div>
                                                     <div class="row">
-                                                        <div class="col-sm-4">
+                                                        <div class="col-sm-3">
                                                             <label class="control-label">Documento Referencia</label>
                                                             <textarea class="control-form Reque Popup" id="ttaDocumentoReferencia" maxlength="200" rows="2"></textarea>
                                                         </div>
-                                                        <div class="col-sm-7">
+                                                        <div class="col-sm-5">
                                                             <label class="control-label">Justificación</label>
                                                             <textarea class="control-form Reque Popup" id="ttaJusticiacion" maxlength="200" rows="2"></textarea>
                                                         </div>
-                                                        <div class="form-group col-sm-3 m-2">
+                                                        <div class="form-group col-sm-4">
+                                                            <label class="control-label">&nbsp;</label>
                                                             <button class="btn btn-out waves-effect waves-light btn-info btn-square" id="btnConsutarItems"><i class="fa fa-search-plus" aria-hidden="true"></i></button>
+                                                            <span id="spnLoad" style="color: rgb(250, 60, 19); border-color: black; font-weight: bold; display:none;">
+                                                                <b>Obteniendo catálogo..</b>
+                                                                <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
+                                                            </span>
                                                         </div>
                                                     </div>
                                                     <div class="row m-2">
@@ -177,7 +185,7 @@
                                                         <td width="33%" style="vertical-align: top">
                                                             <table style="border: 1px solid black">
                                                                 <tr>
-                                                                    <td style="font-size: 14px;text-align: center;font-weight: bold">PEDIDO DE BIENES Y SERVICIOS (BB y SS)</td>
+                                                                    <td style="font-size: 14px;text-align: center;font-weight: bold">REQUERIMIENTO DE AREAS USUARIAS</td>
                                                                 </tr>
                                                                 <tr>
                                                                     <td style="font-size: 14px;text-align: center" id="tdNroSolicitud"></td>
@@ -202,13 +210,13 @@
                                         <td>
                                             <table width="100%" style="border: 1px solid black" cellspacing="5">
                                                 <tr>
-                                                    <td width="20%" style="font-size: 11px;text-align: right">Fecha Pedido:</td>
+                                                    <td width="20%" style="font-size: 11px;text-align: right">Fecha Emisión:</td>
                                                     <td style="font-size: 11px;text-align: left;font-weight: bold" id="tdFechaPedido"></td>
                                                     <td style="font-size: 11px;text-align: right">Fecha Requerida:</td>
                                                     <td style="font-size: 11px;text-align: left;font-weight: bold" id="tdFechaRequerida"></td>
                                                 </tr>
                                                 <tr>
-                                                    <td style="font-size: 11px;text-align: right">Tipo de Solicitud:</td>
+                                                    <td style="font-size: 11px;text-align: right">Tipo de Requerimiento:</td>
                                                     <td style="font-size: 11px;text-align: left;font-weight: bold" id="tdTipoSolicitud"></td>
                                                     <td style="font-size: 11px;text-align: right">Estado:</td>
                                                     <td style="font-size: 11px;text-align: left;font-weight: bold" id="tdEstado"></td>
@@ -219,6 +227,14 @@
         text-align: left;
        font-weight: bold
 " id="tdDocumento">
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="font-size: 11px;text-align: right">Elaborado por:</td>
+                                                    <td colspan="3" style="        font-size: 11px;
+        text-align: left;
+       font-weight: bold
+" id="tdElaborado">
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -272,6 +288,66 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="form-row">
+                        <div class="modal custom-modal" tabindex="-1" role="dialog" aria-hidden="true" id="divPopupContainerForm3" style="overflow-y:auto;">
+                            <div class="modal-dialog modal-lg bg-personalizado" id="divPopupWindowForm3" style="margin-top:30px;">
+                                <div class="modal-content">
+                                    <div id="divBarraForm3" class="modal-header bg-personalizado" style="cursor:move">
+                                        <h5 class="modal-title" id="tituloModal">Nuevo Registro</h5>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="row">
+                                            <div class="form-group col-sm-6">
+                                                <input type="hidden" class="control-form PopupOfi" id="txtIdRegistroOficina" value="0">
+                                                <label class="control-label">Entidad</label>
+                                                <select id="cboEntidad" class="control-lectura RequeOfi PopupOfi"></select>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-group col-sm-6">
+                                                <label class="control-label">Id Padre</label>
+                                                <select id="cboOficinaPadre" class="control-form PopupOfi"></select>
+                                            </div>
+
+                                            <div class="form-group col-sm-6">
+                                                <label class="control-label">Codigo Oficina</label>
+                                                <input type="text" autocomplete="off" class="control-lectura PopupOfi" id="txtCodOficina" readonly>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-group col-sm-12">
+                                                <label class="control-label">Nombre</label>
+                                                <input type="text" autocomplete="off" class="control-form RequeOfi PopupOfi" id="txtNombre">
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-group col-sm-12">
+                                                <label class="control-label">Abreviatura</label>
+                                                <input type="text" autocomplete="off" class="control-form RequeOfi PopupOfi" id="txtNombre">
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-group col-sm-6">
+                                                <label class="control-label" for="dtgEsAgenteRetencion">Es Final</label>
+                                                <input type="checkbox" id="dtgEsFinal" class="PopupOfi" data-toggle="toggle" data-width="160px" data-on="SI" data-off="NO" data-onstyle="success" data-offstyle="danger">
+                                            </div>
+                                            <div class="form-group col-sm-6">
+                                                <label class="control-label">Estado</label>
+                                                <select id="cboEstado" class="control-lectura RequeOfi PopupOfi"></select>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button id="btnCancelarForm3" class="btnCancelarForm"  title="Cancelar"><i class="fa fa-undo" aria-hidden="true"></i>&nbsp;Cancelar</button>
+                                        <button id="btnGuardarForm3" class="btnGuardarForm bg-customer" title="Guardar datos"><span class="fa fa-save"></span>&nbsp;Grabar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>

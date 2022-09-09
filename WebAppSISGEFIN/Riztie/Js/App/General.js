@@ -45,12 +45,12 @@ function validarObligatorio(clase) {
     var controles = document.getElementsByClassName(clase);
     var control;
     var nControles = controles.length;
-   // var fila;
+    // var fila;
     var nObligatorio = 0;
     for (var j = 0; j < nControles; j++) {
         control = controles[j];
         if (control.value == "") {
-           // fila = control.parentNode.parentNode;
+            // fila = control.parentNode.parentNode;
             control.style.borderColor = "red";
             //$('.select2-selection').css('border-color', 'blue');
             nObligatorio = nObligatorio + 1;
@@ -176,14 +176,6 @@ function obtenerVista(control, vista, controller) {
     window.sessionStorage.setItem("subme", subme);
 }
 
-//function obtenerVista(control,vista,controller) {
-//    window.sessionStorage.setItem("Vista", vista);
-//    window.sessionStorage.setItem("Controller", controller);
-//    var menuId = control.parentNode.id;
-//    var opcionId = control.id;
-//    window.sessionStorage.setItem("menuId", menuId);
-//    window.sessionStorage.setItem("opcionId", opcionId);
-//}
 
 function mensajeAlerta(mensaje, alerta) {
     if (alerta == "error") {
@@ -288,6 +280,14 @@ if (divPopupContainerForm2 != null) moverVentana("divPopupContainerForm2", "divP
 var divPopupContainerForm3 = document.getElementById("divPopupContainerForm3");
 if (divPopupContainerForm3 != null) moverVentana("divPopupContainerForm3", "divPopupWindowForm3", "divBarraForm3");
 
+function mostrarLoading(div) {
+    var div = document.getElementById(div);
+    if (div != null) {
+        div.style.textAlign = "center";
+        div.innerHTML = "<span style='color:red;font-size:28px'>Procesando información <i class='fa fa-circle-o-notch fa-spin'></i><span>";
+    }
+}
+
 function formatoNumeroDecimal(num) {
     if (!num || num == 'NaN') return '-';
     if (num == 'Infinity') return '&#x221e;';
@@ -340,7 +340,7 @@ function limpiarForm(clase) {
     }
 
     var divValida = document.getElementById("divValida");
-    if (divValida!=null) divValida.style.display = 'none';
+    if (divValida != null) divValida.style.display = 'none';
 }
 
 function contadorHoras(segundos) {
@@ -418,7 +418,7 @@ function GrillaScroll(lista, divGrilla, registrosPagina, paginasBloque, tabla, c
     var existeChecks = (tieneChecks != null);
     var tieneMensajeRegistros = (tieneMensajeRegistros == null ? true : tieneMensajeRegistros);
     tieneOrden = (tieneOrden == null ? true : tieneOrden);
-   var ids = [];
+    var ids = [];
 
     iniciarGrilla();
 
@@ -544,7 +544,7 @@ function GrillaScroll(lista, divGrilla, registrosPagina, paginasBloque, tabla, c
         }
         if (nBotones > 0) {
             contenido += "<th style='width:80px'>";
-           // contenido += botones[j].cabecera;
+            // contenido += botones[j].cabecera;
             contenido += "</th>";
             //for (var j = 0; j < nBotones; j++) {
             //    contenido += "<th style='width:50px'>";
@@ -761,7 +761,7 @@ function GrillaScroll(lista, divGrilla, registrosPagina, paginasBloque, tabla, c
 
         document.getElementById("tbData" + divGrilla).innerHTML = contenido;
         var CantidaddivGrilla = document.getElementById("spnRegistros" + divGrilla);
-        if (CantidaddivGrilla!=null)document.getElementById("spnRegistros" + divGrilla).innerHTML = formatoNumeroEntero(nRegistros);
+        if (CantidaddivGrilla != null) document.getElementById("spnRegistros" + divGrilla).innerHTML = formatoNumeroEntero(nRegistros);
         crearPaginacion();
         configurarSelCheckBox();
         if (nBotones > 0) configurarBotonesExtra();
@@ -1011,7 +1011,7 @@ function GrillaScroll(lista, divGrilla, registrosPagina, paginasBloque, tabla, c
 
         var btnCancelarPDF = document.getElementById("btnCancelarPDF");
         var btnCerrarPDF = document.getElementById("btnCerrarPDF");
-        if (btnCancelarPDF != null && btnCerrarPDF!=null) {
+        if (btnCancelarPDF != null && btnCerrarPDF != null) {
             btnCancelarPDF.onclick =
                 btnCerrarPDF.onclick = function () {
                     divPopupContainerPDF.style.display = 'none';

@@ -9,11 +9,6 @@
             <div class="card">
                 <div class="card-header bg-primary">
                     <h3><i class="fa fa-money" aria-hidden="true"></i> Cuadro Comparativo</h3>
-                    <div class="card-header-right">
-                        <ul class="list-unstyled card-option">
-                            <li><i class="fa fa-window-maximize full-card" style="color:white"></i></li>
-                        </ul>
-                    </div>
                 </div>
                 <div class="card-block">
                     <div class="form-row">
@@ -59,12 +54,12 @@
                                                         </div>
                                                         <hr />
                                                         <div id="divBuenaPro" style="display:none;">
-                                                            <div class="row">
-                                                                <div class="col-sm-12">
-                                                                    <label class="control-label">Proveedor con buena pro</label>
-                                                                    <select class="control-form" id="cboProveedor"></select>
-                                                                </div>
-                                                            </div>
+                                                            @*<div class="row">
+                                                                    <div class="col-sm-12">
+                                                                        <label class="control-label">Proveedor con buena pro</label>
+                                                                        <select class="control-form" id="cboProveedor"></select>
+                                                                    </div>
+                                                                </div>*@
                                                             <div class="row">
                                                                 <div class="col-sm-12">
                                                                     <label class="control-label">Tipo de Ejecución</label>
@@ -115,6 +110,16 @@
 
                     <table style="max-width: 2480px;width: 100%;font-family:  Arial;font-size:11px" cellpadding="0" cellspacing="0">
                         <tr>
+                            <td style="text-align: left;font-weight: bold;line-height: 20px;font-size: 13px" colspan="4">
+                                IAFAS DE LA MARINA DE GUERRA DEL PERU
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: left;font-weight: bold;line-height: 20px;font-size: 13px" colspan="4">
+                                OFICINA DE LOGISTICA<br />
+                            </td>
+                        </tr>
+                        <tr>
                             <td style="text-align: center;font-weight: bold;line-height: 20px;font-size: 13px" colspan="4">CUADRO COMPARATIVO DE PRECIOS</td>
                         </tr>
                         <tr>
@@ -154,26 +159,41 @@
                     </table>
                     <br />
                     <table style="max-width: 2480px;width: 100%;font-family:  Arial;font-size:11px" cellpadding="0" cellspacing="0" id="tblGenerarCC"></table>
-                    <table style="max-width: 2480px;width: 100%;font-family:  Arial;font-size:11px" cellpadding="4" cellspacing="0">
-                        <tr>
-                            <td style="border: 1px solid black;width:220px">OFERTA MAS CONVENIENTE</td>
-                            <td style="border: 1px solid black;text-align:justify"> LA OFERTA MAS CONVENIENTE ES LA PRESENTADA POR LA EMPRESA "<span id="spnBuenaPro" style="font-weight:bold"></span>" POR SER LA OFERTA QUE CUMPLE CON LOS TERMINOS DE REFERENCIA O ESPECIFICACIONES TECNICAS Y ES LA OFERTA MAS ECONOMICA.</td>
-                        </tr>
-                    </table>
-                    <br /> <br />
-                    <table style="max-width: 2480px;width: 100%;font-family:  Arial;font-size:11px" cellpadding="0" cellspacing="0">
-                        <tr>
-                            <td style="width:750px">&nbsp;</td>
-                            <td style="text-align:center;">
-                                <span id="spnGrado"></span><br />
-                                <span id="spnCargo"></span><br />
-                                <span id="spnNombre"></span><br />
-                                <span id="spnCIP"></span><br />
-                            </td>
-                        </tr>
-                    </table>
-                </div>
+                    @*<table style="max-width: 2480px;width: 100%;font-family:  Arial;font-size:11px" cellpadding="4" cellspacing="0">
+                            <tr>
+                                <td style="border: 1px solid black;width:220px">OFERTA MAS CONVENIENTE</td>
+                                <td style="border: 1px solid black;text-align:justify"> LA OFERTA MAS CONVENIENTE ES LA PRESENTADA POR LA EMPRESA "<span id="spnBuenaPro" style="font-weight:bold"></span>" POR SER LA OFERTA QUE CUMPLE CON LOS TERMINOS DE REFERENCIA O ESPECIFICACIONES TECNICAS Y ES LA OFERTA MAS ECONOMICA.</td>
+                            </tr>
+                        </table>*@
+                    @*<br /> <br />*@
+                    @*<table style="max-width: 2480px;width: 100%;font-family:  Arial;font-size:11px" cellpadding="0" cellspacing="0">
+                            <tr>
+                                <td style="width:750px">&nbsp;</td>
+                                <td style="text-align:center;">
+                                    <span id="spnGrado"></span><br />
+                                    <span id="spnCargo"></span><br />
+                                    <span id="spnNombre"></span><br />
+                                    <span id="spnCIP"></span><br />
+                                </td>
+                            </tr>
+                        </table>*@
+                <table style="max-width: 2480px;width: 100%;font-family:  Arial;font-size:11px" cellpadding="0" cellspacing="0">
+                    <tr>
+                        <td style="width:750px">&nbsp;</td>
+                        <td style="text-align: center; line-height: 80px">
+                            &nbsp;
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="width:750px">&nbsp;</td>
+                        <td style="text-align: center; line-height: 20px">
+                            <span>---------------------------------------------------------------</span><br />
+                            <span>Autorizado por</span><br />
+                        </td>
+                    </tr>
 
+                </table>
+                </div>
             </div>
             <div class="modal custom-modal" tabindex="-1" role="dialog" aria-hidden="true" id="divPopupContainerForm1" style="overflow-y:auto;">
                 <div class="modal-dialog modal-xl bg-personalizado" id="divPopupWindowForm1" style="margin-top:1px">

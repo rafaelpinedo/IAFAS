@@ -1,14 +1,13 @@
 ﻿@{
-    ViewBag.Title = "Personal";
+    ViewBag.Title = "PlanContable";
     Layout = "~/Views/_LayoutPage.cshtml";
 }
-
 <div class="pcoded-content">
     <div class="pcoded-inner-content">
         <div class="main-body">
             <div class="card">
                 <div class="card-header bg-primary">
-                    <h3><i class="fa fa-users" aria-hidden="true"></i> PERSONAL</h3>
+                    <h3><i class="fa fa-users" aria-hidden="true"></i> PLAN CONTABLE GUBERNAMENTAL</h3>
                 </div>
                 <div class="card-block">
                     <div class="form-row">
@@ -30,66 +29,35 @@
                                     </div>
                                     <div class="modal-body">
                                         <div class="row">
-                                            <div class="form-group col-sm-6">
+                                            <div class="form-group col-sm-10">
                                                 <input type="hidden" class="control-form Popup" id="txtIdRegistro">
-                                                <label class="control-label">Tipo Documento</label>
-                                                <select id="cboTipoDocumento" class="control-form Reque Popup"></select>
+                                                <label class="control-label">Id Padre</label>
+                                                <select id="cboPlanContable" class="control-form Popup"></select>
                                             </div>
-
-                                            <div class="form-group col-sm-6">
-                                                <label class="control-label">N° Documento</label>
-                                                <input type="text" autocomplete="off" class="control-form Reque Popup" id="txtDocumento">
-                                            </div>
-
                                         </div>
                                         <div class="row">
                                             <div class="form-group col-sm-6">
-                                                <label class="control-label">Apellido Paterno</label>
-                                                <input type="text" autocomplete="off" class="control-form Reque Popup" id="txtApellPaterno">
-                                            </div>
-
-                                            <div class="form-group col-sm-6">
-                                                <label class="control-label">Apellido Materno</label>
-                                                <input type="text" autocomplete="off" class="control-form Reque Popup" id="txtApellMaterno">
+                                                <label class="control-label">Codigo Plan Contable</label>
+                                                <input type="text" autocomplete="off" class="control-form Reque Popup" id="txtCodPlanContable">
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="form-group col-sm-12">
-                                                <label class="control-label">Nombres</label>
-                                                <input type="text" autocomplete="off" id="txtNombres" class="control-form Reque Popup" />
-                                            </div>
- 
-                                        </div>
-                                        <div class="row">
-                                            <div class="form-group col-sm-5">
-                                                <label class="control-label">Pais</label>
-                                                <select id="cboPais" class="SelectSearch control-form Reque Popup"></select>
-                                            </div>
-                                            <div class="form-group col-sm-3">
-                                                <label class="control-label">Teléfono</label>
-                                                <input type="number" id="txtTelefono" autocomplete="off" class="control-form Reque Popup" />
-                                            </div>
-                                            <div class="form-group col-sm-4">
-                                                <label class="control-label">Correo Electrónico</label>
-                                                <input type="email" id="txtCorreo" autocomplete="off" class="control-form Reque Popup" />
-                                            </div>
-                                        </div> 
-                                        <div class="row">
-                                            <div class="form-group col-sm-6">
-                                                <label class="control-label">Entidad</label>
-                                                <select id="cboEntidad" class="SelectSearch control-form Reque Popup"></select>
-                                            </div>
-                                            <div class="form-group col-sm-6">
-                                                <label class="control-label">Oficina</label>
-                                                <select id="cboOficina" class="SelectSearch control-form Reque Popup"></select>
+                                                <label class="control-label">Plan Contable</label>
+                                                <input type="text" autocomplete="off" class="control-form Reque Popup" id="txtPlan">
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="form-group col-sm-5">
+                                            <div class="form-group col-sm-6">
+                                                <label class="control-label" for="dtgEsAgenteRetencion">Es Final</label>
+                                                <input type="checkbox" id="dtgEsFinal" class="Popup" data-toggle="toggle" data-width="160px" data-on="SI" data-off="NO" data-onstyle="success" data-offstyle="danger">
+                                            </div>
+                                            <div class="form-group col-sm-6">
                                                 <label class="control-label">Estado</label>
                                                 <select id="cboEstado" class="control-lectura Reque Popup"></select>
                                             </div>
                                         </div>
+
                                     </div>
                                     <div class="modal-footer">
                                         <button id="btnCancelar" class="btnCancelarForm" title="Cancelar"><i class="fa fa-undo" aria-hidden="true"></i>&nbsp;Cancelar</button>
@@ -105,6 +73,5 @@
     </div>
 </div>
 <iframe name="print_frame" width="0" height="0" frameborder="0" src="about:blank"></iframe>
-<script src="~/Riztie/Js/App/AppRRHH.js"></script>
-@*<script src="~/Riztie/Js/App/AppLogistica.js"></script>*@
+<script src="~/Riztie/Js/App/AppContabilidad.js"></script>
 

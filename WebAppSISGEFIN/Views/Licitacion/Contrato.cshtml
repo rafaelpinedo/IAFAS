@@ -1,8 +1,291 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "Contrato";
     Layout = "~/Views/_LayoutPage.cshtml";
 }
+<div class="pcoded-content">
+    <div class="pcoded-inner-content">
+        <div class="main-body">
+            <div class="card">
+                <div class="card-header bg-primary">
+                    <h3><i class="fa fa-file-archive" aria-hidden="true"></i> Contratos</h3>
+                </div>
+                <div class="card-block">
+                    <div class="form-row">
+                        <div class="form-group col-sm-3">
+                            <label class="control-label">Año Fiscal</label>
+                            <input type="number" id="txtAnioFiscal" class="control-form" value="@ViewBag.Anio">
+                        </div>
+                        <div class="form-group col-md-5 m-2">
+                            <button class="input-group-inverse btn btn-inverse" id="btnConsultar" data-toggle="tooltip" data-placement="bottom" title="Consultar"><i class="fa fa-search fa-lg" aria-hidden="true"></i></button>
+                            <button class="input-group-inverse btn btn-primary" id="btnNuevo" data-toggle="tooltip" data-placement="bottom" title="Nuevo"><i class="fa fa-plus-circle fa-lg" aria-hidden="true"></i></button>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <div class="table-responsive" id="divLista"></div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="modal custom-modal" tabindex="-1" role="dialog" aria-hidden="true" id="divPopupContainer" style="overflow-y:auto;">
+                            <div class="modal-dialog modal-xl bg-personalizado" id="divPopupWindow" style="margin-top:10px;">
+                                <div class="modal-content">
+                                    <div id="divBarra" class="modal-header bg-personalizado" style="cursor:move">
+                                        <h5 class="modal-title" id="tituloModal">Nuevo Registro</h5>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="row">
+                                            <div class="form-group col-sm-2">
+                                                <label class="control-label">Año Fiscal</label>
+                                                <input type="hidden" class="control-form Popup" id="txtIdRegistro">
+                                                <input type="number" id="txtAnio" class="control-form Reque Popup" value="@ViewBag.Anio" />
+                                            </div>
+                                            <div class="form-group col-sm-4" id="divLicitacion">
+                                                <label class="control-label">Licitación</label>
+                                                <select id="cboLicitacion" class="control-form Popup"></select>
+                                            </div>
+                                            <div class="form-group col-sm-2">
+                                                <label class="control-label">Número de Contrato</label>
+                                                <input type="text" id="txtNumeroContrato" readonly class="control-lectura Popup" />
+                                            </div>
+                                            <div class="form-group col-sm-3">
+                                                <label class="control-label">Fecha Emisión</label>
+                                                <input type="date" id="dttFechaEmision" class="control-form Reque Popup" value="@ViewBag.Fecha" />
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-group col-sm-4">
+                                                <label class="control-label">Proveedor</label>
+                                                <select id="cboProveedor" class="SelectSearch control-lectura Reque Popup"></select>
+                                            </div>
+                                            <div class="form-group col-sm-2">
+                                                <label class="control-label">Tipo de Items</label>
+                                                <select id="cboTipoItem" class="control-form Reque Popup"></select>
+                                            </div>
+                                            <div class="form-group col-sm-3">
+                                                <label class="control-label">Fecha Inicial</label>
+                                                <input type="date" id="dttFechaInicial" class="control-form Reque Popup" />
+                                            </div>
+                                            <div class="form-group col-sm-3">
+                                                <label class="control-label">Fecha Final</label>
+                                                <input type="date" id="dttFechaFinal" class="control-form Reque Popup" />
+                                            </div>
 
-<h2>Contrato</h2>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-group col-sm-6">
+                                                <fieldset class="fieldset">
+                                                    <legend class="legend">OSCE</legend>
+                                                    <div class="row">
+                                                        <div class="form-group col-sm-5">
+                                                            <label class="control-label">ID CONTRATO</label>
+                                                            <input type="text" id="txtEvalTecnica" class="control-form Popup" />
+                                                        </div>
+                                                        <div class="form-group col-sm-5">
+                                                            <label class="control-label">ID PROCESO</label>
+                                                            <input type="text" id="txtEvalTecnica" class="control-form Popup" />
+                                                        </div>
+                                                    </div>
+                                                </fieldset>
+                                            </div>
+                                            <div class="form-group col-sm-6">
+                                                <label class="control-label">Justificación</label>
+                                                <textarea id="txtJustificacion" rows="4" cols="50" class="control-form Reque Popup" maxlength="200"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-group col-sm-3">
+                                                <label class="control-label">Moneda</label>
+                                                <select id="cboMoneda" class="control-form Reque Popup"></select>
+                                            </div>
+                                            <div class="form-group col-sm-3">
+                                                <label class="control-label">Valor del Contrato</label>
+                                                <input type="number" id="numMonto" class="control-form Reque Popup" />
+                                            </div>
+                                            <div class="form-group col-sm-3">
+                                                <label class="control-label">Estado</label>
+                                                <select id="cboEstado" class="control-lectura Reque Popup"></select>
+                                            </div>
+                                        </div>
+                                        <div id="divContratoDetalle" style="display:none">
+                                            <hr />
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <div class="tab-header card">
+                                                        <ul class="nav nav-tabs md-tabs tab-timeline" role="tablist" id="mytab">
+                                                            <li class="nav-item">
+                                                                <a class="nav-link active" id="tabCompromiso" data-toggle="tab" href="#compromiso" role="tab">Compromiso Anual</a>
+                                                                <div class="slide"></div>
+                                                            </li>
+                                                            <li class="nav-item">
+                                                                <a class="nav-link" id="tabGarantia" data-toggle="tab" href="#garantia" role="tab">Garantías</a>
+                                                                <div class="slide"></div>
+                                                            </li>
+                                                            <li class="nav-item">
+                                                                <a class="nav-link" id="tabAdelanto" data-toggle="tab" href="#adelanto"  role="tab">Adelanto</a>
+                                                                <div class="slide"></div>
+                                                            </li>
+                                                            <li class="nav-item">
+                                                                <a class="nav-link" id="tabAdenda" data-toggle="tab" href="#adenda" role="tab">Adenda</a>
+                                                                <div class="slide"></div>
+                                                            </li>
+                                                            <li class="nav-item">
+                                                                <a class="nav-link" id="tabCronograma" data-toggle="tab" href="#cronograma" role="tab">Cronograma</a>
+                                                                <div class="slide"></div>
+                                                            </li>
+                                                            <li class="nav-item m-2">
+                                                                <button class="btn btn-sm btn-info" id="btnNuevoForm" data-toggle="tooltip" data-placement="bottom" title="Nuevo" style="display:none;"><i class="fa fa-plus" aria-hidden="true"></i></button>
+                                                                <button class="btn btn-sm btn-danger" id="btnEliminarForm" data-toggle="tooltip" data-placement="bottom" title="Eliminar" style="display:none;"><i class="fa fa-minus" aria-hidden="true"></i></button>
+                                                            </li>
+                                                            @*<li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#buenapro" role="tab">Penalidad</a>
+            <div class="slide"></div>
+        </li>*@
+                                                        </ul>
+                                                    </div>
+                                                    <div class="tab-content">
+                                                        <div class="tab-pane active" id="compromiso" role="tabpanel">
+                                                            <div class="card">
+                                                                <div class="card-block">
+                                                                    <div class="view-info">
+                                                                        <div class="row">
+                                                                            <div class="col-lg-12">
+                                                                                <div class="general-info">
+                                                                                    <div class="row">
+                                                                                        <div class="col-lg-12 col-xl-12">
+                                                                                            <div class="table-responsive" style="height:315px;" id="div">
+                                                                                                <table class="grilla bordered">
+                                                                                                    <thead>
+                                                                                                        <tr class="FilaHead">
+                                                                                                            <th rowspan="2" style="white-space:pre-wrap;width:100px;">Meta</th>
+                                                                                                            <th rowspan="2" style="white-space:pre-wrap;width:100px;">SubMeta</th>
+                                                                                                            <th rowspan="2" style="white-space:pre-wrap;width:100px;">Clasificador</th>
+                                                                                                            <th rowspan="2" style="white-space:pre-wrap;width:50px;">Item</th>
+                                                                                                            <th rowspan="2" style="white-space:pre-wrap;width:400px;">Descripción Catalogo</th>
+                                                                                                            <th rowspan="2" style="white-space:pre-wrap;width:80px;">Unidad Medida</th>
+                                                                                                            <th colspan="3">Valor Estimado</th>
+                                                                                                        </tr>
+                                                                                                        <tr class="FilaHead">
+                                                                                                            <th style="white-space:pre-wrap; width:90px;">Cantidad</th>
+                                                                                                            <th style="white-space:pre-wrap; width:70px;">Precio Unitario</th>
+                                                                                                            <th style="white-space:pre-wrap; width:70px;">Sub Total</th>
+                                                                                                        </tr>
+                                                                                                    </thead>
+                                                                                                    <tbody id="tbListDetalleItemPac">
+                                                                                                    </tbody>
+                                                                                                    <tbody id="tbBodyListDetalleItemPac" class="FilaHead">
+                                                                                                    </tbody>
+                                                                                                </table>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <!-- end of row -->
+                                                                                </div>
+                                                                                <!-- end of general info -->
+                                                                            </div>
+                                                                            <!-- end of col-lg-12 -->
+                                                                        </div>
+                                                                        <!-- end of row -->
+                                                                    </div>
+                                                                    <!-- end of view-info -->
+                                                                    <!-- end of edit-info -->
+                                                                </div>
+                                                                <!-- end of card-block -->
+                                                            </div>
+                                                        </div>
+                                                        <div class="tab-pane" id="garantia" role="tabpanel">
+                                                            <div class="card">
+                                                                <div class="card-block">
+                                                                    <div class="form-row">
+                                                                        <div class="form-group col-md-12">
+                                                                            <div class="table-responsive" id="divListaGarantia"></div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="tab-pane" id="adelanto" role="tabpanel">
+                                                            <div class="row">
+                                                                <div class="col-sm-12">
+                                                                    <div class="card">
+                                                                        <div class="card-block">
+                                                                            <div class="form-row">
+                                                                                <div class="form-group col-md-12">
+                                                                                    <div class="table-responsive" id="divListaAdelanto"></div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="tab-pane" id="adenda" role="tabpanel">
+                                                            <div class="card">
+                                                                <div class="card-block">
+                                                                    <div class="row">
+                                                                        <div class="col-sm-12">
+                                                                            <div class="card">
+                                                                                <div class="card-block">
+                                                                                    <div class="form-row">
+                                                                                        <div class="form-group col-md-12">
+                                                                                            <div class="table-responsive" id="divListaAdenda"></div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="tab-pane" id="cronograma" role="tabpanel">
+                                                            <div class="card">
+                                                                <div class="card-block">
+                                                                    <div class="form-row">
+                                                                        <div class="form-group col-md-12">
+                                                                            <div class="table-responsive" id="divListaCronograma"></div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button id="btnCancelar" class="btnCancelarForm" title="Cancelar"><i class="fa fa-undo" aria-hidden="true"></i>&nbsp;Cancelar</button>
+                                        <button id="btnGuardar" class="btnGuardarForm bg-customer" title="Guardar datos"><span class="fa fa-save"></span>&nbsp;Grabar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="modal custom-modal" tabindex="-1" role="dialog" aria-hidden="true" id="divPopupContainerForm1" style="overflow-y:auto;">
+                            <div class="modal-dialog modal-lg bg-personalizado" id="divPopupWindowForm1" style="margin-top:30px;">
+                                <div class="modal-content">
+                                    <div id="divBarraForm1" class="modal-header bg-personalizado" style="cursor:move">
+                                        <h5 class="modal-title" id="nombreFormulario"></h5>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div id="divFormulario">
+
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button id="btnCancelarForm1" class="btnCancelarForm" title="Cancelar"><i class="fa fa-undo" aria-hidden="true"></i>&nbsp;Cancelar</button>
+                                        <button id="btnAgregar" class="btnGuardarForm bg-customer" title="Agrega"><span class="fa fa-save"></span>&nbsp;Agregar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<iframe name="print_frame" width="0" height="0" frameborder="0" src="about:blank"></iframe>
+<script src="~/Riztie/Js/App/AppLicitacion.js"></script>
 

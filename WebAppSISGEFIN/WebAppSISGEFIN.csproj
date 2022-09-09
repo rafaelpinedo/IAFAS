@@ -43,8 +43,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="BouncyCastle.Crypto, Version=1.8.9.0, Culture=neutral, PublicKeyToken=0e99375e54769942, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="BouncyCastle.Crypto">
       <HintPath>..\DLL\BouncyCastle.Crypto.dll</HintPath>
     </Reference>
     <Reference Include="EPPlus, Version=5.8.7.0, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
@@ -62,8 +61,7 @@
     <Reference Include="itext.barcodes">
       <HintPath>..\DLL\itext.barcodes.dll</HintPath>
     </Reference>
-    <Reference Include="itext.commons, Version=7.2.1.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="itext.commons">
       <HintPath>..\DLL\itext.commons.dll</HintPath>
     </Reference>
     <Reference Include="itext.forms">
@@ -72,16 +70,13 @@
     <Reference Include="itext.html2pdf">
       <HintPath>..\DLL\itext.html2pdf.dll</HintPath>
     </Reference>
-    <Reference Include="itext.io, Version=7.2.1.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="itext.io">
       <HintPath>..\DLL\itext.io.dll</HintPath>
     </Reference>
-    <Reference Include="itext.kernel, Version=7.2.1.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="itext.kernel">
       <HintPath>..\DLL\itext.kernel.dll</HintPath>
     </Reference>
-    <Reference Include="itext.layout, Version=7.2.1.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="itext.layout">
       <HintPath>..\DLL\itext.layout.dll</HintPath>
     </Reference>
     <Reference Include="itext.pdfa">
@@ -115,8 +110,7 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Web.Services" />
     <Reference Include="System.EnterpriseServices" />
-    <Reference Include="zxing, Version=0.14.0.0, Culture=neutral, PublicKeyToken=4e88037ac681fe60, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="zxing">
       <HintPath>..\DLL\zxing.dll</HintPath>
     </Reference>
   </ItemGroup>
@@ -185,10 +179,12 @@
     <Content Include="Riztie\Images\navbar-img-6.jpg" />
     <Content Include="Riztie\Images\NOFOTO.jpg" />
     <Content Include="Riztie\Images\user-bg.jpg" />
+    <Content Include="Riztie\Js\App\AppContabilidad.js" />
     <Content Include="Riztie\Js\App\AppLicitacion.js" />
-    <Content Include="Riztie\Js\App\AppRRHH.js" />
+    <Content Include="Riztie\Js\App\AppConfig.js" />
     <Content Include="Riztie\Js\App\AppInventario.js" />
     <Content Include="Riztie\Js\App\AppLogistica.js" />
+    <Content Include="Riztie\Js\App\AppPatrimonio.js" />
     <Content Include="Riztie\Js\App\AppPlane.js" />
     <Content Include="Riztie\Js\App\AppPresu.js" />
     <Content Include="Riztie\Js\App\AppSecurity.js" />
@@ -235,6 +231,8 @@
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AdmonController.cs" />
+    <Compile Include="Controllers\ConfiguracionController.cs" />
+    <Compile Include="Controllers\ContabilidadController.cs" />
     <Compile Include="Controllers\GeneralController.cs" />
     <Compile Include="Controllers\IngresosController.cs" />
     <Compile Include="Controllers\InventarioController.cs" />
@@ -311,8 +309,6 @@
     <Content Include="Views\Inventario\Almacen.cshtml" />
     <Content Include="Views\Inventario\InventarioInicial.cshtml" />
     <Content Include="Views\General\Inicio.cshtml" />
-    <Content Include="Views\Logistica\Configuracion.cshtml" />
-    <Content Include="Views\RRHH\Personal.cshtml" />
     <Content Include="Views\Presupuesto\PCA.cshtml" />
     <Content Include="Views\Presupuesto\CentroCosto.cshtml" />
     <Content Include="Views\Presupuesto\MarcoPresu.cshtml" />
@@ -324,6 +320,22 @@
     <Content Include="Views\Licitacion\Prosel.cshtml" />
     <Content Include="Views\Licitacion\Contrato.cshtml" />
     <Content Include="Views\Licitacion\Comite.cshtml" />
+    <Content Include="Views\Inventario\Pendiente.cshtml" />
+    <Content Include="Views\Contabilidad\PlanContable.cshtml" />
+    <Content Include="Views\Logistica\ReporteOrdenes.cshtml" />
+    <Content Include="Views\Logistica\Asigpre.cshtml" />
+    <Content Include="Views\Configuracion\Configuracion.cshtml" />
+    <Content Include="Views\Configuracion\Periodo.cshtml" />
+    <Content Include="Views\Configuracion\Persona.cshtml" />
+    <Content Include="Views\Patrimonio\InventarioInicial.cshtml" />
+    <Content Include="Views\Patrimonio\Marca.cshtml" />
+    <Content Include="Views\Patrimonio\DashPatrimonio.cshtml" />
+    <Content Include="Views\Patrimonio\Altas.cshtml" />
+    <Content Include="Views\Patrimonio\Bajas.cshtml" />
+    <Content Include="Views\Patrimonio\Devoluciones.cshtml" />
+    <Content Include="Views\Patrimonio\CausalBaja.cshtml" />
+    <Content Include="Views\Patrimonio\TipoPatrimonio.cshtml" />
+    <Content Include="Views\Inventario\GenerarNP.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -336,7 +348,6 @@
     <Folder Include="App_Data\" />
     <Folder Include="Riztie\Manual\" />
     <Folder Include="Views\Ingresos\" />
-    <Folder Include="Views\Patrimonio\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

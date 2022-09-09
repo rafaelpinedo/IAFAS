@@ -1,0 +1,75 @@
+﻿
+@{
+    ViewBag.Title = "Periodo";
+    Layout = "~/Views/_LayoutPage.cshtml";
+}
+<div class="pcoded-content">
+    <div class="pcoded-inner-content">
+        <div class="main-body">
+            <div class="card">
+                <div class="card-header bg-primary">
+                    <h3><i class="fa fa-file-archive" aria-hidden="true"></i> Período</h3>
+                </div>
+                <div class="card-block">
+                    <div class="form-row">
+                        <div class="form-group col-sm-3">
+                            <label class="control-label">Año Fiscal</label>
+                            <input type="number" id="txtAnioFiscal" class="control-form" value="@ViewBag.Anio">
+                        </div>
+                        <div class="form-group col-md-5 m-2">
+                            <button class="input-group-inverse btn btn-inverse" id="btnConsultar" data-toggle="tooltip" data-placement="bottom" title="Consultar"><i class="fa fa-search fa-lg" aria-hidden="true"></i></button>
+                            <button class="input-group-inverse btn btn-primary" id="btnNuevo" data-toggle="tooltip" data-placement="bottom" title="Nuevo"><i class="fa fa-plus-circle fa-lg" aria-hidden="true"></i></button>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <div class="table-responsive" id="divLista"></div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="modal custom-modal" tabindex="-1" role="dialog" aria-hidden="true" id="divPopupContainer" style="overflow-y:auto;">
+                            <div class="modal-dialog modal-sm bg-personalizado" id="divPopupWindow" style="margin-top:10px;">
+                                <div class="modal-content">
+                                    <div id="divBarra" class="modal-header bg-personalizado" style="cursor:move">
+                                        <h5 class="modal-title" id="tituloModal">Nuevo Periodo</h5>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="row">
+                                            <div class="form-group col-sm-11">
+                                                <label class="control-label">Año Fiscal</label>
+                                                <input type="hidden" class="control-form Popup" id="txtIdRegistro">
+                                                <input type="number" id="txtAnio" class="control-lectura Reque Popup" value="@ViewBag.Anio" readonly />
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-group col-sm-11">
+                                                <label class="control-label">Periodo actual</label>
+                                                @*<label id="lblPeriodoActual" class="control-lectura">Agosto</label>*@
+                                                <select id="cboPeriodoActual" class="control-lectura Reque Popup" disabled></select>
+                                                @*<label id="lblPeriodoActual" class="control-lectura">Agosto</label>*@
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-group col-sm-11">
+                                                <label class="control-label">Periodo nuevo</label>
+                                                <select id="cboPeriodoSiguiente" class="control-lectura Reque Popup" disabled></select>
+                                                @*<label id="lblPeriodoNuevo" class="control-lectura">Setiembre</label>*@
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button id="btnCancelar" class="btnCancelarForm" title="Cancelar"><i class="fa fa-undo" aria-hidden="true"></i>&nbsp;Cancelar</button>
+                                        <button id="btnGuardar" class="btnGuardarForm bg-customer" title="Cerrar Periodo"><span class="fa fa-save"></span>&nbsp;Cerrar Periodo</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<iframe name="print_frame" width="0" height="0" frameborder="0" src="about:blank"></iframe>
+<script src="~/Riztie/Js/App/AppLogistica.js"></script>

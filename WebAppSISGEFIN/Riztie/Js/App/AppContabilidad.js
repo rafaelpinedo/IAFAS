@@ -29,26 +29,18 @@ function mostrarlistas(rpta) {
         var listas = rpta.split("¯");
         var lista = listas[0].split("¬");
 
-        if (vista == "Personal") {
-            var listaTipoDocumento = listas[1].split("¬");
-            var listaPais = listas[2].split("¬");
-            var listaEntidad = listas[3].split("¬");
-            listaOficina_VG = listas[4].split("¬");
-            var listaEstado = listas[5].split("¬");
-          
-            grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
-           
+        if (vista == "PlanContable") {
+            var listaPlanContable = listas[1].split("¬");
+            var listaEstado = listas[2].split("¬");
 
-            crearCombo(listaTipoDocumento, "cboTipoDocumento", "Seleccione");
-            listarSelect2Item(listaPais, "cboPais");
-            listarSelect2Item(listaEntidad, "cboEntidad");
-            /*listarSelect2Item(listaOficina, "cboOficina");*/
-            listarOficinaItem();
+            grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
+
+            crearCombo(listaPlanContable, "cboPlanContable", "Primer Nivel");
             crearCombo(listaEstado, "cboEstado", "Seleccione");
         }
 
         else {
-              grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
+            grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
         }
     }
 }
@@ -141,6 +133,12 @@ function mostrarGrabar(rpta) {
         divPopupContainer.style.display = 'none';
         grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
 
+        var cboPlanContable = document.getElementById("cboPlanContable");
+        if (cboPlanContable != null) {
+            var listaPadre = listas[2].split("¬");
+            crearCombo(listaPadre, "cboPlanContable", "Primer Nivel");
+        }
+
 
         if (tipo == 'A') {
             Swal.fire({
@@ -218,31 +216,6 @@ function mostrarRegistro(rpta) {
         var nControlesSelectSearch = controlesSelectSearch.length;
         var cboEstado = document.getElementById("cboEstado");
         if (cboEstado != null) { cboEstado.disabled = false };
-        var cboEmpresa = document.getElementById("cboEmpresa");
-        if (cboEmpresa != null) { cboEmpresa.disabled = false };
-        var select2cboPadre = document.getElementById("select2-cboPadre-container");
-        if (select2cboPadre != null) select2cboPadre.innerHTML = "Seleccione";
-
-
-        if (vista == "Personal") {
-            txtIdRegistro.value = campos[0];
-            cboTipoDocumento.value = campos[1];
-            txtDocumento.value = campos[2];
-            txtApellPaterno.value = campos[3];
-            txtApellMaterno.value = campos[4];
-            txtNombres.value = campos[5];
-            cboPais.value = campos[6];
-            txtTelefono.value = campos[7];
-            txtCorreo.value = campos[8];
-            cboEntidad.value = campos[9];
-            listarOficinaItem();
-            cboOficina.value = campos[10];
-            document.getElementById('select2-cboOficina-container').innerHTML = cboOficina.options[cboOficina.selectedIndex].text;
-            cboEstado.value = campos[11];
-            
-        }
-        
-
 
         var divPopupContainer = document.getElementById("divPopupContainer");
         if (divPopupContainer != null) { divPopupContainer.style.display = 'block'; };
@@ -337,14 +310,8 @@ function configurarBotones() {
             cboEstado.disabled = true;
         }
 
-        var select2cboPais = document.getElementById("select2-cboPais-container");
-        if (select2cboPais != null) select2cboPais.innerHTML = "Seleccione";
-
-        var select2cboEntidad = document.getElementById("select2-cboEntidad-container");
-        if (select2cboEntidad != null) select2cboEntidad.innerHTML = "Seleccione";
-
-        var select2cboOficina = document.getElementById("select2-cboOficina-container");
-        if (select2cboOficina != null) select2cboOficina.innerHTML = "Seleccione";
+        //var select2cboOficina = document.getElementById("select2-cboOficina-container");
+        //if (select2cboOficina != null) select2cboOficina.innerHTML = "Seleccione";
 
         //var txtFechaPedido = document.getElementById("txtFechaPedido");
         //if (txtFechaPedido != null) txtFechaPedido.value = txtFechaPedido.getAttribute("data-fecha");
@@ -355,10 +322,7 @@ function configurarBotones() {
     if (btnGuardar != null) btnGuardar.onclick = function () {
         var validar = false;
 
-        if (vista == "PedidoCompra" && validarPedido() == true) {
-            validar = true;
-        }
-        else if (validarInformacion("Reque") == true) {
+        if (validarInformacion("Reque") == true) {
             validar = true;
         }
         if (validar == true) {
@@ -372,13 +336,7 @@ function configurarBotones() {
                 cancelButtonText: 'No'
             }).then((result) => {
                 if (result.value) {
-                    //if (vista == "PedidoCompra") {
-                    //    grabarPedido();
-                    //}
-                    //else
-                    //{
-                    //    grabarDatos();
-                    //}
+
                     grabarDatos();
 
                     Swal.fire({
@@ -402,11 +360,7 @@ function configurarBotones() {
 }
 
 function configurarCombos() {
-    var cboEntidad = document.getElementById("cboEntidad");
-    if (cboEntidad != null) cboEntidad.onchange = function () {
-        listarOficinaItem();
-    }
-
+   
 
 }
 
@@ -419,12 +373,6 @@ function mostrarEliminar(rpta) {
         var tipo = mensajeResul[0];
         var mensaje = mensajeResul[1];
         grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, null, botones, 38, false, null);
-
-        var cbo = document.getElementById("cboPadre");
-        if (cbo != null) {
-            var listaPadre = listas[2].split("¬");
-            crearCombo(listaPadre, "cboPadre", "Ninguno");
-        }
 
         if (tipo == 'A') {
             Swal.fire({

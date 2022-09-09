@@ -1,0 +1,142 @@
+﻿
+@{
+    ViewBag.Title = "ReporteOrdenes";
+    Layout = "~/Views/_LayoutPage.cshtml";
+}
+
+
+<div class="pcoded-content">
+    <div class="pcoded-inner-content">
+        <div class="main-body">
+            <div class="card">
+                <div class="card-header bg-primary">
+                    <h3><i class="fa fa-file" aria-hidden="true"></i> Reporte por Orden de Compra</h3>
+                </div>
+                <div class="card-block">
+                    <div class="form-row">
+                        <div class="form-group col-sm-2">
+                            <label class="control-label">Año Fiscal</label>
+                            <input type="number" id="txtAnioFiscal" class="control-form" value="@ViewBag.Anio">
+                        </div>
+                        <div class="form-group col-md-3 m-3">
+                            @*<button class="input-group-inverse btn btn-inverse" id="btnConsultar"><i class="fa fa-search fa-lg" aria-hidden="true"></i></button>*@
+                            <button class="btn btn-out waves-effect waves-light btn-info btn-square text-c-white" id="btnReporte"><i class="fa fa-file-text text-c-white" aria-hidden="true"></i></button>
+                        </div>
+
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <div class="table-responsive dt-responsive" id="divLista"></div>
+                        </div>
+                    </div>
+                    <div class="modal custom-modal" tabindex="-1" role="dialog" aria-hidden="true" id="divPopupContainer" style="overflow-y:auto;">
+                        <div class="modal-dialog modal-lg bg-personalizado" id="divPopupWindow">
+                            <div class="modal-content">
+                                <div id="divBarra" class="modal-header bg-personalizado" style="cursor:move;">
+                                    <h5 class="modal-title">Reporte</h5>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="row">
+                                        <div class="col-lg-6">
+                                            <div class="row">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" name="reporteRadios" id="optOrdenes" checked>
+                                                    <label class="form-check-label" for="optOrdenes">
+                                                        Listado de Ordenes
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" name="reporteRadios" id="optRecordProv">
+                                                    <label class="form-check-label" for="optRecordProv">
+                                                        Record Por Proveedor
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" name="reporteRadios" id="optItems">
+                                                    <label class="form-check-label" for="optItems">
+                                                        Ordenes por Items
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="row" id="divItems" style="display:none">
+                                                <div class="form-group col-sm-12">
+                                                    <label class="control-label">Items</label>
+                                                    <select class="SelectSearch control-form" id="cboArticulo"></select>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" name="reporteRadios" id="optOCProv">
+                                                    <label class="form-check-label" for="optOCProv">
+                                                        Ordenes por Proveedor
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" name="reporteRadios" id="optPorInternar">
+                                                    <label class="form-check-label" for="optPorInternar">
+                                                        Ordenes pendiente internamiento Almacén
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <div class="form-row">
+                                                <div class="form-group col-sm-6">
+                                                    <label class="control-label">Fecha Inicio</label>
+                                                    <input type="date" id="txtFechaInicio" class="control-form" value="@ViewBag.FechaInicial">
+                                                </div>
+                                                <div class="form-group col-sm-6">
+                                                    <label class="control-label">Fecha Final</label>
+                                                    <input type="date" id="txtFechaFinal" class="control-form" value="@ViewBag.Fecha">
+                                                </div>
+                                            </div>
+                                            <div class="form-row">
+                                                <div class="form-group col-sm-6">
+                                                    <label class="control-label">Tipo de Orden</label>
+                                                    <select id="cboTipoOrden" class="control-form">
+                                                        <option value="0">Todos</option>
+                                                        <option value="1">Orden de Compra</option>
+                                                        <option value="2">Orden de Servicio</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-row">
+                                                <div class="form-group col-sm-12">
+                                                    <label class="control-label">Proveedor</label>
+                                                    <select class="SelectSearch control-form" id="cboProveedor"></select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <hr />
+                                    <div class="row">
+                                        <div class="form-group col-sm-4 text-left">
+                                            <button id="btnCancelar" class="btnCancelarForm" title="Cancelar"><i class="fa fa-undo" aria-hidden="true"></i>&nbsp;Cancelar</button>
+                                            <button class="btn btn-sm btn-danger" id="btnReportePdf" style="display:none" title="Generar Reporte PDF"><span class="fa fa-file-pdf-o"></span>&nbsp;PDF</button>
+                                            <button class="btn btn-sm btn-success" id="btnReporteExcel" title="Generar Reporte EXCEL"><span class="fa fa-file-excel-o"></span>&nbsp;EXCEL</button>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <span id="spnLoad" style="color: rgb(222, 30, 53); border-color: black; font-weight: bold; display: none;">
+                                                Procesando <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="styleSelector">
+            </div>
+        </div>
+    </div>
+</div>
+<iframe name="print_frame" width="0" height="0" frameborder="0" src="about:blank"></iframe>
+<script src="~/Riztie/Js/App/AppLogistica.js"></script>

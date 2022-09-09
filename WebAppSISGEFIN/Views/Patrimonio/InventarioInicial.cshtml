@@ -1,14 +1,14 @@
-﻿
-@{
-    ViewBag.Title = "Clase";
+﻿@{
+    ViewBag.Title = "InventarioInicial";
     Layout = "~/Views/_LayoutPage.cshtml";
 }
+
 <div class="pcoded-content">
     <div class="pcoded-inner-content">
         <div class="main-body">
             <div class="card">
                 <div class="card-header bg-primary">
-                    <h3><i class="fa fa-file" aria-hidden="true"></i> CLASE</h3>
+                    <h3><i class="fa fa-users" aria-hidden="true"></i> INVENTARIO INICIAL</h3>
                 </div>
                 <div class="card-block">
                     <div class="form-row">
@@ -26,50 +26,32 @@
                             <div class="modal-dialog modal-lg bg-personalizado" id="divPopupWindow" style="margin-top:30px;">
                                 <div class="modal-content">
                                     <div id="divBarra" class="modal-header bg-personalizado" style="cursor:move">
-                                        <h5 class="modal-title" id="tituloModal"></h5>
+                                        <h5 class="modal-title" id="tituloModal">Nuevo Activo</h5>
                                     </div>
                                     <div class="modal-body">
+
                                         <div class="row">
                                             <div class="form-group col-sm-4">
-                                                <label class="control-label">Tipo de Bien</label>
-                                                <select id="cboTipoBien" class="control-form Reque Popup"></select>
+                                                <label class="control-label">Id</label>
+                                                <input type="number" autocomplete="off" class="control-lectura Popup" readonly id="txtidRegistro">
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="form-group col-sm-10">
-                                                <label class="control-label">Grupo</label>
-                                                <select id="cboGrupo" class="SelectSearch control-form Reque Popup"></select>
-                                                <input type="hidden" class="control-form Popup" id="txtIdRegistro">
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="form-group col-sm-3">
-                                                <label class="control-label">Código</label>
-                                                <input type="text" autocomplete="off" maxlength="5" id="txtCodigo" class="control-form Reque Popup" />
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="form-group col-sm-10">
+                                            <div class="form-group col-sm-8">
                                                 <label class="control-label">Nombre</label>
-                                                <input type="text" autocomplete="off" id="txtNombre" class="control-form Reque Popup" />
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="form-group col-sm-4">
-                                                <label class="control-label" for="dtgSbn">Es SBN</label>
-                                                <input type="checkbox" id="dtgSbn" class="Popup" data-toggle="toggle" data-width="160px" data-on="SI" data-off="NO" data-onstyle="success" data-offstyle="danger">
-                                            </div>
-                                            <div class="form-group col-sm-4">
-                                                <label class="control-label" for="dtgActivo">Es Activo</label>
-                                                <input type="checkbox" id="dtgActivo" class="Popup" data-toggle="toggle" data-width="160px" data-on="SI" data-off="NO" data-onstyle="success" data-offstyle="danger">
+                                                <input type="text" autocomplete="off" class="control-form Reque Popup" id="txtNombre">
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="form-group col-sm-4">
                                                 <label class="control-label">Estado</label>
-                                                <select id="cboEstado" class="control-lectura Reque Popup"></select>
+                                                <select id="cboEstado" class="control-form Reque Popup">
+                                                    <option value="0">ACTIVO</option>
+                                                    <option value="1">INACTIVO</option>
+                                                </select>
                                             </div>
                                         </div>
+
                                     </div>
                                     <div class="modal-footer">
                                         <button id="btnCancelar" class="btnCancelarForm" title="Cancelar"><i class="fa fa-undo" aria-hidden="true"></i>&nbsp;Cancelar</button>
@@ -82,10 +64,10 @@
                 </div>
             </div>
         </div>
-        <div id="styleSelector">
-        </div>
     </div>
 </div>
 <iframe name="print_frame" width="0" height="0" frameborder="0" src="about:blank"></iframe>
-<script src="~/Riztie/Js/App/AppLogistica.js"></script>
+<script src="~/Riztie/Js/App/AppPatrimonio.js"></script>
+
+
 

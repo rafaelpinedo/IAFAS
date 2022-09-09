@@ -14,12 +14,25 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Data;
+
 namespace WebAppSISGEFIN.Controllers
 {
-    public class LicitacionController : Controller
+    public class ConfiguracionController : Controller
     {
         [FiltroAutenticacion]
-        public ActionResult Tipoproceso()
+        public ActionResult Configuracion()
+        {
+            int Anio = DateTime.Now.Year;
+            string[] Data = Session["DataUsuario"].ToString().Split('|');
+            string IdPerfil = Data[3];
+            ViewBag.Menu = new Menu().Listar(IdPerfil);
+            ViewBag.Anio = Anio;
+            ViewBag.AnioCN = Anio + 1;
+            return View();
+        }
+
+        [FiltroAutenticacion]
+        public ActionResult Periodo()
         {
             string[] Data = Session["DataUsuario"].ToString().Split('|');
             string IdPerfil = Data[3];
@@ -30,53 +43,12 @@ namespace WebAppSISGEFIN.Controllers
         }
 
         [FiltroAutenticacion]
-        public ActionResult Comite()
+        public ActionResult Persona()
         {
             string[] Data = Session["DataUsuario"].ToString().Split('|');
             string IdPerfil = Data[3];
             ViewBag.Menu = new Menu().Listar(IdPerfil);
-
-            DateTime fecha = DateTime.Now;
-            ViewBag.Fecha = Convert.ToDateTime(fecha).ToString("yyyy-MM-dd");
-            int Anio = DateTime.Now.Year;
-            ViewBag.Anio = Anio;
             return View();
         }
-
-        [FiltroAutenticacion]
-        public ActionResult PAC()
-        {
-            string[] Data = Session["DataUsuario"].ToString().Split('|');
-            string IdPerfil = Data[3];
-            ViewBag.Menu = new Menu().Listar(IdPerfil);
-            int Anio = DateTime.Now.Year;
-            ViewBag.Anio = Anio;
-            return View();
-        }
-
-        [FiltroAutenticacion]
-        public ActionResult Prosel()
-        {
-            string[] Data = Session["DataUsuario"].ToString().Split('|');
-            string IdPerfil = Data[3];
-            ViewBag.Menu = new Menu().Listar(IdPerfil);
-            int Anio = DateTime.Now.Year;
-            ViewBag.Anio = Anio;
-            return View();
-        }
-
-        [FiltroAutenticacion]
-        public ActionResult Contrato()
-        {
-            string[] Data = Session["DataUsuario"].ToString().Split('|');
-            string IdPerfil = Data[3];
-            ViewBag.Menu = new Menu().Listar(IdPerfil);
-            DateTime fecha = DateTime.Now;
-            ViewBag.Fecha = Convert.ToDateTime(fecha).ToString("yyyy-MM-dd");
-            int Anio = DateTime.Now.Year;
-            ViewBag.Anio = Anio;
-            return View();
-        }
-
     }
 }

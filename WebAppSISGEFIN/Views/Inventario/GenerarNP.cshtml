@@ -1,0 +1,801 @@
+﻿
+@{
+    ViewBag.Title = "GenerarNP";
+    Layout = "~/Views/_LayoutPage.cshtml";
+}
+<div class="pcoded-content">
+    <div class="pcoded-inner-content">
+        <div class="main-body">
+            <div class="card">
+                <div class="card-header bg-primary">
+                    <h3><i class="fa fa-file" aria-hidden="true"></i> NEA-PECOSA</h3>
+                    <div class="card-header-right">
+                        <ul class="list-unstyled card-option">
+                            <li><i class="fa fa-window-maximize full-card" style="color:white"></i></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card-block">
+                    <div class="form-row">
+                        <div class="form-group col-sm-2">
+                            <label class="control-label">Fecha Inicio</label>
+                            <input type="date" id="txtFechaInicio" class="control-form" value="@ViewBag.FechaInicial">
+                        </div>
+                        <div class="form-group col-sm-2">
+                            <label class="control-label">Fecha Final</label>
+                            <input type="date" id="txtFechaFinal" class="control-form" value="@ViewBag.Fecha">
+                        </div>
+                        <div class="form-group col-md-4 m-3">
+                            <button class="input-group-inverse btn btn-inverse" id="btnConsultar" data-toggle="tooltip" data-placement="bottom" title="Consultar"><i class="fa fa-search fa-lg" aria-hidden="true"></i></button>
+                            @*<button class="btn btn-out waves-effect waves-light btn-info btn-square" id="btnImprimir" data-toggle="tooltip" data-placement="bottom" title="Imprimir"><i class="fa fa-print fa-lg" aria-hidden="true"></i></button>
+                            <button class="btn btn-out waves-effect waves-light btn-primary btn-square" id="btnGenerarPS" data-toggle="tooltip" data-placement="bottom" title="Generar pendiente salida"><i class="fa fa-exchange" aria-hidden="true"></i></button>*@
+                            @*<button class="btn btn-out waves-effect waves-light btn-warning btn-square text-c-green" id="btnReporte" data-toggle="tooltip" data-placement="bottom" title="Mostrar reportes"><i class="fa fa-file-pdf-o text-c-green" aria-hidden="true"></i></button>*@
+                        </div>
+                        <div class="form-group col-sm-2">
+                            <label class="control-label">&nbsp;</label>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="optIngreso">
+                                <label class="form-check-label control-label" for="optIngreso" checked>N.E.A.</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="optSalida">
+                                <label class="form-check-label control-label" for="optSalida">PECOSA</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <div class="table-responsive dt-responsive" id="divLista"></div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="modal custom-modal" tabindex="-1" role="dialog" aria-hidden="true" id="divPopupContainer" style="overflow-y:auto;">
+                            <div class="modal-dialog modal-xl bg-personalizado" id="divPopupWindow" style="margin-top:1px;">
+                                <div class="modal-content">
+                                    <div id="divBarra" class="modal-header bg-personalizado" style="cursor:move">
+                                        <h5 class="modal-title" id="Titulo">N.E.A.</h5>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="row">
+                                            <div class="col-sm-3">
+                                                <input type="hidden" class="control-form Popup" id="txtIdRegistro">
+                                                <label class="control-label">Numero</label>
+                                                <label class="control-lectura" id="lblNro"></label>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <label class="control-label">Fecha</label>
+                                                <input type="date" id="ddtFecha" class="control-lectura" disabled />
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <label class="control-label">Tipo Operación</label>
+                                                <label class="control-lectura" id="lblOperacion"></label>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <label class="control-label">Justificación</label>
+                                                <textarea class="control-lectura" disabled id="ttaJusticiacion" maxlength="200" rows="2"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <fieldset class="fieldset">
+                                                    <legend class="legend">Proveedor</legend>
+                                                    <div class="row">
+                                                        <div class="col-sm-12">
+                                                            <label class="control-label">Proveedor</label>
+                                                            <label class="control-lectura" id="lblProveedor"></label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-sm-6">
+                                                            <label class="control-label">Orden Compra</label>
+                                                            <label class="control-lectura" id="lblOrdenCompra"></label>
+                                                        </div>
+                                                        <div class="col-sm-6">
+                                                            <label class="control-label">Fecha Orden </label>
+                                                            <label class="control-lectura" id="lblFechaOrden"></label>
+                                                        </div>
+                                                    </div>
+                                                </fieldset>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <fieldset class="fieldset">
+                                                    <legend class="legend">Internamiento</legend>
+                                                    <div class="row">
+                                                        <div class="col-sm-4">
+                                                            <label class="control-label">Documento</label>
+                                                            <label class="control-lectura" id="lblDocumentoGuia"></label>
+                                                        </div>
+                                                        <div class="col-sm-4">
+                                                            <label class="control-label">Número</label>
+                                                            <label class="control-lectura" id="lblNumeroGuia"></label>
+                                                        </div>
+                                                        <div class="col-sm-3">
+                                                            <label class="control-label">Fecha</label>
+                                                            <label class="control-lectura" id="lblFechaGuia"></label>
+                                                        </div>
+                                                    </div>
+                                                </fieldset>
+                                                <div class="row m-2">
+                                                    <div class="col-sm-6">
+                                                        <button class="btnCancelarForm" id="btnCancelar" title="Cancelar"><i class="fa fa-undo" aria-hidden="true"></i>&nbsp;Cancelar</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                        <div class="row m-2">
+                                            <div class="form-group col-sm-12">
+                                                <div class="table-responsive" style="height:340px;" id="divDetalleNEA">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <span id="spnNroItems" class="control-label">Items: 0</span>
+                                            </div>
+                                            <div class="col-md-7 text-right">
+                                                <span id="spnTotal" class="control-label">Total: 0</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal custom-modal" tabindex="-1" role="dialog" aria-hidden="true" id="divPopupContainerFormatoPCS" style="overflow-y:auto;">
+                            <div class="modal-dialog modal-xl bg-personalizado" id="divPopupWindowFormatoPCS" style="margin-top:1px;">
+                                <div class="modal-content">
+                                    <div id="divBarraFormatoPCS" class="modal-header bg-personalizado" style="cursor:move">
+                                        <h5 class="modal-title">PECOSA</h5>
+                                        <button type="button" id="btnCerrarFormatoPCS" class="close"><span aria-hidden="true">&times;</span><span class="sr-only"></span></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="row">
+                                            <div class="col-sm-3">
+                                                <input type="hidden" class="control-form Popup" id="txtIdRegistroPCS">
+                                                <label class="control-label">Numero</label>
+                                                <label class="control-lectura" id="lblNroPCS"></label>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <label class="control-label">Fecha</label>
+                                                <input type="date" id="ddtFechaPCS" class="control-lectura" disabled />
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <label class="control-label">Tipo Operación</label>
+                                                <label class="control-lectura" id="lblOperacionPCS"></label>
+                                            </div>
+
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <label class="control-label">Justificación</label>
+                                                <textarea class="control-lectura" disabled id="ttaJusticiacionPCS" maxlength="200" rows="2"></textarea>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <label class="control-label">&nbsp;</label>
+                                                <button class="btnCancelarForm" id="btnCancelarFormatoPCS" title="Cancelar"><i class="fa fa-undo" aria-hidden="true"></i>&nbsp;Cancelar</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row m-2">
+                                        <div class="form-group col-sm-12">
+                                            <div class="table-responsive" style="height:360px;" id="divDetallePCS">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <span id="spnNroItemsPCS" class="control-label">Items: 0</span>
+                                        </div>
+                                        <div class="col-md-7 text-right">
+                                            <span id="spnTotalPCS" class="control-label">Total: 0</span>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <fieldset class="fieldset">
+                                                <legend class="legend">Solicitante</legend>
+                                                <div class="col-sm-12" id="lblNombreSolicita" style="text-align: center;font-weight: bold">
+                                                </div>
+                                            </fieldset><br />
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <fieldset class="fieldset">
+                                                <legend class="legend">Recepcionado por</legend>
+                                                <div class="col-sm-12" id="lblRecepcion" style="text-align:center;font-weight:bold">
+                                                </div>
+                                            </fieldset>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal custom-modal" tabindex="-1" role="dialog" aria-hidden="true" id="divPopupContainerItem" style="overflow-y:auto;">
+                            <div class="modal-dialog bg-personalizado" id="divPopupWindowItem">
+                                <div class="modal-content">
+                                    <div id="divBarraItem" class="modal-header bg-personalizado" style="cursor:move;">
+                                        <h5 class="modal-title">Reporte</h5>
+                                        <button type="button" id="btnCerrarItem" class="close"><span aria-hidden="true">&times;</span><span class="sr-only"></span></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="row">
+                                            <div class="form-group col-sm-4">
+                                                <label class="control-label">Año</label>
+                                                <input type="number" class="form-control" id="txtAnio" value="@ViewBag.Anio">
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="almacenRadios" id="optIngresos" checked>
+                                                <label class="form-check-label" for="optIngresos">
+                                                    Parte diario de ingresos
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="almacenRadios" id="optSalidas">
+                                                <label class="form-check-label" for="optSalidas">
+                                                    Parte diario de salidas
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="almacenRadios" id="optPI">
+                                                <label class="form-check-label" for="optPI">
+                                                    Orden de Compra Pendiente Ingresar
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="almacenRadios" id="optEntradas">
+                                                <label class="form-check-label" for="optEntradas">
+                                                    Entradas al Almacén
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <hr />
+                                        <div class="row">
+                                            <div class="form-group col-sm-4 text-left">
+                                                <button class="btn btn-sm btn-danger" id="btnReportePdf" title="Generar Reporte PDF"><span class="fa fa-file-pdf-o"></span>&nbsp;PDF</button>
+                                                <button class="btn btn-sm btn-success" id="btnReporteExcel" title="Generar Reporte EXCEL"><span class="fa fa-file-excel-o"></span>&nbsp;EXCEL</button>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <span id="spnLoad" style="color: rgb(222, 30, 53); border-color: black; font-weight: bold; display: none;">
+                                                    Procesando <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal custom-modal" tabindex="-1" role="dialog" aria-hidden="true" id="divPopupContainerPreview" style="overflow-y:auto;">
+                            <div class="modal-dialog modal-xl bg-personalizado" id="divPopupWindowPreview" style="margin-top:1px">
+                                <div class="modal-content">
+                                    <div id="divBarraPreview" class="modal-header bg-personalizado" style="cursor:move">
+                                        <button type="button" id="btnCerrarPreview" class="close"><span aria-hidden="true">&times;</span><span class="sr-only"></span></button>
+                                    </div>
+                                    <div style="height:720px;overflow-y:auto;">
+                                        <div id="tblTable" style="display:none"></div>
+                                        <div class="pure-g" style="height: 100%; width:100%">
+                                            <iframe id="pdf_preview" type="application/pdf" src="" width="100%" height="100%"></iframe>
+                                            @*<div id="wrapper" class="pure-u-1 pure-u-md-4-5">
+                                                    <object id="output" type="application/pdf"></object>
+                                                </div>*@
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="divReporte" style="overflow:hidden;width:auto;display:none">
+                    <table cellpadding="0" width="756px" cellspacing="0" style="font-size:12px;font-family:'Arial Narrow', Arial, sans-serif">
+                        <tbody>
+                            <tr>
+                                <td width="200px">
+                                    <CENTER>
+                                        <B>
+                                            MARINA DE GUERA DEL PERU<BR>
+                                            CENTRO MEDICO NAVAL
+                                        </B>
+                                    </CENTER>
+                                </td>
+                                <td></td>
+                                <td width="200px"><CENTER><B> OFICINA DE LOGISTICA<BR>ALMACEN GENERAL</B></CENTER></td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                    <BR>
+                    <BR>
+                    <table cellpadding="0" width="756px" cellspacing="0" style="font-size:12px;font-family:'Arial Narrow', Arial, sans-serif">
+                        <tbody>
+                            <tr>
+                                <td colspan="2"></td>
+                                <td colspan="3"><B><U>NOTA DE ENTRADA AL ALMACEN NRO.</U></B></td>
+                                <td colspan="3" id="tdNumeroNEA"></td>
+                            </tr>
+                            <tr>
+                                <td colspan="8"><br /></td>
+                            </tr>
+                            <tr>
+                                <td colspan="5"></td>
+                                <td><B>FECHA</B></td>
+                                <td id="tdFechaNEA"></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td colspan="8"><br /></td>
+                            </tr>
+                            <tr>
+                                <td colspan="2"><B>PROVEEDOR</B></td>
+                                <td colspan="6" id="tdProveedorNEA"></td>
+                            </tr>
+                            <tr>
+                                <td colspan="2"><B>ORDEN DE COMPRA</B></td>
+                                <td id="tdOrdenNEA"></td>
+                                <td><B>PEDIDO</B></td>
+                                <td colspan="4" id="tdPedido"></td>
+                            </tr>
+                            <tr>
+                                <td colspan="2"><B>GUIA DE REMISION</B></td>
+                                <td id="tdGuiaNEA"></td>
+                                <td><B>USUARIO</B></td>
+                                <td colspan="4" id="tdUsuarioNEA"></td>
+                            </tr>
+                            <tr>
+                                <td colspan="8"><br /></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <BR>
+                    <table cellpadding="0" width="756px" cellspacing="0" style="font-size:12px;font-family:'Arial Narrow', Arial, sans-serif">
+                        <tr>
+                            <td style="border:solid 1px black;height:630px;vertical-align:top">
+                                <table cellpadding="0" width="756px" cellspacing="0" style="font-size:12px;font-family:'Arial Narrow', Arial, sans-serif">
+                                    <thead>
+                                        <tr>
+                                            <th style="border: 1px solid black" rowspan="2"><B>ITEM</B></th>
+                                            <th style="border: 1px solid black" colspan="2" rowspan="2"><CENTER>DESCRIPCION</CENTER></th>
+                                            <th style="border: 1px solid black" rowspan="2">UND.<br />MED.</th>
+                                            <th style="border: 1px solid black" colspan="2">CANTIDAD</th>
+                                            <th style="border: 1px solid black" rowspan="2">VALOR<br />UNITARIO</th>
+                                            <th style="border: 1px solid black" rowspan="2">VALOR<br />TOTAL</th>
+                                        </tr>
+                                        <tr>
+                                            <th style="border: 1px solid black">SOLICITADA</th>
+                                            <th style="border: 1px solid black">RECIBIDA</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tblDetalleNEA"></tbody>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid black;text-align: right;font-size:14px;font-weight:bold" id="tdTotalNEA"></td>
+                        </tr>
+                    </table>
+                    <table cellpadding="0" width="756px" cellspacing="0" style="font-size:12px;font-family:'Arial Narrow', Arial, sans-serif">
+                        <tbody>
+                            <tr>
+                                <td colspan="3">
+                                    <br />OBSERVACIONES: <span id="spnObservacionesNEA">__________________________</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width="200px">
+                                    <BR><BR><BR><BR>
+                                    <CENTER>
+                                        <span id="spnEncargadoGradoNEA"></span><BR>
+                                        <span id="spnEncargadoNombreNEA"></span><BR>
+                                        <span id="spnEncargadoCIPNEA"></span><BR>
+                                        __________________________<BR>
+                                        <B>ENCARGADO DEL ALMACEN</B>
+                                    </CENTER>
+                                </td>
+                                <TD>
+                                </TD>
+                                <td width="200px">
+                                    <BR><BR><BR><BR>
+                                    <CENTER>
+                                        <span id="spnJefeGradoNEA"></span><BR>
+                                        <span id="spnJefeNombreNEA"></span><BR>
+                                        <span id="spnJefeCIPNEA"></span><BR>
+                                        __________________________<BR>
+                                        <B>JEFE DEL ALMACEN</B>
+                                    </CENTER>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="3">
+                                    <CENTER>
+                                        <span id="spnAdmonGradoNEA"></span><BR>
+                                        <span id="spnAdmonNombreNEA"></span><BR>
+                                        <span id="spnAdmonCIPNEA"></span><BR>
+                                        __________________________<BR>
+                                        V°B°<BR>
+                                        <B>
+                                            JEFE DE LA OFICINA <BR>
+                                            DE ABASTECIMIENTO Y SERVICIOS
+                                        </B>
+                                    </CENTER>
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+                <div id="divReportePreNEA" style="overflow:hidden;width:auto;display:none">
+                    <table cellpadding="0" width="956px" cellspacing="0" style="font-size:15px;font-family:Arial">
+                        <tbody>
+                            <tr>
+                                <td colspan="8" style="height:170px">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td colspan="5" style="width:40px;">&nbsp;<br /></td>
+                                <td colspan="3" id="tdNumeroPreNEA"></td>
+                            </tr>
+                            <tr>
+                                <td colspan="8"><br /></td>
+                            </tr>
+                            <tr>
+
+                                <td colspan="7" style="width:680px">&nbsp;</td>
+                                <td id="tdFechaPreNEA"></td>
+
+                            </tr>
+                            <tr>
+                                <td colspan="2" style="width:85px;height:40px">&nbsp;</td>
+                                <td colspan="6" id="tdProveedorPreNEA"></td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" style="width: 40px;height: 30px">
+                                    &nbsp;
+                                </td>
+                                <td id="tdOrdenPreNEA"></td>
+                                <td style="width:10px">&nbsp;</td>
+                                <td colspan="4" id="tdPedidoPre"></td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" style="width: 40px;height: 30px">&nbsp;</td>
+                                <td id="tdGuiaPreNEA"></td>
+                                <td style="width:10px">&nbsp;</td>
+                                <td colspan="4" id="tdUsuarioPreNEA"></td>
+                            </tr>
+                            <tr>
+                                <td colspan="8"><br /></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <br /><br /><br />
+                    <table cellpadding="0" cellspacing="0" style="font-size:14px;font-family:Arial">
+                        <tr>
+                            <td style="height:610px;vertical-align:top">
+                                <table cellpadding="0" width="896px" cellspacing="0" style="font-size:14px;font-family:Arial">
+                                    <tbody id="tblDetallePreNEA"></tbody>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+
+                            <td style="width:889px; text-align: right;font-size:15px;font-weight:bold" id="tdTotalPreNEA"></td>
+                        </tr>
+                    </table>
+                    <table cellpadding="0" width="866px" cellspacing="0" style="font-size:15px;font-family:Arial">
+                        <tbody>
+
+                            <tr>
+                                <td colspan='2' style='width:550px;font-size:12px;'>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <span id="spnObservacionesPreNEA"></span>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td width="400px">
+                                    <BR><BR><BR><BR>
+                                    <CENTER>
+                                        <span id="spnEncargadoGradoPreNEA"></span><BR>
+                                        <span id="spnEncargadoNombrePreNEA"></span><BR>
+                                        <span id="spnEncargadoCIPPreNEA"></span><BR>
+
+                                    </CENTER>
+                                </td>
+
+                                <td width="400px">
+                                    <BR><BR><BR><BR>
+                                    <CENTER>
+                                        <span id="spnJefeGradoPreNEA"></span><BR>
+                                        <span id="spnJefeNombrePreNEA"></span><BR>
+                                        <span id="spnJefeCIPPreNEA"></span><BR>
+
+                                    </CENTER>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" style='height:50px'></td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <CENTER>
+                                        <span id="spnAdmonGradoPreNEA"></span><BR>
+                                        <span id="spnAdmonNombrePreNEA"></span><BR>
+                                        <span id="spnAdmonCIPPreNEA"></span><BR>
+                                    </CENTER>
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+                <div id="divReportePECOSA" style="overflow:hidden;width:auto;display:none">
+                    <table cellpadding="0" width="1000px" cellspacing="0" style="font-family:'Arial Narrow', Arial, sans-serif;font-size:12px">
+                        <tbody>
+                            <tr>
+                                <td width="250px">
+                                    <CENTER>
+                                        <B>
+                                            MARINA DE GUERA DEL PERU<BR>
+                                            CENTRO MEDICO NAVAL
+                                        </B>
+                                    </CENTER>
+                                </td>
+                                <td></td>
+                                <td width="200px"><CENTER><B> OFICINA DE LOGISTICA<BR>ALMACEN GENERAL</B></CENTER></td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                    <br />
+                    <table cellpadding="0" width="1000px" cellspacing="0" style="font-family:'Arial Narrow', Arial, sans-serif;font-size:12px">
+                        <tbody>
+                            <tr>
+                                <td align="center" id="tdNroPecosa" style="font-size:16px;font-weight:bold"></td>
+
+                            </tr>
+                        </tbody>
+                    </table>
+                    <table cellpadding="0" width="1000px" cellspacing="0" style="font-family:'Arial Narrow', Arial, sans-serif;font-size:12px">
+                        <tbody>
+                            <tr>
+                                <td width="150px"> SOLICITANTE</td>
+                                <td width="270px">
+                                    <BR>
+                                    <BR>
+                                    <BR>
+                                    <CENTER>
+                                        <span id="spnSolicitaGrado"></span><br />
+                                        <span id="spnSolicitaCargo"></span><br />
+                                        <span id="spnSolicitaNombre"></span><br />
+                                        <span id="spnSolicitaCIP"></span><br />
+                                        _________________________<BR>
+                                        FIRMA<BR>
+                                    </CENTER>
+                                </td>
+                                <td width="150px">
+                                    <table cellpadding="0" width="100%" cellspacing="0">
+                                        <tbody>
+                                            <tr>
+                                                <td style="border-left: 1px solid black; border-right: 1px solid black; border-top: 1px solid black; border-bottom: 1px solid black; text-align: center;">CENTRO DE GASTO</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="border:1px solid black;text-align:center;font-weight:bold" id="tdCentroGasto"></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <br>
+                                    ENTREGAR A
+                                </td>
+                                <td width="60px"></td>
+                                <td>
+                                    <table cellpadding="0" width="100%" cellspacing="0">
+                                        <tbody>
+                                            <tr>
+                                                <td style="border-left: 1px solid black; border-right: 1px solid black; border-top: 1px solid black; border-bottom: 1px solid black; text-align: center;width: 200px">PEDIDO</td>
+                                                <td style="border:1px solid black">DIA</td>
+                                                <td style="border:1px solid black">MES</td>
+                                                <td style="border:1px solid black">AÑO</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="border: 1px solid black;text-align: center;font-weight: bold" id="tdPedidoPecosa"></td>
+                                                <td style="border: 1px solid black;text-align: center;font-weight: bold" id="tdDiaPecosa"></td>
+                                                <td style="border: 1px solid black;text-align: center;font-weight: bold" id="tdMesPecosa"></td>
+                                                <td style="border: 1px solid black;text-align: center;font-weight: bold" id="tdAnioPecosa"></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <br>
+                                    <br>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <BR>
+                    <BR>
+                    <table cellpadding="0" width="100%" cellspacing="0" style="font-family:'Arial Narrow', Arial, sans-serif;font-size:12px">
+                        <tr>
+                            <td style="height:350px;border:solid 1px black;vertical-align:top" colspan="2">
+                                <table cellpadding="0" width="100%" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th style="border:1px solid black" rowspan="2">ITEM</th>
+                                            <th style="border:1px solid black" rowspan="2">CODIGO DEL<br>ARTICULO</th>
+                                            <th style="border:1px solid black" colspan="2" rowspan="2">DESCRIPCION DEL ARTICULO</th>
+                                            <th style="border:1px solid black" rowspan="2">UNIDAD<br>MEDIDA</th>
+                                            <th style="border-left: 1px solid black; border-right: 1px solid black; border-top: 1px solid black; border-bottom: 1px solid black; text-align: center;" colspan="2">CANTIDAD</th>
+                                            <th style="border-left: 1px solid black; border-right: 1px solid black; border-top: 1px solid black; border-bottom: 1px solid black; text-align: center;" colspan="4">VALORES</th>
+                                        </tr>
+                                        <tr>
+                                            <th style="border:1px solid black">SOLICITADA</th>
+                                            <th style="border:1px solid black">ENTREGADA</th>
+                                            <th style="border:1px solid black">PRECIO UNIT.</th>
+                                            <th style="border:1px solid black" colspan="3">TOTAL</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tblDetallePecosa"></tbody>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td rowspan="2" style="border:1px solid black;width:900px; max-width:900px;line-height:40px;vertical-align:top" id="tdJustificacion"></td>
+                            <td style="border:1px solid black">TOTAL S/. &nbsp;&nbsp;</td>
+                        </tr>
+                    </table>
+                    <br>
+                    <table cellpadding="0" width="1000px" cellspacing="0" style="font-family:'Arial Narrow', Arial, sans-serif;font-size:12px">
+                        <thead>
+                            <tr>
+                                <th style="border:1px solid black" colspan="2">AUTORIZACION DE ENTREGA</th>
+                                <th style="border:1px solid black">ENTREGUE CONFORME</th>
+                                <th style="border:1px solid black">RECIBI CONFORME</th>
+                                <th style="border:1px solid black" colspan="2">FECHA</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="border:1px solid black;text-align:center" rowspan="3">
+                                    <span id="spnJefeAbaGrado"></span><br />
+                                    <span id="spnJefeAbaNombre"></span><br />
+                                    <span id="spnJefeAbaCIP"></span><br />
+                                    ------------------------------------------------<br />
+                                    JEFE DE ABASTECIMIENTO Y SERVICIOS
+                                </td>
+                                <td style="border: 1px solid black;text-align: center" rowspan="3">
+                                    <span id="spnJefeAlmacenGrado"></span><br />
+                                    <span id="spnJefeAlmacenNombre"></span><br />
+                                    <span id="spnJefeAlmacenCIP"></span><br />
+                                    ------------------------------------------------<br />
+                                    JEFE DE ALMACEN
+                                </td>
+                                <td style="border:1px solid black;text-align:center" rowspan="3">
+                                    <span id="spnEntregadoGrado"></span><br />
+                                    <span id="spnEntregadoNombre"></span><br />
+                                    <span id="spnEntregadoCIP"></span><br />
+                                    ------------------------------------------------<br />
+                                    ENTREGADO POR
+                                </td>
+                                <td style="border: 1px solid black;text-align: center" rowspan="3">
+                                    <span id="spnRecibidoGrado"></span><br />
+                                    <span id="spnRecibidoNombre"></span><br />
+                                    <span id="spnRecibidoCIP"></span><br />
+                                    ------------------------------------------------<br />
+                                    RECIBIDO POR
+                                </td>
+                                <td style="border:1px solid black">DIA</td>
+                                <td style="border:1px solid black">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td style="border:1px solid black">MES</td>
+                                <td style="border:1px solid black">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td style="border:1px solid black">AÑO</td>
+                                <td style="border:1px solid black">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div id="divReportePrePECOSA" style="overflow:hidden;width:auto;display:none">
+                    <table cellpadding="0" cellspacing="0" style="font-family:'Arial Narrow', Arial, sans-serif;font-size:12px">
+                        <tbody>
+                            <tr>
+                                <td align="center" style="height:140px"></td>
+                            </tr>
+                            <tr>
+
+                                <td style="width:780px">
+                                    &nbsp;
+                                </td>
+                                <td style="font-weight:bold" id="tdNroPecosaPre"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <table cellpadding="0" cellspacing="0" style="font-family:Arial;font-size:12px">
+                        <tbody>
+                            <tr>
+                                <td style="width:140px">&nbsp;</td>
+                                <td align="center" style="width: 250px; font-size: 12px; font-weight: bold">
+                                    <span id="spnSolicitaGradoPre"></span><br />
+                                    <span id="spnSolicitaCargoPre"></span><br />
+                                    <span id="spnSolicitaNombrePre"></span><br />
+                                    <span id="spnSolicitaCIPPre"></span><br />
+                                </td>
+                                <td style="width: 160px;">&nbsp;</td>
+                                <td style="width: 220px; text-align: center;font-weight: bold">
+                                    <br /><br /><span id="tdCentroGastoPre"></span>
+                                </td>
+                                <td style="width: 210px; text-align: center; font-weight: bold ">
+                                    <br /><br /><span id="tdPedidoPecosaPre"></span>
+                                </td>
+                                <td style="width: 40px; text-align: center; font-weight: bold ">
+                                    <br /><br /><span id="tdDiaPecosaPre"></span>
+                                </td>
+                                <td style="width: 40px; text-align: center; font-weight: bold ">
+                                    <br /><br /><span id="tdMesPecosaPre"></span>
+                                </td>
+                                <td style="width: 40px; text-align: center; font-weight: bold ">
+                                    <br /><br /><span id="tdAnioPecosaPre"></span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <br /><br />
+                    <table cellpadding="0" cellspacing="0">
+                        <tr>
+                            <td colspan="7" style="height:270px;vertical-align:top;">
+                                <table cellpadding="0" cellspacing="0" style="font-family:'Arial Narrow', Arial, sans-serif;font-size:12px">
+                                    <tbody id="tblDetallePecosaPre"></tbody>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="width:120px;vertical-align:top;">&nbsp;</td>
+                            <td colspan="6" style="font-family: Arial, sans-serif; font-size: 12px;width:650px; line-height: 40px; vertical-align: top" id="tdJustificacionPre"></td>
+                        </tr>
+                    </table>
+                    <br><br><br>
+                    <table cellpadding="0" cellspacing="0" style="font-family:Arial, sans-serif;font-size:13px">
+                        <tbody>
+                            <tr>
+                                <td style="text-align:center;width:90px">&nbsp;</td>
+                                <td style="text-align:center;width:200px">
+                                    <span id="spnJefeAbaGradoPre"></span><br />
+                                    <span id="spnJefeAbaNombrePre"></span><br />
+                                    <span id="spnJefeAbaCIPPre"></span><br />
+                                </td>
+                                <td style="text-align: center;width: 250px">
+                                    <span id="spnJefeAlmacenGradoPre"></span><br />
+                                    <span id="spnJefeAlmacenNombrePre"></span><br />
+                                    <span id="spnJefeAlmacenCIPPre"></span><br />
+                                </td>
+                                <td style="text-align: center;width: 230px">
+                                    <span id="spnEntregadoGradoPre"></span><br />
+                                    <span id="spnEntregadoNombrePre"></span><br />
+                                    <span id="spnEntregadoCIPPre"></span><br />
+                                </td>
+                                <td style="text-align: center;width: 200px">
+                                    <span id="spnRecibidoGradoPre"></span><br />
+                                    <span id="spnRecibidoNombrePre"></span><br />
+                                    <span id="spnRecibidoCIPPre"></span><br />
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div id="styleSelector">
+        </div>
+        <div id="divTable" style="display:none"></div>
+    </div>
+</div>
+
+<iframe name="print_frame" width="0" height="0" frameborder="0" src="about:blank"></iframe>
+<script src="~/Riztie/Js/App/AppInventario.js"></script>
+
+
