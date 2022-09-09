@@ -304,8 +304,8 @@ namespace WebAppTurnera.Controllers
                 flujo.Read(buffer, 0, nSize);
 
                 daSQL odaSQL = new daSQL("conSISGEFIN");
-               // bool exito = odaSQL.EjecutarComandoBinario("uspDocumentoOrdenesAdicionar", "@id", idOrden, "@orden", buffer);
-                //if (exito) rpta = "Se grabo el documento";
+                bool exito = odaSQL.EjecutarComandoBinario("uspDocumentoOrdenesAdicionar", "@id", idOrden, "@orden", buffer);
+                if (exito) rpta = "Se grabo el documento";
                 else rpta = "`No se pudo grabar el documento";
             }
             return rpta;
@@ -315,8 +315,8 @@ namespace WebAppTurnera.Controllers
         {
             FileResult rpta = null;
             daSQL odaSQL = new daSQL("conSISGEFIN");
-          //  byte[] buffer = odaSQL.EjecutarConsultaBinaria("uspDocumentoOrdenesObtenerDocPorId", "@id", idOrden);
-           // if (buffer != null && buffer.Length > 0) rpta = File(buffer, "application/pdf");
+            byte[] buffer = odaSQL.EjecutarConsultaBinaria("uspDocumentoOrdenesObtenerDocPorId", "@id", idOrden);
+            if (buffer != null && buffer.Length > 0) rpta = File(buffer, "application/pdf");
             return rpta;
         }
 
