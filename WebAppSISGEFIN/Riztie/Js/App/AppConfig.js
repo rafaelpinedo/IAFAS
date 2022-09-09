@@ -343,21 +343,24 @@ function mostrarRegistro(rpta) {
             txtCCI.value = campos[35];
             txtNroCuenta.value = campos[36];
 
+            if (cboTipoContribuyente.value == "1") {
+                tipoPersonaNatural.style.display = "block";
+                tipoPersonaJuridica.style.display = "none";
+                tipoPersonaJuridicaRuc.style.display = "none";
+                cboTipoDocumento.value = "";
+            }
+            else if (cboTipoContribuyente.value == "2") {
+                tipoPersonaNatural.style.display = "none";
+                tipoPersonaJuridica.style.display = "block";
+                tipoPersonaJuridicaRuc.style.display = "block";
+                cboTipoDocumento.value = 4;
 
-
-            if (cboTipoDocumento.value == "4") {
-                if (cboTipoContribuyente.value == "2") {
-                    tipoPersonaNatural.style.display = "none";
-                    tipoPersonaJuridica.style.display = "block";
-                }
-                else if (cboTipoContribuyente.value == "3") {
-                    tipoPersonaJuridica.style.display = "none";
-                    tipoPersonaNatural.style.display = "block";
-                }
-                else {
-                    tipoPersonaJuridica.style.display = "block";
-                    tipoPersonaNatural.style.display = "block";
-                }
+            }
+            else if (cboTipoContribuyente.value == "3") {
+                tipoPersonaNatural.style.display = "block";
+                tipoPersonaJuridicaRuc.style.display = "block";
+                tipoPersonaJuridica.style.display = "none";
+                cboTipoDocumento.value = 4;
             }
 
             if (chkEsEmpleado.value == "1") {
@@ -509,8 +512,10 @@ function configurarBotones() {
 
         if (vista == "Persona") {
             tipoPersonaNatural.style.display = "block";
-            tipoPersonaJuridica.style.display = "block";
+            tipoPersonaJuridica.style.display = "none";
+            tipoPersonaJuridicaRuc.style.display = "none";
             chklaborales.style.display = "none";
+            divEstadoSunat.style.display = "none";
             cboTipoContribuyente.value = 1;
             cboTipoDocumento.value = 2;
             document.getElementById("txtRUC").classList.remove("Reque");
@@ -541,30 +546,43 @@ function configurarBotones() {
             //    console.log(input.value);
             //});
 
-
-            let dni = txtNroDocumento.value;
-            if (cboTipoDocumento.value == "4" && cboTipoContribuyente.value == "3") {
-                txtRazonSocial.value = txtApePaterno.value + ' ' + txtApeMaterno.value + ', ' + txtNombres.value;
-                document.getElementById("txtRUC").classList.remove("Reque");
-                document.getElementById("txtRazonSocial").classList.remove("Reque");
-                //if (dni.length != 8) {
-                //    spnDniDocumento.innerHTML = "Nro de Documento Incorrecto";
-                //    spnDniDocumento.style.color = "red";
-                //}
-            }
-            else if (cboTipoDocumento.value == "4" && cboTipoContribuyente.value == "2") {
-                document.getElementById("txtNroDocumento").classList.remove("Reque");
-                document.getElementById("txtApePaterno").classList.remove("Reque");
-                document.getElementById("txtApeMaterno").classList.remove("Reque");
-                document.getElementById("txtNombres").classList.remove("Reque");
-            }
-            else {
-                //document.getElementById("txtRUC").classList.add("Reque");
-                //document.getElementById("txtRazonSocial").classList.add("Reque");
+            if (cboTipoContribuyente.value == "1") {
                 document.getElementById("txtNroDocumento").classList.add("Reque");
                 document.getElementById("txtApePaterno").classList.add("Reque");
                 document.getElementById("txtApeMaterno").classList.add("Reque");
                 document.getElementById("txtNombres").classList.add("Reque");
+                document.getElementById("txtRUC").classList.remove("Reque");
+                document.getElementById("txtRazonSocial").classList.remove("Reque");
+            }
+            else if (cboTipoContribuyente.value == "2") {
+                document.getElementById("txtRUC").classList.add("Reque");
+                document.getElementById("txtRazonSocial").classList.add("Reque");
+
+                document.getElementById("txtNroDocumento").classList.remove("Reque");
+                document.getElementById("txtApePaterno").classList.remove("Reque");
+                document.getElementById("txtApeMaterno").classList.remove("Reque");
+                document.getElementById("txtNombres").classList.remove("Reque");
+
+            }
+            else if (cboTipoContribuyente.value == "3") {
+                txtRazonSocial.value = txtApePaterno.value + ' ' + txtApeMaterno.value + ', ' + txtNombres.value;
+                document.getElementById("txtRUC").classList.remove("Reque");
+                document.getElementById("txtRUC").classList.add("Reque");
+
+                document.getElementById("txtNroDocumento").classList.add("Reque");
+                document.getElementById("txtApePaterno").classList.add("Reque");
+                document.getElementById("txtApeMaterno").classList.add("Reque");
+                document.getElementById("txtNombres").classList.add("Reque");
+
+                document.getElementById("txtRazonSocial").classList.remove("Reque");
+            }
+            else {
+                document.getElementById("txtRUC").classList.remove("Reque");
+                document.getElementById("txtRazonSocial").classList.remove("Reque");
+                document.getElementById("txtNroDocumento").classList.remove("Reque");
+                document.getElementById("txtApePaterno").classList.remove("Reque");
+                document.getElementById("txtApeMaterno").classList.remove("Reque");
+                document.getElementById("txtNombres").classList.remove("Reque");
             }
            
         }
@@ -623,6 +641,20 @@ function configurarConsultas() {
 
         }
     }
+
+    var txtDNI = document.getElementById("txtNroDocumento");
+    if (txtDNI != null) {
+        txtDNI.onkeyup = function (event) {
+            var cboTipoDocumento = document.getElementById("cboTipoDocumento");
+            if (cboTipoDocumento.value == "2" || cboTipoDocumento.value == "4" ) {
+                if (this.value != "" && this.value.length == 8 || (event.keyCode == 13)) {
+                    spnLoadDoc.style.display = 'block';
+                    Http.get("General/consultaDniReniec/?dni=" + this.value, mostrarDatosDNI);
+                }
+            }
+        }
+    }
+
 }
 
 
@@ -659,6 +691,93 @@ function mostrarDatosSunat(rpta) {
     }
 }
 
+function mostrarDatosDNI(rpta) {
+    if (rpta != "") {
+        var obj = JSON.parse(rpta);
+
+        if (obj.success) {
+            spnDniDocumento.innerHTML = "";
+            var ttaDireccion = document.getElementById("ttaDireccion");
+            if (ttaDireccion != null) ttaDireccion.value = obj.data.direccion_completa;
+            var txtApePaterno = document.getElementById("txtApePaterno");
+            if (txtApePaterno != null) txtApePaterno.value = obj.data.apellido_paterno;
+            var txtApeMaterno = document.getElementById("txtApeMaterno");
+            if (txtApeMaterno != null) txtApeMaterno.value = obj.data.apellido_materno;
+            var txtNombres = document.getElementById("txtNombres");
+            if (txtNombres != null) txtNombres.value = obj.data.nombres;
+            var txtNroDocumento = document.getElementById("txtNroDocumento");
+            if (txtNroDocumento != null) txtNroDocumento.value = obj.data.numero;
+            var cboSexo = document.getElementById("cboSexo");
+            if (cboSexo != null) {
+                switch (obj.data.sexo) {
+                    case "MASCULINO":
+                        cboSexo.value = 2;
+                        break;
+                    case "FEMENINO":
+                        cboSexo.value = 3;
+                        break;
+                    default:
+                        cboSexo.value = "";
+                }
+            }
+
+            var cboEstadoCivil = document.getElementById("cboEstadoCivil");
+            if (cboEstadoCivil != null) {
+                switch (obj.data.estado_civil) {
+                    case "SOLTERO":
+                        cboEstadoCivil.value = 2;
+                        break;
+                    case "CASADO":
+                        cboEstadoCivil.value = 3;
+                        break;
+                    case "VIUDO":
+                        cboEstadoCivil.value = 4;
+                        break;
+                    case "DIVORCIADO":
+                        cboEstadoCivil.value = 5;
+                        break;
+                    case "CONVIVIENTE":
+                        cboEstadoCivil.value = 6;
+                        break;
+                    default:
+                        cboEstadoCivil.value = "";
+                }
+            }
+
+            var txtFechaNacimiento = document.getElementById("txtFechaNacimiento");
+            if (txtFechaNacimiento != null) txtFechaNacimiento.value = obj.data.fecha_nacimiento;
+            var cboPais = document.getElementById("cboPais");
+            if (cboPais != null) cboPais.value = "1";
+            listarDepartamentos();
+            let ubigeo = obj.data.ubigeo_sunat;
+            let idDpto = ubigeo.substr(0, 2);
+            let idProv = ubigeo.substr(2, 2);
+            let idDist = ubigeo.substr(4, 2);
+            cboDepartamento.value = idDpto;
+            document.getElementById('select2-cboDepartamento-container').innerHTML = cboDepartamento.options[cboDepartamento.selectedIndex].text;
+            listarProvincias();
+            cboProvincia.value = idProv;
+            document.getElementById('select2-cboProvincia-container').innerHTML = cboProvincia.options[cboProvincia.selectedIndex].text;
+            listarDistritos();
+            cboDistrito.value = idDist;
+            document.getElementById('select2-cboDistrito-container').innerHTML = cboDistrito.options[cboDistrito.selectedIndex].text;
+            spnLoadDoc.style.display = 'none';
+        }
+        else {
+            spnLoadDoc.style.display = 'none';
+            spnDniDocumento.innerHTML = "Nro de Documento no encontrado";
+            spnDniDocumento.style.color = "red";
+            
+        }
+    }
+    else {
+        spnDniDocumento.innerHTML = "Documento incorrecto o no existe enlace con SUNAT";
+        spnDniDocumento.style.color = "red";
+        spnLoadDoc.style.display = 'none';
+    }
+}
+
+
 function configurarCombos() {
     var cboEntidad = document.getElementById("cboEntidad");
     if (cboEntidad != null) cboEntidad.onchange = function () {
@@ -675,22 +794,46 @@ function configurarCombos() {
         listarDistritos();
     }
 
+    var cboTipoDocumento = document.getElementById("cboTipoDocumento")
+    if (cboTipoDocumento != null) cboTipoDocumento.onchange = function () {
+        if (cboTipoDocumento.value == "4") {
+            cboTipoContribuyente.value = 2;
+            tipoPersonaNatural.style.display = "none";
+            tipoPersonaJuridica.style.display = "block";
+            tipoPersonaJuridicaRuc.style.display = "block";
+        }
+        else {
+            cboTipoContribuyente.value = 1;
+            tipoPersonaNatural.style.display = "block";
+            tipoPersonaJuridica.style.display = "none";
+            tipoPersonaJuridicaRuc.style.display = "none";
+        }
+
+    }
+
     var cboTipoContribuyente = document.getElementById("cboTipoContribuyente")
     if (cboTipoContribuyente != null) cboTipoContribuyente.onchange = function () {
-        if (cboTipoDocumento.value == "4") {
-            if (cboTipoContribuyente.value == "2") {
-                tipoPersonaNatural.style.display = "none";
-                tipoPersonaJuridica.style.display = "block";
-            }
-            else if (cboTipoContribuyente.value == "3") {
-                tipoPersonaJuridica.style.display = "none";
-                tipoPersonaNatural.style.display = "block";
-            }
-            else {
-                tipoPersonaJuridica.style.display = "block";
-                tipoPersonaNatural.style.display = "block";
-            }
+       
+         if (cboTipoContribuyente.value == "1") {
+            tipoPersonaNatural.style.display = "block";
+            tipoPersonaJuridica.style.display = "none";
+             tipoPersonaJuridicaRuc.style.display = "none";
+             cboTipoDocumento.value = "";
         }
+        else if (cboTipoContribuyente.value == "2") {
+            tipoPersonaNatural.style.display = "none";
+             tipoPersonaJuridica.style.display = "block";
+             tipoPersonaJuridicaRuc.style.display = "block";
+             cboTipoDocumento.value = 4;
+
+        }
+        else if (cboTipoContribuyente.value == "3") {
+            tipoPersonaNatural.style.display = "block";
+            tipoPersonaJuridicaRuc.style.display = "block";
+             tipoPersonaJuridica.style.display = "none";
+             cboTipoDocumento.value = 4;
+        }
+
     }
 
     var chkEsEmpleado = document.getElementById("chkEsEmpleado")
@@ -698,16 +841,11 @@ function configurarCombos() {
         var checked = chkEsEmpleado.checked;
         if (checked) {
             chklaborales.style.display = "block";
-            tipoPersonaJuridica.style.display = "none";
             document.getElementById("txtRUC").classList.remove("Reque");
             document.getElementById("txtRazonSocial").classList.remove("Reque");
-            //cboTipoDocumento.value = 2;
-            //cboTipoContribuyente.value = 1;
-
         }
         else {
             chklaborales.style.display = "none";
-            tipoPersonaJuridica.style.display = "block";
             document.getElementById("txtRUC").classList.remove("Reque");
         }
     }
