@@ -264,5 +264,21 @@ namespace WebAppSISGEFIN.Controllers
             return View();
         }
 
+        public string ContarRegistrosLogisticaArticulo()
+        {
+            string rpta = "";
+            daSQL odaSQL = new daSQL("conSISGEFIN");
+            rpta = odaSQL.EjecutarComando("uspLogisticaArticuloContarRegistros");
+            return rpta;
+        }
+
+        public string consultarPaginaLogisticaArticulo(string tb, int pagina, int registros)
+        {
+            string rpta = "";
+            string data = string.Format("{0}|{1}|{2}", tb, pagina, registros);
+            daSQL odaSQL = new daSQL("conSISGEFIN");
+            rpta = odaSQL.EjecutarComando("uspLogisticaArticuloPaginarCsv", "@data", data);
+            return rpta;
+        }
     }
 }
