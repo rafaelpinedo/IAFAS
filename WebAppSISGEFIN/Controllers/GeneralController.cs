@@ -156,7 +156,7 @@ namespace WebAppTurnera.Controllers
         //private void crearArchivoBajar(string nombreArchivo, string data, string orienta)
 
         private void crearArchivoBajar(string nombreArchivo, string data, string orienta, string stitulo = "", string sProducto = "", bool isTotal = false, string colSuma = "")
-                {
+        {
             string[] Data = Session["DataUsuario"].ToString().Split('|');
             string usuario = Data[1];
             string tipoMime = "";
@@ -173,12 +173,12 @@ namespace WebAppTurnera.Controllers
             byte[] buffer = null;
             switch (tipo)
             {
-                case ".xlsx":
-                    buffer = Epplus.Excel(table, nombre, tituloReporte, usuarioNombre, nombreSistema);
-                    break;
                 //case ".xlsx":
-                //    buffer = Epplus.Excel(data, nombre, tituloReporte, usuarioNombre, nombreSistema, stitulo, sProducto, isTotal, colSuma);
+                //    buffer = Epplus.Excel(table, nombre, tituloReporte, usuarioNombre, nombreSistema);
                 //    break;
+                case ".xlsx":
+                    buffer = Epplus.Excel(data, nombre, tituloReporte, usuarioNombre, nombreSistema, stitulo, sProducto, isTotal, colSuma);
+                    break;
                 case ".pdf":
                     string ruta = Server.MapPath("~/Riztie/Images");
                     string img1 = io.Path.Combine(ruta, "logoReporte.png");
@@ -250,23 +250,73 @@ namespace WebAppTurnera.Controllers
             return rpta;
         }
 
-        public string enviarCorreo()
+        public string enviarCorreo(bool grabarBD = false)
         {
             string rpta = "";
             string contenidoMail = "datos de prueba";
             string correo = Request.Form["correo"];
-            string data = Request.Form["data"];
-            byte[] buffer = io.File.ReadAllBytes(data);
-            
+            //string data = Request.Form["data"];
+            string idOrden = Request.Form["idx"];
             if (Request.Files.Count > 0)
             {
                 //string ruta = Server.MapPath("~/Reporte");
                 //string archivo = io.Path.Combine(ruta, "cotizacion.pdf");
                 //Request.Files[0].SaveAs(archivo);
                 //byte[] buffer = io.File.ReadAllBytes(archivo);
-                Correo.EnviarCorreo(correo, "adminsigea@enamm.edu.pe", "IAFAS: solicitud de cotización", contenidoMail, true, "SolicitudCotizacion", buffer);
-                rpta = "Se envio el correo con el archivo adjunto";
+                Stream flujo = Request.Files[0].InputStream;
+                int nSize = Request.Files[0].ContentLength;
+                byte[] buffer = new byte[nSize];
+                flujo.Read(buffer, 0, nSize);
+                string rutaPDF = Server.MapPath("~/Riztie/Files/" + idOrden + ".pdf");
+                Request.Files[0].SaveAs(rutaPDF);
+                //Correo.EnviarCorreo(correo, "sisgefinweb@gmail.com", "IAFAS: solicitud de cotización", contenidoMail, true, "SolicitudCotizacion", buffer);
+                if (grabarBD)
+                {
+                    daSQL odaSQL = new daSQL("conSISGEFIN");
+                    bool exito = odaSQL.EjecutarComandoBinario("uspDocumentoOrdenesAdicionar", "@id", idOrden, "@orden", buffer);
+                    if (exito) rpta = "Se envio el correo con el archivo adjunto y Se grabo el documento";
+                    else rpta = "Se envio el correo con el archivo adjunto pero No se pudo grabar el documento";
+                }
+                else
+                {
+                    rpta = "Se envio el correo con el archivo adjunto";
+                }
             }
+            return rpta;
+        }
+
+        public string enviarOrden(string tbl)
+        {
+            string rpta = "";
+            string contenidoMail = "Envio de orden de compra al proveedor";
+            string correo = Request.Form["correo"];
+            string idOrden = Request.Form["idx"];
+            if (Request.Files.Count > 0)
+            {
+                //Correo.EnviarCorreo(correo, "sisgefinweb@gmail.com", "IAFAS: solicitud de cotización", contenidoMail, true, "SolicitudCotizacion", buffer);
+                rpta = "Se envio el correo con el archivo adjunto";
+                string[] Data = Session["DataUsuario"].ToString().Split('|');
+                string User = Data[1];
+
+                Stream flujo = Request.Files[0].InputStream;
+                int nSize = Request.Files[0].ContentLength;
+                byte[] buffer = new byte[nSize];
+                flujo.Read(buffer, 0, nSize);
+
+                daSQL odaSQL = new daSQL("conSISGEFIN");
+               // bool exito = odaSQL.EjecutarComandoBinario("uspDocumentoOrdenesAdicionar", "@id", idOrden, "@orden", buffer);
+                //if (exito) rpta = "Se grabo el documento";
+                else rpta = "`No se pudo grabar el documento";
+            }
+            return rpta;
+        }
+
+        public FileResult descargarOrden(string idOrden)
+        {
+            FileResult rpta = null;
+            daSQL odaSQL = new daSQL("conSISGEFIN");
+          //  byte[] buffer = odaSQL.EjecutarConsultaBinaria("uspDocumentoOrdenesObtenerDocPorId", "@id", idOrden);
+           // if (buffer != null && buffer.Length > 0) rpta = File(buffer, "application/pdf");
             return rpta;
         }
 

@@ -16,6 +16,13 @@ var listaUbigeo = [];
 var listaItemInventario = [];
 var idTabActivo = "";
 
+var totalRegistros = 0;
+var registrosPagina = 25000;
+var contadorViajes = 0;
+var totalViajes = 0;
+var listaCatalogo = [];
+var grillaCatalogo;
+
 var botonesProceso = [
     { "cabecera": "Proceso", "clase": "fa fa-plus-circle btn btn-primary btnCirculo", "id": "Proceso" },
     { "cabecera": "Editar", "clase": "fa fa-pencil btn btn-info btnCirculo", "id": "Editar" },
@@ -97,7 +104,20 @@ function getListar() {
 }
 
 function getListarArticulo(tipo) {
-    Http.get("General/listarTabla?tbl=" + controller + vista + "&data=" + tipo, mostrarlistas);
+    Http.get("Logistica/ContarRegistrosLogisticaArticulo", function (data) {
+        if (data) {
+            totalRegistros = data * 1;
+            totalViajes = Math.floor(totalRegistros / registrosPagina);
+            if (totalRegistros % registrosPagina > 0) totalViajes++;
+            //divProgreso.style.display = "inline";
+            //pgrCubso.value = 0;
+            //pgrCubso.max = totalViajes;
+            contadorViajes = 0;
+            listaCatalogo = [];
+            Http.get("General/listarTabla?tbl=" + controller + vista + "&data=" + tipo, mostrarlistas);
+        }
+    });
+
 }
 
 function mostrarlistas(rpta) {
@@ -168,20 +188,26 @@ function mostrarlistas(rpta) {
             crearCombo(listaCC, "cboCentroCosto", "Seleccione");
         }
         else if (vista == "Articulo") {
+            grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, true, true, botones, 38, false, null);
+            //var nRegListaTemp = lista.length;
+            //for (var i = 0; i < nRegListaTemp; i++) {
+            //    listaCatalogo.push(lista[i]);
+            //}
+            //contadorViajes++;
+            //Http.get("Logistica/consultarPaginaLogisticaArticulo?tb=B&pagina=" + (contadorViajes + 1) + "&registros=" + registrosPagina, mostrarRptaPaginaArticulo);
 
-            grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
-            var listaTipo = listas[1].split("¬");
-            listaGrupoItem = listas[2].split("¬");
-            listaClaseItem = listas[3].split("¬");
-            listaFamiliaItem = listas[4].split("¬");
-            var listaTipoItem = listas[5].split("¬");
-            var listaUniMed = listas[6].split("¬");
-            var listaEstado = listas[7].split("¬");
-            crearCombo(listaTipo, "cboTipoBien", "Seleccione");
-            listarGrupoItem();
-            crearCombo(listaTipoItem, "cboTipoItem", "Seleccione");
-            crearCombo(listaEstado, "cboEstado", "Seleccione");
-            crearCombo(listaUniMed, "cboUniMed", "Seleccione");
+            //var listaTipo = listas[1].split("¬");
+            //listaGrupoItem = listas[2].split("¬");
+            //listaClaseItem = listas[3].split("¬");
+            //listaFamiliaItem = listas[4].split("¬");
+            //var listaTipoItem = listas[5].split("¬");
+            //var listaUniMed = listas[6].split("¬");
+            //var listaEstado = listas[7].split("¬");
+            //crearCombo(listaTipo, "cboTipoBien", "Seleccione");
+            //listarGrupoItem();
+            //crearCombo(listaTipoItem, "cboTipoItem", "Seleccione");
+            //crearCombo(listaEstado, "cboEstado", "Seleccione");
+            //crearCombo(listaUniMed, "cboUniMed", "Seleccione");
         }
 
         else if (vista == "Grupo") {
@@ -283,6 +309,37 @@ function mostrarlistas(rpta) {
         }
         else {
             grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
+        }
+    }
+}
+
+function mostrarRptaPaginaArticulo(rpta) {
+    if (rpta) {
+        contadorViajes++;
+        //pgrCubso.value = contadorViajes;
+        //spnProgreso.innerText = contadorViajes + " de " + totalViajes;
+        var listaTemp = rpta.split("¬");
+        var nRegListaTemp = listaTemp.length;
+        for (var i = 0; i < nRegListaTemp; i++) {
+            listaCatalogo.push(listaTemp[i]);
+        }
+        if (contadorViajes == 1 || contadorViajes % 10 == 0) {
+            grillaItem = new GrillaScroll(listaCatalogo, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
+            //GUI.Grilla(divCubso, lista, "cubso", null, "Total de Registros: ", null, null, false, null, 20, 5, false, false, false, false, false);
+
+        }
+        if (contadorViajes < totalViajes) {
+            Http.get("Logistica/consultarPaginaLogisticaArticulo?tb=B&pagina=" + (contadorViajes + 1) + "&registros=" + registrosPagina, mostrarRptaPaginaArticulo);
+            //Http.get("Cubso/consultarPaginaCubso?pagina=" + (contadorViajes + 1) + "&registros=" + registrosPagina, mostrarRptaConsulta);
+        }
+        else {
+            grillaItem = new GrillaScroll(listaCatalogo, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
+            alert('carga terminada');
+            //            pgrCubso.value = totalViajes;
+            //          btnFastPdf.style.display = "inline";
+            //    var horaFin = new Date();
+            //        var tiempo = horaFin - horaInicio;
+            //      spnMensaje.innerText = "Tiempo de Tecnica 3 msg: " + tiempo;
         }
     }
 }
@@ -1027,20 +1084,29 @@ function configurarBotones() {
             mostrarMensaje("Ingrese correo electrónico del proveedor", "error")
         }
         else {
-            var doc = new jsPDF();
-            doc.text('IAFAS DE LA MARINA DE GUERRA DEL PERU', 14, 18)
-            doc.text('SISGEFIN', 14, 21)
-            //  doc.text('Fecha: ' + fecha, 170, 21)
-            // doc.text('Usuario: ' + spnUsuario.innerHTML, 14, 23)
-            //doc.text('Hora: ' + hora, 170, 23)
-            doc.setFontSize(16);
-            doc.text('Solicitud de cotización', 84, 33);
-
-            var blobPDF = new Blob([doc.output("blob")], { type: 'application/pdf' });
+            var blobPDF;
+            var flag = false;
+            if (vista == "Cotizacion") {
+                flag = false;
+                var doc = new jsPDF();
+                doc.text('IAFAS DE LA MARINA DE GUERRA DEL PERU', 14, 18)
+                doc.text('SISGEFIN', 14, 21)
+                //  doc.text('Fecha: ' + fecha, 170, 21)
+                // doc.text('Usuario: ' + spnUsuario.innerHTML, 14, 23)
+                //doc.text('Hora: ' + hora, 170, 23)
+                doc.setFontSize(16);
+                doc.text('Solicitud de cotización', 84, 33);
+                blobPDF = new Blob([doc.output("blob")], { type: 'application/pdf' });
+            }
+            else {
+                flag = true;
+                blobPDF = uplfile.files[0];
+            }
             var frm = new FormData();
             frm.append("correo", correo);
             frm.append("data", blobPDF);
-            Http.post("General/enviarCorreo", mostrarEnviarCorreo, frm);
+            frm.append("idx", idRegistro);
+            Http.post("General/enviarCorreo?grabarBD=" + flag, mostrarEnviarCorreo, frm);
         }
     }
 
@@ -1235,7 +1301,27 @@ function configurarBotones() {
 
     }
 
+    var btnDescargar = document.getElementById("btnDescargar");
+    if (btnDescargar != null) {
+        btnDescargar.onclick = function () {
+            if (idRegistro) {
+                Http.getDownloadBytes("General/descargarOrden?idOrden=" + idRegistro, function (data) {
+                    if (data.byteLength > 0) {
+                        //archivo = idRegistro + ".pdf";
+                        //descargarArchivo(data, obtenerMime());
+                        var blob = new Blob([data], { "type": "application/pdf" });
+                        ifrOrden.src = URL.createObjectURL(blob);
+                    }
+                    else alert("La Orden No tiene archivo para Descargar");
+                });
+            }
+            else {
+                alert("Selecciona la Orden a Descargar");
+            }
+        }
+    }
 }
+
 function mostrarListadoPeriodo(rpta) {
     if (rpta) {
         var listas = rpta.split("|");
@@ -1633,9 +1719,15 @@ function seleccionarFila(fila, id, prefijo) {
         Http.get("General/listarTabla/?tbl=" + controller + vista + "DetalleItem&data=" + id, mostrarSolicitudDetalle);
     }
     else if (vista == "OrdenCompra") {
+        if (prefijo == "divLista") {
+
+            txtProveedorCorreo.value = fila.childNodes[5].innerHTML;
+            //txtEmail.value = fila.childNodes[8].innerHTML;
+        }
         if (prefijo == "lista") {
             empresa = fila.childNodes[3].innerHTML;
             estadoTabla = fila.childNodes[8].innerHTML;
+
             if (estadoTabla == "EMITIDA") {
                 tdEtiquetaIAFAS.innerHTML = "&nbsp;";
                 snpEtiquetaMGP.innerHTML = "";
@@ -4686,10 +4778,7 @@ function emitirOrden() {
             btnEmitir.disabled = true;
         }
     }
-
-
 }
-
 
 function mostrarExportar(rpta) {
     spnLoad.style.display = 'none';
