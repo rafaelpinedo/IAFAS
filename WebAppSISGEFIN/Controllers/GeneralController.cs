@@ -173,12 +173,12 @@ namespace WebAppTurnera.Controllers
             byte[] buffer = null;
             switch (tipo)
             {
-                case ".xlsx":
-                    buffer = Epplus.Excel(table, nombre, tituloReporte, usuarioNombre, nombreSistema);
-                    break;
                 //case ".xlsx":
-                //    buffer = Epplus.Excel(data, nombre, tituloReporte, usuarioNombre, nombreSistema, stitulo, sProducto, isTotal, colSuma);
+                //    buffer = Epplus.Excel(table, nombre, tituloReporte, usuarioNombre, nombreSistema);
                 //    break;
+                case ".xlsx":
+                    buffer = Epplus.Excel(data, nombre, tituloReporte, usuarioNombre, nombreSistema, stitulo, sProducto, isTotal, colSuma);
+                    break;
                 case ".pdf":
                     string ruta = Server.MapPath("~/Riztie/Images");
                     string img1 = io.Path.Combine(ruta, "logoReporte.png");
