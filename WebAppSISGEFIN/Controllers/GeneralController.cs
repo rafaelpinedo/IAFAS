@@ -250,22 +250,37 @@ namespace WebAppTurnera.Controllers
             return rpta;
         }
 
-        public string enviarCorreo()
+        public string enviarCorreo(bool grabarBD = false)
         {
             string rpta = "";
             string contenidoMail = "datos de prueba";
             string correo = Request.Form["correo"];
-            string data = Request.Form["data"];
-            byte[] buffer = io.File.ReadAllBytes(data);
-            
+            //string data = Request.Form["data"];
+            string idOrden = Request.Form["idx"];
             if (Request.Files.Count > 0)
             {
                 //string ruta = Server.MapPath("~/Reporte");
                 //string archivo = io.Path.Combine(ruta, "cotizacion.pdf");
                 //Request.Files[0].SaveAs(archivo);
                 //byte[] buffer = io.File.ReadAllBytes(archivo);
-                Correo.EnviarCorreo(correo, "adminsigea@enamm.edu.pe", "IAFAS: solicitud de cotización", contenidoMail, true, "SolicitudCotizacion", buffer);
-                rpta = "Se envio el correo con el archivo adjunto";
+                Stream flujo = Request.Files[0].InputStream;
+                int nSize = Request.Files[0].ContentLength;
+                byte[] buffer = new byte[nSize];
+                flujo.Read(buffer, 0, nSize);
+                string rutaPDF = Server.MapPath("~/Riztie/Files/" + idOrden + ".pdf");
+                Request.Files[0].SaveAs(rutaPDF);
+                //Correo.EnviarCorreo(correo, "sisgefinweb@gmail.com", "IAFAS: solicitud de cotización", contenidoMail, true, "SolicitudCotizacion", buffer);
+                if (grabarBD)
+                {
+                    daSQL odaSQL = new daSQL("conSISGEFIN");
+                    bool exito = odaSQL.EjecutarComandoBinario("uspDocumentoOrdenesAdicionar", "@id", idOrden, "@orden", buffer);
+                    if (exito) rpta = "Se envio el correo con el archivo adjunto y Se grabo el documento";
+                    else rpta = "Se envio el correo con el archivo adjunto pero No se pudo grabar el documento";
+                }
+                else
+                {
+                    rpta = "Se envio el correo con el archivo adjunto";
+                }
             }
             return rpta;
         }
