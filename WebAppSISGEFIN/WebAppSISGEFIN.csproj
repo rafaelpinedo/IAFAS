@@ -336,6 +336,7 @@
     <Content Include="Views\Patrimonio\CausalBaja.cshtml" />
     <Content Include="Views\Patrimonio\TipoPatrimonio.cshtml" />
     <Content Include="Views\Inventario\GenerarNP.cshtml" />
+    <Content Include="Views\Patrimonio\UbicaFisica.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -346,6 +347,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Riztie\Files\" />
     <Folder Include="Riztie\Manual\" />
     <Folder Include="Views\Ingresos\" />
   </ItemGroup>
