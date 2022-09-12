@@ -40,6 +40,26 @@
                                         <div class="card-block">
                                             <div class="form-row">
                                                 <div class="form-group col-md-12">
+                                                    <div class="row">
+                                                        <div class="col-sm-2">
+                                                            <label class="control-label">Codigo</label>
+                                                            <input type="text" autocomplete="off" id="codigoFilt" class="control-form PopupFiltro" />
+                                                        </div>
+                                                        <div class="col-sm-4">
+                                                            <label class="control-label">Descripción</label>
+                                                            <input type="text" autocomplete="off" id="nombreFilt" class="control-form PopupFiltro" />
+                                                        </div>
+                                                        <div class="col-sm-2">
+                                                            <label class="control-label">Unidad Medida</label>
+                                                            <select id="unidaMedidaFilt" class="control-form PopupFiltro"></select>
+                                                        </div>
+                                                        <div class="col-sm-1">
+                                                            <button class="input-group-inverse btn btn-inverse btn-md" id="btnConsultar" data-toggle="tooltip" data-placement="bottom" title="Consultar BD"><i class="fa fa-search fa-lg" aria-hidden="true"></i></button>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                                <div class="form-group col-md-12">
                                                     <div class="table-responsive" id="divLista"></div>
                                                 </div>
                                             </div>
@@ -86,7 +106,7 @@
                                         <div class="row">
                                             <div class="form-group col-sm-4">
                                                 <label class="control-label">Código Item</label>
-                                                <input type="text" autocomplete="off" maxlength="20" id="txtCodigo" class="control-form Reque Popup"/>
+                                                <input type="text" autocomplete="off" maxlength="20" id="txtCodigo" class="control-form Reque Popup" />
                                             </div>
                                             <div class="form-group col-sm-4">
                                                 <label class="control-label">Tipo Item</label>
@@ -105,10 +125,18 @@
                                         </div>
                                         <div class="row">
                                             <div class="form-group col-sm-4">
+                                                <label class="control-label">Stock Minimo</label>
+                                                <input type="text" autocomplete="off" maxlength="20" id="txtStockMin" class="control-form Popup" onkeypress="return NumCheck(event, this)" />
+                                            </div>
+                                            <div class="form-group col-sm-4">
+                                                <label class="control-label">Stok Maximo</label>
+                                                <input type="text" autocomplete="off" maxlength="20" id="txtStockMax" class="control-form Popup" onkeypress="return NumCheck(event, this)" />
+                                            </div>
+                                            <div class="form-group col-sm-4">
                                                 <label class="control-label">Estado</label>
                                                 <select id="cboEstado" class="control-lectura Reque Popup"></select>
                                             </div>
-                                        </div>
+                                        </div> 
                                     </div>
                                     <div class="modal-footer">
                                         <button id="btnCancelar" class="btnCancelarForm" title="Cancelar"><i class="fa fa-undo" aria-hidden="true"></i>&nbsp;Cancelar</button>

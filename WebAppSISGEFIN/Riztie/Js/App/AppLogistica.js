@@ -72,6 +72,26 @@ function getListarLicita() {
     Http.get("General/listarTabla/?tbl=" + controller + vista + "&data=" + anioFiscal, mostrarlistas);
 }
 
+function NumCheck(e, field) {
+    key = e.keyCode ? e.keyCode : e.which
+    // backspace
+    if (key == 8) return true
+    // 0-9
+    if (key > 47 && key < 58) {
+        if (field.value == "") return true
+        regexp = /^\d+(\.\d{0,2})?$/;
+        return (regexp.test(field.value))
+    }
+    // .
+    if (key == 46) {
+        if (field.value == "") return false
+        regexp = /^[0-9]+$/
+        return regexp.test(field.value)
+    }
+
+    return false
+}
+
 function getListarOrden(tipo) {
     var data = "";
     var txtFechaInicio = document.getElementById("txtFechaInicio").value;
@@ -188,7 +208,7 @@ function mostrarlistas(rpta) {
             crearCombo(listaCC, "cboCentroCosto", "Seleccione");
         }
         else if (vista == "Articulo") {
-            grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, true, true, botones, 38, false, null);
+            grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
             //var nRegListaTemp = lista.length;
             //for (var i = 0; i < nRegListaTemp; i++) {
             //    listaCatalogo.push(lista[i]);
@@ -196,18 +216,19 @@ function mostrarlistas(rpta) {
             //contadorViajes++;
             //Http.get("Logistica/consultarPaginaLogisticaArticulo?tb=B&pagina=" + (contadorViajes + 1) + "&registros=" + registrosPagina, mostrarRptaPaginaArticulo);
 
-            //var listaTipo = listas[1].split("¬");
-            //listaGrupoItem = listas[2].split("¬");
-            //listaClaseItem = listas[3].split("¬");
-            //listaFamiliaItem = listas[4].split("¬");
-            //var listaTipoItem = listas[5].split("¬");
-            //var listaUniMed = listas[6].split("¬");
-            //var listaEstado = listas[7].split("¬");
-            //crearCombo(listaTipo, "cboTipoBien", "Seleccione");
-            //listarGrupoItem();
-            //crearCombo(listaTipoItem, "cboTipoItem", "Seleccione");
-            //crearCombo(listaEstado, "cboEstado", "Seleccione");
-            //crearCombo(listaUniMed, "cboUniMed", "Seleccione");
+            var listaTipo = listas[1].split("¬");
+            listaGrupoItem = listas[2].split("¬");
+            listaClaseItem = listas[3].split("¬");
+            listaFamiliaItem = listas[4].split("¬");
+            var listaTipoItem = listas[5].split("¬");
+            var listaUniMed = listas[6].split("¬");
+            var listaEstado = listas[7].split("¬");
+            crearCombo(listaTipo, "cboTipoBien", "Seleccione");
+            listarGrupoItem();
+            crearCombo(listaTipoItem, "cboTipoItem", "Seleccione");
+            crearCombo(listaEstado, "cboEstado", "Seleccione");
+            crearCombo(listaUniMed, "cboUniMed", "Seleccione");
+            crearCombo(listaUniMed, "unidaMedidaFilt", "Seleccione");
         }
 
         else if (vista == "Grupo") {
@@ -773,17 +794,50 @@ function configurarBotones() {
 
     var btnTabBienes = document.getElementById("btnTabBienes");
     if (btnTabBienes != null) btnTabBienes.onclick = function () {
-        getListarArticulo('B')
+       // getListarArticulo('B')
+        codigoFilt.value = "";
+        nombreFilt.value = "";
+        unidaMedidaFilt.value = "";
+        let data = 'B|||';
+        Http.get("General/listarTabla?tbl=" + controller + vista + "Filtro" + "&data=" + data, function (response) {
+            if (response) {
+                var listas = response.split("¯");
+                var lista = listas[0].split("¬");
+                grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
+            }
+        });
     }
 
     var btnTabServicios = document.getElementById("btnTabServicios");
     if (btnTabServicios != null) btnTabServicios.onclick = function () {
-        getListarArticulo('S')
+        //getListarArticulo('S')
+        codigoFilt.value = "";
+        nombreFilt.value = "";
+        unidaMedidaFilt.value = "";
+        let data = 'S|||';
+        Http.get("General/listarTabla?tbl=" + controller + vista + "Filtro" + "&data=" + data, function (response) {
+            if (response) {
+                var listas = response.split("¯");
+                var lista = listas[0].split("¬");
+                grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
+            }
+        });
     }
 
     var btnTabObras = document.getElementById("btnTabObras");
     if (btnTabObras != null) btnTabObras.onclick = function () {
-        getListarArticulo('O')
+      //  getListarArticulo('O')
+        codigoFilt.value = "";
+        nombreFilt.value = "";
+        unidaMedidaFilt.value = "";
+        let data = 'O|||';
+        Http.get("General/listarTabla?tbl=" + controller + vista + "Filtro" + "&data=" + data, function (response) {
+            if (response) {
+                var listas = response.split("¯");
+                var lista = listas[0].split("¬");
+                grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
+            }
+        });
     }
 
     var btnConsultar = document.getElementById("btnConsultar");
@@ -793,6 +847,36 @@ function configurarBotones() {
         }
         else if (vista == "Periodo") {
             getListarPeriodo();
+        }
+        else if (vista == "Articulo") {
+
+            var container = document.querySelector('#mytab');
+            let tabs = Array.prototype.slice.apply(container.querySelectorAll('.nav-tabs .active'));
+            var idTabActivo = tabs[0].attributes[1].value;
+            var idTipo = "";
+            switch (idTabActivo) {
+                case "btnTabBienes":
+                    idTipo = "B";
+                    break;
+                case "btnTabServicios":
+                    idTipo = "S";
+                    break;
+                case "btnTabObras":
+                    idTipo = "O";
+                    break;
+                default:
+                    idTipo = "B";
+                    break;
+            }
+
+            let data = idTipo + '|' + codigoFilt.value + '|' + nombreFilt.value + '|' + unidaMedidaFilt.value;
+            Http.get("General/listarTabla?tbl=" + controller + vista + "Filtro" + "&data=" + data, function (response) {
+                if (response) {
+                    var listas = response.split("¯");
+                    var lista = listas[0].split("¬");
+                    grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
+                }
+            });
         }
         else {
             getListar();
@@ -2450,7 +2534,9 @@ function mostrarRegistro(rpta) {
             cboTipoItem.value = campos[6];
             cboUniMed.value = campos[7];
             txtNombre.value = campos[8];
-            cboEstado.value = campos[9];
+            txtStockMin.value = campos[9];
+            txtStockMax.value = campos[10];
+            cboEstado.value = campos[11];
         }
         else if (vista == "Clase") {
 
@@ -2599,6 +2685,29 @@ function grabarDatos() {
     if (vista == "Periodo") {
         data += data + '¯' + txtAnioFiscal.value;
     }
+    else if (vista == "Articulo") {
+        var container = document.querySelector('#mytab');
+        let tabs = Array.prototype.slice.apply(container.querySelectorAll('.nav-tabs .active'));
+        var idTabActivo = tabs[0].attributes[1].value;
+        var idTipo = "";
+        switch (idTabActivo) {
+            case "btnTabBienes":
+                idTipo = "B";
+                break;
+            case "btnTabServicios":
+                idTipo = "S";
+                break;
+            case "btnTabObras":
+                idTipo = "O";
+                break;
+            default:
+                idTipo = "B";
+                break;
+        }
+        let articulo = idTipo + '|' + codigoFilt.value + '|' + nombreFilt.value + '|' + unidaMedidaFilt.value;
+        data = data + '¯' + articulo;
+    }
+
     frm.append("data", data);
     Http.post("General/guardar/?tbl=" + controller + vista, mostrarGrabar, frm);
 }
@@ -2838,6 +2947,29 @@ function eliminarRegistro(id) {
         var fechaInicio = txtFechaInicio.value;
         var fechaFinal = txtFechaFinal.value;
         data = id + '|' + fechaInicio + '|' + fechaFinal + '|' + idTipo;
+    }
+    else if (vista == "Articulo") {
+        var container = document.querySelector('#mytab');
+        let tabs = Array.prototype.slice.apply(container.querySelectorAll('.nav-tabs .active'));
+        var idTabActivo = tabs[0].attributes[1].value;
+        var idTipo = "";
+        switch (idTabActivo) {
+            case "btnTabBienes":
+                idTipo = "B";
+                break;
+            case "btnTabServicios":
+                idTipo = "S";
+                break;
+            case "btnTabObras":
+                idTipo = "O";
+                break;
+            default:
+                idTipo = "B";
+                break;
+        }
+
+        let articulo = id+'|'+ idTipo + '|' + codigoFilt.value + '|' + nombreFilt.value + '|' + unidaMedidaFilt.value;
+        data = articulo;
     }
     else if (vista == "Periodo") {
         titulomsg = '¿Desea Extornar El Período ?';
