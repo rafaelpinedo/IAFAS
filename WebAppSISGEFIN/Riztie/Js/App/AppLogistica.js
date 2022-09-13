@@ -56,7 +56,6 @@ window.onload = function () {
     else if (vista == "Periodo" || vista == "ReporteOrdenes") {
         getListarPeriodo()
     }
-
     else {
         getListar();
     }
@@ -146,15 +145,30 @@ function mostrarlistas(rpta) {
         var lista = listas[0].split("¬");
         if (vista == "Proveedor") {
             var listaDocumento = listas[1].split("¬");
-            var listaBanco = listas[2].split("¬");
-            var listaEstado = listas[3].split("¬");
-            listaUbigeo = listas[4].split("¬");
+            var listaTipoContr = listas[2].split("¬");
+            var listaSexo = listas[3].split("¬");
+            var listaEstadoCivil = listas[4].split("¬");
+            var listaEstado = listas[5].split("¬");
+            listaUbigeo = listas[6].split("¬");
             listarDepartamentos();
-
+            var listaGradoMil = listas[7].split("¬");
+            var listaSituacionMil = listas[8].split("¬");
+            var listaBanco = listas[9].split("¬");
+            var listaPais = listas[10].split("¬");
+            var listaEntidad = listas[11].split("¬");
+            var listaOficina = listas[12].split("¬");
             grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
             crearCombo(listaDocumento, "cboTipoDocumento", "Seleccione");
-            crearCombo(listaBanco, "cboBanco", "Seleccione");
+            crearCombo(listaTipoContr, "cboTipoContribuyente", null);
+            crearCombo(listaSexo, "cboSexo", "Seleccione");
+            crearCombo(listaEstadoCivil, "cboEstadoCivil", "Seleccione");
             crearCombo(listaEstado, "cboEstado", "Seleccione");
+            crearCombo(listaGradoMil, "cboGrado", "Seleccione");
+            crearCombo(listaSituacionMil, "cboSituacion", "Seleccione");
+            crearCombo(listaBanco, "cboBanco", "Seleccione");
+            crearCombo(listaPais, "cboPais", "Seleccione");
+            crearCombo(listaEntidad, "cboEntidad", "Seleccione");
+            crearCombo(listaOficina, "cboOficina", "Seleccione");
         }
         else if (vista == "Oficina") {
             var listaEntidad = listas[1].split("¬");
@@ -657,6 +671,31 @@ function configurarCombos() {
         }
 
     }
+
+    var cboTipoContribuyente = document.getElementById("cboTipoContribuyente")
+    if (cboTipoContribuyente != null) cboTipoContribuyente.onchange = function () {
+
+        if (cboTipoContribuyente.value == "1") {
+            tipoPersonaNatural.style.display = "block";
+            tipoPersonaJuridica.style.display = "none";
+            tipoPersonaJuridicaRuc.style.display = "none";
+          
+        }
+        else if (cboTipoContribuyente.value == "2") {
+            tipoPersonaNatural.style.display = "none";
+            tipoPersonaJuridica.style.display = "block";
+            tipoPersonaJuridicaRuc.style.display = "block";
+            cboTipoDocumento.value = 4;
+
+        }
+        else if (cboTipoContribuyente.value == "3") {
+            tipoPersonaNatural.style.display = "block";
+            tipoPersonaJuridicaRuc.style.display = "block";
+            tipoPersonaJuridica.style.display = "none";
+            cboTipoDocumento.value = 4;
+        }
+
+    }
 }
 
 function configurarBotones() {
@@ -922,6 +961,11 @@ function configurarBotones() {
         var cboTipoDocumento = document.getElementById("cboTipoDocumento");
         if (cboTipoDocumento != null) {
             cboTipoDocumento.value = 4;
+            //cboTipoDocumento.disabled = true;
+        }
+        var cboTipoContribuyente = document.getElementById("cboTipoContribuyente");
+        if (cboTipoContribuyente != null) {
+            cboTipoContribuyente.value = 1;
         }
 
         var lblEstado = document.getElementById("lblEstado");
@@ -1089,6 +1133,48 @@ function configurarBotones() {
                 mostrarMensaje("Seleccione Fuente Financiamiento", "error");
             }
             else {
+                validar = true;
+            }
+        }
+        else if (vista == "Proveedor") {
+
+            let inputs = document.querySelectorAll('.chkTipoPersonaId:checked');
+            if (inputs.length == 0) {
+                mostrarMensaje("Seleccionar Tipo de Persona", "error")
+                return;
+            }
+            else if (cboTipoContribuyente.value == "1") {
+                mostrarMensaje("Seleccione Tipo Contribuyente", "error");
+                document.getElementById("txtNroDocumento").classList.remove("Reque");
+                document.getElementById("txtApePaterno").classList.remove("Reque");
+                document.getElementById("txtApeMaterno").classList.remove("Reque");
+                document.getElementById("txtNombres").classList.remove("Reque");
+                document.getElementById("txtRUC").classList.remove("Reque");
+                document.getElementById("txtRazonSocial").classList.remove("Reque");
+                return;
+            }
+            else if (cboTipoContribuyente.value == "2") {
+                document.getElementById("txtRUC").classList.add("Reque");
+                document.getElementById("txtRazonSocial").classList.add("Reque");
+
+                document.getElementById("txtNroDocumento").classList.remove("Reque");
+                document.getElementById("txtApePaterno").classList.remove("Reque");
+                document.getElementById("txtApeMaterno").classList.remove("Reque");
+                document.getElementById("txtNombres").classList.remove("Reque");
+            }
+            else if (cboTipoContribuyente.value == "3") {
+                txtRazonSocial.value = txtApePaterno.value + ' ' + txtApeMaterno.value + ', ' + txtNombres.value;
+                document.getElementById("txtRUC").classList.remove("Reque");
+                document.getElementById("txtRUC").classList.add("Reque");
+
+                document.getElementById("txtNroDocumento").classList.add("Reque");
+                document.getElementById("txtApePaterno").classList.add("Reque");
+                document.getElementById("txtApeMaterno").classList.add("Reque");
+                document.getElementById("txtNombres").classList.add("Reque");
+
+                document.getElementById("txtRazonSocial").classList.remove("Reque");
+            }
+            if (validarInformacion("Reque") == true) {
                 validar = true;
             }
         }
@@ -1717,18 +1803,18 @@ function grabarPedido() {
     btnGuardar.disabled = true;
 }
 
-function configurarConsultas() {
-    var txtRUC = document.getElementById("txtRUC");
-    if (txtRUC != null) {
-        txtRUC.onkeyup = function (event) {
-            if (this.value != "" && this.value.length == 11 || (event.keyCode == 13)) {
-                spnLoad.style.display = 'block';
-                Http.get("General/consultaRucSunat/?ruc=" + this.value, mostrarDatosSunat);
-            }
+//function configurarConsultas() {
+//    var txtRUC = document.getElementById("txtRUC");
+//    if (txtRUC != null) {
+//        txtRUC.onkeyup = function (event) {
+//            if (this.value != "" && this.value.length == 11 || (event.keyCode == 13)) {
+//                spnLoad.style.display = 'block';
+//                Http.get("General/consultaRucSunat/?ruc=" + this.value, mostrarDatosSunat);
+//            }
 
-        }
-    }
-}
+//        }
+//    }
+//}
 
 function mostrarListadoItems(rpta) {
     if (rpta) {
@@ -1741,14 +1827,44 @@ function mostrarListadoItems(rpta) {
     }
 }
 
+
+function configurarConsultas() {
+    var txtRUC = document.getElementById("txtRUC");
+    if (txtRUC != null) {
+        txtRUC.onkeyup = function (event) {
+            if (this.value != "" && this.value.length == 11 || (event.keyCode == 13)) {
+                spnLoad.style.display = 'block';
+                Http.get("General/consultaRucSunat/?ruc=" + this.value, mostrarDatosSunat);
+            }
+
+        }
+    }
+
+    var txtDNI = document.getElementById("txtNroDocumento");
+    if (txtDNI != null) {
+        txtDNI.onkeyup = function (event) {
+            var cboTipoDocumento = document.getElementById("cboTipoDocumento");
+            if (cboTipoDocumento.value == "2" || cboTipoDocumento.value == "4") {
+                if (this.value != "" && this.value.length == 8 || (event.keyCode == 13)) {
+                    spnLoadDoc.style.display = 'block';
+                    Http.get("General/consultaDniReniec/?dni=" + this.value, mostrarDatosDNI);
+                }
+            }
+        }
+    }
+
+}
+
+
 function mostrarDatosSunat(rpta) {
     if (rpta != "") {
         var obj = JSON.parse(rpta);
         if (obj.success) {
+            console.log(obj);
             spnDocumento.innerHTML = "";
             var ttaDireccion = document.getElementById("ttaDireccion");
             if (ttaDireccion != null) ttaDireccion.value = obj.data.direccion_completa;
-            var txtNombre = document.getElementById("txtNombre");
+            var txtNombre = document.getElementById("txtRazonSocial");
             if (txtNombre != null) txtNombre.value = obj.data.nombre_o_razon_social;
             divEstadoSunat.style.display = 'inline';
             lblEstadoSunat.innerHTML = obj.data.estado;
@@ -1759,6 +1875,21 @@ function mostrarDatosSunat(rpta) {
             else {
                 $('#dtgEsAgenteRetencion').bootstrapToggle('on')
             }
+
+            listarDepartamentos();
+            let ubigeo = obj.data.ubigeo_sunat;
+            let idDpto = ubigeo.substr(0, 2);
+            let idProv = ubigeo.substr(2, 2);
+            let idDist = ubigeo.substr(4, 2);
+            cboDepartamento.value = idDpto;
+            document.getElementById('select2-cboDepartamento-container').innerHTML = cboDepartamento.options[cboDepartamento.selectedIndex].text;
+            listarProvincias();
+            cboProvincia.value = idProv;
+            document.getElementById('select2-cboProvincia-container').innerHTML = cboProvincia.options[cboProvincia.selectedIndex].text;
+            listarDistritos();
+            cboDistrito.value = idDist;
+            document.getElementById('select2-cboDistrito-container').innerHTML = cboDistrito.options[cboDistrito.selectedIndex].text;
+           
             spnLoad.style.display = 'none';
         }
         else {
@@ -1773,6 +1904,92 @@ function mostrarDatosSunat(rpta) {
         spnLoad.style.display = 'none';
     }
 }
+
+function mostrarDatosDNI(rpta) {
+    if (rpta != "") {
+        var obj = JSON.parse(rpta);
+
+        if (obj.success) {
+            spnDniDocumento.innerHTML = "";
+            var ttaDireccion = document.getElementById("ttaDireccion");
+            if (ttaDireccion != null) ttaDireccion.value = obj.data.direccion_completa;
+            var txtApePaterno = document.getElementById("txtApePaterno");
+            if (txtApePaterno != null) txtApePaterno.value = obj.data.apellido_paterno;
+            var txtApeMaterno = document.getElementById("txtApeMaterno");
+            if (txtApeMaterno != null) txtApeMaterno.value = obj.data.apellido_materno;
+            var txtNombres = document.getElementById("txtNombres");
+            if (txtNombres != null) txtNombres.value = obj.data.nombres;
+            var txtNroDocumento = document.getElementById("txtNroDocumento");
+            if (txtNroDocumento != null) txtNroDocumento.value = obj.data.numero;
+            var cboSexo = document.getElementById("cboSexo");
+            if (cboSexo != null) {
+                switch (obj.data.sexo) {
+                    case "MASCULINO":
+                        cboSexo.value = 2;
+                        break;
+                    case "FEMENINO":
+                        cboSexo.value = 3;
+                        break;
+                    default:
+                        cboSexo.value = "";
+                }
+            }
+
+            var cboEstadoCivil = document.getElementById("cboEstadoCivil");
+            if (cboEstadoCivil != null) {
+                switch (obj.data.estado_civil) {
+                    case "SOLTERO":
+                        cboEstadoCivil.value = 2;
+                        break;
+                    case "CASADO":
+                        cboEstadoCivil.value = 3;
+                        break;
+                    case "VIUDO":
+                        cboEstadoCivil.value = 4;
+                        break;
+                    case "DIVORCIADO":
+                        cboEstadoCivil.value = 5;
+                        break;
+                    case "CONVIVIENTE":
+                        cboEstadoCivil.value = 6;
+                        break;
+                    default:
+                        cboEstadoCivil.value = "";
+                }
+            }
+
+            var txtFechaNacimiento = document.getElementById("txtFechaNacimiento");
+            if (txtFechaNacimiento != null) txtFechaNacimiento.value = obj.data.fecha_nacimiento;
+            var cboPais = document.getElementById("cboPais");
+            if (cboPais != null) cboPais.value = "1";
+            listarDepartamentos();
+            let ubigeo = obj.data.ubigeo_sunat;
+            let idDpto = ubigeo.substr(0, 2);
+            let idProv = ubigeo.substr(2, 2);
+            let idDist = ubigeo.substr(4, 2);
+            cboDepartamento.value = idDpto;
+            document.getElementById('select2-cboDepartamento-container').innerHTML = cboDepartamento.options[cboDepartamento.selectedIndex].text;
+            listarProvincias();
+            cboProvincia.value = idProv;
+            document.getElementById('select2-cboProvincia-container').innerHTML = cboProvincia.options[cboProvincia.selectedIndex].text;
+            listarDistritos();
+            cboDistrito.value = idDist;
+            document.getElementById('select2-cboDistrito-container').innerHTML = cboDistrito.options[cboDistrito.selectedIndex].text;
+            spnLoadDoc.style.display = 'none';
+        }
+        else {
+            spnLoadDoc.style.display = 'none';
+            spnDniDocumento.innerHTML = "Nro de Documento no encontrado";
+            spnDniDocumento.style.color = "red";
+
+        }
+    }
+    else {
+        spnDniDocumento.innerHTML = "Documento incorrecto o no existe enlace con SUNAT";
+        spnDniDocumento.style.color = "red";
+        spnLoadDoc.style.display = 'none';
+    }
+} 
 
 function seleccionarFila(fila, id, prefijo) {
     idRegistro = id;
@@ -2584,6 +2801,81 @@ function mostrarRegistro(rpta) {
             if (dtgSbn.value == "1") { $('#dtgSbn').bootstrapToggle('on') } else { $('#dtgSbn').bootstrapToggle('off') }
             if (dtgActivo.value == "1") { $('#dtgActivo').bootstrapToggle('on') } else { $('#dtgActivo').bootstrapToggle('off') }
             document.getElementById("divPopupContainer").style.display = 'block';
+        }
+        else if (vista == "Proveedor") {
+            txtIdRegistro.value = campos[0];
+            cboTipoDocumento.value = campos[1];
+            cboTipoContribuyente.value = campos[2];
+            chkEsEmpleado.value = campos[3];
+            chkEsProveedor.value = campos[4];
+            document.getElementById("chkEsProveedor").checked = true;
+            chkEsAsegurado.value = campos[5];
+            chkEsFamiliar.value = campos[6];
+            chkEsOtros.value = campos[7];
+            txtRUC.value = campos[8];
+            txtRazonSocial.value = campos[9];
+            txtNroDocumento.value = campos[10];
+            txtApePaterno.value = campos[11];
+            txtApeMaterno.value = campos[12];
+            txtNombres.value = campos[13];
+
+            cboPais.value = campos[14];
+            txtTelefono.value = campos[15];
+            txtCorreo.value = campos[16];
+            txtFechaNacimiento.value = campos[17];
+            cboSexo.value = campos[18];
+            cboEstadoCivil.value = campos[19];
+            cboEstado.value = campos[20];
+
+            cboEntidad.value = campos[21];
+            cboOficina.value = campos[22];
+            txtFechaIngreso.value = campos[23];
+
+            listarDepartamentos();
+            cboDepartamento.value = campos[24];
+            // document.getElementById('select2-cboDepartamento-container').innerHTML = cboDepartamento.options[cboDepartamento.selectedIndex].text;
+            listarProvincias();
+            cboProvincia.value = campos[25];
+            //document.getElementById('select2-cboProvincia-container').innerHTML = cboProvincia.options[cboProvincia.selectedIndex].text;
+            listarDistritos();
+            cboDistrito.value = campos[26];
+            // document.getElementById('select2-cboDistrito-container').innerHTML = cboDistrito.options[cboDistrito.selectedIndex].text;
+
+            ttaDireccion.value = campos[27];
+            cboGrado.value = campos[28];
+            // document.getElementById('select2-cboGrado-container').innerHTML = cboGrado.options[cboGrado.selectedIndex].text;
+            cboSituacion.value = campos[29];
+            txtCIP.value = campos[30];
+            txtContacto.value = campos[31];
+            dtgEsAgenteRetencion.value = campos[32];
+
+            cboBanco.value = campos[33];
+            txtNroCuenta.value = campos[34];
+            txtCCI.value = campos[35];
+            txtNroCuenta.value = campos[36];
+
+            if (cboTipoContribuyente.value == "1") {
+                tipoPersonaNatural.style.display = "block";
+                tipoPersonaJuridica.style.display = "none";
+                tipoPersonaJuridicaRuc.style.display = "none";
+                cboTipoDocumento.value = "";
+            }
+            else if (cboTipoContribuyente.value == "2") {
+                tipoPersonaNatural.style.display = "none";
+                tipoPersonaJuridica.style.display = "block";
+                tipoPersonaJuridicaRuc.style.display = "block";
+                cboTipoDocumento.value = 4;
+
+            }
+            else if (cboTipoContribuyente.value == "3") {
+                tipoPersonaNatural.style.display = "block";
+                tipoPersonaJuridicaRuc.style.display = "block";
+                tipoPersonaJuridica.style.display = "none";
+                cboTipoDocumento.value = 4;
+            }
+
+            var divPopupContainer = document.getElementById("divPopupContainer");
+            if (divPopupContainer != null) { divPopupContainer.style.display = 'block'; };
         }
         else {
             var divPopupContainer = document.getElementById("divPopupContainer");
