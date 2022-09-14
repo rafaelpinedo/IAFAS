@@ -9,14 +9,29 @@ var formulario = [];
 var idRegistro = "";
 var operacion = 0;
 var listaOficina_VG = [];
+var idTabActivo = "";
+
 
 window.onload = function () {
     getConfigMn();
     vista = window.sessionStorage.getItem("Vista");
     controller = window.sessionStorage.getItem("Controller");
-    getListar();
+    mostrarLoading("divLista");
+    if (vista == "PlanContable") {
+        getListarPlanCta("Mayor")
+    }
+    else {
+        getListar();
+    }
     configurarBotones();
     configurarCombos();
+    
+}
+
+function getListarPlanCta(tabPlan) {
+   // var data = "";
+    var anioFiscal = txtAnioFiscal.value;
+    Http.get("General/listarTabla?tbl=" + controller + vista + tabPlan + "&data=" + anioFiscal, mostrarlistas);
 }
 
 function getListar() {
@@ -30,12 +45,9 @@ function mostrarlistas(rpta) {
         var lista = listas[0].split("¬");
 
         if (vista == "PlanContable") {
-            var listaPlanContable = listas[1].split("¬");
-            var listaEstado = listas[2].split("¬");
+            var listaEstado = listas[1].split("¬");
 
             grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
-
-            crearCombo(listaPlanContable, "cboPlanContable", "Primer Nivel");
             crearCombo(listaEstado, "cboEstado", "Seleccione");
         }
 
@@ -294,6 +306,18 @@ function listarSelect2Item(lista, idCombo) {
 }
 
 function configurarBotones() {
+    var tabMayor = document.getElementById("tabMayor");
+    if (tabMayor != null) tabMayor.onclick = function () {
+        getListarPlanCta("Mayor");
+        idTabActivo = "tabMayor";
+    }
+
+    var tabSubCta = document.getElementById("tabSubCta");
+    if (tabSubCta != null) tabSubCta.onclick = function () {
+        getListarPlanCta("SubCta");
+        idTabActivo = "tabSubCta";
+    }
+
     var btnNuevo = document.getElementById("btnNuevo");
     if (btnNuevo != null) btnNuevo.onclick = function () {
         divPopupContainer.style.display = 'block';
