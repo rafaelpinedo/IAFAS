@@ -62,6 +62,7 @@ namespace WebAppSISGEFIN.Controllers
             string[] Data = Session["DataUsuario"].ToString().Split('|');
             string IdPerfil = Data[3];
             ViewBag.Menu = new Menu().Listar(IdPerfil);
+            ViewBag.AnhoActual = Convert.ToString(DateTime.Now.Year);
             return View();
         }
 
@@ -71,6 +72,7 @@ namespace WebAppSISGEFIN.Controllers
             string[] Data = Session["DataUsuario"].ToString().Split('|');
             string IdPerfil = Data[3];
             ViewBag.Menu = new Menu().Listar(IdPerfil);
+            ViewBag.AnhoActual = Convert.ToString(DateTime.Now.Year);
             return View();
         }
 
