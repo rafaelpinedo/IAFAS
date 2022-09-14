@@ -1,5 +1,5 @@
 ﻿@{
-    ViewBag.Title = "PlanContable";
+    ViewBag.Title = "Plan contable";
     Layout = "~/Views/_LayoutPage.cshtml";
 }
 <div class="pcoded-content">
@@ -7,17 +7,46 @@
         <div class="main-body">
             <div class="card">
                 <div class="card-header bg-primary">
-                    <h3><i class="fa fa-users" aria-hidden="true"></i> PLAN CONTABLE GUBERNAMENTAL</h3>
+                    <h3><i class="fa fa-file" aria-hidden="true"></i> PLAN CONTABLE GUBERNAMENTAL</h3>
                 </div>
                 <div class="card-block">
                     <div class="form-row">
                         <div class="form-group col-sm-2">
+                            <label class="control-label">Año Fiscal</label>
+                            <input type="number" id="txtAnioFiscal" class="control-form" value="@ViewBag.Anio">
+                        </div>
+                        <div class="form-group col-sm-2 m-3">
+                            <button class="input-group-inverse btn btn-inverse" id="btnConsultar"><i class="fa fa-search fa-lg" aria-hidden="true"></i></button>
                             <button class="input-group-inverse btn btn-primary" id="btnNuevo">Nuevo <i class="fa fa-plus-circle fa-lg" aria-hidden="true"></i></button>
                         </div>
                     </div>
-                    <div class="form-row">
-                        <div class="form-group col-md-12">
-                            <div class="table-responsive" id="divLista"></div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="tab-header card">
+                                <ul class="nav nav-tabs md-tabs tab-timeline" role="tablist" id="mytab">
+                                    <li class="nav-item">
+                                        <a class="nav-link active" id="tabMayor" data-toggle="tab" href="#items" role="tab">MAYOR</a>
+                                        <div class="slide"></div>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="tabSubCta" data-toggle="tab" href="#items" role="tab">SUB CUENTA</a>
+                                        <div class="slide"></div>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="items" role="tabpanel">
+                                    <div class="card">
+                                        <div class="card-block">
+                                            <div class="form-row">
+                                                <div class="form-group col-md-12">
+                                                    <div class="table-responsive" id="divLista"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="form-row">
@@ -25,39 +54,26 @@
                             <div class="modal-dialog modal-lg bg-personalizado" id="divPopupWindow" style="margin-top:30px;">
                                 <div class="modal-content">
                                     <div id="divBarra" class="modal-header bg-personalizado" style="cursor:move">
-                                        <h5 class="modal-title" id="tituloModal">Nuevo Registro</h5>
+                                        <h5 class="modal-title" id="tituloModal"></h5>
                                     </div>
                                     <div class="modal-body">
                                         <div class="row">
-                                            <div class="form-group col-sm-10">
+                                            <div class="form-group col-sm-6">
                                                 <input type="hidden" class="control-form Popup" id="txtIdRegistro">
-                                                <label class="control-label">Id Padre</label>
-                                                <select id="cboPlanContable" class="control-form Popup"></select>
+                                                <label class="control-label">Cuenta Mayor</label>
+                                                <input type="text" autocomplete="off" maxlength="20" id="txtCodigo" class="control-form Reque Popup" />
                                             </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="form-group col-sm-6">
-                                                <label class="control-label">Codigo Plan Contable</label>
-                                                <input type="text" autocomplete="off" class="control-form Reque Popup" id="txtCodPlanContable">
-                                            </div>
-                                        </div>
-                                        <div class="row">
                                             <div class="form-group col-sm-12">
-                                                <label class="control-label">Plan Contable</label>
-                                                <input type="text" autocomplete="off" class="control-form Reque Popup" id="txtPlan">
+                                                <label class="control-label">Nombre</label>
+                                                <input type="text" autocomplete="off" id="txtNombre" class="control-form Reque Popup" />
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="form-group col-sm-6">
-                                                <label class="control-label" for="dtgEsAgenteRetencion">Es Final</label>
-                                                <input type="checkbox" id="dtgEsFinal" class="Popup" data-toggle="toggle" data-width="160px" data-on="SI" data-off="NO" data-onstyle="success" data-offstyle="danger">
-                                            </div>
-                                            <div class="form-group col-sm-6">
+                                            <div class="form-group col-sm-4">
                                                 <label class="control-label">Estado</label>
                                                 <select id="cboEstado" class="control-lectura Reque Popup"></select>
                                             </div>
                                         </div>
-
                                     </div>
                                     <div class="modal-footer">
                                         <button id="btnCancelar" class="btnCancelarForm" title="Cancelar"><i class="fa fa-undo" aria-hidden="true"></i>&nbsp;Cancelar</button>
@@ -70,8 +86,9 @@
                 </div>
             </div>
         </div>
+        <div id="styleSelector">
+        </div>
     </div>
 </div>
 <iframe name="print_frame" width="0" height="0" frameborder="0" src="about:blank"></iframe>
 <script src="~/Riztie/Js/App/AppContabilidad.js"></script>
-

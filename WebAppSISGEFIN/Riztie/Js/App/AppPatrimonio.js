@@ -15,7 +15,7 @@ window.onload = function () {
     mostrarLoading("divLista");
     getListar();
     configurarBotones();
-    //configurarCombos();
+    //    configurarCombos();
 }
 
 
@@ -28,7 +28,27 @@ function mostrarlistas(rpta) {
     if (rpta) {
         var listas = rpta.split("¯");
         var lista = listas[0].split("¬");
-        grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
+        if (vista == "UbicaFisica") {
+            var listaOficina = listas[1].split("¬");
+            var listaResponsable = listas[2].split("¬");
+            var listaEstado = listas[3].split("¬");
+
+            grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
+            crearCombo(listaOficina, "cboOficina", "Seleccionar");
+            crearCombo(listaResponsable, "cboResponsable", "Seleccionar");
+            crearCombo(listaEstado, "cboEstado", "Seleccionar");
+        }
+        if (vista == "InventarioInicial") {
+            var listaUbicaFisica = listas[1].split("¬");
+            var listaResponsable = listas[2].split("¬");
+
+            grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
+            crearCombo(listaUbicaFisica, "cboUbicaFisica", "Seleccionar");
+            crearCombo(listaResponsable, "cboResponsable", "Seleccionar");
+        }
+        else {
+            grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
+        }
     }
 }
 
@@ -86,9 +106,30 @@ function configurarBotones() {
     if (btnCancelarForm2 != null) btnCancelarForm2.onclick = function () {
         divPopupContainerForm2.style.display = 'none';
     }
+
+    var btnConsutarEspecificacionesTecnicas = document.getElementById("btnConsutarEspecificacionesTecnicas");
+    if (btnConsutarEspecificacionesTecnicas != null) btnConsutarEspecificacionesTecnicas.onclick = function () {
+        mostrarEspecificacionesTecnicas("s");
+    }
+
+    var btnConsutarValoresContables = document.getElementById("btnConsutarValoresContables");
+    if (btnConsutarValoresContables != null) btnConsutarValoresContables.onclick = function () {
+        //var idTipoBien = cboTipoSolicitud.value;
+        //if (idTipoBien != "") {
+        //    Http.get("General/listarTabla?tbl=" + controller + "Items&data=" + idTipoBien, mostrarListadoItems);
+        //    spnLoad.style.display = 'inline';
+        //}
+        //else {
+        //    mostrarMensaje("Seleccione tipo de solicitud", "error")
+        //    cboTipoSolicitud.focus();
+        //}
+        mostrarValoresContables("s");
+    }
 }
 
 function seleccionarBoton(idGrilla, idRegistro, idBoton) {
+    limpiarForm('Popup')
+
     if (idGrilla == "divLista") {
         if (idBoton == "Editar") {
             let tituloModal = document.getElementById("tituloModal");
@@ -110,47 +151,58 @@ function editarRegistro(id) {
 function mostrarRegistro(rpta) {
     if (rpta) {
         var campos = rpta.split("|");
-        var divPopupContainer = document.getElementById("divPopupContainer");
-        if (divPopupContainer != null) { divPopupContainer.style.display = 'block'; };
-        var controles = document.getElementsByClassName("Popup");
+        if (vista == "UbicaFisica") {
+            document.getElementById("divPopupContainer").style.display = 'block';
+            txtIdRegistro.value = campos[0];
+            cboOficina.value = campos[1];
+            txtNombre.value = campos[2];
+            cboResponsable.value = campos[3];
+            cboEstado.value = campos[4];
+        }
+        else {
+            var divPopupContainer = document.getElementById("divPopupContainer");
+            if (divPopupContainer != null) { divPopupContainer.style.display = 'block'; };
+            var controles = document.getElementsByClassName("Popup");
 
-        var nControles = controles.length;
-        var control;
-        var tipo;
-        var subCampos;
-        for (var j = 0; j < nControles; j++) {
-            control = controles[j];
-            control.style.borderColor = ""
-            tipo = control.id.substr(0, 3);
-            if (tipo == "txt" || tipo == "num" || tipo == "tta" || tipo == "tim") { control.value = campos[j]; }
-            else if (tipo == "dtt") {
-                if (campos[j] == '01/01/1900') {
-                    control.value = "";
-                } else {
-                    var dFecha = campos[j].split("/");
-                    control.value = dFecha[2] + "-" + dFecha[1] + "-" + dFecha[0];
+            var nControles = controles.length;
+            var control;
+            var tipo;
+            var subCampos;
+            for (var j = 0; j < nControles; j++) {
+                control = controles[j];
+                control.style.borderColor = ""
+                tipo = control.id.substr(0, 3);
+                if (tipo == "txt" || tipo == "num" || tipo == "tta" || tipo == "tim") { control.value = campos[j]; }
+                else if (tipo == "dtt") {
+                    if (campos[j] == '01/01/1900') {
+                        control.value = "";
+                    } else {
+                        var dFecha = campos[j].split("/");
+                        control.value = dFecha[2] + "-" + dFecha[1] + "-" + dFecha[0];
+                    }
+                }
+                else if (tipo == "cbo") {
+                    subCampos = campos[j].split("-");
+                    if (subCampos[0] == 0) {
+                        control.value = campos[j];
+                    }
+                }
+                else if (tipo == "img") {
+                    control.src = "data:image/jpeg;base64," + campos[j];
+                }
+                else if (tipo == "chk" || tipo == "opt") {
+                    control.checked = (campos[j] == "1")
+                }
+                else if (tipo == "dtg") {
+                    if (campos[j] == 1) {
+                        $('#' + control.id).bootstrapToggle('on')
+                    }
+                    else {
+                        $('#' + control.id).bootstrapToggle('off')
+                    }
                 }
             }
-            else if (tipo == "cbo") {
-                subCampos = campos[j].split("-");
-                if (subCampos[0] == 0) {
-                    control.value = campos[j];
-                }
-            }
-            else if (tipo == "img") {
-                control.src = "data:image/jpeg;base64," + campos[j];
-            }
-            else if (tipo == "chk" || tipo == "opt") {
-                control.checked = (campos[j] == "1")
-            }
-            else if (tipo == "dtg") {
-                if (campos[j] == 1) {
-                    $('#' + control.id).bootstrapToggle('on')
-                }
-                else {
-                    $('#' + control.id).bootstrapToggle('off')
-                }
-            }
+
         }
     }
     else {
@@ -277,6 +329,20 @@ function obtenerDatosGrabar(clase) {
     data = data.substr(0, data.length - 1);
 
     return data;
+}
+
+function mostrarEspecificacionesTecnicas(rpta) {
+    if (rpta) {
+        //spnLoad.style.display = 'none';
+        divPopupContainerForm1.style.display = 'block';
+    }
+}
+
+function mostrarValoresContables(rpta) {
+    if (rpta) {
+        //spnLoad.style.display = 'none';
+        divPopupContainerForm2.style.display = 'block';
+    }
 }
 
 function mostrarGrabar(rpta) {
