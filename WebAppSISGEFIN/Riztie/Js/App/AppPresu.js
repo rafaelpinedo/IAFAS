@@ -34,6 +34,12 @@ function getListarProgramacion() {
 
 function getListar() {
     var data = "";
+
+    var txtAnio = document.getElementById("txtAnio");
+    if (txtAnio != null) {
+        data = txtAnio.value;
+    }
+    
     Http.get("General/listarTabla?tbl=" + controller + vista + "&data=" + data, mostrarlistas);
 }
 
@@ -71,22 +77,25 @@ function mostrarlistas(rpta) {
         }
 
         else if (vista == "ClasiIngreso") {
-            listaMetaItem_VG= listas[1].split("¬");
+            let listaTipo = listas[1].split("¬");
             var listaEstado = listas[2].split("¬");
              grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
+            crearCombo(listaTipo, "cboTipoBien", "Ninguno");
             crearCombo(listaEstado, "cboEstado", "Seleccione");
-            listarMetaItem();
         }
         else if (vista == "ClasiGasto") {
 
-            listaMetaItem_VG = listas[1].split("¬");
+           // listaMetaItem_VG = listas[1].split("¬");
+            let listaTipo = listas[1].split("¬");
             var listaEstado = listas[2].split("¬");
              grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
-            crearCombo(listaMetaItem_VG, "cboPadre", "Ninguno");
-            var select2cboPadre= document.getElementById("select2-cboPadre-container");
-            if (select2cboPadre != null) select2cboPadre.innerHTML = "Ninguno";
+            /*crearCombo(listaMetaItem_VG, "cboPadre", "Ninguno");*/
+            crearCombo(listaTipo, "cboTipoBien", "Ninguno");
             crearCombo(listaEstado, "cboEstado", "Seleccione");
-            listarMetaItem();
+            //var select2cboPadre= document.getElementById("select2-cboPadre-container");
+            //if (select2cboPadre != null) select2cboPadre.innerHTML = "Ninguno";
+           
+            //listarMetaItem();
         }
         else if (vista == "CentroCosto") {
             var listaEntidad = listas[1].split("¬");
@@ -210,6 +219,12 @@ function grabarDatos() {
         var txtAnhoFiscal = document.getElementById("txtAnioFiscal").value;
         data += "|" + txtAnhoFiscal;
     }
+
+    var txtAnio = document.getElementById("txtAnio");
+    if (txtAnio != null) {
+        data += "¯" + txtAnio.value;
+    }
+
     frm.append("data", data);
     Http.post("General/guardar/?tbl=" + controller + vista, mostrarGrabar, frm);
 }
@@ -334,11 +349,16 @@ function eliminarRegistro(id) {
         var txtAnhoFiscal = document.getElementById("txtAnioFiscal").value;
         data += "|" + txtAnhoFiscal;
     }
+    var txtAnio = document.getElementById("txtAnio");
+    if (txtAnio != null) {
+        data += "|" + txtAnio.value;
+    }
+
     var frm = new FormData();
     frm.append("data", data);
 
     Swal.fire({
-        title: '¿Desea eliminar el registro?',
+        title: '¿Desea anular el registro?',
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
