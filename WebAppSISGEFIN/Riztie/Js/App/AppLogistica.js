@@ -679,20 +679,32 @@ function configurarCombos() {
             tipoPersonaNatural.style.display = "block";
             tipoPersonaJuridica.style.display = "none";
             tipoPersonaJuridicaRuc.style.display = "none";
+
+            txtRazonSocial.value = "";
+            txtApePaterno.value = "";
+            txtApeMaterno.value = "";
+            txtNombres.value = "";
+            txtRUC.value = "";
+            txtRazonSocial.value = "";
           
         }
         else if (cboTipoContribuyente.value == "2") {
             tipoPersonaNatural.style.display = "none";
             tipoPersonaJuridica.style.display = "block";
             tipoPersonaJuridicaRuc.style.display = "block";
-            cboTipoDocumento.value = 4;
-
+           
+            txtApePaterno.value = "";
+            txtApeMaterno.value = "";
+            txtNombres.value = "";
+         
         }
         else if (cboTipoContribuyente.value == "3") {
             tipoPersonaNatural.style.display = "block";
             tipoPersonaJuridicaRuc.style.display = "block";
             tipoPersonaJuridica.style.display = "none";
-            cboTipoDocumento.value = 4;
+
+            txtRazonSocial.value = "";
+          
         }
 
     }
@@ -961,7 +973,7 @@ function configurarBotones() {
         var cboTipoDocumento = document.getElementById("cboTipoDocumento");
         if (cboTipoDocumento != null) {
             cboTipoDocumento.value = 4;
-            //cboTipoDocumento.disabled = true;
+            cboTipoDocumento.disabled = true;
         }
         var cboTipoContribuyente = document.getElementById("cboTipoContribuyente");
         if (cboTipoContribuyente != null) {

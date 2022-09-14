@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "Proveedor";
     Layout = "~/Views/_LayoutPage.cshtml";
 }
@@ -8,7 +7,7 @@
         <div class="main-body">
             <div class="card">
                 <div class="card-header bg-primary">
-                    <h3><i class="fa fa-users" aria-hidden="true"></i> PROVEEDOR</h3>
+                    <h3><i class="fa fa-users" aria-hidden="true"></i> ASEGURADOS</h3>
                     <div class="card-header-right">
                         <ul class="list-unstyled card-option">
                             <li><i class="fa fa-window-maximize full-card" style="color:white"></i></li>
@@ -38,7 +37,7 @@
                                             <div class="form-group col-sm-4">
                                                 <input type="hidden" class="control-form Popup" id="txtIdRegistro">
                                                 <label class="control-label">Tipo Documento</label>
-                                                <select id="cboTipoDocumento" class="control-lectura Reque Popup"></select>
+                                                <select id="cboTipoDocumento" class="control-form Reque Popup"></select>
                                             </div>
                                             <div class="form-group col-sm-3">
                                                 <label class="control-label">Tipo de contribuyente</label>
@@ -48,15 +47,15 @@
                                                 <fieldset class="fieldset">
                                                     <legend class="legend">Tipo de Persona</legend>
                                                     <div class="row">
-                                                        <div class="form-check form-check-inline" style="left: 5px; display: none;">
+                                                        <div class="form-check form-check-inline" style="display: none;">
                                                             <input class="form-check-input chkTipoPersonaId Popup" type="checkbox" id="chkEsEmpleado">
                                                             <label class="form-check-label" for="chkEsEmpleado">Empleado</label>
                                                         </div>
-                                                        <div class="form-check form-check-inline" style="left: 5px;">
+                                                        <div class="form-check form-check-inline" style="display:none">
                                                             <input class="form-check-input chkTipoPersonaId Popup" type="checkbox" id="chkEsProveedor">
                                                             <label class="form-check-label" for="chkEsProveedor">Proveedor</label>
                                                         </div>
-                                                        <div class="form-check form-check-inline" style="display:none">
+                                                        <div class="form-check form-check-inline" style="display:none" >
                                                             <input class="form-check-input chkTipoPersonaId Popup" type="checkbox" id="chkEsAsegurado">
                                                             <label class="form-check-label" for="chkEsAsegurado">Asegurado</label>
                                                         </div>
@@ -64,9 +63,9 @@
                                                             <input class="form-check-input chkTipoPersonaId Popup" type="checkbox" id="chkEsFamiliar">
                                                             <label class="form-check-label" for="chkEsFamiliar">Familiar</label>
                                                         </div>
-                                                        <div class="form-check form-check-inline" style="display:none">
+                                                        <div class="form-check form-check-inline" style="left: 5px;">
                                                             <input class="form-check-input chkTipoPersonaId Popup" type="checkbox" id="chkEsOtros">
-                                                            <label class="form-check-label" for="chkEsOtros">Otros</label>
+                                                            <label class="form-check-label" for="chkEsOtros">Asegurado</label>
                                                         </div>
                                                     </div>
                                                 </fieldset>
@@ -139,7 +138,7 @@
                                                             <a class="nav-link active" data-toggle="tab" href="#datosgeneral" role="tab">Datos Generales</a>
                                                             <div class="slide"></div>
                                                         </li>
-                                                        <li class="nav-item" style="display:none">
+                                                        <li class="nav-item" style="display:none;">
                                                             <a class="nav-link" data-toggle="tab" href="#laborales" role="tab">Datos Laborales</a>
                                                             <div class="slide"></div>
                                                         </li>
@@ -147,15 +146,15 @@
                                                             <a class="nav-link" data-toggle="tab" href="#direccion" role="tab">Dirección</a>
                                                             <div class="slide"></div>
                                                         </li>
-                                                        <li class="nav-item" style="display:none">
+                                                        <li class="nav-item" style="display:none;">
                                                             <a class="nav-link" data-toggle="tab" href="#datosMilitares" role="tab">Datos Militares</a>
                                                             <div class="slide"></div>
                                                         </li>
-                                                        <li class="nav-item">
+                                                        <li class="nav-item" style="display:none;">
                                                             <a class="nav-link" data-toggle="tab" href="#datosTributarios" role="tab">Datos Tributarios</a>
                                                             <div class="slide"></div>
                                                         </li>
-                                                        <li class="nav-item" style="display:none">
+                                                        <li class="nav-item">
                                                             <a class="nav-link" data-toggle="tab" href="#datosAseguradora" role="tab">Datos Aseguradora</a>
                                                             <div class="slide"></div>
                                                         </li>
@@ -204,10 +203,10 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class="tab-pane" id="laborales" role="tabpanel" style="display:none">
+                                                    <div class="tab-pane" id="laborales" role="tabpanel">
                                                         <div class="card">
                                                             <div class="card-block">
-                                                                <div id="chklaborales" style="display:none">
+                                                                <div id="chklaborales">
                                                                     <div class="row">
                                                                         <div class="form-group col-sm-6">
                                                                             <label class="control-label">Entidad</label>
@@ -286,9 +285,9 @@
                                                             <div class="card-block">
                                                                 <div class="row">
 
-                                                                    <div class="form-group col-sm-7">
+                                                                    <div class="form-group col-sm-5">
                                                                         <label class="control-label">Contacto</label>
-                                                                        <input id="txtContacto" class="control-form Popup"  autocomplete="off"/>
+                                                                        <input id="txtContacto" class="control-form Popup" />
                                                                     </div>
                                                                     <div class="form-group col-sm-3">
                                                                         <label class="control-label" for="dtgEsAgenteRetencion">Es agente retención:</label>
@@ -302,7 +301,7 @@
                                                         <div class="row">
                                                             <div class="form-group col-sm-6">
                                                                 <label class="control-label">Banco</label>
-                                                                <select id="cboBanco" class="control-form Reque Popup"></select>
+                                                                <select id="cboBanco" class="SelectSearch control-form Reque Popup"></select>
                                                             </div>
                                                         </div>
                                                         <div class="row">
@@ -341,5 +340,4 @@
     </div>
 </div>
 <iframe name="print_frame" width="0" height="0" frameborder="0" src="about:blank"></iframe>
-<script src="~/Riztie/Js/App/AppLogistica.js"></script>
-
+<script src="~/Riztie/Js/App/AppIngresos.js"></script>
