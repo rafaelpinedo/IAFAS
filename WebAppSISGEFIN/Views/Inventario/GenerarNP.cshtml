@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "GenerarNP";
     Layout = "~/Views/_LayoutPage.cshtml";
 }
@@ -27,8 +26,8 @@
                         </div>
                         <div class="form-group col-md-4 m-3">
                             <button class="input-group-inverse btn btn-inverse" id="btnConsultar" data-toggle="tooltip" data-placement="bottom" title="Consultar"><i class="fa fa-search fa-lg" aria-hidden="true"></i></button>
-                            @*<button class="btn btn-out waves-effect waves-light btn-info btn-square" id="btnImprimir" data-toggle="tooltip" data-placement="bottom" title="Imprimir"><i class="fa fa-print fa-lg" aria-hidden="true"></i></button>
-                            <button class="btn btn-out waves-effect waves-light btn-primary btn-square" id="btnGenerarPS" data-toggle="tooltip" data-placement="bottom" title="Generar pendiente salida"><i class="fa fa-exchange" aria-hidden="true"></i></button>*@
+                            <button class="btn btn-out waves-effect waves-light btn-info btn-square" id="btnImprimir" data-toggle="tooltip" data-placement="bottom" title="Imprimir"><i class="fa fa-print fa-lg" aria-hidden="true"></i></button>
+                            <button class="btn btn-out waves-effect waves-light btn-primary btn-square" id="btnGenerarPS" data-toggle="tooltip" data-placement="bottom" title="Generar pendiente salida"><i class="fa fa-exchange" aria-hidden="true"></i></button>
                             @*<button class="btn btn-out waves-effect waves-light btn-warning btn-square text-c-green" id="btnReporte" data-toggle="tooltip" data-placement="bottom" title="Mostrar reportes"><i class="fa fa-file-pdf-o text-c-green" aria-hidden="true"></i></button>*@
                         </div>
                         <div class="form-group col-sm-2">
@@ -294,245 +293,400 @@
                 </div>
 
                 <div id="divReporte" style="overflow:hidden;width:auto;display:none">
-                    <table cellpadding="0" width="756px" cellspacing="0" style="font-size:12px;font-family:'Arial Narrow', Arial, sans-serif">
-                        <tbody>
-                            <tr>
-                                <td width="200px">
-                                    <CENTER>
-                                        <B>
-                                            MARINA DE GUERA DEL PERU<BR>
-                                            CENTRO MEDICO NAVAL
-                                        </B>
-                                    </CENTER>
-                                </td>
-                                <td></td>
-                                <td width="200px"><CENTER><B> OFICINA DE LOGISTICA<BR>ALMACEN GENERAL</B></CENTER></td>
-                            </tr>
+                    <div style="width:100%;">
+                        <h1 style="font-family: 'Arial Narrow', Arial, sans-serif; margin-bottom: 0px; text-align: center; ">NOTA DE ENTRADA A ALMACEN</h1>
+                        <div style="width:100%;">
+                            <div style="width: 25%; float: left;text-align:center">
+                                <img src="~/Riztie/Images/user-bg.jpg" alt="IAFAS" width="150" height="180" />
+                                <p style="font-family: 'Arial Narrow', Arial, sans-serif; margin-bottom: 0px; text-align: left;font-size:10px ">HEMOS RECIBIDO CONFORME LOS SIGUIENTES ARTICULOS</p>
+                            </div>
+                            <div style="width: 65%; float: left;">
+                                <div style="width:100%;">
+                                    <div style="width:20%; float: left;">
+                                        <h5 style="font-family: 'Arial Narrow', Arial, sans-serif; margin-bottom: 0px; text-align: left;">DEPARTAMENTO : </h5>
+                                        <h2></h2>
+                                    </div>
+                                    <div style="width:60%; float: left;border-bottom: 1px solid black; text-align: center;">
+                                        <h5 style="font-family: 'Arial Narrow', Arial, sans-serif; margin-bottom: 0px; text-align: center;">OFICINA DE LOGISTICA - DISFOMAR</h5>
+                                    </div>
+                                    <div style="width:20%; float: left;">
+                                        <h2 style="font-family: 'Arial Narrow', Arial, sans-serif; margin-bottom: 0px; text-align: right;" id="tdNroTitulo"></h2>
+                                    </div>
+                                </div>
+                                <br />
+                                <div style="width: 100%; margin-bottom: 1rem; background-color: transparent; height: 190px;font-size: 14px; ">
+                                    <table cellpadding="0" width="830px" cellspacing="0" style="font-family: 'Arial Narrow', Arial, sans-serif; font-size: 12px; border: solid 1px #242828;">
+                                        <thead>
+                                            <tr cellpadding="0" width="1100px" cellspacing="0" style="font-family: 'Arial Narrow', Arial, sans-serif; font-size: 12px; border: 1px solid black">
+                                                <th colspan="62" rowspan="1" style="color: black; text-align: center; font-weight: bold; white-space: pre-wrap; height:30px;">R E F E R E N C I A S</th>
+                                            </tr>
+                                            <tr style="color: black; text-align: center; font-weight: bold;">
+                                                <th colspan="6" rowspan="2" style="border:1px solid black;white-space:pre-wrap; width:5px;">Identific. del Documento</th>
+                                                <th colspan="6" rowspan="2" style="border:1px solid black;white-space:pre-wrap; width:5px;">NUMERO ENTRADA ALMACEN</th>
+                                                <th colspan="6" rowspan="1" style="border:1px solid black;white-space:pre-wrap; width:5px;">FECHA</th>
+                                                <th colspan="6" rowspan="2" style="border:1px solid black;white-space:pre-wrap; width:5px;">Código del Departamento</th>
+                                                <th colspan="6" rowspan="2" style="border:1px solid black;white-space:pre-wrap; width:5px;">CÓDIGO DEL ALMACÉN</th>
+                                                <th colspan="10" rowspan="2" style="border:1px solid black;white-space:pre-wrap; width:5px;">CÓDIGO DEL ENTIDAD</th>
+                                                <th colspan="14" rowspan="2" style="border:1px solid black;white-space:pre-wrap; width:5px;">REFERENCIA DOCUMENTO</th>
+                                                <th colspan="3" rowspan="2" style="border:1px solid black;white-space:pre-wrap; width:5px;">Código de Moneda</th>
+                                                <th colspan="5" rowspan="2" style="border:1px solid black;white-space:pre-wrap; width:5px;">Código de Cuenta</th>
+                                            </tr>
+                                            <tr style="color: black; text-align: center; font-weight: bold;">
+                                                <th colspan="2" style="border:1px solid black;white-space:pre-wrap; width:5px;">Dia</th>
+                                                <th colspan="2" style="border:1px solid black;white-space:pre-wrap; width:5px;">Mes</th>
+                                                <th colspan="2" style="border:1px solid black;white-space:pre-wrap; width:5px;">Año</th>
+                                            </tr>
 
-                        </tbody>
-                    </table>
-                    <BR>
-                    <BR>
-                    <table cellpadding="0" width="756px" cellspacing="0" style="font-size:12px;font-family:'Arial Narrow', Arial, sans-serif">
-                        <tbody>
-                            <tr>
-                                <td colspan="2"></td>
-                                <td colspan="3"><B><U>NOTA DE ENTRADA AL ALMACEN NRO.</U></B></td>
-                                <td colspan="3" id="tdNumeroNEA"></td>
-                            </tr>
-                            <tr>
-                                <td colspan="8"><br /></td>
-                            </tr>
-                            <tr>
-                                <td colspan="5"></td>
-                                <td><B>FECHA</B></td>
-                                <td id="tdFechaNEA"></td>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <td colspan="8"><br /></td>
-                            </tr>
-                            <tr>
-                                <td colspan="2"><B>PROVEEDOR</B></td>
-                                <td colspan="6" id="tdProveedorNEA"></td>
-                            </tr>
-                            <tr>
-                                <td colspan="2"><B>ORDEN DE COMPRA</B></td>
-                                <td id="tdOrdenNEA"></td>
-                                <td><B>PEDIDO</B></td>
-                                <td colspan="4" id="tdPedido"></td>
-                            </tr>
-                            <tr>
-                                <td colspan="2"><B>GUIA DE REMISION</B></td>
-                                <td id="tdGuiaNEA"></td>
-                                <td><B>USUARIO</B></td>
-                                <td colspan="4" id="tdUsuarioNEA"></td>
-                            </tr>
-                            <tr>
-                                <td colspan="8"><br /></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <BR>
-                    <table cellpadding="0" width="756px" cellspacing="0" style="font-size:12px;font-family:'Arial Narrow', Arial, sans-serif">
-                        <tr>
-                            <td style="border:solid 1px black;height:630px;vertical-align:top">
-                                <table cellpadding="0" width="756px" cellspacing="0" style="font-size:12px;font-family:'Arial Narrow', Arial, sans-serif">
-                                    <thead>
-                                        <tr>
-                                            <th style="border: 1px solid black" rowspan="2"><B>ITEM</B></th>
-                                            <th style="border: 1px solid black" colspan="2" rowspan="2"><CENTER>DESCRIPCION</CENTER></th>
-                                            <th style="border: 1px solid black" rowspan="2">UND.<br />MED.</th>
-                                            <th style="border: 1px solid black" colspan="2">CANTIDAD</th>
-                                            <th style="border: 1px solid black" rowspan="2">VALOR<br />UNITARIO</th>
-                                            <th style="border: 1px solid black" rowspan="2">VALOR<br />TOTAL</th>
-                                        </tr>
-                                        <tr>
-                                            <th style="border: 1px solid black">SOLICITADA</th>
-                                            <th style="border: 1px solid black">RECIBIDA</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="tblDetalleNEA"></tbody>
-                                </table>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td style="border: 1px solid black;text-align: right;font-size:14px;font-weight:bold" id="tdTotalNEA"></td>
-                        </tr>
-                    </table>
-                    <table cellpadding="0" width="756px" cellspacing="0" style="font-size:12px;font-family:'Arial Narrow', Arial, sans-serif">
-                        <tbody>
-                            <tr>
-                                <td colspan="3">
-                                    <br />OBSERVACIONES: <span id="spnObservacionesNEA">__________________________</span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td width="200px">
-                                    <BR><BR><BR><BR>
-                                    <CENTER>
-                                        <span id="spnEncargadoGradoNEA"></span><BR>
-                                        <span id="spnEncargadoNombreNEA"></span><BR>
-                                        <span id="spnEncargadoCIPNEA"></span><BR>
-                                        __________________________<BR>
-                                        <B>ENCARGADO DEL ALMACEN</B>
-                                    </CENTER>
-                                </td>
-                                <TD>
-                                </TD>
-                                <td width="200px">
-                                    <BR><BR><BR><BR>
-                                    <CENTER>
-                                        <span id="spnJefeGradoNEA"></span><BR>
-                                        <span id="spnJefeNombreNEA"></span><BR>
-                                        <span id="spnJefeCIPNEA"></span><BR>
-                                        __________________________<BR>
-                                        <B>JEFE DEL ALMACEN</B>
-                                    </CENTER>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colspan="3">
-                                    <CENTER>
-                                        <span id="spnAdmonGradoNEA"></span><BR>
-                                        <span id="spnAdmonNombreNEA"></span><BR>
-                                        <span id="spnAdmonCIPNEA"></span><BR>
-                                        __________________________<BR>
-                                        V°B°<BR>
-                                        <B>
-                                            JEFE DE LA OFICINA <BR>
-                                            DE ABASTECIMIENTO Y SERVICIOS
-                                        </B>
-                                    </CENTER>
-                                </td>
-                            </tr>
+                                            <tr style="text-align: center; font-weight: bold; height: 30px; width: 10px;">
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; border-right: 1px solid black;"></th>
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black;"></th>
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black;"></th>
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black;"></th>
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black;"></th>
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black;"></th>
 
-                        </tbody>
-                    </table>
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black;"></th>
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black;"></th>
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black;"></th>
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black;">1</th>
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black;">1</th>
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black;">1</th>
+
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black;">1</th>
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black;">1</th>
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black;">1</th>
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black;">1</th>
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black;">1</th>
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black;">1</th>
+
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black;">1</th>
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black;">2</th>
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black;">2</th>
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black;">2</th>
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black;">2</th>
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black;">2</th>
+
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black;">2</th>
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black;">2</th>
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black;">2</th>
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black;">2</th>
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black;">2</th>
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black;">3</th>
+
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black;">3</th>
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black;">3</th>
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black;">3</th>
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black;">3</th>
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black;">3</th>
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black;">3</th>
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black;">3</th>
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black;">3</th>
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black;">3</th>
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black;">4</th>
+
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black;">4</th>
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black;">4</th>
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black;">4</th>
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black;">4</th>
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black;">4</th>
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black;">4</th>
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black;">4</th>
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black;">4</th>
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black;">4</th>
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black;">5</th>
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black;">5</th>
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black;">5</th>
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black;">5</th>
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black;">5</th>
+
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black;">5</th>
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black;">5</th>
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black;">5</th>
+
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black;">5</th>
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black;">5</th>
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black;">6</th>
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black;">6</th>
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black;">6</th>
+
+                                            </tr>
+                                            <tr style="text-align: center; font-weight: bold; height: 30px; width: 10px;">
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; border-bottom: 1px solid black;">1</th>
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; border-bottom: 1px solid black;">2</th>
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; border-bottom: 1px solid black;">3</th>
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; border-bottom: 1px solid black;">4</th>
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; border-bottom: 1px solid black;">5</th>
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; border-bottom: 1px solid black;">6</th>
+
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; border-bottom: 1px solid black;">7</th>
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; border-bottom: 1px solid black;">8</th>
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; border-bottom: 1px solid black;">9</th>
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; border-bottom: 1px solid black;">0</th>
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; border-bottom: 1px solid black;">1</th>
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; border-bottom: 1px solid black;">2</th>
+
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; border-bottom: 1px solid black;">3</th>
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; border-bottom: 1px solid black;">4</th>
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; border-bottom: 1px solid black;">5</th>
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; border-bottom: 1px solid black;">6</th>
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; border-bottom: 1px solid black;">7</th>
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; border-bottom: 1px solid black;">8</th>
+
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; border-bottom: 1px solid black;">9</th>
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; border-bottom: 1px solid black;">0</th>
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; border-bottom: 1px solid black;">1</th>
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; border-bottom: 1px solid black;">2</th>
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; border-bottom: 1px solid black;">3</th>
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; border-bottom: 1px solid black;">4</th>
+
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; border-bottom: 1px solid black;">5</th>
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; border-bottom: 1px solid black;">6</th>
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; border-bottom: 1px solid black;">7</th>
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; border-bottom: 1px solid black;">8</th>
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; border-bottom: 1px solid black;">9</th>
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; border-bottom: 1px solid black;">0</th>
+
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; border-bottom: 1px solid black;">1</th>
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; border-bottom: 1px solid black;">2</th>
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; border-bottom: 1px solid black;">3</th>
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; border-bottom: 1px solid black;">4</th>
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; border-bottom: 1px solid black;">5</th>
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; border-bottom: 1px solid black;">6</th>
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; border-bottom: 1px solid black;">7</th>
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; border-bottom: 1px solid black;">8</th>
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; border-bottom: 1px solid black;">9</th>
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; border-bottom: 1px solid black;">0</th>
+
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; border-bottom: 1px solid black;">1</th>
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; border-bottom: 1px solid black;">2</th>
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; border-bottom: 1px solid black;">3</th>
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; border-bottom: 1px solid black;">4</th>
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; border-bottom: 1px solid black;">5</th>
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; border-bottom: 1px solid black;">6</th>
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; border-bottom: 1px solid black;">7</th>
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; border-bottom: 1px solid black;">8</th>
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; border-bottom: 1px solid black;">9</th>
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; border-bottom: 1px solid black;">0</th>
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; border-bottom: 1px solid black;">1</th>
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; border-bottom: 1px solid black;">2</th>
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; border-bottom: 1px solid black;">3</th>
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; border-bottom: 1px solid black;">4</th>
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; border-bottom: 1px solid black;">5</th>
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; border-bottom: 1px solid black;">6</th>
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; border-bottom: 1px solid black;">7</th>
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; border-bottom: 1px solid black;">8</th>
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; border-bottom: 1px solid black;">9</th>
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; border-bottom: 1px solid black;">0</th>
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; border-bottom: 1px solid black;">1</th>
+                                                <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; border-bottom: 1px solid black;">2</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr style="color: black; text-align: center; font-weight: bold; height: 30px; width: 10px;">
+                                                <td style="border:1px solid black;white-space:pre-wrap;width:50px;height:30px;" colspan="6"></td>
+                                                <td style="border:1px solid black;white-space:pre-wrap;width:50px;height:30px;" colspan="6" id="tdNroNea"></td>
+                                                <td style="border:1px solid black;white-space:pre-wrap;width:50px;height:30px;" colspan="2" id="tdDia"></td>
+                                                <td style="border:1px solid black;white-space:pre-wrap;width:50px;height:30px;" colspan="2" id="tdMes"></td>
+                                                <td style="border:1px solid black;white-space:pre-wrap;width:50px;height:30px;" colspan="2" id="tdAnio"></td>
+                                                <td style="border:1px solid black;white-space:pre-wrap;width:50px;height:30px;" colspan="6"></td>
+                                                <td style="border:1px solid black;white-space:pre-wrap;width:50px;height:30px;" colspan="6"></td>
+                                                <td style="border:1px solid black;white-space:pre-wrap;width:50px;height:30px;" colspan="10"></td>
+                                                <td style="border:1px solid black;white-space:pre-wrap;width:50px;height:30px;" colspan="14" id="tdOrden"></td>
+                                                <td style="border:1px solid black;white-space:pre-wrap;width:50px;height:30px;" colspan="3" id="tdMoneda"></td>
+                                                <td style="border:1px solid black;white-space:pre-wrap;width:50px;height:30px;" colspan="5"></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="width:100%;">
+                            <table cellpadding="0" width="100%" cellspacing="0" style="font-family:'Arial Narrow', Arial, sans-serif;font-size:10px">
+                                <tr>
+                                    <td style="height:325px;border:solid 1px black;vertical-align:top" colspan="2">
+                                        <table cellpadding="0" width="100%" cellspacing="0" style="font-family:'Arial Narrow', Arial, sans-serif;font-size:12px">
+                                            <thead>
+                                                <tr>
+                                                    <th style="border: 1px solid black;" colspan="2" rowspan="2">N° Ord.</th>
+                                                    <th colspan="1" rowspan="2" style="white-space: pre-wrap; width: 3px; border: 1px solid black;">Tipo Cod.</th>
+                                                    <th style="border: 1px solid black;" colspan="16" rowspan="2">CODIGO DE ARTICULO</th>
+                                                    <th colspan="1" rowspan="4" style="white-space: pre-wrap; width: 7px; border: 1px solid black;">UNIDAD DE MEDIDA</th>
+                                                    <th colspan="10" rowspan="2" style="white-space: pre-wrap; width: 7px; border: 1px solid black;">CANTIDAD RECIBIDAS</th>
+                                                    <th colspan="1" rowspan="4" style="white-space: pre-wrap; width: 500px; border: 1px solid black;">DESCRIPCIÓN DEL ARTICULO</th>
+                                                    <th colspan="1" rowspan="4" style="white-space: pre-wrap; width: 7px; border: 1px solid black;">CUENTA CONTABLE</th>
+                                                    <th colspan="11" style="white-space: pre-wrap; width: 7px; border: 1px solid black;">VALORES</th>
+
+                                                </tr>
+                                                <tr>
+                                                    <th colspan="10" style="white-space: pre-wrap; width: 5px; border: 1px solid black;">UNITARIO</th>
+                                                    <th colspan="1" rowspan="3" style="white-space: pre-wrap; width: 5px; border: 1px solid black;">Total</th>
+                                                </tr>
+                                                <tr>
+                                                    <th style="white-space: pre-wrap; width: 5px; border-left: 1px solid black; border-right: 1px solid black; ">6</th>
+                                                    <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; ">6</th>
+                                                    <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; ">6</th>
+                                                    <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; ">6</th>
+                                                    <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; ">6</th>
+                                                    <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; ">6</th>
+                                                    <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; ">6</th>
+                                                    <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; ">7</th>
+                                                    <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; ">7</th>
+                                                    <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; ">7</th>
+                                                    <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; ">7</th>
+                                                    <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; ">7</th>
+                                                    <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; ">7</th>
+                                                    <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; ">7</th>
+                                                    <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; ">7</th>
+                                                    <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; ">7</th>
+                                                    <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; ">7</th>
+                                                    <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; ">8</th>
+                                                    <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; ">8</th>
+
+
+                                                    <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black;">8</th>
+                                                    <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black;">8</th>
+                                                    <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black;">8</th>
+                                                    <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black;">8</th>
+                                                    <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black;">8</th>
+                                                    <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black;">8</th>
+                                                    <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black;">8</th>
+                                                    <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black;">8</th>
+                                                    <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black;">9</th>
+                                                    <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black;">9</th>
+                                                    <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black;">9</th>
+                                                    <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black;">9</th>
+                                                    <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black;">9</th>
+                                                    <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black;">9</th>
+                                                    <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black;">9</th>
+                                                    <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black;">9</th>
+                                                    <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black;">9</th>
+                                                    <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black;">9</th>
+                                                    <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black;">10</th>
+                                                    <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black;">10</th>
+
+                                                </tr>
+                                                <tr>
+                                                    <th style="white-space: pre-wrap; width: 5px; border-left: 1px solid black; border-right: 1px solid black; border-bottom: 1px solid black; ">3</th>
+                                                    <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; border-bottom: 1px solid black;">4</th>
+                                                    <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; border-bottom: 1px solid black;">5</th>
+
+                                                    <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; border-bottom: 1px solid black;">6</th>
+                                                    <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; border-bottom: 1px solid black;">7</th>
+                                                    <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; border-bottom: 1px solid black;">8</th>
+                                                    <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; border-bottom: 1px solid black;">9</th>
+                                                    <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; border-bottom: 1px solid black;">0</th>
+                                                    <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; border-bottom: 1px solid black;">1</th>
+                                                    <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; border-bottom: 1px solid black;">2</th>
+                                                    <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; border-bottom: 1px solid black;">3</th>
+                                                    <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; border-bottom: 1px solid black;">4</th>
+                                                    <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; border-bottom: 1px solid black;">5</th>
+                                                    <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; border-bottom: 1px solid black;">6</th>
+                                                    <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; border-bottom: 1px solid black;">7</th>
+                                                    <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; border-bottom: 1px solid black;">8</th>
+                                                    <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; border-bottom: 1px solid black;">9</th>
+                                                    <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; border-bottom: 1px solid black;">0</th>
+                                                    <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; border-bottom: 1px solid black;">1</th>
+
+                                                    <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; border-bottom: 1px solid black;">2</th>
+                                                    <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; border-bottom: 1px solid black;">3</th>
+                                                    <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; border-bottom: 1px solid black;">4</th>
+                                                    <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; border-bottom: 1px solid black;">5</th>
+                                                    <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; border-bottom: 1px solid black;">6</th>
+                                                    <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; border-bottom: 1px solid black;">7</th>
+                                                    <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; border-bottom: 1px solid black;">8</th>
+                                                    <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; border-bottom: 1px solid black;">9</th>
+                                                    <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; border-bottom: 1px solid black;">0</th>
+                                                    <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; border-bottom: 1px solid black;">1</th>
+
+                                                    <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; border-bottom: 1px solid black;">2</th>
+                                                    <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; border-bottom: 1px solid black;">3</th>
+                                                    <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; border-bottom: 1px solid black;">4</th>
+                                                    <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; border-bottom: 1px solid black;">5</th>
+                                                    <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; border-bottom: 1px solid black;">6</th>
+                                                    <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; border-bottom: 1px solid black;">7</th>
+                                                    <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; border-bottom: 1px solid black;">8</th>
+                                                    <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; border-bottom: 1px solid black;">9</th>
+                                                    <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; border-bottom: 1px solid black;">0</th>
+                                                    <th style="white-space: pre-wrap; width: 5px; border-right: 1px solid black; border-bottom: 1px solid black;">1</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="tblDetalleNEA"></tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td  style="line-height:25px; font-family: 'Arial Narrow', Arial, sans-serif; font-size: 14px;border: 1px solid black; text-align: right; color: #080707; font-weight: bold;" id="tdTotalNEA"></td>
+                                </tr>
+                            </table>
+                          
+                        </div>
+                        <div style="line-height: 28px; font-family: 'Arial Narrow', Arial, sans-serif; font-size: 12px; width: 100%; float: left; border-left: 1px solid black; border-right: 1px solid black; border-top: 1px solid black; border-bottom: 1px solid black; ">
+                            <div style="width: 100%; float: left;">
+                                <div style="width: 60%;float: left;">
+                                    <label>PRESUPUESTO:</label>
+                                    <label id="lblPresupuesto"></label>
+                                </div>
+                                <div style="width: 20%; float: left;">
+                                    <label>GUIA REM. :</label>
+                                    <label id="lblGuiaRemi"></label>
+                                </div>
+                                <div style="width: 20%; float: left;">
+                                    <label>FECHA. :</label>
+                                    <label id="lblFechaGuiaRemi"></label>
+                                </div>
+                            </div>
+                            <div style="width: 100%; float: left;">
+                                <div style="width: 30%;float: left;">
+                                    <label>OBSERVACIONES :</label>
+                                    <label>ORDEN DE COMPRA :</label>
+                                    <label id="lblNroOrden"></label>
+                                </div>
+                                <div style="width: 10%; float: left;">
+                                    <label>FECHA :</label>
+                                    <label id="lblFechaOC"></label>
+                                </div>
+                                <div style="width: 25%; float: left;">
+                                    <label id="lblJustificacion"></label>
+                                </div>
+                                <div style="width: 35%; float: left;">
+                                    <label>PROVEEDOR :</label>
+                                    <label id="lblProveedorNEA"></label>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="font-family: 'Arial Narrow', Arial, sans-serif; font-size: 12px; width: 100%; float: left;">
+                            <div style="width: 35%; height: 100Px; float: left; border-left: 1px solid black; border-right: 1px solid black; border-top: 1px solid black; border-bottom: 1px solid black; text-align: center;">
+                                <br />
+                                <label>JEFE DE ALMACEN</label><br />
+                                <label id="lblNombreJefeAlmacen"></label><br />
+                                <label id="lblDNIAlmacen"></label><br />
+                                @*<label>---------------------------------------------</label>*@
+                            </div>
+                            <div style="width: 35%; height: 100Px; float: left; border-left: 1px solid black; border-right: 1px solid black; border-top: 1px solid black; border-bottom: 1px solid black; text-align: center;">
+                                <br />
+                                <label>JEFE DE LA OFICINA DE LOGÍSTICA</label><br />
+                                <label id="lblGradoJeLog"></label><br />
+                                <label id="lblNombreJelog"></label><br />
+                                <label id="lblDNIJelog"></label><br />
+                                @*<label>---------------------------------------------</label>*@
+                            </div>
+                            <div style="width: 28%;height:100Px; float: left;border-left: 1px solid black; border-right: 1px solid black; border-top: 1px solid black; border-bottom: 1px solid black;">
+                                <h6 style="text-align:left;margin-left:10px;">DISTRIBUCIÓN;</h6>
+                                <div style="width: 30%; float: left;">
+                                    <label>Original</label><br />
+                                    <label>1. Copia :</label><br />
+                                    <label>2. Copia :</label><br />
+                                </div>
+                                <div style="width: 50%;float: left;">
+                                    <label>Almacén</label><br />
+                                    <label>Kardex</label><br />
+                                    <label>Interesado</label><br />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div id="divReportePreNEA" style="overflow:hidden;width:auto;display:none">
-                    <table cellpadding="0" width="956px" cellspacing="0" style="font-size:15px;font-family:Arial">
-                        <tbody>
-                            <tr>
-                                <td colspan="8" style="height:170px">&nbsp;</td>
-                            </tr>
-                            <tr>
-                                <td colspan="5" style="width:40px;">&nbsp;<br /></td>
-                                <td colspan="3" id="tdNumeroPreNEA"></td>
-                            </tr>
-                            <tr>
-                                <td colspan="8"><br /></td>
-                            </tr>
-                            <tr>
 
-                                <td colspan="7" style="width:680px">&nbsp;</td>
-                                <td id="tdFechaPreNEA"></td>
-
-                            </tr>
-                            <tr>
-                                <td colspan="2" style="width:85px;height:40px">&nbsp;</td>
-                                <td colspan="6" id="tdProveedorPreNEA"></td>
-                            </tr>
-                            <tr>
-                                <td colspan="2" style="width: 40px;height: 30px">
-                                    &nbsp;
-                                </td>
-                                <td id="tdOrdenPreNEA"></td>
-                                <td style="width:10px">&nbsp;</td>
-                                <td colspan="4" id="tdPedidoPre"></td>
-                            </tr>
-                            <tr>
-                                <td colspan="2" style="width: 40px;height: 30px">&nbsp;</td>
-                                <td id="tdGuiaPreNEA"></td>
-                                <td style="width:10px">&nbsp;</td>
-                                <td colspan="4" id="tdUsuarioPreNEA"></td>
-                            </tr>
-                            <tr>
-                                <td colspan="8"><br /></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <br /><br /><br />
-                    <table cellpadding="0" cellspacing="0" style="font-size:14px;font-family:Arial">
-                        <tr>
-                            <td style="height:610px;vertical-align:top">
-                                <table cellpadding="0" width="896px" cellspacing="0" style="font-size:14px;font-family:Arial">
-                                    <tbody id="tblDetallePreNEA"></tbody>
-                                </table>
-                            </td>
-                        </tr>
-                        <tr>
-
-                            <td style="width:889px; text-align: right;font-size:15px;font-weight:bold" id="tdTotalPreNEA"></td>
-                        </tr>
-                    </table>
-                    <table cellpadding="0" width="866px" cellspacing="0" style="font-size:15px;font-family:Arial">
-                        <tbody>
-
-                            <tr>
-                                <td colspan='2' style='width:550px;font-size:12px;'>
-                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                    <span id="spnObservacionesPreNEA"></span>
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td width="400px">
-                                    <BR><BR><BR><BR>
-                                    <CENTER>
-                                        <span id="spnEncargadoGradoPreNEA"></span><BR>
-                                        <span id="spnEncargadoNombrePreNEA"></span><BR>
-                                        <span id="spnEncargadoCIPPreNEA"></span><BR>
-
-                                    </CENTER>
-                                </td>
-
-                                <td width="400px">
-                                    <BR><BR><BR><BR>
-                                    <CENTER>
-                                        <span id="spnJefeGradoPreNEA"></span><BR>
-                                        <span id="spnJefeNombrePreNEA"></span><BR>
-                                        <span id="spnJefeCIPPreNEA"></span><BR>
-
-                                    </CENTER>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colspan="2" style='height:50px'></td>
-                            </tr>
-                            <tr>
-                                <td colspan="2">
-                                    <CENTER>
-                                        <span id="spnAdmonGradoPreNEA"></span><BR>
-                                        <span id="spnAdmonNombrePreNEA"></span><BR>
-                                        <span id="spnAdmonCIPPreNEA"></span><BR>
-                                    </CENTER>
-                                </td>
-                            </tr>
-
-                        </tbody>
-                    </table>
-                </div>
                 <div id="divReportePECOSA" style="overflow:hidden;width:auto;display:none">
                     <table cellpadding="0" width="1000px" cellspacing="0" style="font-family:'Arial Narrow', Arial, sans-serif;font-size:12px">
                         <tbody>
@@ -696,93 +850,6 @@
                             <tr>
                                 <td style="border:1px solid black">AÑO</td>
                                 <td style="border:1px solid black">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div id="divReportePrePECOSA" style="overflow:hidden;width:auto;display:none">
-                    <table cellpadding="0" cellspacing="0" style="font-family:'Arial Narrow', Arial, sans-serif;font-size:12px">
-                        <tbody>
-                            <tr>
-                                <td align="center" style="height:140px"></td>
-                            </tr>
-                            <tr>
-
-                                <td style="width:780px">
-                                    &nbsp;
-                                </td>
-                                <td style="font-weight:bold" id="tdNroPecosaPre"></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <table cellpadding="0" cellspacing="0" style="font-family:Arial;font-size:12px">
-                        <tbody>
-                            <tr>
-                                <td style="width:140px">&nbsp;</td>
-                                <td align="center" style="width: 250px; font-size: 12px; font-weight: bold">
-                                    <span id="spnSolicitaGradoPre"></span><br />
-                                    <span id="spnSolicitaCargoPre"></span><br />
-                                    <span id="spnSolicitaNombrePre"></span><br />
-                                    <span id="spnSolicitaCIPPre"></span><br />
-                                </td>
-                                <td style="width: 160px;">&nbsp;</td>
-                                <td style="width: 220px; text-align: center;font-weight: bold">
-                                    <br /><br /><span id="tdCentroGastoPre"></span>
-                                </td>
-                                <td style="width: 210px; text-align: center; font-weight: bold ">
-                                    <br /><br /><span id="tdPedidoPecosaPre"></span>
-                                </td>
-                                <td style="width: 40px; text-align: center; font-weight: bold ">
-                                    <br /><br /><span id="tdDiaPecosaPre"></span>
-                                </td>
-                                <td style="width: 40px; text-align: center; font-weight: bold ">
-                                    <br /><br /><span id="tdMesPecosaPre"></span>
-                                </td>
-                                <td style="width: 40px; text-align: center; font-weight: bold ">
-                                    <br /><br /><span id="tdAnioPecosaPre"></span>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <br /><br />
-                    <table cellpadding="0" cellspacing="0">
-                        <tr>
-                            <td colspan="7" style="height:270px;vertical-align:top;">
-                                <table cellpadding="0" cellspacing="0" style="font-family:'Arial Narrow', Arial, sans-serif;font-size:12px">
-                                    <tbody id="tblDetallePecosaPre"></tbody>
-                                </table>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td style="width:120px;vertical-align:top;">&nbsp;</td>
-                            <td colspan="6" style="font-family: Arial, sans-serif; font-size: 12px;width:650px; line-height: 40px; vertical-align: top" id="tdJustificacionPre"></td>
-                        </tr>
-                    </table>
-                    <br><br><br>
-                    <table cellpadding="0" cellspacing="0" style="font-family:Arial, sans-serif;font-size:13px">
-                        <tbody>
-                            <tr>
-                                <td style="text-align:center;width:90px">&nbsp;</td>
-                                <td style="text-align:center;width:200px">
-                                    <span id="spnJefeAbaGradoPre"></span><br />
-                                    <span id="spnJefeAbaNombrePre"></span><br />
-                                    <span id="spnJefeAbaCIPPre"></span><br />
-                                </td>
-                                <td style="text-align: center;width: 250px">
-                                    <span id="spnJefeAlmacenGradoPre"></span><br />
-                                    <span id="spnJefeAlmacenNombrePre"></span><br />
-                                    <span id="spnJefeAlmacenCIPPre"></span><br />
-                                </td>
-                                <td style="text-align: center;width: 230px">
-                                    <span id="spnEntregadoGradoPre"></span><br />
-                                    <span id="spnEntregadoNombrePre"></span><br />
-                                    <span id="spnEntregadoCIPPre"></span><br />
-                                </td>
-                                <td style="text-align: center;width: 200px">
-                                    <span id="spnRecibidoGradoPre"></span><br />
-                                    <span id="spnRecibidoNombrePre"></span><br />
-                                    <span id="spnRecibidoCIPPre"></span><br />
-                                </td>
                             </tr>
                         </tbody>
                     </table>
