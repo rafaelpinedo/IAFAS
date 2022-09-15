@@ -10,7 +10,10 @@ var idRegistro = "";
 var operacion = 0;
 var listaOficina_VG = [];
 var idTabActivo = "";
+var tipoPlanCta = "";
 
+const CTA_MAYOR = "Mayor";
+const SUB_CTA = "SubCta";
 
 window.onload = function () {
     getConfigMn();
@@ -18,18 +21,21 @@ window.onload = function () {
     controller = window.sessionStorage.getItem("Controller");
     mostrarLoading("divLista");
     if (vista == "PlanContable") {
-        getListarPlanCta("Mayor")
+        tipoPlanCta = CTA_MAYOR;
+        getListarPlanCta(tipoPlanCta)
+
+        mostrarFormTabPlanCta("formTabMayor");
+        ocultarFormTabPlanCta("formTabSubCta");
     }
     else {
         getListar();
     }
     configurarBotones();
     configurarCombos();
-    
+
 }
 
 function getListarPlanCta(tabPlan) {
-   // var data = "";
     var anioFiscal = txtAnioFiscal.value;
     Http.get("General/listarTabla?tbl=" + controller + vista + tabPlan + "&data=" + anioFiscal, mostrarlistas);
 }
@@ -45,10 +51,22 @@ function mostrarlistas(rpta) {
         var lista = listas[0].split("¬");
 
         if (vista == "PlanContable") {
-            var listaEstado = listas[1].split("¬");
-
             grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
-            crearCombo(listaEstado, "cboEstado", "Seleccione");
+
+            if (tipoPlanCta == CTA_MAYOR) {
+                var listaEstado = listas[1].split("¬");
+
+                crearCombo(listaEstado, "cboEstado", "Seleccione");
+            }
+            else if (tipoPlanCta == SUB_CTA) {
+                var listaCtaMayor = listas[1].split("¬");
+                var listaFuentFinanciera = listas[2].split("¬");
+                var listaEstado = listas[3].split("¬");
+
+                crearCombo(listaCtaMayor, "cboCuentaMayorSubCta", "Seleccione");
+                crearCombo(listaFuentFinanciera, "cboFuenteFinanciamientoSubCta", "Ninguno");
+                crearCombo(listaEstado, "cboEstadoSubCta", "Seleccione");
+            }
         }
 
         else {
@@ -82,6 +100,22 @@ function listarOficinaItem() {
     }
 }
 
+
+function grabarDatosPlanCta(tabPlan) {
+    var data = ""
+    var frm = new FormData();
+
+    var clasePopup = "Popup";
+    if (tipoPlanCta == SUB_CTA) clasePopup = "PopupSubCta";
+
+    data = obtenerDatosGrabar(clasePopup);
+
+    var txtAnhoFiscal = document.getElementById("txtAnioFiscal").value;
+    data += "|" + txtAnhoFiscal;
+
+    frm.append("data", data);
+    Http.post("General/guardar/?tbl=" + controller + vista + tabPlan, mostrarGrabar, frm);
+}
 
 function grabarDatos() {
     var data = ""
@@ -190,13 +224,44 @@ function seleccionarBoton(idGrilla, idRegistro, idBoton) {
             editarRegistro(idRegistro);
         }
         if (idBoton == "Eliminar") {
-            eliminarRegistro(idRegistro)
+            eliminarRegistroPlanCta(idRegistro);
         }
     }
 }
 
 function editarRegistro(id) {
-    Http.get("General/obtenerTabla/?tbl=" + controller + vista + '&id=' + id, mostrarRegistro);
+    if (vista == "PlanContable") {
+        if (tipoPlanCta)
+            Http.get("General/obtenerTabla/?tbl=" + controller + vista + tipoPlanCta + '&id=' + id, mostrarRegistro);
+    }
+    else {
+        Http.get("General/obtenerTabla/?tbl=" + controller + vista + '&id=' + id, mostrarRegistro);
+    }
+}
+
+function eliminarRegistroPlanCta(id) {
+    var data = "";
+    data = id;
+
+    var txtAnhoFiscal = document.getElementById("txtAnioFiscal").value;
+    data += "|" + txtAnhoFiscal;
+
+    var frm = new FormData();
+    frm.append("data", data);
+
+    Swal.fire({
+        title: '¿Desea eliminar el registro?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Si',
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.value) {
+            Http.post("General/eliminar/?tbl=" + controller + vista + tipoPlanCta, mostrarEliminar, frm);
+        }
+    })
 }
 
 function eliminarRegistro(id) {
@@ -229,9 +294,17 @@ function mostrarRegistro(rpta) {
         var cboEstado = document.getElementById("cboEstado");
         if (cboEstado != null) { cboEstado.disabled = false };
 
+        var cboEstadoSubCta = document.getElementById("cboEstadoSubCta");
+        if (cboEstadoSubCta != null) { cboEstadoSubCta.disabled = false };
+
         var divPopupContainer = document.getElementById("divPopupContainer");
         if (divPopupContainer != null) { divPopupContainer.style.display = 'block'; };
-        var controles = document.getElementsByClassName("Popup");
+
+        var claseControles = "Popup";
+        if (vista == "PlanContable")
+            if (tipoPlanCta == SUB_CTA) claseControles = "PopupSubCta";
+
+        var controles = document.getElementsByClassName(claseControles);
         var nControles = controles.length;
         var control;
         var tipo;
@@ -308,20 +381,35 @@ function listarSelect2Item(lista, idCombo) {
 function configurarBotones() {
     var tabMayor = document.getElementById("tabMayor");
     if (tabMayor != null) tabMayor.onclick = function () {
-        getListarPlanCta("Mayor");
         idTabActivo = "tabMayor";
+        tipoPlanCta = CTA_MAYOR;
+        getListarPlanCta(tipoPlanCta);
+
+        mostrarFormTabPlanCta("formTabMayor");
+        ocultarFormTabPlanCta("formTabSubCta");
     }
 
     var tabSubCta = document.getElementById("tabSubCta");
     if (tabSubCta != null) tabSubCta.onclick = function () {
-        getListarPlanCta("SubCta");
         idTabActivo = "tabSubCta";
+        tipoPlanCta = SUB_CTA;
+        getListarPlanCta(tipoPlanCta);
+
+        mostrarFormTabPlanCta("formTabSubCta");
+        ocultarFormTabPlanCta("formTabMayor");
     }
 
     var btnNuevo = document.getElementById("btnNuevo");
     if (btnNuevo != null) btnNuevo.onclick = function () {
         divPopupContainer.style.display = 'block';
         limpiarForm("Popup");
+        limpiarForm("PopupSubCta");
+
+        var txtAnio = document.getElementById("txtAnio");
+        if (txtAnio != null) {
+            var anio = txtAnio.getAttribute('value');
+            txtAnio.value = anio;
+        }
 
         let tituloModal = document.getElementById("tituloModal");
         if (tituloModal != null) {
@@ -332,6 +420,13 @@ function configurarBotones() {
         if (cboEstado != null) {
             cboEstado.value = 1;
             cboEstado.disabled = true;
+        }
+
+        var cboEstadoSubCta = document.getElementById("cboEstadoSubCta");
+        console.log(cboEstadoSubCta);
+        if (cboEstadoSubCta != null) {
+            cboEstadoSubCta.value = 1;
+            cboEstadoSubCta.disabled = true;
         }
 
         //var select2cboOficina = document.getElementById("select2-cboOficina-container");
@@ -346,7 +441,13 @@ function configurarBotones() {
     if (btnGuardar != null) btnGuardar.onclick = function () {
         var validar = false;
 
-        if (validarInformacion("Reque") == true) {
+        var claseReque = "Reque";
+
+        if (vista == "PlanContable")
+            if (tipoPlanCta == SUB_CTA) claseReque = "RequeSubCta";
+
+
+        if (validarInformacion(claseReque) == true) {
             validar = true;
         }
         if (validar == true) {
@@ -361,7 +462,12 @@ function configurarBotones() {
             }).then((result) => {
                 if (result.value) {
 
-                    grabarDatos();
+                    if (vista == "PlanContable") {
+                        grabarDatosPlanCta(tipoPlanCta);
+                    }
+                    else {
+                        grabarDatos();
+                    }
 
                     Swal.fire({
                         title: 'Procesando...',
@@ -376,15 +482,25 @@ function configurarBotones() {
         }
     }
 
-
     var btnCancelar = document.getElementById("btnCancelar");
     if (btnCancelar != null) btnCancelar.onclick = function () {
         divPopupContainer.style.display = 'none';
     }
+
+    var btnConsultar = document.getElementById("btnConsultar");
+    if (btnConsultar != null) btnConsultar.onclick = function () {
+
+        if (vista == "PlanContable") {
+            getListarPlanCta(tipoPlanCta);
+        }
+        else {
+            getListar();
+        }
+    }
 }
 
 function configurarCombos() {
-   
+
 
 }
 
@@ -428,4 +544,14 @@ function seleccionarFila(fila, id, prefijo) {
     if (window["fila" + prefijo] != null) window["fila" + prefijo].className = "FilaDatos";
     fila.className = "FilaSeleccionada";
     window["fila" + prefijo] = fila;
+}
+
+function mostrarFormTabPlanCta(idTab) {
+    var divPopupFormTab = document.getElementById(idTab);
+    if (divPopupFormTab != null) { divPopupFormTab.style.display = 'block'; };
+}
+
+function ocultarFormTabPlanCta(idTab) {
+    var divPopupFormTab = document.getElementById(idTab);
+    if (divPopupFormTab != null) { divPopupFormTab.style.display = 'none'; };
 }
