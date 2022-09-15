@@ -42,12 +42,16 @@ function mostrarlistas(rpta) {
             var listaUbicaFisica = listas[1].split("¬");
             var listaResponsable = listas[2].split("¬");
             var listaOficina = listas[3].split("¬");
+            var listaActivos = listas[4].split("¬");
 
-            grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
+            grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, null, 20, false, null);
             crearCombo(listaUbicaFisica, "cboUbicaFisica", "Seleccionar");
             crearCombo(listaResponsable, "cboResponsable", "Seleccionar");
             crearCombo(listaResponsable, "cboUsuarioFinal", "Seleccionar");
             crearCombo(listaResponsable, "cboOficinaCons", "Seleccionar");
+            crearCombo(listaActivos, "cboActivos", "Seleccionar");
+
+            
         }
         else {
             grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
@@ -282,6 +286,20 @@ function seleccionarFila(fila, id, prefijo) {
     if (window["fila" + prefijo] != null) window["fila" + prefijo].className = "FilaDatos";
     fila.className = "FilaSeleccionada";
     window["fila" + prefijo] = fila;
+
+    if (vista == "InventarioInicial") {
+        var periodoCons = txtPeriodoCons.value;
+        var data = periodoCons + '-' + idRegistro;
+        Http.get("General/listarTabla?tbl=" + controller + vista + "Activos&data=" + data, mostrarlistasActivos);
+    }
+}
+
+function mostrarlistasActivos(rpta) {
+    if (rpta) {
+        var listas = rpta.split("¯");
+        var lista = listas[0].split("¬");
+        grillaItem = new GrillaScroll(lista, "divListaActivo", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
+    }
 }
 
 function grabarDatos() {
