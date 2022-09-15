@@ -41,10 +41,13 @@ function mostrarlistas(rpta) {
         if (vista == "InventarioInicial") {
             var listaUbicaFisica = listas[1].split("¬");
             var listaResponsable = listas[2].split("¬");
+            var listaOficina = listas[3].split("¬");
 
             grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
             crearCombo(listaUbicaFisica, "cboUbicaFisica", "Seleccionar");
             crearCombo(listaResponsable, "cboResponsable", "Seleccionar");
+            crearCombo(listaResponsable, "cboUsuarioFinal", "Seleccionar");
+            crearCombo(listaResponsable, "cboOficinaCons", "Seleccionar");
         }
         else {
             grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);

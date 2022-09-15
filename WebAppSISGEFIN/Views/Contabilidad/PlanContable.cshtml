@@ -57,23 +57,66 @@
                                         <h5 class="modal-title" id="tituloModal"></h5>
                                     </div>
                                     <div class="modal-body">
-                                        <div class="row">
-                                            <div class="form-group col-sm-6">
-                                                <input type="hidden" class="control-form Popup" id="txtIdRegistro">
-                                                <label class="control-label">Cuenta Mayor</label>
-                                                <input type="text" autocomplete="off" maxlength="20" id="txtCodigo" class="control-form Reque Popup" />
+                                        <section id="formTabMayor">
+                                            <div class="row">
+                                                <div class="form-group col-sm-4">
+                                                    <input type="hidden" class="control-form Popup" id="txtIdRegistro">
+                                                    <label class="control-label">Año</label>
+                                                    <input type="number" id="txtAnio" class="control-form Reque Popup" value="@ViewBag.Anio" placeholder="@ViewBag.Anio" autocomplete="off">
+                                                </div>
+                                                <div class="form-group col-sm-8">
+                                                    <label class="control-label">Cuenta Mayor</label>
+                                                    <input type="text" autocomplete="off" maxlength="20" id="txtCodigo" class="control-form Reque Popup" />
+                                                </div>
                                             </div>
-                                            <div class="form-group col-sm-12">
-                                                <label class="control-label">Nombre</label>
-                                                <input type="text" autocomplete="off" id="txtNombre" class="control-form Reque Popup" />
+                                            <div class="row">
+                                                <div class="form-group col-sm-12">
+                                                    <label class="control-label">Nombre</label>
+                                                    <input type="text" autocomplete="off" id="txtNombre" class="control-form Reque Popup" />
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="form-group col-sm-4">
-                                                <label class="control-label">Estado</label>
-                                                <select id="cboEstado" class="control-lectura Reque Popup"></select>
+                                            <div class="row">
+                                                <div class="form-group col-sm-4">
+                                                    <label class="control-label">Estado</label>
+                                                    <select id="cboEstado" class="control-lectura Reque Popup"></select>
+                                                </div>
                                             </div>
-                                        </div>
+                                        </section>
+                                        <section id="formTabSubCta">
+                                            <div class="row">
+                                                <div class="form-group col-sm-4">
+                                                    <input type="hidden" class="control-form PopupSubCta" id="txtIdRegistroSubCta">
+                                                    <label class="control-label">Sub Cuenta</label>
+                                                    <input type="text" autocomplete="off" maxlength="20" id="txtCodigoSubCta" class="control-form RequeSubCta PopupSubCta" />
+                                                </div>
+                                                <div class="form-group col-sm-8">
+                                                    <label class="control-label">Nombre</label>
+                                                    <input type="text" autocomplete="off" id="txtNombreSubCta" class="control-form RequeSubCta PopupSubCta" />
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="form-group col-sm-12" hidden>
+                                                    <label class="control-label">Naturaleza</label>
+                                                    <input type="text" autocomplete="off" id="txtNaturalezaSubCta" class="control-form PopupSubCta" />
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="form-group col-sm-6">
+                                                    <label class="control-label">Cuenta Mayor</label>
+                                                    <select id="cboCuentaMayorSubCta" class="control-form RequeSubCta PopupSubCta"></select>
+                                                </div>
+                                                <div class="form-group col-sm-6">
+                                                    <label class="control-label">Fuente Financiamiento</label>
+                                                    <select id="cboFuenteFinanciamientoSubCta" class="control-form RequeSubCta PopupSubCta"></select>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="form-group col-sm-4">
+                                                    <label class="control-label">Estado</label>
+                                                    <select id="cboEstadoSubCta" class="control-lectura RequeSubCta PopupSubCta"></select>
+                                                </div>
+                                            </div>
+                                        </section>
                                     </div>
                                     <div class="modal-footer">
                                         <button id="btnCancelar" class="btnCancelarForm" title="Cancelar"><i class="fa fa-undo" aria-hidden="true"></i>&nbsp;Cancelar</button>

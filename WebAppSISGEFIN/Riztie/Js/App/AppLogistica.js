@@ -849,6 +849,8 @@ function configurarBotones() {
         codigoFilt.value = "";
         nombreFilt.value = "";
         unidaMedidaFilt.value = "";
+        var select2cboUnidadMedida = document.getElementById("select2-unidaMedidaFilt-container");
+        if (select2cboUnidadMedida != null) select2cboUnidadMedida.innerHTML = "Seleccione";
         let data = 'B|||';
         Http.get("General/listarTabla?tbl=" + controller + vista + "Filtro" + "&data=" + data, function (response) {
             if (response) {
@@ -865,6 +867,8 @@ function configurarBotones() {
         codigoFilt.value = "";
         nombreFilt.value = "";
         unidaMedidaFilt.value = "";
+        var select2cboUnidadMedida = document.getElementById("select2-unidaMedidaFilt-container");
+        if (select2cboUnidadMedida != null) select2cboUnidadMedida.innerHTML = "Seleccione";
         let data = 'S|||';
         Http.get("General/listarTabla?tbl=" + controller + vista + "Filtro" + "&data=" + data, function (response) {
             if (response) {
@@ -881,6 +885,8 @@ function configurarBotones() {
         codigoFilt.value = "";
         nombreFilt.value = "";
         unidaMedidaFilt.value = "";
+        var select2cboUnidadMedida = document.getElementById("select2-unidaMedidaFilt-container");
+        if (select2cboUnidadMedida != null) select2cboUnidadMedida.innerHTML = "Seleccione";
         let data = 'O|||';
         Http.get("General/listarTabla?tbl=" + controller + vista + "Filtro" + "&data=" + data, function (response) {
             if (response) {

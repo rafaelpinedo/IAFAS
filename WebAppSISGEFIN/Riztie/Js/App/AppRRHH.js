@@ -466,8 +466,10 @@ function configurarBotones() {
             tipoPersonaJuridica.style.display = "none";
             tipoPersonaJuridicaRuc.style.display = "none";
             divEstadoSunat.style.display = "none";
-            cboTipoContribuyente.value = 1;
             cboTipoDocumento.value = 2;
+
+            var cboTipoContribuyente = document.getElementById("cboTipoContribuyente");
+            cboTipoContribuyente.value = 1;
             cboTipoContribuyente.disabled = true;
 
             document.getElementById("txtRUC").classList.remove("Reque");
@@ -485,7 +487,6 @@ function configurarBotones() {
     var btnGuardar = document.getElementById("btnGuardar");
     if (btnGuardar != null) btnGuardar.onclick = function () {
         var validar = false;
-        debugger
         if (vista == "Personal") {
 
             let inputs = document.querySelectorAll('.chkTipoPersonaId:checked');
@@ -726,15 +727,9 @@ function configurarCombos() {
 
     var cboTipoDocumento = document.getElementById("cboTipoDocumento")
     if (cboTipoDocumento != null) cboTipoDocumento.onchange = function () {
-        //if (cboTipoDocumento.value == "4") {
-        //    cboTipoContribuyente.value = 2;
-        //    tipoPersonaNatural.style.display = "none";
-        //    tipoPersonaJuridica.style.display = "block";
-        //    tipoPersonaJuridicaRuc.style.display = "block";
-        //}
-        //else {
-           
-        //}
+        if (cboTipoDocumento.value == "4") {
+            cboTipoDocumento.value = 2;
+        }
         cboTipoContribuyente.value = 1;
         tipoPersonaNatural.style.display = "block";
         tipoPersonaJuridica.style.display = "none";
