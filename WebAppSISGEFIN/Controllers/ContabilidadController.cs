@@ -30,5 +30,16 @@ namespace WebAppSISGEFIN.Controllers
             ViewBag.Anio = Anio;
             return View();
         }
+
+        [FiltroAutenticacion]
+        public ActionResult FamiliaCuenta()
+        {
+            string[] Data = Session["DataUsuario"].ToString().Split('|');
+            string IdPerfil = Data[3];
+            ViewBag.Menu = new Menu().Listar(IdPerfil);
+            int Anio = DateTime.Now.Year;
+            ViewBag.Anio = Anio;
+            return View();
+        }
     }
 }

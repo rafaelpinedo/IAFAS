@@ -44,7 +44,7 @@ function mostrarlistas(rpta) {
             var listaOficina = listas[3].split("¬");
             var listaActivos = listas[4].split("¬");
 
-            grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, null, 20, false, null);
+            grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, null, 15, false, null);
             crearCombo(listaUbicaFisica, "cboUbicaFisica", "Seleccionar");
             crearCombo(listaResponsable, "cboResponsable", "Seleccionar");
             crearCombo(listaResponsable, "cboUsuarioFinal", "Seleccionar");
@@ -287,7 +287,7 @@ function seleccionarFila(fila, id, prefijo) {
     fila.className = "FilaSeleccionada";
     window["fila" + prefijo] = fila;
 
-    if (vista == "InventarioInicial") {
+    if (vista == "InventarioInicial" && prefijo =="divLista") {
         var periodoCons = txtPeriodoCons.value;
         var data = periodoCons + '-' + idRegistro;
         Http.get("General/listarTabla?tbl=" + controller + vista + "Activos&data=" + data, mostrarlistasActivos);

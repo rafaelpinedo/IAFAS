@@ -21,6 +21,17 @@ namespace WebAppSISGEFIN.Controllers
     public class PresupuestoController : Controller
     {
         [FiltroAutenticacion]
+        public ActionResult FamiliaClasificador()
+        {
+            string[] Data = Session["DataUsuario"].ToString().Split('|');
+            string IdPerfil = Data[3];
+            ViewBag.Menu = new Menu().Listar(IdPerfil);
+            int Anio = DateTime.Now.Year;
+            ViewBag.Anio = Anio;
+            return View();
+        }
+
+        [FiltroAutenticacion]
         public ActionResult CentroGasto()
         {
             string[] Data = Session["DataUsuario"].ToString().Split('|');
