@@ -15,7 +15,7 @@ window.onload = function () {
     getConfigMn();
     vista = window.sessionStorage.getItem("Vista");
     controller = window.sessionStorage.getItem("Controller");
-    if (vista == "PCA" || vista == "MarcoPresu" ) {
+    if (vista == "PCA") {
         getListarProgramacion();
     }
     else {
@@ -128,7 +128,17 @@ function mostrarlistas(rpta) {
             totalsumAnho.innerText = "Total S/ : " + formatoNumeroDecimal(pia)
         }
         else if (vista == "MarcoPresu") {
-            grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, null, 38, false, null);
+            var listaPCA = listas[1].split('¬');
+            var listaMeta = listas[2].split('¬');
+            listaSubMetaItem_v = listas[3].split('¬');
+            var listaClasificador = listas[4].split('¬');
+             
+            grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
+
+            listarSubMetaItem();
+            crearCombo(listaPCA, "cboPCA", "Seleccionar");
+            crearCombo(listaMeta, "cboMeta", "Seleccionar");
+            crearCombo(listaClasificador, "cboClasificador", "Seleccionar");
         }
         else {
               grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
@@ -398,6 +408,22 @@ function mostrarRegistro(rpta) {
             //txtEjecutado.value = campos[8];
             //txtDisponible.value = campos[9];
             //cboEstado.value = campos[10];
+       }
+       else if (vista == "MarcoPresu") {
+            txtIdRegistro.value = campos[0];
+           cboPCA.value = campos[1];
+           document.getElementById('select2-cboPCA-container').innerHTML = cboPCA.options[cboPCA.selectedIndex].text;
+           cboMeta.value = campos[2];
+           document.getElementById('select2-cboMeta-container').innerHTML = cboMeta.options[cboMeta.selectedIndex].text;
+            listarSubMetaItem();
+           cboSubMeta.value = campos[3];
+           document.getElementById('select2-cboSubMeta-container').innerHTML = cboSubMeta.options[cboSubMeta.selectedIndex].text;
+           cboClasificador.value = campos[4];
+           document.getElementById('select2-cboClasificador-container').innerHTML = cboClasificador.options[cboClasificador.selectedIndex].text;
+           console.log(rpta);
+           var divPopupContainer = document.getElementById("divPopupContainer");
+           if (divPopupContainer != null) { divPopupContainer.style.display = 'block'; };
+           return;
         }
         
 
@@ -497,18 +523,17 @@ function configurarBotones() {
             txtEjecutado.value = 0;
             txtDisponible.value = 0;
         }
-
-        if (vista == 'MarcoPresu') {
-            var anioFiscal = txtAnioFiscal.value;
-            document.getElementById("select2-cboSubMeta-container").innerHTML = "";
-            Http.get("General/listarTabla/?tbl=" + controller + vista + 'Clasificador&data=' + anioFiscal, mostrarListasMarco);
-        }
-
+          
         var txtAnioPerido = document.getElementById("txtAnioPerido");
         if (txtAnioPerido != null) {
             var anio = txtAnioPerido.getAttribute('value');
             txtAnioPerido.value = anio;
         }
+        var select2cboClasificador = document.getElementById("select2-cboClasificador-container");
+        if (select2cboClasificador != null) select2cboClasificador.innerHTML = "Seleccione";
+
+        var select2cboPCA = document.getElementById("select2-cboPCA-container");
+        if (select2cboPCA != null) select2cboPCA.innerHTML = "Seleccione";
         //var txtFechaPedido = document.getElementById("txtFechaPedido");
         //if (txtFechaPedido != null) txtFechaPedido.value = txtFechaPedido.getAttribute("data-fecha");
     }
@@ -628,15 +653,4 @@ function seleccionarFila(fila, id, prefijo) {
     window["fila" + prefijo] = fila;
 }
 
-function mostrarListasMarco(rpta) {
-    var listas = rpta.split('¯');
-    var listaPCA = listas[0].split('¬');
-    var listaMeta = listas[1].split('¬');
-    listaSubMeta = listas[2].split('¬');
-    var listaClasificador = listas[3].split('¬');
-
-    crearCombo(listaPCA, "cboPCA", "Seleccionar");
-    crearCombo(listaMeta, "cboMeta", "Seleccionar");
-    cboSubMeta.disabled = true;
-    crearCombo(listaClasificador, "cboClasificador", "Seleccionar");
-}
+ 
