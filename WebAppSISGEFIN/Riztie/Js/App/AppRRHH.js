@@ -477,8 +477,8 @@ function configurarBotones() {
             document.getElementById("txtNroDocumento").classList.remove("Reque");
             document.getElementById("txtApePaterno").classList.remove("Reque");
             document.getElementById("txtApeMaterno").classList.remove("Reque");
-            document.getElementById("txtNombres").classList.remove("Reque");
-
+            document.getElementById("txtNombres").classList.remove("Reque"); 
+            document.getElementById("chkEsEmpleado").checked = true; 
         }
 
     }

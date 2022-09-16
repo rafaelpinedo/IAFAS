@@ -504,6 +504,11 @@ function configurarBotones() {
             Http.get("General/listarTabla/?tbl=" + controller + vista + 'Clasificador&data=' + anioFiscal, mostrarListasMarco);
         }
 
+        var txtAnioPerido = document.getElementById("txtAnioPerido");
+        if (txtAnioPerido != null) {
+            var anio = txtAnioPerido.getAttribute('value');
+            txtAnioPerido.value = anio;
+        }
         //var txtFechaPedido = document.getElementById("txtFechaPedido");
         //if (txtFechaPedido != null) txtFechaPedido.value = txtFechaPedido.getAttribute("data-fecha");
     }
