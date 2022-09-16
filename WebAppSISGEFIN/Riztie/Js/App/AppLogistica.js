@@ -2981,13 +2981,15 @@ function grabarConfiguracion() {
         var idRegistroDirector = cboDirector.getAttribute('data-id');
         var idJeLog = cboJelog.value
         var idRegistroJeLog = cboJelog.getAttribute('data-id');
+        var idAdqui = cboAdquisicion.value
+        var idRegistroAdqui = cboAdquisicion.getAttribute('data-id');
 
         var idJelogAlma = cboJelogAlma.value
         var idRegistroJelogAlma = cboJelogAlma.getAttribute('data-id');
         var idJefeAlmacen = cboJefeAlmacen.value
         var idRegistroJefeAlmacen = cboJefeAlmacen.getAttribute('data-id');
 
-        data = idRegistroDirector + '|' + idDirector + '|' + idRegistroJeLog + '|' + idJeLog + '|' + idRegistroJelogAlma + '|' + idJelogAlma + '|' + idRegistroJefeAlmacen + '|' + idJefeAlmacen
+        data = idRegistroDirector + '|' + idDirector + '|' + idRegistroJeLog + '|' + idJeLog + '|' + idRegistroAdqui + '|' + idAdqui + '|' + idRegistroJelogAlma + '|' + idJelogAlma + '|' + idRegistroJefeAlmacen + '|' + idJefeAlmacen
         frm.append("data", data);
         Http.post("General/guardar/?tbl=" + controller + vista + 'Autorizacion', mostrarGrabarConfiguracion, frm);
     }

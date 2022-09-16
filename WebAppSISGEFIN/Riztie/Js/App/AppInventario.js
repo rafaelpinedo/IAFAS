@@ -240,11 +240,14 @@ function mostrarGrabar(rpta) {
         mensajeResul = listas[1].split("|");
         var tipo = mensajeResul[0];
         var mensaje = mensajeResul[1];
-        divPopupContainer.style.display = 'none';
-        divPopupContainerForm1.style.display = 'none';
+
+        var divPopupContainer = document.getElementById("divPopupContainer");
+        if (divPopupContainer!=null) divPopupContainer.style.display = 'none';
+
+        var divPopupContainerForm1 = document.getElementById("divPopupContainerForm1");
+        if (divPopupContainerForm1 != null)divPopupContainerForm1.style.display = 'none';
 
         grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
-
 
         if (tipo == 'A') {
             Swal.fire({
@@ -1312,10 +1315,9 @@ function grabarIngreso() {
 
 function getReporte(id) {
     var tipo = "";
-    if (tabla == "GenerarNP") {
+    if (vista == "GenerarNP") {
         if (optIngreso.checked) { tipo = "NEA"; } else { tipo = "PECOSA"; }
     }
-
     Http.get("General/obtenerReporteId/?tbl=" + controller + vista + tipo + '&id=' + id, mostrarReporte);
 }
 
@@ -1404,28 +1406,35 @@ function mostrarReporteCierre(rpta) {
 
 function mostrarReporte(rpta) {
     if (rpta) {
-        if (tabla == "GenerarNP") {
+        if (vista == "GenerarNP") {
             if (optIngreso.checked) {
                 var listaDetalleReporte = "";
                 var listaReporte = rpta.split("¯");
                 var Cabecera = listaReporte[0].split("|");
-                tdNumeroNEA.innerHTML = Cabecera[0];
-                tdFechaNEA.innerHTML = Cabecera[1];
-                tdProveedorNEA.innerHTML = Cabecera[3];
-                tdOrdenNEA.innerHTML = Cabecera[4];
-                tdPedido.innerHTML = Cabecera[6];
-                tdGuiaNEA.innerHTML = Cabecera[5];
-                tdUsuarioNEA.innerHTML = Cabecera[7];
-                spnObservacionesNEA.innerHTML = Cabecera[2];
-                spnEncargadoGradoNEA.innerHTML = Cabecera[8];
-                spnEncargadoNombreNEA.innerHTML = Cabecera[10];
-                spnEncargadoCIPNEA.innerHTML = Cabecera[11];
-                spnJefeGradoNEA.innerHTML = Cabecera[12];
-                spnJefeNombreNEA.innerHTML = Cabecera[14];
-                spnJefeCIPNEA.innerHTML = Cabecera[15];
-                spnAdmonGradoNEA.innerHTML = Cabecera[16];
-                spnAdmonNombreNEA.innerHTML = Cabecera[18];
-                spnAdmonCIPNEA.innerHTML = Cabecera[19];
+                tdNroTitulo.innerHTML = "Nº " + Cabecera[0];
+                tdNroNea.innerHTML = Cabecera[0];
+                var fechaNea = Cabecera[1].split('/');
+                tdDia.innerHTML = fechaNea[0];
+                tdMes.innerHTML = fechaNea[1];
+                tdAnio.innerHTML = fechaNea[2];
+                tdMoneda.innerHTML = Cabecera[2];
+                tdOrden.innerHTML = Cabecera[3];
+                lblNroOrden.innerHTML = Cabecera[3];
+                lblFechaOC.innerHTML = Cabecera[4];
+                lblJustificacion.innerHTML = Cabecera[5];
+                lblProveedorNEA.innerHTML = Cabecera[6];
+                lblGuiaRemi.innerHTML = Cabecera[7];
+                lblFechaGuiaRemi.innerHTML = Cabecera[8];
+                lblPresupuesto.innerHTML = Cabecera[9];
+
+                var jeLog = Cabecera[10].split('-');
+                lblGradoJeLog.innerHTML = jeLog[2];
+                lblNombreJelog.innerHTML = jeLog[0];
+                lblDNIJelog.innerHTML = jeLog[1];
+
+                var jeAlmacen = Cabecera[11].split('-');
+                lblNombreJefeAlmacen.innerHTML = jeAlmacen[0];
+                lblDNIAlmacen.innerHTML = jeAlmacen[1];
 
                 var total = 0;
                 var contenido = "";
@@ -1436,31 +1445,36 @@ function mostrarReporte(rpta) {
                     for (var i = 0; i < nregistros; i++) {
                         campos = listaDetalleReporte[i].split("|");
                         contenido += "<tr>";
-                        contenido += "<td style='vertical-align:top;text-align: center;'>";
+                        contenido += "<td colspan='2'style='vertical-align:top;text-align: center;'>";
                         contenido += i + 1;
                         contenido += "</td > ";
-                        contenido += "<td colspan='2' style='vertical-align:top;text-align: left;width:350px;max-width:350px;white-space: pre-wrap;white-space: -moz-pre-wrap;white-space: -o-pre-wrap;'>";
-                        contenido += campos[2];
+                        contenido += "<td>";
                         contenido += "</td > ";
-                        contenido += "<td style='vertical-align:top;text-align: center;'>";
+                        contenido += "<td colspan='16' style='vertical-align:top;text-align: center;'>";
                         contenido += campos[1];
                         contenido += "</td > ";
-                        contenido += "<td style='vertical-align:top;text-align: right;'>";
-                        contenido += formatoNumero(campos[3] * 1);
+                        contenido += "<td style='vertical-align:top;text-align: center;'>";
+                        contenido += campos[2];//unidad medida
                         contenido += "</td > ";
-                        contenido += "<td style='vertical-align:top;text-align: right;'>";
-                        contenido += formatoNumero(campos[4] * 1);
+                        contenido += "<td colspan='10' style='vertical-align:top;text-align: right;'>";
+                        contenido += formatoNumeroDecimal(campos[3] * 1);
                         contenido += "</td > ";
-                        contenido += "<td style='vertical-align:top;text-align: right;'>";
-                        contenido += formatoNumero(campos[5] * 1);
+                        contenido += "<td style='vertical-align:top;width:550px;max-width:550px;white-space: pre-wrap;white-space: -moz-pre-wrap;white-space: -o-pre-wrap;'>&nbsp;&nbsp;&nbsp;";
+                        contenido += campos[4];//descripcion
                         contenido += "</td > ";
-                        contenido += "<td style='vertical-align:top;text-align: right;'>";
-                        contenido += formatoNumero(campos[6] * 1);
-                        total = total + (campos[6] * 1);
+                        contenido += "<td style='vertical-align:top;'>";
+                        contenido += campos[5];
+                        contenido += "</td > ";
+                        contenido += "<td colspan='10' style='vertical-align:top;text-align: right;'>";
+                        contenido += formatoNumeroDecimal(campos[6] * 1);
+                        contenido += "</td > ";
+                        contenido += "<td style='width:75px;max-width:75px;vertical-align:top;text-align: right;'>";
+                        contenido += formatoNumeroDecimal(campos[7] * 1);
+                        total = total + (campos[7] * 1);
                         contenido += "</td > ";
                         contenido += "</tr>";
                     }
-                    tdTotalNEA.innerHTML = "TOTAL: " + formatoNumero(total);
+                    tdTotalNEA.innerHTML ="TOTAL: "+ formatoNumeroDecimal(total);
                     tblDetalleNEA.innerHTML = contenido;
                 }
                 imprimir(divReporte.innerHTML);
@@ -1503,19 +1517,21 @@ function mostrarReporte(rpta) {
                     for (var i = 0; i < nregistros; i++) {
                         campos = listaDetalleReporte[i].split("|");
                         contenido += "<tr>";
-                        contenido += "<td style='vertical-align:top;text-align: center;'>";
+                        contenido += "<td style='border:1px solid black;vertical-align:top;text-align: center;'>";
                         contenido += i + 1;
                         contenido += "</td > ";
-                        contenido += "<td style='vertical-align:top;text-align: center;'>";
+                        contenido += "<td style='border:1px solid black;>";
+                        contenido += "</td > ";
+                        contenido += "<td style='border:1px solid black;vertical-align:top;text-align: center;'>";
                         contenido += campos[1];
                         contenido += "</td > ";
-                        contenido += "<td colspan='2' style='vertical-align:top;text-align: left;max-width:500px;white-space: pre-wrap;white-space: -moz-pre-wrap;white-space: -o-pre-wrap;'>";
+                        contenido += "<td colspan='2' style='border:1px solid black;vertical-align:top;text-align: left;max-width:500px;white-space: pre-wrap;white-space: -moz-pre-wrap;white-space: -o-pre-wrap;'>";
                         contenido += campos[2];
                         contenido += "</td > ";
-                        contenido += "<td style='vertical-align:top;text-align: center;'>";
+                        contenido += "<td style='border:1px solid black;vertical-align:top;text-align: center;'>";
                         contenido += campos[3];
                         contenido += "</td > ";
-                        contenido += "<td style='vertical-align:top;text-align: right;'>";
+                        contenido += "<td style='border:1px solid black;vertical-align:top;text-align: right;'>";
                         contenido += formatoNumero(campos[4] * 1);
                         contenido += "</td > ";
                         contenido += "<td style='vertical-align:top;text-align: right;'>";
@@ -1532,4 +1548,15 @@ function mostrarReporte(rpta) {
             }
         }
     }
+}
+
+function imprimir(contenido) {
+    pagina = document.body;
+    var ventana = window.frames["print_frame"];
+    ventana.document.body.innerHTML = "";
+    ventana.document.write(contenido);
+    ventana.focus();
+    ventana.print();
+    ventana.close();
+    document.body = pagina;
 }
