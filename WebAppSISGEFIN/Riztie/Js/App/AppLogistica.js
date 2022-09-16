@@ -1056,6 +1056,11 @@ function configurarBotones() {
         if (dtgActivo != null) {
             $('#dtgActivo').bootstrapToggle('off')
         }
+
+        var chkEsProveedor = document.getElementById("chkEsProveedor");
+        if (chkEsProveedor != null) {
+            chkEsProveedor.checked = true;
+        }
     }
 
     var btnActualizar = document.getElementById("btnActualizar");
