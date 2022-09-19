@@ -584,6 +584,11 @@ function configurarBotones() {
         if (select2cboOClase != null) select2cboOClase.innerHTML = "Seleccione";
         var select2cboFamilia = document.getElementById("select2-cboFamilia-container");
         if (select2cboFamilia != null) select2cboFamilia.innerHTML = "Seleccione";
+
+        var cboTipoUso = document.getElementById("cboTipoUso");
+        if (cboTipoUso != null) {
+            cboTipoUso.value = 2;
+        }
     }
 
 
