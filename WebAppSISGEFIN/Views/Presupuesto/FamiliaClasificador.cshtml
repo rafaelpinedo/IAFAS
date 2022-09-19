@@ -15,20 +15,9 @@
                     <div class="form-row">
                         <div class="form-group col-sm-1">
                             <label class="control-label">Periodo</label>
-                            <input type="text" id="txtPeriodoCons" class="control-form PopupCons" value="@ViewBag.Anio">
+                            <input type="text" id="txtAnio" class="control-form" value="@ViewBag.Anio">
                         </div>
-                        <div class="form-group col-sm-1" style="display:none">
-                            <label class="control-label">Mes</label>
-                            <select class="control-form RequeCons PopupCons" id="cboPeriodoCons"></select>
-                        </div>
-                        <div class="form-group col-sm-2" style="display:none">
-                            <label class="control-label">Centro Costo</label>
-                            <select class="control-form RequeCons PopupCons" id="cboCentroCostoCons"></select>
-                        </div>
-                        <div class="form-group col-sm-2" style="display:none">
-                            <label class="control-label">Oficina</label>
-                            <select class="control-form RequeCons PopupCons" id="cboOficinaCons"></select>
-                        </div>
+
                         <div class="form-group col-md-2 m-3">
                             <button class="input-group-inverse btn btn-dark" id="btnConsultar" data-toggle="tooltip" data-placement="bottom" title="Consultar"><i class="fa fa-search fa-lg" aria-hidden="true"></i></button>
                             <button class="input-group-inverse btn btn-primary" id="btnNuevo" data-toggle="tooltip" data-placement="bottom" title="Nuevo"><i class="fa fa-plus-circle fa-lg" aria-hidden="true"></i></button>
@@ -40,284 +29,59 @@
                             <div class="table-responsive" id="divLista"></div>
                         </div>
                     </div>
-                    <div class="form-row">
-                        <div class="form-group col-md-12">
-                            <div class="table-responsive" id="divListaActivo"></div>
-                        </div>
-                    </div>
+
                     <div class="form-row">
                         <div class="modal custom-modal" tabindex="-1" role="dialog" aria-hidden="true" id="divPopupContainer" style="overflow-y:auto;">
-                            <div class="modal-dialog modal-xl bg-personalizado" id="divPopupWindow" style="margin-top:30px;">
+                            <div class="modal-dialog modal-lg bg-personalizado" id="divPopupWindow" style="margin-top:30px;">
                                 <div class="modal-content">
                                     <div id="divBarra" class="modal-header bg-personalizado" style="cursor:move">
-                                        <h5 class="modal-title" id="tituloModal">Nuevo Activo</h5>
+                                        <h5 class="modal-title" id="tituloModal"></h5>
                                     </div>
                                     <div class="modal-body">
                                         <div class="row">
-                                            <div class="col-sm-12 col-lg-6 mb-2">
-                                                <fieldset class="fieldset h-100 p-3">
-                                                    <div class="row">
-                                                        <div class="form-group col-sm-6">
-                                                            <label class="control-label">Item</label>
-                                                            <input type="text" autocomplete="off" class="control-lectura Popup" readonly id="txtItem">
-                                                        </div>
-                                                        <div class="form-group col-sm-6">
-                                                            <label class="control-label">Correlativo</label>
-                                                            <input type="text" autocomplete="off" class="control-lectura Popup" readonly id="txtCorrelativo">
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="form-group col-sm-6">
-                                                            <label class="control-label">Margesí</label>
-                                                            <input type="text" autocomplete="off" class="control-form Reque Popup" id="txtMargesi">
-                                                        </div>
-                                                        <div class="form-group col-sm-6">
-                                                            <label class="control-label">Código Barra / Inv. Anterior</label>
-                                                            <input type="text" autocomplete="off" class="control-form Reque Popup" id="txtCodigoBarra">
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="form-group col-sm-12">
-                                                            <label class="control-label">Nombre del Item</label>
-                                                            <select class="SelectSearch control-form Reque Popup" id="cboActivos"></select>
-                                                        </div>
-                                                    </div>
-                                                    <hr />
-                                                    <div class="row">
-                                                        <div class="form-group col-sm-12">
-                                                            <label class="control-label">Sede</label>
-                                                            <input type="text" autocomplete="off" class="control-lectura Reque Popup" readonly id="txtSede">
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="form-group col-sm-12">
-                                                            <label class="control-label">Centro Costo</label>
-                                                            <select class="control-form Reque Popup" id="cboCentroCosto"></select>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="form-group col-sm-12">
-                                                            <label class="control-label">Ubic. Física</label>
-                                                            <select class="control-form Reque Popup" id="cboUbicaFisica"></select>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="form-group col-sm-12">
-                                                            <label class="control-label">Responsable</label>
-                                                            <select class="control-form Reque Popup" id="cboResponsable"></select>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="form-group col-sm-12">
-                                                            <label class="control-label">Usuario Final</label>
-                                                            <select class="control-form Reque Popup" id="cboUsuarioFinal"></select>
-                                                        </div>
-                                                    </div>
-                                                    <hr />
-                                                    <div class="row">
-                                                        <div class="form-group col-sm-8">
-                                                            <label class="control-label">Nro Serie</label>
-                                                            <input type="text" autocomplete="off" class="control-form Reque Popup" id="txtNroSerie">
-                                                        </div>
-                                                        <div class="form-group col-sm-4">
-                                                            <label class="control-label">Estado Conserv</label>
-                                                            <select class="control-form Reque Popup" id="cboEstadoConserv"></select>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="form-group col-sm-8">
-                                                            <label class="control-label">Marca</label>
-                                                            <input type="text" autocomplete="off" class="control-lectura Reque Popup" readonly id="txtMarca">
-                                                        </div>
-                                                        <div class="form-group col-sm-4">
-                                                            <label class="control-label">Estado Uso</label>
-                                                            <select class="control-form Reque Popup" id="cboEstadoUso"></select>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="form-group col-sm-12">
-                                                            <label class="control-label">Modelo</label>
-                                                            <input type="text" autocomplete="off" class="control-form Reque Popup" id="txtModelo">
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="form-group col-sm-12">
-                                                            <label class="control-label">Medidas</label>
-                                                            <input type="text" autocomplete="off" class="control-form Reque Popup" id="txtMedida">
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="form-group col-sm-12">
-                                                            <label class="control-label">Características</label>
-                                                            <textarea class="control-form RequeProv PopupProv" rows="2" id="ttaCaracteristica"></textarea>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="form-group col-sm-12">
-                                                            <label class="control-label">Observaciones</label>
-                                                            <textarea class="control-form RequeProv PopupProv" rows="2" id="ttaObservacion"></textarea>
-                                                        </div>
-                                                    </div>
-                                                </fieldset>
+                                            <div class="form-group col-sm-2">
+                                                <input type="hidden" class="control-form Popup" id="txtIdRegistro">
+                                                <label class="control-label">Año Fiscal</label>
+                                                <input type="text" class="control-form Reque Popup" id="txtAnioPerido" value="@ViewBag.Anio">
                                             </div>
-                                            <div class="col-sm-12 col-lg-6 mb-2">
-                                                <fieldset class="fieldset h-100 p-3">
-                                                    <div class="row">
-                                                        <div class="form-group col-sm-6">
-                                                            <label class="control-label">País de Procedencia</label>
-                                                            <select class="control-form Reque Popup" id="cboPaisProcedencia"></select>
-                                                        </div>
-                                                        <div class="form-group col-sm-6">
-                                                            <label class="control-label">Estado</label>
-                                                            <select class="control-form Reque Popup" id="cboEstado"></select>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="form-group col-sm-12">
-                                                            <fieldset class="fieldset">
-                                                                <legend class="legend">Tipo Patrimonio</legend>
-                                                                <div class="row">
-                                                                    <div class="form-group col-sm-12">
-                                                                        @*<label class="control-label">Tipo Doc</label>*@
-                                                                        <input type="number" autocomplete="off" class="control-lectura Popup" readonly id="">
-                                                                    </div>
-                                                                </div>
-                                                                <div class="row">
-                                                                    <div class="form-group col-sm-12">
-                                                                        @*<label class="control-label">Nro Doc</label>*@
-                                                                        <input type="number" autocomplete="off" class="control-lectura Popup" readonly id="">
-                                                                    </div>
-                                                                </div>
-                                                            </fieldset>
-                                                        </div>
-                                                    </div>
-                                                    <hr />
-                                                    <div class="row">
-                                                        <div class="col-sm-12">
-                                                            <div class="form-check form-check-inline">
-                                                                <input class="form-check-input" type="checkbox" id="chkEsSBN">
-                                                                <label class="form-check-label" for="chkEsAsegurado">SBN</label>
-                                                            </div>
-                                                            <div class="form-check form-check-inline">
-                                                                <input class="form-check-input" type="checkbox" id="chkEsActivoDepreciable">
-                                                                <label class="form-check-label" for="chkEsEmpleado">Activo Depreciable</label>
-                                                            </div>
-                                                            <div class="form-check form-check-inline">
-                                                                <input class="form-check-input" type="checkbox" id="chkEsVerificacionFisica">
-                                                                <label class="form-check-label" for="chkEsEmpleado">Verificación Física</label>
-                                                            </div>
-                                                            <div class="form-check form-check-inline">
-                                                                <input class="form-check-input" type="checkbox" id="chkEsEtiquetado">
-                                                                <label class="form-check-label" for="chkEsEmpleado">Etiquetado</label>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <hr />
-                                                    <div class="row">
-                                                        <div class="form-group col-sm-12">
-                                                            <fieldset class="fieldset">
-                                                                <legend class="legend">Ingreso del Bien por :</legend>
-                                                                <div class="row">
-                                                                    <div class="form-group col-sm-4">
-                                                                        <div class="row">
-                                                                            <div class="form-check form-check-inline col col-sm-12">
-                                                                                <input class="form-check-input" type="radio" name="ingresoBien" id="optOC" checked>
-                                                                                <label class="form-check-label" for="optOC">
-                                                                                    O/C
-                                                                                </label>
-                                                                            </div>
-                                                                            <div class="form-check form-check-inline col col-sm-12">
-                                                                                <input class="form-check-input" type="radio" name="ingresoBien" id="optNEA">
-                                                                                <label class="form-check-label" for="optNEA">
-                                                                                    NEA
-                                                                                </label>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="form-group col-sm-4">
-                                                                        <label class="control-label">Cantidad</label>
-                                                                        <input type="number" autocomplete="off" class="control-form Reque Popup" id="txtCantidadIngresoBien">
-                                                                    </div>
-                                                                    <div class="form-group col-sm-4">
-                                                                        <label class="control-label">Fecha</label>
-                                                                        <input type="date" class="control-form Reque Popup" id="ddtFechaIngresoBien">
-                                                                    </div>
-                                                                </div>
-                                                                <div class="row">
-                                                                    <div class="form-group col-sm-12">
-                                                                        <label class="control-label">Proveedor</label>
-                                                                        <input type="text" autocomplete="off" class="control-form Reque Popup" id="txtProveedor">
-                                                                    </div>
-                                                                </div>
-                                                                <div class="row">
-                                                                    <div class="form-group col-sm-6">
-                                                                        <label class="control-label">Valor Compra</label>
-                                                                        <input type="number" autocomplete="off" class="control-form Reque Popup" id="txtValorCompra">
-                                                                    </div>
-                                                                </div>
-                                                                <div class="row">
-                                                                    <div class="form-group col-sm-3 d-flex align-items-center">
-                                                                        <div class="form-check form-check-inline">
-                                                                            <input class="form-check-input" type="checkbox" id="chkEsGarantia">
-                                                                            <label class="form-check-label" for="chkEsGarantia">Garantía</label>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="form-group col-sm-4">
-                                                                        <label class="control-label">Fecha</label>
-                                                                        <input type="date" class="control-form Reque Popup" id="ddtFechaGarantia">
-                                                                    </div>
-                                                                    <div class="form-group col-sm-5">
-                                                                        <label class="control-label">N° Contrato</label>
-                                                                        <input type="number" autocomplete="off" class="control-form Reque Popup" id="txtNroContrato">
-                                                                    </div>
-                                                                </div>
-                                                            </fieldset>
-                                                        </div>
-                                                    </div>
-                                                    <hr />
-                                                    <div class="row">
-                                                        <div class="form-group col-sm-12">
-                                                            <fieldset class="fieldset">
-                                                                <legend class="legend">Alta</legend>
-                                                                <div class="row">
-                                                                    <div class="form-group col-sm-12">
-                                                                        <label class="control-label">Tipo Doc</label>
-                                                                        <select class="control-form Reque Popup" id="cboTipoDoc"></select>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="row">
-                                                                    <div class="form-group col-sm-6">
-                                                                        <label class="control-label">Nro Doc</label>
-                                                                        <input type="number" autocomplete="off" class="control-form Reque Popup" id="txtNumeroDoc">
-                                                                    </div>
-                                                                    <div class="form-group col-sm-6">
-                                                                        <label class="control-label">Fecha</label>
-                                                                        <input type="date" class="control-form Reque Popup" id="ddtFechaAlta">
-                                                                    </div>
-                                                                </div>
-                                                            </fieldset>
-                                                        </div>
-                                                    </div>
-                                                    <hr />
-                                                    <div class="row">
-                                                        <div class="form-group col-sm-12">
-                                                            <label class="control-label">Almacén</label>
-                                                            <input type="text" autocomplete="off" class="control-lectura Popup" readonly id="txtAlmacen">
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="form-group col-sm-12">
-                                                            <label class="control-label">Cta Contable</label>
-                                                            <input type="text" autocomplete="off" class="control-lectura Popup" readonly id="txtCtaContable">
-                                                        </div>
-                                                    </div>
-                                                </fieldset>
+                                            <div class="form-group col-sm-4">
+                                                <label class="control-label">Tipo de Uso</label>
+                                                <select id="cboTipoUso" class="control-form Reque Popup"></select>
+                                            </div>
+                                            <div class="form-group col-sm-4">
+
+                                                <label class="control-label">Tipo de Bien</label>
+                                                <select id="cboTipoBien" class="control-form Reque Popup"></select>
                                             </div>
                                         </div>
-                                        <div class="row m-0">
-                                            <div class="col-sm-12 text-left p-0">
-                                                <button class="btn waves-effect btn-secondary" id="btnConsutarEspecificacionesTecnicas" title="Especificaciones Técnicas"><i class="fa fa-archive" aria-hidden="true"></i>&nbsp;Especificaciones Técnicas</button>
-                                                <button class="btn waves-effect btn-info" id="btnConsutarValoresContables" title="Valores Contables"><i class="fa fa-search" aria-hidden="true"></i>&nbsp;Valores Contables</button>
+                                        <div class="row">
+                                            <div class="form-group col-sm-10">
+                                                <label class="control-label">Grupo</label>
+                                                <select id="cboGrupo" class="SelectSearch control-form Reque Popup"></select>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-group col-sm-10">
+                                                <label class="control-label">Clase</label>
+                                                <select id="cboClase" class="SelectSearch control-form Reque Popup"></select>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-group col-sm-10">
+                                                <label class="control-label">Familia</label>
+                                                <select id="cboFamilia" class="SelectSearch control-form Reque Popup"></select>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-group col-sm-10">
+                                                <label class="control-label">Clasificador</label>
+                                                <select id="cboClasificador" class="SelectSearch control-form Reque Popup"></select>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-group col-sm-4">
+                                                <label class="control-label">Estado</label>
+                                                <select id="cboEstado" class="control-lectura Reque Popup"></select>
                                             </div>
                                         </div>
                                     </div>
@@ -329,261 +93,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="form-row">
-                        <div class="modal custom-modal" tabindex="-1" role="dialog" aria-hidden="true" id="divPopupContainerForm1" style="overflow-y:auto;">
-                            <div class="modal-dialog modal-lg bg-personalizado" id="divPopupWindowForm1">
-                                <div class="modal-content">
-                                    <div id="divBarraForm1" class="modal-header bg-personalizado" style="cursor:move">
-                                        <h5 class="modal-title">Especificaciones Técnicas</h5>
-                                    </div>
-                                    <div class="modal-body">
-                                        <div class="row">
-                                            <div class="form-group col-sm-6">
-                                                <label class="control-label">Código Margesí</label>
-                                                <input type="number" autocomplete="off" class="control-lectura" readonly id="txtCodigoMargesi">
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="form-group col-sm-12">
-                                                <label class="control-label">Descripción</label>
-                                                <input type="number" autocomplete="off" class="control-lectura" readonly id="txtDescripcion">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button id="btnCancelarForm1" class="btnCancelarForm" title="Cancelar"><i class="fa fa-undo" aria-hidden="true"></i>&nbsp;Cancelar</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="modal custom-modal" tabindex="-1" role="dialog" aria-hidden="true" id="divPopupContainerForm2" style="overflow-y:auto;">
-                            <div class="modal-dialog modal-xl bg-personalizado" id="divPopupWindowForm2">
-                                <div class="modal-content">
-                                    <div id="divBarraForm2" class="modal-header bg-personalizado" style="cursor:move">
-                                        <h5 class="modal-title">Valores Contables</h5>
-                                    </div>
-                                    <div class="modal-body">
-                                        <div class="row">
-                                            <div class="form-group col-sm">
-                                                <label class="control-label">Vida Util en Años</label>
-                                                <input type="text" autocomplete="off" class="control-lectura PopupValContable" readonly id="txtVidaUtil">
-                                            </div>
-                                            <div class="form-group col-sm">
-                                                <label class="control-label">Fecha Alta</label>
-                                                <input type="text" class="control-lectura PopupValContable" readonly id="txtFechaAlta">
-                                            </div>
-                                            <div class="form-group col-sm">
-                                                <label class="control-label">Fin de Vida</label>
-                                                <input type="text" class="control-lectura PopupValContable" readonly id="txtFinVida">
-                                            </div>
-                                            <div class="form-group col-sm">
-                                                <label class="control-label">Año</label>
-                                                <select class="control-form RequeValContable PopupValContable" id="cboAnio"></select>
-                                            </div>
-                                            <div class="form-group col-sm">
-                                                <label class="control-label">Mes</label>
-                                                <select class="control-form RequeValContable PopupValContable" id="cboMes"></select>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="form-group col-sm-3">
-                                                <label class="control-label">% Depreciación</label>
-                                                <input type="text" autocomplete="off" class="control-lectura Popup" readonly id="txtDepreciacion">
-                                            </div>
-                                            <div class="form-group col-sm-3">
-                                                <label class="control-label">Estado de Conservación</label>
-                                                <input type="text" class="control-lectura PopupValContable" readonly id="txtEstadoConservacion">
-                                            </div>
-                                            <div class="form-group col-sm-3">
-                                                <label class="control-label">Factor Ajuste</label>
-                                                <input type="text" class="control-lectura PopupValContable" readonly id="txtFactorAjuste">
-                                            </div>
-                                            <div class="form-group col-sm-3">
-                                                <label class="control-label">Fecha Proceso</label>
-                                                <input type="text" class="control-lectura PopupValContable" readonly id="txtFechaProceso">
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="form-group col-sm-12">
-                                                <fieldset class="fieldset">
-                                                    <legend class="legend">Valores Iniciales del Ejercicio</legend>
-                                                    <div class="row">
-                                                        <div class="form-group col-sm-4">
-                                                            <label class="control-label">Valor</label>
-                                                            <input type="number" autocomplete="off" class="control-lectura PopupValContable" readonly id="txtValor">
-                                                        </div>
-                                                        <div class="form-group col-sm-4">
-                                                            <label class="control-label">Deprec Acumulada</label>
-                                                            <input type="number" autocomplete="off" class="control-lectura PopupValContable" readonly id="txtDeprecAcumulada">
-                                                        </div>
-                                                        <div class="form-group col-sm-4">
-                                                            <label class="control-label">Valor Neto</label>
-                                                            <input type="number" autocomplete="off" class="control-lectura PopupValContable" readonly id="txtValor">
-                                                        </div>
-                                                    </div>
-                                                </fieldset>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="form-group col-sm-4">
-                                                <fieldset class="fieldset">
-                                                    <legend class="legend">Valores Históricos</legend>
-                                                    <div class="row">
-                                                        <div class="form-group col-sm-12">
-                                                            <label class="control-label">Valor Inicial</label>
-                                                            <input type="number" autocomplete="off" class="control-lectura PopupValContable" readonly id="txtValor">
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="form-group col-sm-12">
-                                                            <label class="control-label">Deprec Inicial</label>
-                                                            <input type="number" autocomplete="off" class="control-lectura PopupValContable" readonly id="txtValor">
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="form-group col-sm-12">
-                                                            <label class="control-label">Prov.Defecto / Exceso</label>
-                                                            <input type="number" autocomplete="off" class="control-lectura PopupValContable" readonly id="txtValor">
-                                                        </div>
-                                                    </div>
-                                                    <hr />
-                                                    <div class="row">
-                                                        <div class="form-group col-sm-12">
-                                                            <label class="control-label">Deprec Periodo</label>
-                                                            <input type="number" autocomplete="off" class="control-lectura PopupValContable" readonly id="txtValor">
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="form-group col-sm-12">
-                                                            <label class="control-label">Deprec Ejercicio</label>
-                                                            <input type="number" autocomplete="off" class="control-lectura PopupValContable" readonly id="txtValor">
-                                                        </div>
-                                                    </div>
-                                                    <hr />
-                                                    <div class="row">
-                                                        <div class="form-group col-sm-12">
-                                                            <label class="control-label">Deprec Acumulada</label>
-                                                            <input type="number" autocomplete="off" class="control-lectura PopupValContable" readonly id="txtValor">
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="form-group col-sm-12">
-                                                            <label class="control-label">Valor Neto</label>
-                                                            <input type="number" autocomplete="off" class="control-lectura PopupValContable" readonly id="txtValor">
-                                                        </div>
-                                                    </div>
-                                                </fieldset>
-                                            </div>
-                                            <div class="form-group col-sm-4">
-                                                <fieldset class="fieldset">
-                                                    <legend class="legend">ACM</legend>
-                                                    <div class="row">
-                                                        <div class="form-group col-sm-12">
-                                                            <label class="control-label">Valor Inicial</label>
-                                                            <input type="number" autocomplete="off" class="control-lectura PopupValContable" readonly id="txtValor">
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="form-group col-sm-12">
-                                                            <label class="control-label">Deprec Inicial</label>
-                                                            <input type="number" autocomplete="off" class="control-lectura PopupValContable" readonly id="txtValor">
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="form-group col-sm-12">
-                                                            <label class="control-label">Prov.Defecto / Exceso</label>
-                                                            <input type="number" autocomplete="off" class="control-lectura PopupValContable" readonly id="txtValor">
-                                                        </div>
-                                                    </div>
-                                                    <hr />
-                                                    <div class="row">
-                                                        <div class="form-group col-sm-12">
-                                                            <label class="control-label">Deprec Periodo</label>
-                                                            <input type="number" autocomplete="off" class="control-lectura PopupValContable" readonly id="txtValor">
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="form-group col-sm-12">
-                                                            <label class="control-label">Deprec Ejercicio</label>
-                                                            <input type="number" autocomplete="off" class="control-lectura PopupValContable" readonly id="txtValor">
-                                                        </div>
-                                                    </div>
-                                                    <hr />
-                                                    <div class="row">
-                                                        <div class="form-group col-sm-12">
-                                                            <label class="control-label">Deprec Acumulada</label>
-                                                            <input type="number" autocomplete="off" class="control-lectura PopupValContable" readonly id="txtValor">
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="form-group col-sm-12">
-                                                            <label class="control-label">Valor Neto</label>
-                                                            <input type="number" autocomplete="off" class="control-lectura PopupValContable" readonly id="txtValor">
-                                                        </div>
-                                                    </div>
-                                                </fieldset>
-                                            </div>
-                                            <div class="form-group col-sm-4">
-                                                <fieldset class="fieldset">
-                                                    <legend class="legend">Valores Ajustados</legend>
-                                                    <div class="row">
-                                                        <div class="form-group col-sm-12">
-                                                            <label class="control-label">Valor Inicial</label>
-                                                            <input type="number" autocomplete="off" class="control-lectura PopupValContable" readonly id="txtValor">
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="form-group col-sm-12">
-                                                            <label class="control-label">Deprec Inicial</label>
-                                                            <input type="number" autocomplete="off" class="control-lectura PopupValContable" readonly id="txtValor">
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="form-group col-sm-12">
-                                                            <label class="control-label">Prov.Defecto / Exceso</label>
-                                                            <input type="number" autocomplete="off" class="control-lectura PopupValContable" readonly id="txtValor">
-                                                        </div>
-                                                    </div>
-                                                    <hr />
-                                                    <div class="row">
-                                                        <div class="form-group col-sm-12">
-                                                            <label class="control-label">Deprec Periodo</label>
-                                                            <input type="number" autocomplete="off" class="control-lectura PopupValContable" readonly id="txtValor">
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="form-group col-sm-12">
-                                                            <label class="control-label">Deprec Ejercicio</label>
-                                                            <input type="number" autocomplete="off" class="control-lectura PopupValContable" readonly id="txtValor">
-                                                        </div>
-                                                    </div>
-                                                    <hr />
-                                                    <div class="row">
-                                                        <div class="form-group col-sm-12">
-                                                            <label class="control-label">Deprec Acumulada</label>
-                                                            <input type="number" autocomplete="off" class="control-lectura PopupValContable" readonly id="txtValor">
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="form-group col-sm-12">
-                                                            <label class="control-label">Valor Neto</label>
-                                                            <input type="number" autocomplete="off" class="control-lectura PopupValContable" readonly id="txtValor">
-                                                        </div>
-                                                    </div>
-                                                </fieldset>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button id="btnCancelarForm2" class="btnCancelarForm" title="Cancelar"><i class="fa fa-undo" aria-hidden="true"></i>&nbsp;Cancelar</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                     
                 </div>
             </div>
         </div>
