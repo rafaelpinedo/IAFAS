@@ -9,6 +9,8 @@ var formulario = [];
 var idRegistro = "";
 var operacion = 0;
 var listaRespoItem_VG = [];
+var idTabActivo = "Ingreso";
+
 
 window.onload = function () {
     getConfigMn();
@@ -30,12 +32,12 @@ window.onload = function () {
 function getListarInformacion() {
     var tipo = "";
     var data = "";
-    optIngreso.checked = true;
+
     if (vista == "GenerarNP") {
-        if (optIngreso.checked) { tipo = "NEA"; } else { tipo = "PECOSA"; }
+        if (idTabActivo == "Ingreso") { tipo = "NEA"; } else { tipo = "PECOSA"; }
     }
     else {
-        if (optIngreso.checked) { tipo = "Ingreso"; } else { tipo = "Salida"; }
+        if (idTabActivo == "Ingreso") { tipo = "Ingreso"; } else { tipo = "Salida"; }
     }
 
     var fechaInicio = document.getElementById("txtFechaInicio").value;
@@ -90,6 +92,8 @@ function mostrarlistas(rpta) {
             listarSelect2Item(listaInvetario, "cboInventario");
         }
         else if (vista == "Pendiente") {
+          
+            divLista.innerHTML = "";
             grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
             var listaProveedor = listas[1].split("¬");
             var listaTipoOperacion = listas[2].split("¬");
@@ -164,8 +168,6 @@ function listarSelect2Item(lista, idCombo) {
     }
 }
 
-
-
 function grabarDatos() {
     var data = ""
     var frm = new FormData();
@@ -180,7 +182,6 @@ function grabarDatos() {
     frm.append("data", data);
     Http.post("General/guardar/?tbl=" + controller + vista, mostrarGrabar, frm);
 }
-
 
 function obtenerDatosGrabar(clase) {
     var data = "";
@@ -230,7 +231,6 @@ function obtenerDatosGrabar(clase) {
 
     return data;
 }
-
 
 function mostrarGrabar(rpta) {
     var mensajeResul = [];
@@ -536,6 +536,18 @@ function mostrarRegistro(rpta) {
 }
 
 function configurarBotones() {
+    var btnTabIngreso = document.getElementById("btnTabIngreso");
+    if (btnTabIngreso != null) btnTabIngreso.onclick = function () {
+        idTabActivo = "Ingreso";
+        getListarInformacion()
+    }
+
+    var btnTabSalida = document.getElementById("btnTabSalida");
+    if (btnTabSalida != null) btnTabSalida.onclick = function () {
+        idTabActivo = "Salida";
+        getListarInformacion();
+    }
+
     var btnImprimir = document.getElementById("btnImprimir");
     if (btnImprimir != null) btnImprimir.onclick = function () {
         if (idRegistro == "") {
@@ -547,6 +559,20 @@ function configurarBotones() {
         }
         else {
             getReporte(idRegistro);
+        }
+    }
+
+    var btnGenerarPS = document.getElementById("btnGenerarPS");
+    if (btnGenerarPS != null) btnGenerarPS.onclick = function () {
+
+        if (idRegistro == "") {
+            mostrarMensaje("Seleccione la NEA", "error")
+        }
+        //else if (ordenCompra == "") {
+        //    mostrarMensaje("La NEA no tiene Orden de Compra", "error")
+        //}
+        else {
+            generarPendienteSalida();
         }
     }
 
@@ -651,10 +677,7 @@ function configurarBotones() {
     if (btnGuardar != null) btnGuardar.onclick = function () {
         var validar = false;
 
-        if (vista == "PedidoCompra" && validarPedido() == true) {
-            validar = true;
-        }
-        else if (validarInformacion("Reque") == true) {
+      if (validarInformacion("Reque") == true) {
             validar = true;
         }
         if (validar == true) {
@@ -1559,4 +1582,36 @@ function imprimir(contenido) {
     ventana.print();
     ventana.close();
     document.body = pagina;
+}
+
+
+function generarPendienteSalida() {
+    var data = "";
+    var fechaInicio = txtFechaInicio.value;
+    var fechaFinal = txtFechaFinal.value;
+    data = idRegistro + '|' + fechaInicio + '|' + fechaFinal;
+
+    var frm = new FormData();
+    frm.append("data", data);
+    Swal.fire({
+        title: '¿Está seguro que desea generar pendiente de salida de la N.E.A. seleccionada ?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Si',
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.value) {
+            Http.post("General/Guardar/?tbl=" + controller + "PendienteSalidadeNEA", mostrarGrabar, frm);
+            Swal.fire({
+                title: 'Procesando...',
+                allowEscapeKey: false,
+                allowOutsideClick: false,
+                onOpen: () => {
+                    Swal.showLoading()
+                }
+            })
+        }
+    })
 }

@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "Pendiente";
     Layout = "~/Views/_LayoutPage.cshtml";
 }
@@ -38,9 +37,38 @@
                             </div>
                         </div>
                     </div>
-                    <div class="form-row">
-                        <div class="form-group col-md-12">
-                            <div class="table-responsive dt-responsive" id="divLista"></div>
+                    @*<div class="form-row">
+            <div class="form-group col-md-12">
+                <div class="table-responsive dt-responsive" id="divLista"></div>
+            </div>
+        </div>*@
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="tab-header card">
+                                <ul class="nav nav-tabs md-tabs tab-timeline" role="tablist" id="mytab">
+                                    <li class="nav-item">
+                                        <a class="nav-link active" id="btnTabIngreso" data-toggle="tab" href="#items" role="tab">Ingreso</a>
+                                        <div class="slide"></div>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="btnTabSalida" data-toggle="tab" href="#items" role="tab">Salida</a>
+                                        <div class="slide"></div>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="items" role="tabpanel">
+                                    <div class="card">
+                                        <div class="card-block">
+                                            <div class="form-row">
+                                                <div class="form-group col-md-12">
+                                                    <div class="table-responsive" id="divLista"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="form-row">
@@ -192,13 +220,13 @@
                                                 <label class="control-lectura" id="lblOrdenCompraNuevo"></label>
                                             </div>
                                             @*<div class="col-sm-5" style="display:none" id="divAreaNuevo">
-                                                    <label class="control-label">Area</label>
-                                                    <select class="control-lectura Reque Popup" disabled id="cboAreaNuevo"></select>
-                                                </div>*@
+                                    <label class="control-label">Area</label>
+                                    <select class="control-lectura Reque Popup" disabled id="cboAreaNuevo"></select>
+                                </div>*@
                                             @*<div class="col-sm-4" style="display:none" id="divRecepcion">
-                                                    <label class="control-label">Recepcionado por</label>
-                                                    <select class="SelectSearch control-form Reque Popup" id="cboRecepcion"></select>
-                                                </div>*@
+                                    <label class="control-label">Recepcionado por</label>
+                                    <select class="SelectSearch control-form Reque Popup" id="cboRecepcion"></select>
+                                </div>*@
 
                                             <div class="col-sm-3">
                                                 <label class="control-label">Estado</label>
