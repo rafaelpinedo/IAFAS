@@ -343,6 +343,7 @@
     <Content Include="Views\Ingresos\Asegurado.cshtml" />
     <Content Include="Views\Contabilidad\FamiliaCuenta.cshtml" />
     <Content Include="Views\Presupuesto\FamiliaClasificador.cshtml" />
+    <Content Include="Views\Ingresos\EntiFin.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

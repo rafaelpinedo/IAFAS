@@ -25,5 +25,16 @@ namespace WebAppSISGEFIN.Controllers
             ViewBag.Menu = new Menu().Listar(IdPerfil);
             return View();
         }
+
+        [FiltroAutenticacion]
+        public ActionResult EntiFin()
+        {
+            string[] Data = Session["DataUsuario"].ToString().Split('|');
+            string IdPerfil = Data[3];
+            ViewBag.Menu = new Menu().Listar(IdPerfil);
+            return View();
+        }
+
+        
     }
 }

@@ -78,8 +78,12 @@ function mostrarlistas(rpta) {
             crearCombo(listaEntidad, "cboEntidad", "Seleccione");
             crearCombo(listaOficina, "cboOficina", "Seleccione");
         }
-
-
+        else if (vista == "EntiFin") {
+            console.log(rpta);
+            var listaEstado = listas[1].split("¬");
+            grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
+            crearCombo(listaEstado, "cboEstado", "Seleccione");
+        }
         else {
               grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
         }
