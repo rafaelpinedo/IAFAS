@@ -12,6 +12,10 @@ var listaOficina_VG = [];
 var idTabActivo = "";
 var tipoPlanCta = "";
 
+var listaGrupoItem = [];
+var listaClaseItem = [];
+var listaFamiliaItem = [];
+
 const CTA_MAYOR = "Mayor";
 const SUB_CTA = "SubCta";
 
@@ -42,6 +46,10 @@ function getListarPlanCta(tabPlan) {
 
 function getListar() {
     var data = "";
+    var txtAnio = document.getElementById("txtAnio");
+    if (txtAnio != null) {
+        data = txtAnio.value;
+    }
     Http.get("General/listarTabla?tbl=" + controller + vista + "&data=" + data, mostrarlistas);
 }
 
@@ -67,6 +75,23 @@ function mostrarlistas(rpta) {
                 crearCombo(listaFuentFinanciera, "cboFuenteFinanciamientoSubCta", "Ninguno");
                 crearCombo(listaEstado, "cboEstadoSubCta", "Seleccione");
             }
+        }
+        else if (vista == "FamiliaCuenta") {
+            var listaTipo = listas[1].split("¬");
+            listaGrupoItem = listas[2].split("¬");
+            listaClaseItem = listas[3].split("¬");
+            listaFamiliaItem = listas[4].split("¬");
+            var listaTipoUso = listas[5].split("¬");
+            var listaClasificador = listas[6].split("¬");
+            var listaEstado = listas[7].split("¬");
+
+            grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
+
+            crearCombo(listaTipo, "cboTipoBien", "Seleccione");
+            listarGrupoItem();
+            crearCombo(listaTipoUso, "cboTipoUso", "Seleccione");
+            crearCombo(listaClasificador, "cboClasificador", "Seleccione");
+            crearCombo(listaEstado, "cboEstado", "Seleccione");
         }
 
         else {
@@ -429,6 +454,11 @@ function configurarBotones() {
             cboEstadoSubCta.disabled = true;
         }
 
+        var txtAnioPerido = document.getElementById("txtAnioPerido");
+        if (txtAnioPerido != null) {
+            var anio = txtAnioPerido.getAttribute('value');
+            txtAnioPerido.value = anio;
+        }
         //var select2cboOficina = document.getElementById("select2-cboOficina-container");
         //if (select2cboOficina != null) select2cboOficina.innerHTML = "Seleccione";
 
@@ -501,7 +531,19 @@ function configurarBotones() {
 
 function configurarCombos() {
 
+    var cboTipoBien = document.getElementById("cboTipoBien");
+    if (cboTipoBien != null) cboTipoBien.onchange = function () {
+        listarGrupoItem();
+    }
+    var cboGrupo = document.getElementById("cboGrupo");
+    if (cboGrupo != null) cboGrupo.onchange = function () {
+        listarClaseItem();
+    }
 
+    var cboClase = document.getElementById("cboClase");
+    if (cboClase != null) cboClase.onchange = function () {
+        listarFamiliaItem();
+    }
 }
 
 function mostrarEliminar(rpta) {
@@ -554,4 +596,83 @@ function mostrarFormTabPlanCta(idTab) {
 function ocultarFormTabPlanCta(idTab) {
     var divPopupFormTab = document.getElementById(idTab);
     if (divPopupFormTab != null) { divPopupFormTab.style.display = 'none'; };
+}
+
+
+function listarGrupoItem() {
+    var idTipoItem = cboTipoBien.value;
+    var nRegistros = listaGrupoItem.length;
+    var contenido = "<option value=''>Seleccione</option>";
+    var campos, idCodigo, nombre, idxTipoItem;
+    for (var i = 0; i < nRegistros; i++) {
+        campos = listaGrupoItem[i].split('|');
+        idCodigo = campos[0];
+        nombre = campos[1];
+        idxTipoItem = campos[2];
+        if (idxTipoItem == idTipoItem) {
+            contenido += "<option value='";
+            contenido += idCodigo;
+            contenido += "'>";
+            contenido += nombre;
+            contenido += "</option>";
+        }
+    }
+    var cbo = document.getElementById("cboGrupo");
+    if (cbo != null) {
+        cbo.innerHTML = contenido;
+        listarClaseItem();
+    }
+}
+
+function listarClaseItem() {
+    var idTipoItem = cboTipoBien.value;
+    var idGrupoItem = cboGrupo.value;
+    var nRegistros = listaClaseItem.length;
+    var contenido = "<option value=''>Seleccione</option>";
+    var campos, idCodigo, nombre, idxTipoItem, idxGrupoItem;
+    for (var i = 0; i < nRegistros; i++) {
+        campos = listaClaseItem[i].split('|');
+        idCodigo = campos[0];
+        nombre = campos[1];
+        idxTipoItem = campos[2];
+        idxGrupoItem = campos[3];
+        if (idxTipoItem == idTipoItem && idxGrupoItem == idGrupoItem) {
+            contenido += "<option value='";
+            contenido += idCodigo;
+            contenido += "'>";
+            contenido += nombre;
+            contenido += "</option>";
+        }
+    }
+    var cbo = document.getElementById("cboClase");
+    if (cbo != null) {
+        cbo.innerHTML = contenido;
+        listarFamiliaItem();
+    }
+}
+
+function listarFamiliaItem() {
+    var idTipoItem = cboTipoBien.value;
+    var idGrupoItem = cboGrupo.value;
+    var idClaseItem = cboClase.value;
+    var nRegistros = listaFamiliaItem.length;
+    var contenido = "<option value=''>Seleccione</option>";
+    var campos, idCodigo, nombre, idxTipoItem, idxGrupoItem, idxClaseItem;
+    for (var i = 0; i < nRegistros; i++) {
+        campos = listaFamiliaItem[i].split('|');
+        idCodigo = campos[0];
+        nombre = campos[1];
+        idxTipoItem = campos[2];
+        idxGrupoItem = campos[3];
+        idxClaseItem = campos[4];
+        if (idxTipoItem == idTipoItem && idxGrupoItem == idGrupoItem && idxClaseItem == idClaseItem) {
+            contenido += "<option value='";
+            contenido += idCodigo;
+            contenido += "'>";
+            contenido += nombre;
+            contenido += "</option>";
+        }
+    }
+    var cbo = document.getElementById("cboFamilia");
+    if (cbo != null) cbo.innerHTML = contenido;
 }
