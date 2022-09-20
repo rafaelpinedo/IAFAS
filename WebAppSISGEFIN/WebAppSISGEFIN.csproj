@@ -344,6 +344,8 @@
     <Content Include="Views\Contabilidad\FamiliaCuenta.cshtml" />
     <Content Include="Views\Presupuesto\FamiliaClasificador.cshtml" />
     <Content Include="Views\Ingresos\EntiFin.cshtml" />
+    <Content Include="Views\Ingresos\LineaIngreso.cshtml" />
+    <Content Include="Views\Ingresos\Tarifa.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
