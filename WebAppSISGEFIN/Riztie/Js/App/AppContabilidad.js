@@ -97,6 +97,9 @@ function mostrarlistas(rpta) {
             crearCombo(listaEstado, "cboEstado", "Seleccione");
             crearCombo(listaCuentaMayor, "cboCuentaMayor", "Seleccione");
             listarSubCuentaItem();
+
+            crearCombo(listaTipoUso, "cboTipoUsoInact", "Seleccione");
+            crearCombo(listaTipo, "cboTipoBienInact", "Seleccione");
         }
 
         else {
@@ -592,8 +595,88 @@ function configurarBotones() {
         if (vista == "PlanContable") {
             getListarPlanCta(tipoPlanCta);
         }
+        else if (vista == "FamiliaCuenta") {
+            let filtro = txtAnio.value + '||||1';
+            Http.get("General/listarTabla?tbl=" + controller + vista + "Estado" + "&data=" + filtro, mostarlistaActualizarEstado );
+        }
         else {
             getListar();
+        }
+    }
+
+    var btnCancelarForm1 = document.getElementById("btnCancelarForm1");
+    if (btnCancelarForm1 != null) btnCancelarForm1.onclick = function () {
+        divPopupContainerForm1.style.display = 'none';
+    }
+
+    var btnListado = document.getElementById("btnListado");
+    if (btnListado != null) btnListado.onclick = function () {
+        var data = "";
+        if (vista == "FamiliaCuenta") {
+            //limpiarForm("PopupInact");
+            cboTipoUsoInact.value = 2;
+            cboTipoBienInact.value = "B";
+            spnLoadData.style.display = "block";
+            listaInactivo.style.display = 'none';
+            data= txtAnioPeridoInact.value + '|' + cboTipoUsoInact.value + '|' + cboTipoBienInact.value + '||2';
+            Http.get("General/listarTabla?tbl=" + controller + vista + "Estado" + "&data=" + data, function (response) {
+                if (response) {
+                    var listas = response.split("¯");
+                    var lista = listas[0].split("¬");
+                    grillaItems = new GrillaScroll(lista, "divListaInactivo", 1000, 3, vista, controller, null, null, null, null, 25, false, true);
+                    spnLoadData.style.display = 'none';
+                    listaInactivo.style.display = 'block';
+                }
+            });
+            divPopupContainerForm1.style.display = 'block';
+        }
+        else if (vista == "Familia") {
+           
+        }
+
+    }
+
+    var btnConsultarInact = document.getElementById("btnConsultarInact");
+    if (btnConsultarInact != null) btnConsultarInact.onclick = function () {
+        var data = "";
+        if (vista == "FamiliaCuenta") {
+            spnLoadData.style.display = "block";
+            listaInactivo.style.display = 'none';
+            data = txtAnioPeridoInact.value + '|' + cboTipoUsoInact.value + '|' + cboTipoBienInact.value + '|' + txtCuentaInact.value + '|2';
+            Http.get("General/listarTabla?tbl=" + controller + vista + "Estado" + "&data=" + data, function (response) {
+                if (response) {
+                    var listas = response.split("¯");
+                    var lista = listas[0].split("¬");
+                    grillaItems = new GrillaScroll(lista, "divListaInactivo", 1000, 3, vista, controller, null, null, null, null, 25, false, true);
+                    spnLoadData.style.display = 'none';
+                    listaInactivo.style.display = 'block';
+                }
+            });
+        }
+    }
+
+    var btnSeleccionarItems = document.getElementById("btnSeleccionarItems");
+    if (btnSeleccionarItems != null) btnSeleccionarItems.onclick = function () {
+        var ids = grillaItems.obtenerIdsChecks();
+        var data = "";
+        if (vista == "FamiliaCuenta") {
+            let filtro = txtAnio.value + '||||1';
+
+            for (var i = 0; i < ids.length; i++) {
+                fila = grillaItems.obtenerFilaCheckPorId(ids[i]);
+                if (fila.length > 0) {
+                    id = fila[0];
+                    data += (id + ",");
+                }
+            }
+            data = data.substring(0, data.length - 1);
+            let datos = data + '¯' + filtro;
+            var frm = new FormData();
+            frm.append("data", datos);
+            Http.post("General/guardar/?tbl=" + controller + vista + 'ActualizarEstado', mostarlistaActualizarEstado, frm);
+            console.log(data);
+            divPopupContainerForm1.style.display = 'none';
+            return;
         }
     }
 }
@@ -823,3 +906,10 @@ function listarClasificadorItem() {
     var cbo = document.getElementById("cboClasificador");
     if (cbo != null) cbo.innerHTML = contenido;
 }
+function mostarlistaActualizarEstado(response) {
+    if (response) {
+        var listas = response.split("¯");
+        var lista = listas[0].split("¬");
+        grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
+    }
+};

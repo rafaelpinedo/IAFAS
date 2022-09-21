@@ -17,10 +17,11 @@
                             <label class="control-label">Año Fiscal</label>
                             <input type="text" id="txtAnio" class="control-form PopupCons" value="@ViewBag.Anio">
                         </div>
-                       
-                        <div class="form-group col-md-2 m-3">
+
+                        <div class="form-group col-md-10 m-3">
                             <button class="input-group-inverse btn btn-dark" id="btnConsultar" data-toggle="tooltip" data-placement="bottom" title="Consultar"><i class="fa fa-search fa-lg" aria-hidden="true"></i></button>
                             <button class="input-group-inverse btn btn-primary" id="btnNuevo" data-toggle="tooltip" data-placement="bottom" title="Nuevo"><i class="fa fa-plus-circle fa-lg" aria-hidden="true"></i></button>
+                            <button class="input-group-inverse btn btn-info" id="btnListado"> Ver Listado <i class="fa fa-list" aria-hidden="true"></i> </button>
                         </div>
                     </div>
 
@@ -87,12 +88,6 @@
                                                 <select id="cboSubCuenta" class="SelectSearch control-form Reque Popup"></select>
                                             </div>
                                         </div>
-                                        @*<div class="row">
-                                            <div class="form-group col-sm-6">
-                                                <label class="control-label">Cuenta Familia Clasificador</label>
-                                                <select id="cboCuentaFamilia" class="SelectSearch control-form Reque Popup"></select>
-                                            </div>
-                                        </div>*@
 
                                         <div class="row">
                                             <div class="form-group col-sm-4">
@@ -109,7 +104,69 @@
                             </div>
                         </div>
                     </div>
-                     
+
+                    <div class="form-row">
+                        <div class="modal custom-modal" tabindex="-1" role="dialog" aria-hidden="true" id="divPopupContainerForm1" style="overflow-y:auto;">
+                            <div class="modal-dialog modal-xl bg-personalizado" id="divPopupWindowForm1" style="margin-top:15px;">
+                                <div class="modal-content">
+                                    <div id="divBarraForm1" class="modal-header bg-personalizado" style="cursor:move">
+                                        <h5 class="modal-title">Listado de Familia Cuenta</h5>
+                                    </div>
+                                    <div class="modal-body">
+
+                                        <div class="row">
+                                            <div class="form-group col-sm-2">
+                                                <label class="control-label">Año Fiscal</label>
+                                                <input type="text" class="control-form Popup" id="txtAnioPeridoInact" value="@ViewBag.Anio" autocomplete="off">
+                                            </div>
+                                            <div class="form-group col-sm-3">
+                                                <label class="control-label">Tipo de Uso</label>
+                                                <select id="cboTipoUsoInact" class="control-form PopupInact"></select>
+                                            </div>
+                                            <div class="form-group col-sm-3">
+                                                <label class="control-label">Tipo de Bien</label>
+                                                <select id="cboTipoBienInact" class="control-form PopupInact"></select>
+                                            </div>
+                                            <div class="form-group col-sm-3">
+                                                <label class="control-label">N° Cuenta</label>
+                                                <input type="text" class="control-form PopupInact" id="txtCuentaInact" autocomplete="off">
+                                            </div>
+                                            <div class="col-sm-1" style="padding-top: 12px;">
+                                                <button class="input-group-inverse btn btn-inverse btn-md" id="btnConsultarInact" data-toggle="tooltip" data-placement="bottom" title="Consultar BD"><i class="fa fa-search fa-lg" aria-hidden="true"></i></button>
+                                            </div>
+                                        </div>
+                                        @*<div class="row">
+                                            <div class="form-group col-sm-6">
+                                                <label class="control-label">Grupo</label>
+                                                <select id="cboGrupo" class="SelectSearch control-form Reque Popup"></select>
+                                            </div>
+                                            <div class="form-group col-sm-6">
+                                                <label class="control-label">Clase</label>
+                                                <select id="cboClase" class="SelectSearch control-form Reque Popup"></select>
+                                            </div>
+                                        </div>*@
+
+                                        <div class="row">
+
+                                            <div class="form-group col-md-12 text-center" id="spnLoadData" style="display:none">
+                                                <span style="color: #ff5252; border-color: black; font-weight: bold; ">
+                                                    <b>Procesando información  ..</b>
+                                                    <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
+                                                </span>
+                                            </div>
+                                            <div class="form-group col-md-12" id="listaInactivo" style="display:none">
+                                                <div class="table-responsive" id="divListaInactivo"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button id="btnCancelarForm1" class="btnCancelarForm" title="Cancelar"><i class="fa fa-undo" aria-hidden="true"></i>&nbsp;Cancelar</button>
+                                        <button class="btnGuardarForm bg-customer" id="btnSeleccionarItems" title="btn btn-success"><span class="fa fa-hand-o-left"></span>&nbsp;Agregar Items</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
