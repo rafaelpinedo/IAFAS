@@ -1,20 +1,24 @@
 ﻿
 @{
-    ViewBag.Title = "Plan de Salud";
+    ViewBag.Title = "Linea Ingreso";
     Layout = "~/Views/_LayoutPage.cshtml";
 }
-
 <div class="pcoded-content">
     <div class="pcoded-inner-content">
         <div class="main-body">
             <div class="card">
                 <div class="card-header bg-primary">
-                    <h3><i class="fa fa-industry" aria-hidden="true"></i> PLAN DE SALUD</h3>
+                    <h3><i class="fa fa-users" aria-hidden="true"></i> LINEA DE  INGRESOS</h3>
                 </div>
                 <div class="card-block">
                     <div class="form-row">
                         <div class="form-group col-sm-2">
-                            <button class="input-group-inverse btn btn-primary" id="btnNuevo">Nuevo <i class="fa fa-plus-circle fa-lg" aria-hidden="true"></i></button>
+                            <label class="control-label">Año Fiscal</label>
+                            <input type="number" id="txtAnio" class="control-form" value="@ViewBag.AnhoActual" maxlength="4">
+                        </div>
+                        <div class="form-group col-md-4 m-3">
+                            <button class="input-group-inverse btn btn-inverse" id="btnConsultar" data-toggle="tooltip" data-placement="bottom" title="Consultar"><i class="fa fa-search fa-lg" aria-hidden="true"></i></button>
+                            <button class="input-group-inverse btn btn-primary" id="btnNuevo" data-toggle="tooltip" data-placement="bottom"><i class="fa fa-plus-circle fa-lg" aria-hidden="true"></i></button>
                         </div>
                     </div>
                     <div class="form-row">
@@ -31,20 +35,30 @@
                                     </div>
                                     <div class="modal-body">
                                         <div class="row">
-                                            <div class="form-group col-sm-12">
+                                            <div class="form-group col-sm-4">
                                                 <input type="hidden" class="control-form Popup" id="txtIdRegistro">
-                                                <label class="control-label">Plan de Salud</label>
-                                                <input type="text" autocomplete="off" class="control-form Reque Popup" maxlength="120" id="txtNombre">
+                                                <label class="control-label">Año Fiscal</label>
+                                                <input type="text" autocomplete="off" class="control-form Reque Popup" maxlength="4" id="txtAnofiscal" value="@ViewBag.AnhoActual">
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-group col-sm-12">
+                                                <label class="control-label">Ingreso</label>
+                                                <select id="cboIngreso" class="control-form Reque Popup"></select>
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="form-group col-sm-6">
-                                                <label class="control-label">Abreviatura</label>
-                                                <input type="text" autocomplete="off" class="control-form Reque Popup" maxlength="10" id="txtAbreviatura">
+                                                <label class="control-label">Moneda</label>
+                                                <select id="cboMoneda" class="control-form Reque Popup"></select>
+                                            </div>
+                                            <div class="form-group col-sm-6">
+                                                <label class="control-label">Monto</label>
+                                                <input type="text" autocomplete="off" class="control-form Reque Popup" onkeypress="return doubleCheck(event, this)" id="txtAnofiscal">
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="form-group col-sm-6">
+                                            <div class="form-group col-sm-4">
                                                 <label class="control-label">Estado</label>
                                                 <select id="cboEstado" class="control-lectura Reque Popup"></select>
                                             </div>
@@ -64,5 +78,5 @@
     </div>
 </div>
 <iframe name="print_frame" width="0" height="0" frameborder="0" src="about:blank"></iframe>
-<script src="~/Riztie/Js/App/AppPresu.js"></script>
+<script src="~/Riztie/Js/App/AppIngresos.js"></script>
 

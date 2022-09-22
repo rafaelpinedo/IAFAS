@@ -243,6 +243,10 @@ function mostrarlistas(rpta) {
             crearCombo(listaEstado, "cboEstado", "Seleccione");
             crearCombo(listaUniMed, "cboUniMed", "Seleccione");
             crearCombo(listaUniMed, "unidaMedidaFilt", "Seleccione");
+
+            crearCombo(listaTipo, "cboTipoBienInact", "Seleccione");
+            crearCombo(listaUniMed, "unidaMedidaInact", "Seleccione");
+
         }
 
         else if (vista == "Grupo") {
@@ -851,7 +855,7 @@ function configurarBotones() {
         unidaMedidaFilt.value = "";
         var select2cboUnidadMedida = document.getElementById("select2-unidaMedidaFilt-container");
         if (select2cboUnidadMedida != null) select2cboUnidadMedida.innerHTML = "Seleccione";
-        let data = 'B|||';
+        let data = 'B||||1';
         Http.get("General/listarTabla?tbl=" + controller + vista + "Filtro" + "&data=" + data, function (response) {
             if (response) {
                 var listas = response.split("¯");
@@ -869,7 +873,7 @@ function configurarBotones() {
         unidaMedidaFilt.value = "";
         var select2cboUnidadMedida = document.getElementById("select2-unidaMedidaFilt-container");
         if (select2cboUnidadMedida != null) select2cboUnidadMedida.innerHTML = "Seleccione";
-        let data = 'S|||';
+        let data = 'S||||1';
         Http.get("General/listarTabla?tbl=" + controller + vista + "Filtro" + "&data=" + data, function (response) {
             if (response) {
                 var listas = response.split("¯");
@@ -887,7 +891,7 @@ function configurarBotones() {
         unidaMedidaFilt.value = "";
         var select2cboUnidadMedida = document.getElementById("select2-unidaMedidaFilt-container");
         if (select2cboUnidadMedida != null) select2cboUnidadMedida.innerHTML = "Seleccione";
-        let data = 'O|||';
+        let data = 'O||||1';
         Http.get("General/listarTabla?tbl=" + controller + vista + "Filtro" + "&data=" + data, function (response) {
             if (response) {
                 var listas = response.split("¯");
@@ -926,7 +930,7 @@ function configurarBotones() {
                     break;
             }
 
-            let data = idTipo + '|' + codigoFilt.value + '|' + nombreFilt.value + '|' + unidaMedidaFilt.value;
+            let data = idTipo + '|' + codigoFilt.value + '|' + nombreFilt.value + '|' + unidaMedidaFilt.value+'|1';
             Http.get("General/listarTabla?tbl=" + controller + vista + "Filtro" + "&data=" + data, function (response) {
                 if (response) {
                     var listas = response.split("¯");
@@ -1397,18 +1401,51 @@ function configurarBotones() {
     if (btnSeleccionarItems != null) btnSeleccionarItems.onclick = function () {
         var ids = grillaItems.obtenerIdsChecks();
         var data = "";
-        for (var i = 0; i < ids.length; i++) {
-            fila = grillaItems.obtenerFilaCheckPorId(ids[i]);
-            if (fila.length > 0) {
-                id = fila[0];
-                codigo = fila[1];
-                nombre = fila[2];
-                unidad = fila[3];
-                data += (id + "|" + codigo + "|" + nombre + "|" + unidad);
-                if (i < ids.length - 1) data += "¬";
+
+        if (vista == "Articulo") {
+            let filtro = '';
+            var container = document.querySelector('#mytab');
+            let tabs = Array.prototype.slice.apply(container.querySelectorAll('.nav-tabs .active'));
+            var idTabActivo = tabs[0].attributes[1].value;
+            var idTipo = "";
+            switch (idTabActivo) {
+                case "btnTabBienes": idTipo = "B"; break;
+                case "btnTabServicios":idTipo = "S"; break;
+                case "btnTabObras":idTipo = "O";  break;
+                default:idTipo = "B";break;
             }
+            filtro = idTipo + '||||1';
+
+            for (var i = 0; i < ids.length; i++) {
+                fila = grillaItems.obtenerFilaCheckPorId(ids[i]);
+                if (fila.length > 0) {
+                    id = fila[0];
+                    data += (id + ",");
+                }
+            }            
+            data = data.substring(0, data.length - 1);
+            let datos = data + '¯' + filtro;
+            var frm = new FormData();
+            frm.append("data", datos);
+            Http.post("General/guardar/?tbl=" + controller + vista + 'ActualizarEstado', mostarlistaActualizarEstado, frm);
+            console.log(data);
+            divPopupContainerForm1.style.display = 'none';
+            return;
         }
-        obtenerItems(data);
+        else {
+            for (var i = 0; i < ids.length; i++) {
+                fila = grillaItems.obtenerFilaCheckPorId(ids[i]);
+                if (fila.length > 0) {
+                    id = fila[0];
+                    codigo = fila[1];
+                    nombre = fila[2];
+                    unidad = fila[3];
+                    data += (id + "|" + codigo + "|" + nombre + "|" + unidad);
+                    if (i < ids.length - 1) data += "¬";
+                }
+            }
+            obtenerItems(data);
+        } 
     }
 
     if (vista == "PAC") {
@@ -1513,6 +1550,80 @@ function configurarBotones() {
             }
         }
     }
+
+    var btnListado = document.getElementById("btnListado");
+    if (btnListado != null) btnListado.onclick = function () {
+        var data = "";
+        if (vista == "Articulo") {
+            limpiarForm("PopupInact");
+            var container = document.querySelector('#mytab');
+            let tabs = Array.prototype.slice.apply(container.querySelectorAll('.nav-tabs .active'));
+            var idTabActivo = tabs[0].attributes[1].value;
+            var idTipo = "";
+            switch (idTabActivo) {
+                case "btnTabBienes": idTipo = "B"; break;
+                case "btnTabServicios": idTipo = "S"; break;
+                case "btnTabObras": idTipo = "O"; break;
+                default: idTipo = "B"; break;
+            }
+
+            data = idTipo + '||||2';
+            cboTipoBienInact.value = idTipo;
+            var select2cboUnidadMedida = document.getElementById("select2-unidaMedidaInact-container");
+            if (select2cboUnidadMedida != null) select2cboUnidadMedida.innerHTML = "Seleccione";
+            document.getElementById("spnLoadData").style.display = "block";
+            listaInactivo.style.display = 'none';
+            Http.get("General/listarTabla?tbl=" + controller + vista + "Filtro" + "&data=" + data, function (response) {
+                if (response) {
+                    var listas = response.split("¯");
+                    var lista = listas[0].split("¬");
+                    grillaItems = new GrillaScroll(lista, "divListaInactivo", 1000, 3, vista, controller, null, null, null, null, 25, false, true);
+                    spnLoadData.style.display = 'none';
+                    listaInactivo.style.display = 'block';
+                }
+            });
+
+            divPopupContainerForm1.style.display = 'block';
+        }
+        else if (vista == "Familia") {
+            spnLoadData.style.display = "block";
+            listaInactivo.style.display = 'none';
+            data = "2";
+            Http.get("General/listarTabla?tbl=" + controller + vista + "Estado" + "&data=" + data, function (response) {
+                if (response) {
+                    var listas = response.split("¯");
+                    var lista = listas[0].split("¬");
+                    grillaItems = new GrillaScroll(lista, "divListaInactivo", 1000, 3, vista, controller, null, null, null, null, 25, false, true);
+                    spnLoadData.style.display = 'none';
+                    listaInactivo.style.display = 'block';
+                }
+            });
+            divPopupContainerForm1.style.display = 'block';
+        }
+        
+    }
+
+    var btnConsultarInact = document.getElementById("btnConsultarInact");
+    if (btnConsultarInact != null) btnConsultarInact.onclick = function () {
+        var data = "";
+        if (vista == "Articulo") {
+            document.getElementById("spnLoadData").style.display = "block";
+            listaInactivo.style.display = 'none';
+            data = cboTipoBienInact.value + '|' + codigoInact.value + '|' + nombreInact.value + '|' + unidaMedidaInact.value+'|2';
+            Http.get("General/listarTabla?tbl=" + controller + vista + "Filtro" + "&data=" + data, function (response) {
+                if (response) {
+                    var listas = response.split("¯");
+                    var lista = listas[0].split("¬");
+                    grillaItems = new GrillaScroll(lista, "divListaInactivo", 1000, 3, vista, controller, null, null, null, null, 25, false, true);
+                    spnLoadData.style.display = 'none';
+                    listaInactivo.style.display = 'block';
+                }
+            });
+        }
+
+    }
+
+    
 }
 
 function mostrarListadoPeriodo(rpta) {
@@ -2997,7 +3108,6 @@ function grabarConfiguracion() {
 
 function grabarDatos() {
     var data = ""
-    var frm = new FormData();
     data = obtenerDatosGrabar("Popup");
     if (vista == "Periodo") {
         data += data + '¯' + txtAnioFiscal.value;
@@ -3024,7 +3134,7 @@ function grabarDatos() {
         let articulo = idTipo + '|' + codigoFilt.value + '|' + nombreFilt.value + '|' + unidaMedidaFilt.value;
         data = data + '¯' + articulo;
     }
-
+    var frm = new FormData();
     frm.append("data", data);
     Http.post("General/guardar/?tbl=" + controller + vista, mostrarGrabar, frm);
 }
@@ -5263,3 +5373,11 @@ function descargarArchivo(contenido, tipoMime) {
     enlace.click();
     document.removeChild(enlace);
 }
+
+function mostarlistaActualizarEstado(response) {
+    if (response) {
+        var listas = response.split("¯");
+        var lista = listas[0].split("¬");
+        grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
+    }
+};

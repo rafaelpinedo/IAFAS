@@ -19,6 +19,7 @@ window.onload = function () {
     getConfigMn();
     vista = window.sessionStorage.getItem("Vista");
     controller = window.sessionStorage.getItem("Controller");
+    mostrarLoading("divLista");
     if (vista == "PCA") {
         getListarProgramacion();
     }
@@ -160,7 +161,10 @@ function mostrarlistas(rpta) {
             listarGrupoItem();
             crearCombo(listaTipoUso, "cboTipoUso", "Seleccione");
             crearCombo(listaClasificador, "cboClasificador", "Seleccione");
-            crearCombo(listaEstado, "cboEstado", "Seleccione"); 
+            crearCombo(listaEstado, "cboEstado", "Seleccione");
+
+            crearCombo(listaTipoUso, "cboTipoUsoInact", "Seleccione");
+            crearCombo(listaTipo, "cboTipoBienInact", "Seleccione");
         }
         else {
               grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
@@ -584,6 +588,11 @@ function configurarBotones() {
         if (select2cboOClase != null) select2cboOClase.innerHTML = "Seleccione";
         var select2cboFamilia = document.getElementById("select2-cboFamilia-container");
         if (select2cboFamilia != null) select2cboFamilia.innerHTML = "Seleccione";
+
+        var cboTipoUso = document.getElementById("cboTipoUso");
+        if (cboTipoUso != null) {
+            cboTipoUso.value = 2;
+        }
     }
 
 
@@ -633,6 +642,32 @@ function configurarBotones() {
     var btnCancelar = document.getElementById("btnCancelar");
     if (btnCancelar != null) btnCancelar.onclick = function () {
         divPopupContainer.style.display = 'none';
+    }
+    var btnCancelarForm1 = document.getElementById("btnCancelarForm1");
+    if (btnCancelarForm1 != null) btnCancelarForm1.onclick = function () {
+        divPopupContainerForm1.style.display = 'none';
+    }
+    var btnListado = document.getElementById("btnListado");
+    if (btnListado != null) btnListado.onclick = function () {
+        var data = "";
+        if (vista == "FamiliaClasificador") {
+            //limpiarForm("PopupInact");
+            cboTipoUsoInact.value = 2;
+            cboTipoBienInact.value = "B";
+            spnLoadData.style.display = "block";
+            listaInactivo.style.display = 'none';
+            data = txtAnioPeridoInact.value + '|' + cboTipoUsoInact.value + '|' + cboTipoBienInact.value + '||2';
+            //Http.get("General/listarTabla?tbl=" + controller + vista + "Estado" + "&data=" + data, function (response) {
+            //    if (response) {
+            //        var listas = response.split("¯");
+            //        var lista = listas[0].split("¬");
+            //        grillaItems = new GrillaScroll(lista, "divListaInactivo", 1000, 3, vista, controller, null, null, null, null, 25, false, true);
+            //        spnLoadData.style.display = 'none';
+            //        listaInactivo.style.display = 'block';
+            //    }
+            //});
+            divPopupContainerForm1.style.display = 'block';
+        }
     }
 
     var btnConsultar = document.getElementById("btnConsultar");

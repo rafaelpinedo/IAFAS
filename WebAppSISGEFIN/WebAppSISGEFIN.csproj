@@ -347,6 +347,9 @@
     <Content Include="Views\Inventario\Kardex.cshtml" />
     <Content Include="Views\Logistica\Configuracion.cshtml" />
     <Content Include="Views\Logistica\Periodo.cshtml" />
+    <Content Include="Views\Ingresos\EntiFin.cshtml" />
+    <Content Include="Views\Ingresos\LineaIngreso.cshtml" />
+    <Content Include="Views\Ingresos\Tarifa.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

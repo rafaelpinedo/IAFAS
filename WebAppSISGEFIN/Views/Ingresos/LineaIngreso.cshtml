@@ -1,15 +1,14 @@
 ﻿
 @{
-    ViewBag.Title = "Plan de Salud";
+    ViewBag.Title = "Linea Ingreso";
     Layout = "~/Views/_LayoutPage.cshtml";
 }
-
 <div class="pcoded-content">
     <div class="pcoded-inner-content">
         <div class="main-body">
             <div class="card">
                 <div class="card-header bg-primary">
-                    <h3><i class="fa fa-industry" aria-hidden="true"></i> PLAN DE SALUD</h3>
+                    <h3><i class="fa fa-users" aria-hidden="true"></i> LINEA DE  INGRESOS</h3>
                 </div>
                 <div class="card-block">
                     <div class="form-row">
@@ -24,27 +23,45 @@
                     </div>
                     <div class="form-row">
                         <div class="modal custom-modal" tabindex="-1" role="dialog" aria-hidden="true" id="divPopupContainer" style="overflow-y:auto;">
-                            <div class="modal-dialog modal-md bg-personalizado" id="divPopupWindow" style="margin-top:30px;">
+                            <div class="modal-dialog modal-lg bg-personalizado" id="divPopupWindow" style="margin-top:30px;">
                                 <div class="modal-content">
                                     <div id="divBarra" class="modal-header bg-personalizado" style="cursor:move">
                                         <h5 class="modal-title" id="tituloModal">Nuevo Registro</h5>
                                     </div>
                                     <div class="modal-body">
                                         <div class="row">
-                                            <div class="form-group col-sm-12">
+                                            <div class="form-group col-sm-10">
                                                 <input type="hidden" class="control-form Popup" id="txtIdRegistro">
-                                                <label class="control-label">Plan de Salud</label>
-                                                <input type="text" autocomplete="off" class="control-form Reque Popup" maxlength="120" id="txtNombre">
-                                            </div>
+                                                <label class="control-label">Ingreso</label>
+                                                <input type="text" autocomplete="off" class="control-form Reque Popup" maxlength="50" id="txtIngreso">
+                                            </div> 
                                         </div>
                                         <div class="row">
                                             <div class="form-group col-sm-6">
-                                                <label class="control-label">Abreviatura</label>
-                                                <input type="text" autocomplete="off" class="control-form Reque Popup" maxlength="10" id="txtAbreviatura">
+                                                <label class="control-label">Abrevitura</label>
+                                                <input type="text" autocomplete="off" class="control-form Reque Popup" maxlength="20" id="txtAbreviatura">
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="form-group col-sm-6">
+                                            <div class="form-group col-sm-10">
+                                                <label class="control-label">Cuenta Mayor</label>
+                                                <select id="cboCuentaMayor" class="SelectSearch control-form Reque Popup"></select>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-group col-sm-12">
+                                                <label class="control-label">Sub Cuenta</label>
+                                                <select id="cboSubCuenta" class="SelectSearch control-form Reque Popup"></select>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-group col-sm-12">
+                                                <label class="control-label">Clasificador</label>
+                                                <select id="cboClasificador" class="SelectSearch control-form Reque Popup"></select>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-group col-sm-4">
                                                 <label class="control-label">Estado</label>
                                                 <select id="cboEstado" class="control-lectura Reque Popup"></select>
                                             </div>
@@ -64,5 +81,5 @@
     </div>
 </div>
 <iframe name="print_frame" width="0" height="0" frameborder="0" src="about:blank"></iframe>
-<script src="~/Riztie/Js/App/AppPresu.js"></script>
+<script src="~/Riztie/Js/App/AppIngresos.js"></script>
 
