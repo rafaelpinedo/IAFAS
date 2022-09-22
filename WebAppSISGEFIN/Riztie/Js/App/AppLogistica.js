@@ -3395,7 +3395,8 @@ function eliminarRegistro(id) {
                 break;
         }
 
-        let articulo = id+'|'+ idTipo + '|' + codigoFilt.value + '|' + nombreFilt.value + '|' + unidaMedidaFilt.value;
+        /*let articulo = id+'|'+ idTipo + '|' + codigoFilt.value + '|' + nombreFilt.value + '|' + unidaMedidaFilt.value;*/
+        let articulo = id + '|' + idTipo;
         data = articulo;
     }
     else if (vista == "Periodo") {
