@@ -28,6 +28,7 @@ window.onload = function () {
     getConfigMn();
     vista = window.sessionStorage.getItem("Vista");
     controller = window.sessionStorage.getItem("Controller");
+    mostrarLoading("divLista");
     if (vista == "PAC" || vista == "Contrato" || vista == "Prosel" || vista == "Tipoproceso") {
         getListarLicitaPac();
     }
