@@ -1,0 +1,146 @@
+﻿
+@{
+    ViewBag.Title = "Kardex";
+    Layout = "~/Views/_LayoutPage.cshtml";
+}
+
+@{
+    ViewBag.Title = "Reporte";
+    Layout = "~/Views/_LayoutPage.cshtml";
+}
+<style>
+    #wrapper {
+        overflow: hidden;
+        height: 100%;
+        background: rgba(193, 193, 193, 1);
+    }
+
+    #output {
+        width: 100%;
+        height: 100%;
+        background: rgba(193, 193, 193, 1);
+    }
+
+    .table {
+        font-size: 14px;
+    }
+</style>
+<div class="pcoded-content">
+    <div class="pcoded-inner-content">
+        <div class="main-body">
+            <div class="card">
+                <div class="card-header bg-primary">
+                    <h3><i class="fa fa-file" aria-hidden="true"></i> KARDEX</h3>
+                </div>
+                <div class="card-block">
+                    <div class="form-row">
+                        <div class="form-group col-sm-2">
+                            <label class="control-label">Fecha Final</label>
+                            <input type="date" id="txtFechaFinal" class="control-form" value="@ViewBag.Fecha">
+                        </div>
+                        <div class="form-group col-md-4 m-3">
+                            <button class="input-group-inverse btn btn-inverse" id="btnGenerar"><i class="fa fa-newspaper-o fa-lg" aria-hidden="true"></i> Generar Kardex</button>
+                            <button class="btn btn-out waves-effect waves-light btn-info btn-square" id="btnReporte" style="display:none"><i class="fa fa-file-text fa-lg" aria-hidden="true"> Reportes</i></button>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <div class="table-responsive dt-responsive" id="divLista"></div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="modal custom-modal" tabindex="-1" role="dialog" aria-hidden="true" id="divPopupContainer" style="overflow-y:auto;">
+                            <div class="modal-dialog bg-personalizado" id="divPopupWindow">
+                                <div class="modal-content">
+                                    <div id="divBarra" class="modal-header bg-personalizado" style="cursor:move;">
+                                        <h5 class="modal-title">Reporte</h5>
+                                        <button type="button" id="btnCerrar" class="close"><span aria-hidden="true">&times;</span><span class="sr-only"></span></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        @*<div class="row">
+            <div class="form-group col-sm-4">
+                <label class="control-label">Año</label>
+                <input type="number" class="form-control" id="txtAnio" value="@ViewBag.Anio">
+            </div>
+        </div>*@
+                                        <div class="row">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="almacenRadios" id="optResumen" checked>
+                                                <label class="form-check-label" for="optResumen">
+                                                    Resumen del Kardex
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="almacenRadios" id="optSaldoVal">
+                                                <label class="form-check-label" for="optSaldoVal">
+                                                    Saldos en Unidades
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="row" style="display:none">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="almacenRadios" id="optSaldoNega">
+                                                <label class="form-check-label" for="optSaldoNega">
+                                                    Saldos Negativos
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="almacenRadios" id="optDetalle">
+                                                <label class="form-check-label" for="optDetalle">
+                                                    Kardex Detallado
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="almacenRadios" id="optDetalleItem">
+                                                <label class="form-check-label" for="optDetalleItem">
+                                                    Kardex Detallado por Item
+                                                </label>
+                                            </div>
+                                        </div>
+
+                                        <hr />
+                                        <div class="row">
+                                            <div class="form-group col-sm-4 text-left">
+                                                <button class="btn btn-sm btn-danger" id="btnReportePdf" title="Generar Reporte PDF" style="display:none"><span class="fa fa-file-pdf-o"></span>&nbsp;PDF</button>
+                                                <button class="btn btn-sm btn-success" id="btnReporteExcel" title="Generar Reporte EXCEL"><span class="fa fa-file-excel-o"></span>&nbsp;EXCEL</button>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <span id="spnLoad" style="color: rgb(222, 30, 53); border-color: black; font-weight: bold; display: none;">
+                                                    Procesando <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="modal custom-modal" tabindex="-1" role="dialog" aria-hidden="true" id="divPopupContainerItem" style="overflow-y:auto;">
+                            <div class="modal-dialog modal-xl bg-personalizado" id="divPopupWindowItem" style="margin-top:1px">
+                                <div class="modal-content">
+                                    <div id="divBarraItem" class="modal-header bg-personalizado" style="cursor:move">
+                                        <button type="button" id="btnCerrarItem" class="close"><span aria-hidden="true">&times;</span><span class="sr-only"></span></button>
+                                    </div>
+                                    <div style="height:720px;overflow-y:auto;">
+                                        <div id="tblTable" style="display:none"></div>
+                                        <div class="pure-g" style="height: 100%; width:100%">
+                                            <iframe id="pdf_preview" type="application/pdf" src="" width="100%" height="100%"></iframe>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/Riztie/Js/App/Kardex.js"></script>
