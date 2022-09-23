@@ -1,6 +1,6 @@
 ﻿
 @{
-    ViewBag.Title = "Linea Ingreso";
+    ViewBag.Title = "Entidad Financiera";
     Layout = "~/Views/_LayoutPage.cshtml";
 }
 <div class="pcoded-content">
@@ -8,7 +8,9 @@
         <div class="main-body">
             <div class="card">
                 <div class="card-header bg-primary">
-                    <h3><i class="fa fa-money" aria-hidden="true"></i> LINEA DE  INGRESOS</h3>
+                    <h3> 
+                        <i class="fa fa-university" aria-hidden="true"></i>
+                          ENTIDAD FINANCIERA CODIFICACIÓN</h3>
                 </div>
                 <div class="card-block">
                     <div class="form-row">
@@ -23,41 +25,24 @@
                     </div>
                     <div class="form-row">
                         <div class="modal custom-modal" tabindex="-1" role="dialog" aria-hidden="true" id="divPopupContainer" style="overflow-y:auto;">
-                            <div class="modal-dialog modal-lg bg-personalizado" id="divPopupWindow" style="margin-top:30px;">
+                            <div class="modal-dialog modal-md bg-personalizado" id="divPopupWindow" style="margin-top:30px;">
                                 <div class="modal-content">
                                     <div id="divBarra" class="modal-header bg-personalizado" style="cursor:move">
                                         <h5 class="modal-title" id="tituloModal">Nuevo Registro</h5>
                                     </div>
                                     <div class="modal-body">
                                         <div class="row">
-                                            <div class="form-group col-sm-10">
+                                            <div class="form-group col-sm-12">
                                                 <input type="hidden" class="control-form Popup" id="txtIdRegistro">
-                                                <label class="control-label">Ingreso</label>
-                                                <input type="text" autocomplete="off" class="control-form Reque Popup" maxlength="50" id="txtIngreso">
-                                            </div> 
+                                                <label class="control-label">Linea de Ingreso</label>
+                                                <select id="cboLineaIngreso" class="control-form Reque Popup"></select>
+                                            </div>
                                         </div>
+
                                         <div class="row">
                                             <div class="form-group col-sm-6">
-                                                <label class="control-label">Abrevitura</label>
-                                                <input type="text" autocomplete="off" class="control-form Reque Popup" maxlength="20" id="txtAbreviatura">
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="form-group col-sm-10">
-                                                <label class="control-label">Cuenta Mayor</label>
-                                                <select id="cboCuentaMayor" class="SelectSearch control-form Reque Popup"></select>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="form-group col-sm-12">
-                                                <label class="control-label">Sub Cuenta</label>
-                                                <select id="cboSubCuenta" class="SelectSearch control-form Reque Popup"></select>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="form-group col-sm-12">
-                                                <label class="control-label">Clasificador</label>
-                                                <select id="cboClasificador" class="SelectSearch control-form Reque Popup"></select>
+                                                <label class="control-label">Codigo</label>
+                                                <input type="text" autocomplete="off" class="control-form Reque Popup" maxlength="30" id="txtAbreviatura">
                                             </div>
                                         </div>
                                         <div class="row">

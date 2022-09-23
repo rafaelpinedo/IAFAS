@@ -54,7 +54,16 @@ namespace WebAppSISGEFIN.Controllers
             return View();
         }
 
+        [FiltroAutenticacion]
+        public ActionResult CodifiEntiFin()
+        {
+            string[] Data = Session["DataUsuario"].ToString().Split('|');
+            string IdPerfil = Data[3];
+            ViewBag.Menu = new Menu().Listar(IdPerfil);
+            ViewBag.AnhoActual = DateTime.Now.Year;
+            return View();
+        }
 
-
+        
     }
 }

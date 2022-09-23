@@ -350,6 +350,7 @@
     <Content Include="Views\Ingresos\EntiFin.cshtml" />
     <Content Include="Views\Ingresos\LineaIngreso.cshtml" />
     <Content Include="Views\Ingresos\Tarifa.cshtml" />
+    <Content Include="Views\Ingresos\CodifiEntiFin.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
