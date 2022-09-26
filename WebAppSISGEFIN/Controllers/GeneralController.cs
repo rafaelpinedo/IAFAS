@@ -166,10 +166,6 @@ namespace WebAppTurnera.Controllers
             var usuarioNombre = "Usuario: " + usuario;
             var nombreSistema = "SISGEFIN";
 
-            DataTable table = Cadena.ConvertirDataTable(data, tipo);
-            DataSet dst = new DataSet();
-            dst.Tables.Add(table);
-
             byte[] buffer = null;
             switch (tipo)
             {
@@ -180,6 +176,9 @@ namespace WebAppTurnera.Controllers
                     buffer = Epplus.Excel(data, nombre, tituloReporte, usuarioNombre, nombreSistema, stitulo, sProducto, isTotal, colSuma);
                     break;
                 case ".pdf":
+                    DataTable table = Cadena.ConvertirDataTable(data, tipo);
+                    DataSet dst = new DataSet();
+                    dst.Tables.Add(table);
                     string ruta = Server.MapPath("~/Riztie/Images");
                     string img1 = io.Path.Combine(ruta, "logoReporte.png");
                     tipoMime = "application/pdf";

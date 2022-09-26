@@ -95,6 +95,27 @@ function guardarUrl() {
     window.localStorage.setItem("urlBase", urlBase);
 }
 
+function imgToBase64(src, callback) {
+    var outputFormat = src.substr(-3) === 'png' ? 'image/png' : 'image/jpeg';
+    var img = new Image();
+    img.crossOrigin = 'Anonymous';
+    img.onload = function () {
+        var canvas = document.createElement('CANVAS');
+        var ctx = canvas.getContext('2d');
+        var dataURL;
+        canvas.height = this.naturalHeight;
+        canvas.width = this.naturalWidth;
+        ctx.drawImage(this, 0, 0);
+        dataURL = canvas.toDataURL(outputFormat);
+        callback(dataURL);
+    };
+    img.src = src;
+    if (img.complete || img.complete === undefined) {
+        img.src = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==";
+        img.src = src;
+    }
+}
+
 function validarDatosForm(clsRequerido, span) {
     var mensaje = validarRequeridos(clsRequerido);
     var spnValida = document.getElementById(span);

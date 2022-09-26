@@ -458,12 +458,12 @@ function listarSelect2Item(lista, idCombo) {
 }
 
 function configurarBotones() {
+
     var tabMayor = document.getElementById("tabMayor");
     if (tabMayor != null) tabMayor.onclick = function () {
         idTabActivo = "tabMayor";
         tipoPlanCta = CTA_MAYOR;
         getListarPlanCta(tipoPlanCta);
-
         mostrarFormTabPlanCta("formTabMayor");
         ocultarFormTabPlanCta("formTabSubCta");
     }
@@ -630,8 +630,32 @@ function configurarBotones() {
             });
             divPopupContainerForm1.style.display = 'block';
         }
-        else if (vista == "Familia") {
-           
+        else if (vista == "PlanContable") {
+
+            var container = document.querySelector('#mytab');
+            let tabs = Array.prototype.slice.apply(container.querySelectorAll('.nav-tabs .active'));
+            var idTabActivo = tabs[0].attributes[1].value;
+            var idTipo = "";
+            switch (idTabActivo) {
+                case "tabMayor": idTipo = "1"; break;
+                case "tabSubCta": idTipo = "2"; break;
+                default: idTipo = "1"; break;
+            }
+
+            cboTipoCuentaInact.value = idTipo;
+            spnLoadData.style.display = "block";
+            listaInactivo.style.display = 'none';
+            data = txtAnioPeridoInact.value + '|' + cboTipoCuentaInact.value + '|2';
+            Http.get("General/listarTabla?tbl=" + controller + vista + "Filtro" + "&data=" + data, function (response) {
+                if (response) {
+                    var listas = response.split("¯");
+                    var lista = listas[0].split("¬");
+                    grillaItems = new GrillaScroll(lista, "divListaInactivo", 1000, 3, vista, controller, null, null, null, null, 25, false, true);
+                    spnLoadData.style.display = 'none';
+                    listaInactivo.style.display = 'block';
+                }
+            });
+            divPopupContainerForm1.style.display = 'block';
         }
 
     }
@@ -644,6 +668,20 @@ function configurarBotones() {
             listaInactivo.style.display = 'none';
             data = txtAnioPeridoInact.value + '|' + cboTipoUsoInact.value + '|' + cboTipoBienInact.value + '|' + txtCuentaInact.value + '|2';
             Http.get("General/listarTabla?tbl=" + controller + vista + "Estado" + "&data=" + data, function (response) {
+                if (response) {
+                    var listas = response.split("¯");
+                    var lista = listas[0].split("¬");
+                    grillaItems = new GrillaScroll(lista, "divListaInactivo", 1000, 3, vista, controller, null, null, null, null, 25, false, true);
+                    spnLoadData.style.display = 'none';
+                    listaInactivo.style.display = 'block';
+                }
+            });
+        }
+        else if (vista == "PlanContable") {
+            spnLoadData.style.display = "block";
+            listaInactivo.style.display = 'none';
+            data = txtAnioPeridoInact.value + '|' + cboTipoCuentaInact.value + '|2';
+            Http.get("General/listarTabla?tbl=" + controller + vista + "Filtro" + "&data=" + data, function (response) {
                 if (response) {
                     var listas = response.split("¯");
                     var lista = listas[0].split("¬");
@@ -678,6 +716,34 @@ function configurarBotones() {
             divPopupContainerForm1.style.display = 'none';
             return;
         }
+        else if (vista == "PlanContable") {
+            var container = document.querySelector('#mytab');
+            let tabs = Array.prototype.slice.apply(container.querySelectorAll('.nav-tabs .active'));
+            var idTabActivo = tabs[0].attributes[1].value;
+            var idTipo = "";
+            switch (idTabActivo) {
+                case "tabMayor": idTipo = "1"; break;
+                case "tabSubCta": idTipo = "2"; break;
+                default: idTipo = "1"; break;
+            }
+            let filtro = txtAnio.value + '|' + idTipo + '|1';
+            for (var i = 0; i < ids.length; i++) {
+                fila = grillaItems.obtenerFilaCheckPorId(ids[i]);
+                if (fila.length > 0) {
+                    id = fila[0];
+                    data += (id + ",");
+                }
+            }
+            data = data.substring(0, data.length - 1);
+            let datos = data + '¯' + cboTipoCuentaInact.value + '¯' + filtro;
+            var frm = new FormData();
+            frm.append("data", datos);
+            Http.post("General/guardar/?tbl=" + controller + vista + 'ActualizarEstado', mostarlistaActualizarEstado, frm);
+            console.log(data);
+            divPopupContainerForm1.style.display = 'none';
+            return;
+        }
+        
     }
 }
 
@@ -711,6 +777,25 @@ function configurarCombos() {
     if (cboCuentaMayor != null) cboCuentaMayor.onchange = function () {
         listarSubCuentaItem();
     }
+
+    var cboTipoCuentaInact = document.getElementById("cboTipoCuentaInact");
+    if (cboTipoCuentaInact != null) cboTipoCuentaInact.onchange = function () {
+        if (vista == "PlanContable") {
+            spnLoadData.style.display = "block";
+            listaInactivo.style.display = 'none';
+            data = txtAnioPeridoInact.value + '|' + cboTipoCuentaInact.value + '|2';
+            Http.get("General/listarTabla?tbl=" + controller + vista + "Filtro" + "&data=" + data, function (response) {
+                if (response) {
+                    var listas = response.split("¯");
+                    var lista = listas[0].split("¬");
+                    grillaItems = new GrillaScroll(lista, "divListaInactivo", 1000, 3, vista, controller, null, null, null, null, 25, false, true);
+                    spnLoadData.style.display = 'none';
+                    listaInactivo.style.display = 'block';
+                }
+            });
+        }
+    }
+    
     
 }
 

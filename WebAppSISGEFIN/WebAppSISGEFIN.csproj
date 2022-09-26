@@ -193,6 +193,7 @@
     <Content Include="Riztie\Js\App\General.js" />
     <Content Include="Riztie\Js\App\Login.js" />
     <Content Include="Riztie\Js\App\MontoLetras.js" />
+    <Content Include="Riztie\Js\App\Kardex.js" />
     <Content Include="Riztie\Js\App\sha256.js" />
     <Content Include="Riztie\Js\App\xlsx.full.min.js" />
     <Content Include="Riztie\Js\Design\bootstrap-toggle.min.js" />
@@ -343,9 +344,13 @@
     <Content Include="Views\Ingresos\Asegurado.cshtml" />
     <Content Include="Views\Contabilidad\FamiliaCuenta.cshtml" />
     <Content Include="Views\Presupuesto\FamiliaClasificador.cshtml" />
+    <Content Include="Views\Inventario\Kardex.cshtml" />
+    <Content Include="Views\Logistica\Configuracion.cshtml" />
+    <Content Include="Views\Logistica\Periodo.cshtml" />
     <Content Include="Views\Ingresos\EntiFin.cshtml" />
     <Content Include="Views\Ingresos\LineaIngreso.cshtml" />
     <Content Include="Views\Ingresos\Tarifa.cshtml" />
+    <Content Include="Views\Ingresos\CodifiEntiFin.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

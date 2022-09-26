@@ -16,6 +16,7 @@ window.onload = function () {
     getConfigMn();
     vista = window.sessionStorage.getItem("Vista");
     controller = window.sessionStorage.getItem("Controller");
+    mostrarLoading("divLista");
     getListar();
     configurarBotones();
     configurarCombos();
@@ -128,6 +129,15 @@ function mostrarlistas(rpta) {
             crearCombo(listaIngreso, "cboIngreso", "Seleccione");
             crearCombo(listaMoneda, "cboMoneda", "Seleccione");
             crearCombo(listaEstado, "cboEstado", "Seleccione");
+        }
+        else if (vista == "CodifiEntiFin") {
+            var listaIngreso = listas[1].split("¬"); 
+            var listaEstado = listas[2].split("¬");
+            var listaEntidad = listas[3].split("¬");
+            grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
+            crearCombo(listaIngreso, "cboLineaIngreso", "Seleccione");
+            crearCombo(listaEstado, "cboEstado", "Seleccione");
+            crearCombo(listaEntidad, "cboEntidadFinanciera", "Seleccione");
         }
         else {
               grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);

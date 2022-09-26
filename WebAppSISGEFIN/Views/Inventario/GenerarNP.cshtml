@@ -30,21 +30,35 @@
                             <button class="btn btn-out waves-effect waves-light btn-primary btn-square" id="btnGenerarPS" data-toggle="tooltip" data-placement="bottom" title="Generar pendiente salida"><i class="fa fa-exchange" aria-hidden="true"></i></button>
                             @*<button class="btn btn-out waves-effect waves-light btn-warning btn-square text-c-green" id="btnReporte" data-toggle="tooltip" data-placement="bottom" title="Mostrar reportes"><i class="fa fa-file-pdf-o text-c-green" aria-hidden="true"></i></button>*@
                         </div>
-                        <div class="form-group col-sm-2">
-                            <label class="control-label">&nbsp;</label>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="optIngreso">
-                                <label class="form-check-label control-label" for="optIngreso" checked>N.E.A.</label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="optSalida">
-                                <label class="form-check-label control-label" for="optSalida">PECOSA</label>
-                            </div>
-                        </div>
+
                     </div>
-                    <div class="form-row">
-                        <div class="form-group col-md-12">
-                            <div class="table-responsive dt-responsive" id="divLista"></div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="tab-header card">
+                                <ul class="nav nav-tabs md-tabs tab-timeline" role="tablist" id="mytab">
+                                    <li class="nav-item">
+                                        <a class="nav-link active" id="btnTabIngreso" data-toggle="tab" href="#items" role="tab">NEA</a>
+                                        <div class="slide"></div>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="btnTabSalida" data-toggle="tab" href="#items" role="tab">PECOSA</a>
+                                        <div class="slide"></div>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="items" role="tabpanel">
+                                    <div class="card">
+                                        <div class="card-block">
+                                            <div class="form-row">
+                                                <div class="form-group col-md-12">
+                                                    <div class="table-responsive" id="divLista"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="form-row">
@@ -63,7 +77,7 @@
                                             </div>
                                             <div class="col-sm-2">
                                                 <label class="control-label">Fecha</label>
-                                                <input type="date" id="ddtFecha" class="control-lectura" disabled />
+                                                <input type="date" id="ddtFecha" class="control-form" />
                                             </div>
                                             <div class="col-sm-3">
                                                 <label class="control-label">Tipo Operación</label>
@@ -117,6 +131,7 @@
                                                 <div class="row m-2">
                                                     <div class="col-sm-6">
                                                         <button class="btnCancelarForm" id="btnCancelar" title="Cancelar"><i class="fa fa-undo" aria-hidden="true"></i>&nbsp;Cancelar</button>
+                                                        <button class="btnGuardarForm bg-customer" id="btnEmitirNEA" title="Emitir NEA"><span class="fa fa-save"></span>&nbsp;Grabar</button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -141,12 +156,11 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="modal custom-modal" tabindex="-1" role="dialog" aria-hidden="true" id="divPopupContainerFormatoPCS" style="overflow-y:auto;">
-                            <div class="modal-dialog modal-xl bg-personalizado" id="divPopupWindowFormatoPCS" style="margin-top:1px;">
+                        <div class="modal custom-modal" tabindex="-1" role="dialog" aria-hidden="true" id="divPopupContainerForm1" style="overflow-y:auto;">
+                            <div class="modal-dialog modal-xl bg-personalizado" id="divPopupWindowForm1" style="margin-top:1px;">
                                 <div class="modal-content">
-                                    <div id="divBarraFormatoPCS" class="modal-header bg-personalizado" style="cursor:move">
+                                    <div id="divBarraForm1" class="modal-header bg-personalizado" style="cursor:move">
                                         <h5 class="modal-title">PECOSA</h5>
-                                        <button type="button" id="btnCerrarFormatoPCS" class="close"><span aria-hidden="true">&times;</span><span class="sr-only"></span></button>
                                     </div>
                                     <div class="modal-body">
                                         <div class="row">
@@ -155,16 +169,30 @@
                                                 <label class="control-label">Numero</label>
                                                 <label class="control-lectura" id="lblNroPCS"></label>
                                             </div>
-                                            <div class="col-sm-2">
+                                            <div class="col-sm-3">
                                                 <label class="control-label">Fecha</label>
-                                                <input type="date" id="ddtFechaPCS" class="control-lectura" disabled />
+                                                <input type="date" id="ddtFechaPCS" class="control-form" />
                                             </div>
                                             <div class="col-sm-3">
                                                 <label class="control-label">Tipo Operación</label>
                                                 <label class="control-lectura" id="lblOperacionPCS"></label>
                                             </div>
-
                                         </div>
+                                        <div class="row">
+                                            <div class="col-sm-3">
+                                                <label class="control-label">Oficina</label>
+                                                <label class="control-lectura" id="lblOficina"></label>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <label class="control-label">Estado</label>
+                                                <label class="control-lectura" id="lblEstado"></label>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <label class="control-label">Recepcionado por</label>
+                                                <select class="SelectSearch control-form Reque Popup" id="cboRecepcion"></select>
+                                            </div>
+                                        </div>
+
                                         <div class="row">
                                             <div class="col-sm-6">
                                                 <label class="control-label">Justificación</label>
@@ -172,7 +200,8 @@
                                             </div>
                                             <div class="col-sm-6">
                                                 <label class="control-label">&nbsp;</label>
-                                                <button class="btnCancelarForm" id="btnCancelarFormatoPCS" title="Cancelar"><i class="fa fa-undo" aria-hidden="true"></i>&nbsp;Cancelar</button>
+                                                <button class="btnCancelarForm" id="btnCancelarForm1" title="Cancelar"><i class="fa fa-undo" aria-hidden="true"></i>&nbsp;Cancelar</button>
+                                                <button class="btnGuardarForm bg-customer" id="btnEmitirPCS" title="Emitir PECOSA"><span class="fa fa-save"></span>&nbsp;Grabar</button>
                                             </div>
                                         </div>
                                     </div>
@@ -188,22 +217,6 @@
                                         </div>
                                         <div class="col-md-7 text-right">
                                             <span id="spnTotalPCS" class="control-label">Total: 0</span>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-sm-6">
-                                            <fieldset class="fieldset">
-                                                <legend class="legend">Solicitante</legend>
-                                                <div class="col-sm-12" id="lblNombreSolicita" style="text-align: center;font-weight: bold">
-                                                </div>
-                                            </fieldset><br />
-                                        </div>
-                                        <div class="col-sm-6">
-                                            <fieldset class="fieldset">
-                                                <legend class="legend">Recepcionado por</legend>
-                                                <div class="col-sm-12" id="lblRecepcion" style="text-align:center;font-weight:bold">
-                                                </div>
-                                            </fieldset>
                                         </div>
                                     </div>
                                 </div>
@@ -615,10 +628,9 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td  style="line-height:25px; font-family: 'Arial Narrow', Arial, sans-serif; font-size: 14px;border: 1px solid black; text-align: right; color: #080707; font-weight: bold;" id="tdTotalNEA"></td>
+                                    <td style="line-height:25px; font-family: 'Arial Narrow', Arial, sans-serif; font-size: 14px;border: 1px solid black; text-align: right; color: #080707; font-weight: bold;" id="tdTotalNEA"></td>
                                 </tr>
                             </table>
-                          
                         </div>
                         <div style="line-height: 28px; font-family: 'Arial Narrow', Arial, sans-serif; font-size: 12px; width: 100%; float: left; border-left: 1px solid black; border-right: 1px solid black; border-top: 1px solid black; border-bottom: 1px solid black; ">
                             <div style="width: 100%; float: left;">
@@ -688,171 +700,153 @@
                 </div>
 
                 <div id="divReportePECOSA" style="overflow:hidden;width:auto;display:none">
-                    <table cellpadding="0" width="1000px" cellspacing="0" style="font-family:'Arial Narrow', Arial, sans-serif;font-size:12px">
-                        <tbody>
-                            <tr>
-                                <td width="250px">
-                                    <CENTER>
-                                        <B>
-                                            MARINA DE GUERA DEL PERU<BR>
-                                            CENTRO MEDICO NAVAL
-                                        </B>
-                                    </CENTER>
-                                </td>
-                                <td></td>
-                                <td width="200px"><CENTER><B> OFICINA DE LOGISTICA<BR>ALMACEN GENERAL</B></CENTER></td>
-                            </tr>
+                    <div style="width:100%;">
 
-                        </tbody>
-                    </table>
-                    <br />
-                    <table cellpadding="0" width="1000px" cellspacing="0" style="font-family:'Arial Narrow', Arial, sans-serif;font-size:12px">
-                        <tbody>
-                            <tr>
-                                <td align="center" id="tdNroPecosa" style="font-size:16px;font-weight:bold"></td>
+                        <div style="width: 100%; font-family: 'Arial Narrow', Arial, sans-serif; margin-bottom: 0px; text-align: left;">
+                            <div style="width: 35%; float: left;">
+                                <img src="~/Riztie/Images/user-bg.jpg" alt="IAFAS" width="220" height="185" />
+                                <div>
+                                    <label style="margin-bottom: 0px; font-weight: bold; ">SOLICITANTE :</label>
+                                    <label style="margin-bottom: 0px;" id="lblOficinaPcs"></label>
+                                </div>
+                                <div>
+                                    <label style="margin-bottom: 0px; font-weight: bold; ">REFERENCIA :</label>
+                                    <label style="margin-bottom: 0px;" id="lblJustificacionPcs"></label>
+                                </div>
+                            </div>
+                            <div style="width: 40%; float: left;font-family: 'Arial Narrow', Arial, sans-serif; text-align: left;">
+                                <h2 style="font-family: 'Arial Narrow', Arial, sans-serif; margin-bottom: 0px; text-align: left; height:70px;">PEDIDO - COMPROBANTE DE SALIDA</h2>
+                            </div>
+                            <div style="width: 25%; float: left;">
+                                <h2 style="font-family: 'Arial Narrow', Arial, sans-serif; margin-bottom: 0px; text-align: center; height: 70px;" id="lblNroPecosa"></h2>
+                                <div>
+                                    <h4 style="font-family: 'Arial Narrow', Arial, sans-serif;height:85px; margin-bottom: 0px; text-align: center;">OFICINA DE LOGISTICA <br />ALMACEN GENERAL</h4>
+                                    <div style="width:100%; float: left;">
+                                        <div style="width: 25%; float: left; border-left: 1px solid black; border-right: 1px solid black; border-top: 1px solid black; border-bottom: 1px solid black; text-align: center;">
+                                            <label style="margin-bottom: 0px; font-weight: bold;">DIA</label>
+                                        </div>
+                                        <div style="width: 25%; float: left; border-left: 1px solid black; border-right: 1px solid black; border-top: 1px solid black; border-bottom: 1px solid black; text-align: center;">
+                                            <label style="margin-bottom: 0px; font-weight: bold; ">MES</label>
+                                        </div>
+                                        <div style="width: 30%;float: left;border-left: 1px solid black; border-right: 1px solid black; border-top: 1px solid black; border-bottom: 1px solid black; text-align: center;">
+                                            <label style="margin-bottom: 0px; font-weight: bold; ">AÑO</label>
+                                        </div>
+                                    </div>
+                                    <div style="width:100%; float: left;">
+                                        <div style="width: 25%; float: left; border-left: 1px solid black; border-right: 1px solid black; border-top: 1px solid black; border-bottom: 1px solid black; text-align: center;">
+                                            <label style="margin-bottom: 0px; font-weight: bold; " id="lblDia"></label>
+                                        </div>
+                                        <div style="width: 25%; float: left; border-left: 1px solid black; border-right: 1px solid black; border-top: 1px solid black; border-bottom: 1px solid black; text-align: center;">
+                                            <label style="margin-bottom: 0px; font-weight: bold; " id="lblMes"></label>
+                                        </div>
+                                        <div style="width: 30%;float: left;border-left: 1px solid black; border-right: 1px solid black; border-top: 1px solid black; border-bottom: 1px solid black; text-align: center;">
+                                            <label style="margin-bottom: 0px; font-weight: bold; " id="lblAnio"></label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
-                            </tr>
-                        </tbody>
-                    </table>
-                    <table cellpadding="0" width="1000px" cellspacing="0" style="font-family:'Arial Narrow', Arial, sans-serif;font-size:12px">
-                        <tbody>
-                            <tr>
-                                <td width="150px"> SOLICITANTE</td>
-                                <td width="270px">
-                                    <BR>
-                                    <BR>
-                                    <BR>
-                                    <CENTER>
-                                        <span id="spnSolicitaGrado"></span><br />
-                                        <span id="spnSolicitaCargo"></span><br />
-                                        <span id="spnSolicitaNombre"></span><br />
-                                        <span id="spnSolicitaCIP"></span><br />
-                                        _________________________<BR>
-                                        FIRMA<BR>
-                                    </CENTER>
-                                </td>
-                                <td width="150px">
-                                    <table cellpadding="0" width="100%" cellspacing="0">
-                                        <tbody>
-                                            <tr>
-                                                <td style="border-left: 1px solid black; border-right: 1px solid black; border-top: 1px solid black; border-bottom: 1px solid black; text-align: center;">CENTRO DE GASTO</td>
-                                            </tr>
-                                            <tr>
-                                                <td style="border:1px solid black;text-align:center;font-weight:bold" id="tdCentroGasto"></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                    <br>
-                                    ENTREGAR A
-                                </td>
-                                <td width="60px"></td>
-                                <td>
-                                    <table cellpadding="0" width="100%" cellspacing="0">
-                                        <tbody>
-                                            <tr>
-                                                <td style="border-left: 1px solid black; border-right: 1px solid black; border-top: 1px solid black; border-bottom: 1px solid black; text-align: center;width: 200px">PEDIDO</td>
-                                                <td style="border:1px solid black">DIA</td>
-                                                <td style="border:1px solid black">MES</td>
-                                                <td style="border:1px solid black">AÑO</td>
-                                            </tr>
-                                            <tr>
-                                                <td style="border: 1px solid black;text-align: center;font-weight: bold" id="tdPedidoPecosa"></td>
-                                                <td style="border: 1px solid black;text-align: center;font-weight: bold" id="tdDiaPecosa"></td>
-                                                <td style="border: 1px solid black;text-align: center;font-weight: bold" id="tdMesPecosa"></td>
-                                                <td style="border: 1px solid black;text-align: center;font-weight: bold" id="tdAnioPecosa"></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                    <br>
-                                    <br>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <BR>
-                    <BR>
-                    <table cellpadding="0" width="100%" cellspacing="0" style="font-family:'Arial Narrow', Arial, sans-serif;font-size:12px">
-                        <tr>
-                            <td style="height:350px;border:solid 1px black;vertical-align:top" colspan="2">
-                                <table cellpadding="0" width="100%" cellspacing="0">
-                                    <thead>
-                                        <tr>
-                                            <th style="border:1px solid black" rowspan="2">ITEM</th>
-                                            <th style="border:1px solid black" rowspan="2">CODIGO DEL<br>ARTICULO</th>
-                                            <th style="border:1px solid black" colspan="2" rowspan="2">DESCRIPCION DEL ARTICULO</th>
-                                            <th style="border:1px solid black" rowspan="2">UNIDAD<br>MEDIDA</th>
-                                            <th style="border-left: 1px solid black; border-right: 1px solid black; border-top: 1px solid black; border-bottom: 1px solid black; text-align: center;" colspan="2">CANTIDAD</th>
-                                            <th style="border-left: 1px solid black; border-right: 1px solid black; border-top: 1px solid black; border-bottom: 1px solid black; text-align: center;" colspan="4">VALORES</th>
-                                        </tr>
-                                        <tr>
-                                            <th style="border:1px solid black">SOLICITADA</th>
-                                            <th style="border:1px solid black">ENTREGADA</th>
-                                            <th style="border:1px solid black">PRECIO UNIT.</th>
-                                            <th style="border:1px solid black" colspan="3">TOTAL</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="tblDetallePecosa"></tbody>
+                        <div style="width: 100%; font-family: 'Arial Narrow', Arial, sans-serif; margin-bottom: 0px; text-align: left;">
+                            <div style="width: 100%; float: left;font-family: 'Arial Narrow', Arial, sans-serif; text-align: left;">
+                                <table cellpadding="0" width="100%" cellspacing="0" style="font-family:'Arial Narrow', Arial, sans-serif;font-size:10px">
+                                    <tr>
+                                        <td style="height:355px;border:solid 1px black;vertical-align:top" colspan="2">
+                                            <table cellpadding="0" width="1100px" cellspacing="0" style="font-family: 'Arial Narrow', Arial, sans-serif; font-size: 12px;">
+                                                <thead>
+
+                                                    <tr cellpadding="0" width="1100px" cellspacing="0" style="font-family: 'Arial Narrow', Arial, sans-serif; font-size: 12px; border: 1px solid black;text-align:center;font-weight: bold;">
+                                                        <th colspan="1" rowspan="2" style="font-weight: bold;width: 5px;border:1px solid black;white-space:pre-wrap; ">ITEM</th>
+                                                        <th colspan="1" rowspan="2" style="font-weight: bold;width: 20px;border:1px solid black;white-space:pre-wrap;">CÓDIGO DEL ARTICULO</th>
+                                                        <th colspan="1" rowspan="2" style="font-weight: bold;width:380px;border:1px solid black;white-space:pre-wrap;">D E S C R I P C I Ó N    D E L   A R T I C U L O</th>
+                                                        <th colspan="1" rowspan="2" style="font-weight: bold;width: 20px;border:1px solid black;white-space:pre-wrap;">CUENTA CONTABLE</th>
+                                                        <th colspan="1" rowspan="2" style="font-weight: bold;width: 20px;border:1px solid black;white-space:pre-wrap;">UNIDAD MEDIDA</th>
+                                                        <th colspan="1" rowspan="2" style="font-weight: bold;width: 20px;border:1px solid black;white-space:pre-wrap;">CANTIDAD</th>
+                                                        <th colspan="2" rowspan="1" style="font-weight: bold;width: 30px;border:1px solid black;white-space:pre-wrap;">VALORES</th>
+                                                    </tr>
+                                                    <tr style="color: black; text-align: center; font-weight: bold;">
+                                                        <th style="color: black;border:1px solid black;white-space:pre-wrap; width:70px;">PRECIO UNIT.</th>
+                                                        <th style="color: black;border:1px solid black;white-space:pre-wrap; width:70px;">TOTAL</th>
+                                                    </tr>
+
+                                                </thead>
+                                                <tbody id="tblDetallePecosa"></tbody>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="line-height:25px; font-family: 'Arial Narrow', Arial, sans-serif; font-size: 14px;border: 1px solid black; text-align: right; color: #080707; font-weight: bold;" id="tdTotalPecosa"></td>
+                                    </tr>
                                 </table>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td rowspan="2" style="border:1px solid black;width:900px; max-width:900px;line-height:40px;vertical-align:top" id="tdJustificacion"></td>
-                            <td style="border:1px solid black">TOTAL S/. &nbsp;&nbsp;</td>
-                        </tr>
-                    </table>
-                    <br>
-                    <table cellpadding="0" width="1000px" cellspacing="0" style="font-family:'Arial Narrow', Arial, sans-serif;font-size:12px">
-                        <thead>
-                            <tr>
-                                <th style="border:1px solid black" colspan="2">AUTORIZACION DE ENTREGA</th>
-                                <th style="border:1px solid black">ENTREGUE CONFORME</th>
-                                <th style="border:1px solid black">RECIBI CONFORME</th>
-                                <th style="border:1px solid black" colspan="2">FECHA</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td style="border:1px solid black;text-align:center" rowspan="3">
-                                    <span id="spnJefeAbaGrado"></span><br />
-                                    <span id="spnJefeAbaNombre"></span><br />
-                                    <span id="spnJefeAbaCIP"></span><br />
-                                    ------------------------------------------------<br />
-                                    JEFE DE ABASTECIMIENTO Y SERVICIOS
-                                </td>
-                                <td style="border: 1px solid black;text-align: center" rowspan="3">
-                                    <span id="spnJefeAlmacenGrado"></span><br />
-                                    <span id="spnJefeAlmacenNombre"></span><br />
-                                    <span id="spnJefeAlmacenCIP"></span><br />
-                                    ------------------------------------------------<br />
-                                    JEFE DE ALMACEN
-                                </td>
-                                <td style="border:1px solid black;text-align:center" rowspan="3">
-                                    <span id="spnEntregadoGrado"></span><br />
-                                    <span id="spnEntregadoNombre"></span><br />
-                                    <span id="spnEntregadoCIP"></span><br />
-                                    ------------------------------------------------<br />
-                                    ENTREGADO POR
-                                </td>
-                                <td style="border: 1px solid black;text-align: center" rowspan="3">
-                                    <span id="spnRecibidoGrado"></span><br />
-                                    <span id="spnRecibidoNombre"></span><br />
-                                    <span id="spnRecibidoCIP"></span><br />
-                                    ------------------------------------------------<br />
-                                    RECIBIDO POR
-                                </td>
-                                <td style="border:1px solid black">DIA</td>
-                                <td style="border:1px solid black">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-                            </tr>
-                            <tr>
-                                <td style="border:1px solid black">MES</td>
-                                <td style="border:1px solid black">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-                            </tr>
-                            <tr>
-                                <td style="border:1px solid black">AÑO</td>
-                                <td style="border:1px solid black">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="width: 100%; font-family: 'Arial Narrow', Arial, sans-serif; margin-bottom: 0px; text-align: left;">
+                        <div style="width: 100%; float: left;font-family: 'Arial Narrow', Arial, sans-serif; text-align: left;">
+                            <table cellpadding="0" width="1100px" cellspacing="0" style="font-family: 'Arial Narrow', Arial, sans-serif; font-size: 12px; border: solid 1px #242828;">
+                                <thead>
+                                    <tr cellpadding="0" cellspacing="0" style="font-family: 'Arial Narrow', Arial, sans-serif; font-size: 12px; border: 1px solid black;text-align:center;font-weight: bold;height:20px;">
+                                        <th colspan="2" rowspan="2" style="font-weight: bold;width: 100px;border:1px solid black;white-space:pre-wrap; ">AUTORIZACIÓN DE ENTREGA</th>
+                                        <th colspan="1" rowspan="2" style="font-weight: bold;width: 60px;border:1px solid black;white-space:pre-wrap;">ENTREGE CONFORME</th>
+                                        <th colspan="1" rowspan="2" style="font-weight: bold;width:60px;border:1px solid black;white-space:pre-wrap;">RECIBI CONFORME</th>
+                                        <th colspan="2" rowspan="1" style="font-weight: bold;width: 40px;border:1px solid black;white-space:pre-wrap;">FECHA</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr style="color: black; text-align: center; font-weight: bold; height: 20px;">
+                                        <td rowspan="3" style="border:1px solid black;width: 100px;">
+                                            <label id="lblGradoJeLogPcs"></label><br />
+                                            <label id="lblNombreJelogPcs"></label><br />
+                                            <label id="lblDNIJelogPcs"></label><br />
+                                            JEFE LOGISTICA
+                                        </td>
+                                        <td rowspan="3" style="border:1px solid black;width: 100px;">
+                                            <label id="lblGradoJefeAlmacenPcs"></label><br />
+                                            <label id="lblNombreJefeAlmacenPcs"></label><br />
+                                            <label id="lblDNIAlmacenPcs"></label><br />
+                                            <label>JEFE DE ALMACEN</label><br />
+                                        </td>
+                                        <td rowspan="3" style="border: 1px solid black; width: 100px;">
+                                            <label id="lblGradoEntregadoPcs"></label><br />
+                                            <label id="lblNombreEntregadoPcs"></label><br />
+                                            <label id="lblDNIEntregadoPcs"></label><br />
+                                            ENTREGADO POR
+                                        </td>
+                                        <td rowspan="3" style="border: 1px solid black; width: 60px;">
+                                            <label id="lblGradoRecibidoPcs"></label><br />
+                                            <label id="lblNombreRecibidoPcs"></label><br />
+                                            <label id="lblDNIRecibidoPcs"></label><br />
+                                            RECIBIDO POR
+                                        </td>
+                                        <td style="border: 1px solid black;width: 10px;" colspan="1">
+                                            DIA
+                                        </td>
+                                        <td style="border: 1px solid black;width: 10px;" colspan="1">
+                                            15
+                                        </td>
+                                    </tr>
+                                    <tr style="color: black; text-align: center; font-weight: bold; height: 30px;">
+                                        <td style="border: 1px solid black;width: 10px;" colspan="1">
+                                            MES
+                                        </td>
+                                        <td style="border: 1px solid black;width: 10px;" colspan="1">
+                                            09
+                                        </td>
+                                    </tr>
+                                    <tr style="color: black; text-align: center; font-weight: bold; height: 30px;">
+                                        <td style="border: 1px solid black;width: 10px;" colspan="1">
+                                            AÑO
+                                        </td>
+                                        <td style="border: 1px solid black;width: 10px;" colspan="1">
+                                            2022
+                                        </td>
+                                    </tr>
+                                </tbody>
+
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
