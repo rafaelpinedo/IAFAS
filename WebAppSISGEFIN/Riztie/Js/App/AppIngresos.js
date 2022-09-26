@@ -11,7 +11,7 @@ var operacion = 0;
 var listaOficina_VG = [];
 var listaUbigeo = [];
 var listaSubCuentaItem = [];
-
+//hola
 window.onload = function () {
     getConfigMn();
     vista = window.sessionStorage.getItem("Vista");
