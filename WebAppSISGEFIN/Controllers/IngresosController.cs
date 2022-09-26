@@ -55,6 +55,15 @@ namespace WebAppSISGEFIN.Controllers
         }
 
         [FiltroAutenticacion]
+        public ActionResult CodifiEntiFin()
+        {
+            string[] Data = Session["DataUsuario"].ToString().Split('|');
+            string IdPerfil = Data[3];
+            ViewBag.Menu = new Menu().Listar(IdPerfil);
+            ViewBag.AnhoActual = DateTime.Now.Year;
+            return View();
+        }
+        [FiltroAutenticacion]
         public ActionResult Recaudacion()
         {
             int Anio = DateTime.Now.Year;
