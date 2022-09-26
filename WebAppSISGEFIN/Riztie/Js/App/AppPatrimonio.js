@@ -10,7 +10,7 @@ var idRegistro = "";
 var listaUbicaFisica_v = [];
 var listaActivos_v = [];
 var FLAG_INICIAL_INVENTARIO_INICIAL = 1;
-var FLAG_INICIAL_ALTA = 0;
+var FLAG_INICIAL_ALTAS = 0;
 
 window.onload = function () {
     getConfigMn();
@@ -26,6 +26,19 @@ window.onload = function () {
 
 function getListar() {
     var data = "";
+
+    if (vista == "InventarioInicial") {
+        var anioConsulta = document.getElementById('txtPeriodoCons')?.value;
+        data = FLAG_INICIAL_INVENTARIO_INICIAL + '|' + anioConsulta;
+    }
+    if (vista == "Altas") {
+        var anioConsulta = document.getElementById('txtPeriodoCons')?.value;
+        data = FLAG_INICIAL_ALTAS + '|' + anioConsulta;
+    }
+    if (vista == "Bajas") {
+        var anioConsulta = document.getElementById('txtPeriodoCons')?.value;
+        data = anioConsulta;
+    }
     Http.get("General/listarTabla?tbl=" + controller + vista + "&data=" + data, mostrarlistas);
 }
 
@@ -43,7 +56,7 @@ function mostrarlistas(rpta) {
             crearCombo(listaResponsable, "cboResponsable", "Seleccione");
             crearCombo(listaEstado, "cboEstado", "Seleccione");
         }
-        if (vista == "InventarioInicial" || vista == "Altas") {
+        else if (vista == "InventarioInicial" || vista == "Altas") {
             listaUbicaFisica_v = listas[1].split("¬");
             listaActivos_v = listas[4].split("¬");
 
@@ -76,6 +89,15 @@ function mostrarlistas(rpta) {
             crearCombo(listaProveedor, "cboProveedor", "Seleccione");
             crearCombo(listaTipoDoc, "cboTipoDoc", "Seleccionar");
             crearCombo(listaMeses, "cboMes", "Seleccione");
+        }
+        else if (vista == "Bajas") {
+            var listaCausalBajas = listas[1].split("¬");
+            var listaEstado = listas[2].split("¬");
+
+            grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
+
+            crearCombo(listaCausalBajas, "cboCausalBaja", "Seleccione");
+            crearCombo(listaEstado, "cboEstado", "Seleccione");
         }
         else {
             grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
@@ -131,6 +153,61 @@ function configurarBotones() {
 
             var txtDeprecAcumulada = document.getElementById("txtDeprecAcumulada");
             if (txtDeprecAcumulada != null) txtDeprecAcumulada.value = 0;
+        }
+        if (vista == "Bajas") {
+            document.querySelectorAll('.section-nuevo-activo').forEach(function (el) {
+                el.style.display = 'block';
+            });
+
+            tbDetalleActivos.innerHTML = "";
+            spnNroItems.innerHTML = "Items: 0";
+            txtPeriodoItemsCons.value = new Date().getFullYear();
+
+            btnGuardarBajas.innerHTML = "<i class='fa fa-save'></i> Grabar";
+            btnGuardarBajas.disabled = false;
+        }
+    }
+
+    var btnGuardarBajas = document.getElementById("btnGuardarBajas");
+    if (btnGuardarBajas != null) btnGuardarBajas.onclick = function () {
+        var validar = false;
+        var esNuevaBaja = !txtIdRegistro.value;
+
+        if (esNuevaBaja) {
+            if (validarBajas())
+                validar = true;
+        }
+        else {
+            if (validarInformacion("Reque") == true)
+                validar = true;
+        }
+
+        if (validar == true) {
+            Swal.fire({
+                title: '¿Desea grabar la información?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Si',
+                cancelButtonText: 'No'
+            }).then((result) => {
+                if (result.value) {
+                    if (esNuevaBaja)
+                        grabarBajas();
+                    else
+                        grabarDatos();
+
+                    Swal.fire({
+                        title: 'Procesando...',
+                        allowEscapeKey: false,
+                        allowOutsideClick: false,
+                        onOpen: () => {
+                            Swal.showLoading()
+                        }
+                    })
+                }
+            })
         }
     }
 
@@ -192,8 +269,64 @@ function configurarBotones() {
         mostrarValoresContables("s");
     }
 
+    var btnConsultar = document.getElementById("btnConsultar");
+    if (btnConsultar != null) btnConsultar.onclick = function () {
+        var anioConsulta = document.getElementById('txtPeriodoCons');
+
+        if (!anioConsulta || !anioConsulta.value) {
+            mostrarMensaje('Especifique el año del periodo', 'error');
+            return;
+        }
+
+        limpiarListaActivos();
+        getListar();
+    }
+
     var cboUbicaFisica = document.getElementById("cboUbicaFisica");
     if (cboUbicaFisica != null) cboUbicaFisica.innerHTML = "<option value>Seleccione</option>";
+
+    var btnConsutarItems = document.getElementById("btnConsutarItems");
+    if (btnConsutarItems != null) btnConsutarItems.onclick = function () {
+        var anioConsulta = document.getElementById('txtPeriodoItemsCons')?.value;
+        if (anioConsulta) {
+            var data = anioConsulta;
+            Http.get("General/listarTabla?tbl=" + controller + vista + "Items&data=" + data, mostrarListadoItems);
+            //    spnLoad.style.display = 'inline';
+        }
+        else {
+            mostrarMensaje("Seleccione el periodo", "error")
+            txtPeriodoItemsCons.focus();
+        }
+    }
+
+    var btnSeleccionarItems = document.getElementById("btnSeleccionarItems");
+    if (btnSeleccionarItems != null) btnSeleccionarItems.onclick = function () {
+        var ids = grillaItems.obtenerIdsChecks();
+        var data = "";
+
+        for (var i = 0; i < ids.length; i++) {
+            fila = grillaItems.obtenerFilaCheckPorId(ids[i]);
+            if (fila.length > 0) {
+                id = fila[0];
+                codigo = fila[1];
+                descripcion = fila[2];
+                marca = fila[3];
+                modelo = fila[4];
+                serie = fila[5];
+                usuarioFinal = fila[6];
+                fechaCompra = fila[7];
+                valorCompra = fila[8];
+                fechaAlta = fila[9];
+                valorInicial = fila[10];
+                conservacion = fila[11];
+                data += (id + "|" + codigo + "|" + descripcion + "|" + marca + "|" + modelo + "|" + serie + "|" + usuarioFinal +
+                    "|" + fechaCompra + "|" + valorCompra + "|" + fechaAlta + "|" + valorInicial + "|" + conservacion);
+
+                if (i < ids.length - 1) data += "¬";
+            }
+        }
+        obtenerItems(data);
+    }
 }
 
 function configurarCampos() {
@@ -242,6 +375,27 @@ function configurarCampos() {
         if (txtValorCompra) {
             txtValorCompra.onkeyup = function (event) {
                 if (txtValor) txtValor.value = txtValorCompra.value;
+            }
+        }
+    }
+}
+
+function configurarCheckBoxs() {
+    var selcheckbox = document.getElementsByClassName("selcheckbox");
+    if (selcheckbox && selcheckbox.length > 0) {
+        for (var i = 0; i < selcheckbox.length; i++) {
+            selcheckbox[i].onchange = function (event) {
+                var isCheck = false;
+                var chequeo = tbllistaItem.getElementsByTagName('input');
+                var nroChequeo = chequeo.length;
+                for (var i = 0; i < nroChequeo; i++) {
+                    if (chequeo[i].type == "checkbox" && chequeo[i].checked) {
+                        isCheck = true;
+                        break;
+                    }
+                }
+                if (isCheck) btnSeleccionarItems.disabled = false;
+                else btnSeleccionarItems.disabled = true;
             }
         }
     }
@@ -318,7 +472,7 @@ function mostrarRegistro(rpta) {
             cboResponsable.value = campos[3];
             cboEstado.value = campos[4];
         }
-        if (vista == "InventarioInicial" || vista == "Altas") {
+        else if (vista == "InventarioInicial" || vista == "Altas") {
             txtIdRegistro.value = campos[0];
             txtCodigoPatrimonio.value = campos[1];
             txtItem.value = campos[2];
@@ -385,6 +539,21 @@ function mostrarRegistro(rpta) {
             txtValorNeto.value = (txtValor.value || txtDeprecAcumulada.value) ? txtValor.value - txtDeprecAcumulada.value : '';
 
             document.getElementById("divPopupContainer").style.display = 'block';
+        }
+        else if (vista == "Bajas") {
+            document.getElementById("divPopupContainer").style.display = 'block';
+
+            document.querySelectorAll('.section-nuevo-activo').forEach(function (el) {
+                el.style.display = 'none';
+            });
+
+            txtIdRegistro.value = campos[0];
+            cboCausalBaja.value = campos[1];
+
+            var dFechaBaja = campos[2].split("/");
+            dttFechaBaja.value = dFechaBaja.length == 3 ? dFechaBaja[2] + "-" + dFechaBaja[1] + "-" + dFechaBaja[0] : '';
+
+            ttaObservacion.value = campos[3];
         }
         else {
             var divPopupContainer = document.getElementById("divPopupContainer");
@@ -476,7 +645,14 @@ function eliminarRegistro(id) {
         cancelButtonText: 'No'
     }).then((result) => {
         if (result.value) {
-            Http.post("General/eliminar/?tbl=" + controller + vista, mostrarEliminar, frm);
+            if (vista == "InventarioInicial" || vista == "Altas" || vista == "Bajas") {
+                var filtroAnio = txtPeriodoCons.value;
+                var data = filtroAnio;
+                Http.post("General/eliminar/?tbl=" + controller + vista + "&data=" + data, mostrarEliminar, frm);
+            }
+            else {
+                Http.post("General/eliminar/?tbl=" + controller + vista, mostrarEliminar, frm);
+            }
         }
     })
 }
@@ -498,8 +674,7 @@ function mostrarEliminar(rpta) {
         }
 
         if (vista == "InventarioInicial" || vista == "Altas") {
-            var divListaActivo = document.getElementById("divListaActivo");
-            if (divListaActivo) divListaActivo.innerHTML = '';
+            limpiarListaActivos();
             getListar();
         }
         else {
@@ -539,7 +714,8 @@ function seleccionarFila(fila, id, prefijo) {
 
     if ((vista == "InventarioInicial" || vista == "Altas") && prefijo != "divListaActivo") {
         var periodoCons = txtPeriodoCons.value;
-        var data = periodoCons + '-' + idRegistro;
+        var flagInicial = vista == "InventarioInicial" ? FLAG_INICIAL_INVENTARIO_INICIAL : FLAG_INICIAL_ALTAS;
+        var data = periodoCons + '-' + idRegistro + '-' + flagInicial;
 
         Http.get("General/listarTabla?tbl=" + controller + vista + "Activos&data=" + data, mostrarlistasActivos);
     }
@@ -551,6 +727,48 @@ function mostrarlistasActivos(rpta) {
         var lista = listas[0].split("¬");
         grillaItem = new GrillaScroll(lista, "divListaActivo", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
     }
+}
+
+function mostrarListadoItems(rpta) {
+    if (rpta) {
+        //spnLoad.style.display = 'none';
+        divPopupContainerForm1.style.display = 'block';
+
+        var listas = rpta.split('¯');
+        lista = listas[0].split("¬");
+        grillaItems = new GrillaScroll(lista, "listaItem", 1000, 6, "listaItems", "Admon", null, null, null, null, 25, false, true);
+        configurarCheckBoxs();
+    }
+}
+
+function grabarBajas() {
+    var data = "";
+    data = obtenerDatosGrabar("Popup");
+
+    data += "|";
+
+    var nfilas = tbDetalleActivos.rows.length;
+    var fila;
+    for (var i = 0; i < nfilas; i++) {
+        fila = tbDetalleActivos.rows[i];
+        data += fila.cells[0].innerHTML; //Item
+
+        if (i < (nfilas - 1))
+            data += ",";
+    }
+
+    var filtroAnio = txtPeriodoCons.value;
+
+    data += "|" + filtroAnio;
+    data += "|";
+
+    var frm = new FormData();
+    frm.append("data", data);
+
+    Http.post("General/guardar?tbl=" + controller + vista, mostrarGrabar, frm);
+
+    btnGuardarBajas.innerHTML = "Guardando <i class='fa fa-circle-o-notch fa-spin' style='color:white'></i>";
+    btnGuardarBajas.disabled = true;
 }
 
 function grabarDatos() {
@@ -573,6 +791,17 @@ function grabarDatos() {
 
         data += '|' + flagInicial;
         data += '|' + valoresContables;
+        data += '|';
+
+        frm.append("data", data);
+    }
+    else if (vista == "Bajas") {
+        var grupoSecuencias = ''
+        var filtroAnio = txtPeriodoCons.value;
+
+        data += '|' + grupoSecuencias;
+        data += '|' + filtroAnio;
+        data += '|';
 
         frm.append("data", data);
     }
@@ -596,7 +825,7 @@ function obtenerDatosGrabar(clase) {
                 if (control.id.substr(0, 3) == "num") data += control.value;
                 if (control.id.substr(0, 3) == "dtt") {
                     if (control.value != "") {
-                        if (vista == "InventarioInicial" || vista == "Altas") {
+                        if (vista == "InventarioInicial" || vista == "Altas" || vista == "Bajas") {
                             data += control.value;
                         }
                         else {
@@ -640,6 +869,128 @@ function mostrarValoresContables(rpta) {
         //spnLoad.style.display = 'none';
         divPopupContainerForm2.style.display = 'block';
     }
+}
+
+function obtenerItems(datos) {
+    var lista = datos.split('¬');
+    var nRegistros = lista.length;
+    for (var i = 0; i < nRegistros; i++) {
+        adicionarItem(lista[i]);
+    }
+}
+
+function adicionarItem(datos) {
+    console.log(datos);
+    var campos = datos.split('|');
+    item = campos[0];
+    codigo = campos[1];
+    descripcion = campos[2];
+    marca = campos[3];
+    modelo = campos[4];
+    serie = campos[5];
+    usuarioFinal = campos[6];
+    fechaCompra = campos[7];
+    valorCompra = campos[8];
+    fechaAlta = campos[9];
+    valorInicial = campos[10];
+    conservacion = campos[11];
+
+    var nFilas = tbDetalleActivos.rows.length;
+    var existe = false;
+    for (var i = 0; i < nFilas; i++) {
+        if (tbDetalleActivos.rows[i].cells[0].innerHTML == item) {
+            existe = true;
+            break;
+        }
+    }
+
+    if (!existe) {
+        var filaDetalle = "<tr>";
+        filaDetalle += "<td style='white-space:pre-wrap;width:50px;display:none'>";
+        filaDetalle += item;
+        filaDetalle += "</td> ";
+        filaDetalle += "<td style='white-space:pre-wrap;width:100px;vertical-align:top;'>";
+        filaDetalle += codigo;
+        filaDetalle += "</td> ";
+        filaDetalle += "<td style='white-space:pre-wrap;width:100px;vertical-align:top;'>";
+        filaDetalle += descripcion;
+        filaDetalle += "</td> ";
+        filaDetalle += "<td style='white-space:pre-wrap;width:100px;vertical-align:top;'>";
+        filaDetalle += marca;
+        filaDetalle += "</td> ";
+        filaDetalle += "<td style='white-space:pre-wrap;width:100px;vertical-align:top;'>";
+        filaDetalle += modelo;
+        filaDetalle += "</td> ";
+        filaDetalle += "<td style='white-space:pre-wrap;width:100px;vertical-align:top;'>";
+        filaDetalle += serie;
+        filaDetalle += "</td> ";
+        filaDetalle += "<td style='white-space:pre-wrap;width:100px;vertical-align:top;'>";
+        filaDetalle += usuarioFinal;
+        filaDetalle += "<td style='white-space:pre-wrap;width:100px;vertical-align:top;'>";
+        filaDetalle += fechaCompra;
+        filaDetalle += "</td> ";
+        filaDetalle += "<td style='white-space:pre-wrap;width:100px;vertical-align:top;'>";
+        filaDetalle += valorCompra;
+        filaDetalle += "</td> ";
+        filaDetalle += "<td style='white-space:pre-wrap;width:100px;vertical-align:top;'>";
+        filaDetalle += fechaAlta;
+        filaDetalle += "</td> ";
+        filaDetalle += "<td style='white-space:pre-wrap;width:100px;vertical-align:top;'>";
+        filaDetalle += valorInicial;
+        filaDetalle += "</td> ";
+        filaDetalle += "<td style='white-space:pre-wrap;width:100px;vertical-align:top;'>";
+        filaDetalle += conservacion;
+        filaDetalle += "</td> ";
+        filaDetalle += "</td> ";
+        filaDetalle += "<td style='white-space:pre-wrap;width:10px;vertical-align:top;'>";
+        filaDetalle += "<i class='fa fa-trash f-16 text-c-red' title='Quitar Item' onclick='retirarItem(this,\"";
+        filaDetalle += item;
+        filaDetalle += "\");'></i>";
+        filaDetalle += "</td> ";
+        filaDetalle += "</tr>";
+        tbDetalleActivos.insertAdjacentHTML("beforeend", filaDetalle);
+    }
+    else mostrarMensaje("Existen Items ya agregados- verificar", "error");
+    spnNroItems.innerHTML = "Items: " + (nFilas + 1);
+    configurarEnterCantidad(tbDetalleActivos, 8);
+
+    divPopupContainerForm1.style.display = 'none';
+}
+
+function configurarEnterCantidad(tbody, celda) {
+    var filas = tbody.childNodes;
+    var nfilas = filas.length - 1;
+    for (var i = 0; i < nfilas; i++) {
+        txt = filas[i].childNodes[celda].firstChild;
+        txt.onkeyup = function (event) {
+            if (this.value != "" && event.keyCode == 13) {
+                this.parentNode.parentNode.nextSibling.childNodes[celda].firstChild.focus();
+            }
+        }
+    }
+}
+
+function retirarItem(col, id) {
+    var fila = col.parentNode.parentNode;
+    tbDetalleActivos.removeChild(fila);
+    var nFilas = 0;
+    nFilas = tbDetalleActivos.rows.length;
+    spnNroItems.innerHTML = "Items: " + (nFilas);
+}
+
+function validarBajas() {
+    var nfilas = tbDetalleActivos.rows.length;
+
+    if (!validarInformacion("Reque")) {
+        return false;
+    }
+
+    if (nfilas == 0) {
+        mostrarMensaje("Debe agregar items a la Baja", "error");
+        return false;
+    }
+
+    return true;
 }
 
 function asignarValoresActivo(idItem) {
@@ -742,6 +1093,11 @@ function CalcularValorNeto(txtValor, txtDeprecAcumulada) {
     return valor - deprec;
 }
 
+function limpiarListaActivos() {
+    var divListaActivo = document.getElementById("divListaActivo");
+    if (divListaActivo) divListaActivo.innerHTML = '';
+}
+
 function seleccionarControlSelect2(control) {
     var controlSelect = 'select2-' + control.id + '-container';
     var cboControlSelect = document.getElementById(controlSelect);
@@ -762,8 +1118,10 @@ function mostrarGrabar(rpta) {
         divPopupContainer.style.display = 'none';
 
         if (vista == "InventarioInicial" || vista == "Altas") {
-            var divListaActivo = document.getElementById("divListaActivo");
-            if (divListaActivo) divListaActivo.innerHTML = '';
+            limpiarListaActivos();
+            getListar();
+        }
+        else if (vista == "Bajas") {
             getListar();
         }
         else {
@@ -794,6 +1152,12 @@ function mostrarGrabar(rpta) {
         mostrarMensaje("No se realizó el registro", "error")
     }
 
-    btnGuardar.innerHTML = "<i class='fa fa-save'></i> Grabar";
-    btnGuardar.disabled = false;
+    if (vista == "Bajas") {
+        btnGuardarBajas.innerHTML = "<i class='fa fa-save'></i> Grabar";
+        btnGuardarBajas.disabled = false;
+    }
+    else {
+        btnGuardar.innerHTML = "<i class='fa fa-save'></i> Grabar";
+        btnGuardar.disabled = false;
+    }
 }
