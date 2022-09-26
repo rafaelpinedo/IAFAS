@@ -185,9 +185,9 @@ function grabarDatos() {
         var txtAnio = document.getElementById("txtAnio");
         if (txtAnio != null) {
             data += "¯" + txtAnio.value;
-            frm.append("data", data);
-            Http.post("General/guardar/?tbl=" + controller + vista, mostrarGrabar, frm);
         }
+        frm.append("data", data);
+        Http.post("General/guardar/?tbl=" + controller + vista, mostrarGrabar, frm);
     }
 }
 
