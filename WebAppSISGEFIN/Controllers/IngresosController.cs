@@ -54,7 +54,36 @@ namespace WebAppSISGEFIN.Controllers
             return View();
         }
 
+        [FiltroAutenticacion]
+        public ActionResult Recaudacion()
+        {
+            int Anio = DateTime.Now.Year;
+            string[] Data = Session["DataUsuario"].ToString().Split('|');
+            string IdPerfil = Data[3];
+            string Fecha = DateTime.Now.ToShortDateString();
+            ViewBag.FechaInicial = DateTime.Now.Year + "-01-01";
+            ViewBag.Fecha = Convert.ToDateTime(Fecha).ToString("yyyy-MM-dd");
+            ViewBag.Menu = new Menu().Listar(IdPerfil);
+            ViewBag.Anio = Anio;
+            return View();
+        }
 
+        [FiltroAutenticacion]
+        public ActionResult ReciboIngreso()
+        {
+            string[] Data = Session["DataUsuario"].ToString().Split('|');
+            string IdPerfil = Data[3];
+            ViewBag.Menu = new Menu().Listar(IdPerfil);
+            string Fecha = DateTime.Now.ToShortDateString();
+            ViewBag.FechaInicial = DateTime.Now.Year + "-01-01";
+            ViewBag.Fecha = Convert.ToDateTime(Fecha).ToString("yyyy-MM-dd");
+            DateTime nuevaFecha = Convert.ToDateTime(Fecha);
+            nuevaFecha = nuevaFecha.AddDays(-1);
+            ViewBag.FechaAprobacion = Convert.ToDateTime(nuevaFecha).ToString("yyyy-MM-dd");
+            int Anio = DateTime.Now.Year;
+            ViewBag.Anio = Anio;
+            return View();
+        }
 
     }
 }

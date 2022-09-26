@@ -11,11 +11,15 @@ var operacion = 0;
 var listaOficina_VG = [];
 var listaUbigeo = [];
 var listaSubCuentaItem = [];
+var dataImport = "";
+var dataCab = "";
+var dataDeta = "";
 
 window.onload = function () {
     getConfigMn();
     vista = window.sessionStorage.getItem("Vista");
     controller = window.sessionStorage.getItem("Controller");
+    mostrarLoading("divLista");
     getListar();
     configurarBotones();
     configurarCombos();
@@ -130,7 +134,7 @@ function mostrarlistas(rpta) {
             crearCombo(listaEstado, "cboEstado", "Seleccione");
         }
         else {
-              grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
+            grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
         }
     }
 }
@@ -160,21 +164,23 @@ function listarOficinaItem() {
     }
 }
 
-
 function grabarDatos() {
     var data = ""
     var frm = new FormData();
     data = obtenerDatosGrabar("Popup");
-
-    var txtAnio = document.getElementById("txtAnio");
-    if (txtAnio != null) {
-        data += "¯" + txtAnio.value;
+    if (vista == "Recaudacion") {
+        frm.append("data", dataImport);
+        Http.post("General/guardar/?tbl=" + controller + vista, mostrarGrabar, frm);
     }
-
-    frm.append("data", data);
-    Http.post("General/guardar/?tbl=" + controller + vista, mostrarGrabar, frm);
+    else {
+        var txtAnio = document.getElementById("txtAnio");
+        if (txtAnio != null) {
+            data += "¯" + txtAnio.value;
+            frm.append("data", data);
+            Http.post("General/guardar/?tbl=" + controller + vista, mostrarGrabar, frm);
+        }
+    }
 }
-
 
 function obtenerDatosGrabar(clase) {
     var data = "";
@@ -283,7 +289,7 @@ function eliminarRegistro(id) {
 
     var txtAnio = document.getElementById("txtAnio");
     if (txtAnio != null) {
-        data +='|'+ txtAnio.value;
+        data += '|' + txtAnio.value;
     }
     var frm = new FormData();
     frm.append("data", data);
@@ -477,6 +483,33 @@ function listarSelect2Item(lista, idCombo) {
 }
 
 function configurarBotones() {
+    var btnCargarArchivo = document.getElementById("btnCargarArchivo");
+    if (btnCargarArchivo != null) btnCargarArchivo.onclick = function () {
+        divPopupContainer.style.display = 'block';
+        spanPendiente.innerHTML = "";
+    }
+
+    var btnCargarCXC = document.getElementById("btnCargarCXC");
+    if (btnCargarCXC != null) btnCargarCXC.onclick = function () {
+        divPopupContainerForm1.style.display = 'block';
+        fupExcel.value = "";
+        snpnombrearchivo.innerHTML = "Seleccione archivo&hellip;";
+        btnImportarExcel.disabled = false;
+        btnImportarExcel.style.display = 'block';
+        btnImportarExcel.innerHTML = "<i class='fa fa-upload' aria-hidden='true'></i>&nbsp;Importar";
+    }
+
+    var btnImportarExcel = document.getElementById("btnImportarExcel");
+    if (btnImportarExcel != null) btnImportarExcel.onclick = function () {
+        vista = window.sessionStorage.getItem("Vista");
+        /* if (validarDatos()) {*/
+
+        importarExcel("divPopupContainerForm1", "divListaExcel", dataCab, dataDeta);
+        //btnGrabarExterno.style.display = 'block';
+
+        //}
+    }
+
     var btnNuevo = document.getElementById("btnNuevo");
     if (btnNuevo != null) btnNuevo.onclick = function () {
         divPopupContainer.style.display = 'block';
@@ -498,7 +531,7 @@ function configurarBotones() {
             cboEntidad.disabled = true;
         }
 
-       
+
 
         var select2cboPais = document.getElementById("select2-cboPais-container");
         if (select2cboPais != null) select2cboPais.innerHTML = "Seleccione";
@@ -514,7 +547,7 @@ function configurarBotones() {
             $('#dtgEsAgenteRetencion').bootstrapToggle('off')
         }
 
-        
+
 
         var select2cboDepartamento = document.getElementById("select2-cboDepartamento-container");
         if (select2cboDepartamento != null) select2cboDepartamento.innerHTML = "Seleccione";
@@ -528,14 +561,14 @@ function configurarBotones() {
         var select2cboGrado = document.getElementById("select2-cboGrado-container");
         if (select2cboGrado != null) select2cboGrado.innerHTML = "Seleccione";
 
-       
+
         if (vista == "Asegurado") {
             tipoPersonaNatural.style.display = "block";
             tipoPersonaJuridica.style.display = "none";
             tipoPersonaJuridicaRuc.style.display = "none";
             divEstadoSunat.style.display = "none";
             cboTipoDocumento.value = 2;
-            
+
             var cboTipoContribuyente = document.getElementById("cboTipoContribuyente");
             cboTipoContribuyente.value = 1;
             cboTipoContribuyente.disabled = true;
@@ -575,13 +608,9 @@ function configurarBotones() {
 
             let inputs = document.querySelectorAll('.chkTipoPersonaId:checked');
             if (inputs.length == 0) {
-                mostrarMensaje("Seleccionar Tipo de Persona","error")
+                mostrarMensaje("Seleccionar Tipo de Persona", "error")
                 return;
             }
-            // Aquí haces lo que debas hacer con cada checkbox
-            //inputs.forEach(input => {
-            //    console.log(input.value);
-            //});
 
             if (cboTipoContribuyente.value == "1") {
                 document.getElementById("txtNroDocumento").classList.add("Reque");
@@ -590,7 +619,7 @@ function configurarBotones() {
                 document.getElementById("txtNombres").classList.add("Reque");
                 document.getElementById("txtRUC").classList.remove("Reque");
                 document.getElementById("txtRazonSocial").classList.remove("Reque");
-            } 
+            }
             else {
                 document.getElementById("txtRUC").classList.remove("Reque");
                 document.getElementById("txtRazonSocial").classList.remove("Reque");
@@ -599,7 +628,11 @@ function configurarBotones() {
                 document.getElementById("txtApeMaterno").classList.remove("Reque");
                 document.getElementById("txtNombres").classList.remove("Reque");
             }
-           
+        }
+        else if (vista == "Recaudacion") {
+            if (fupExcel.value = "") {
+                mostrarMensaje("Seleccione el archivo excel a importar", "error");
+            }
         }
 
         if (validarInformacion("Reque") == true) {
@@ -616,15 +649,7 @@ function configurarBotones() {
                 cancelButtonText: 'No'
             }).then((result) => {
                 if (result.value) {
-                    //if (vista == "PedidoCompra") {
-                    //    grabarPedido();
-                    //}
-                    //else
-                    //{
-                    //    grabarDatos();
-                    //}
                     grabarDatos();
-
                     Swal.fire({
                         title: 'Procesando...',
                         allowEscapeKey: false,
@@ -636,6 +661,8 @@ function configurarBotones() {
                 }
             })
         }
+
+
     }
 
 
@@ -644,9 +671,14 @@ function configurarBotones() {
         divPopupContainer.style.display = 'none';
     }
 
+    var btnCancelarForm1 = document.getElementById("btnCancelarForm1");
+    if (btnCancelarForm1 != null) btnCancelarForm1.onclick = function () {
+        divPopupContainerForm1.style.display = 'none';
+    }
+
     var btnConsultar = document.getElementById("btnConsultar");
     if (btnConsultar != null) btnConsultar.onclick = function () {
-        getListar(); 
+        getListar();
     }
 }
 
@@ -666,7 +698,7 @@ function configurarConsultas() {
     if (txtDNI != null) {
         txtDNI.onkeyup = function (event) {
             var cboTipoDocumento = document.getElementById("cboTipoDocumento");
-            if (cboTipoDocumento.value == "2" || cboTipoDocumento.value == "4" ) {
+            if (cboTipoDocumento.value == "2" || cboTipoDocumento.value == "4") {
                 if (this.value != "" && this.value.length == 8 || (event.keyCode == 13)) {
                     spnLoadDoc.style.display = 'block';
                     Http.get("General/consultaDniReniec/?dni=" + this.value, mostrarDatosDNI);
@@ -787,7 +819,7 @@ function mostrarDatosDNI(rpta) {
             spnLoadDoc.style.display = 'none';
             spnDniDocumento.innerHTML = "Nro de Documento no encontrado";
             spnDniDocumento.style.color = "red";
-            
+
         }
     }
     else {
@@ -828,28 +860,28 @@ function configurarCombos() {
 
     var cboTipoContribuyente = document.getElementById("cboTipoContribuyente")
     if (cboTipoContribuyente != null) cboTipoContribuyente.onchange = function () {
-       
-         if (cboTipoContribuyente.value == "1") {
+
+        if (cboTipoContribuyente.value == "1") {
             tipoPersonaNatural.style.display = "block";
             tipoPersonaJuridica.style.display = "none";
-             tipoPersonaJuridicaRuc.style.display = "none";
-           //  cboTipoDocumento.value = "";
+            tipoPersonaJuridicaRuc.style.display = "none";
+            //  cboTipoDocumento.value = "";
         }
         else if (cboTipoContribuyente.value == "2") {
             //tipoPersonaNatural.style.display = "none";
             // tipoPersonaJuridica.style.display = "block";
             // tipoPersonaJuridicaRuc.style.display = "block";
 
-             tipoPersonaNatural.style.display = "block";
-             tipoPersonaJuridica.style.display = "none";
-             tipoPersonaJuridicaRuc.style.display = "none";
+            tipoPersonaNatural.style.display = "block";
+            tipoPersonaJuridica.style.display = "none";
+            tipoPersonaJuridicaRuc.style.display = "none";
 
         }
-         else if (cboTipoContribuyente.value == "3") {
+        else if (cboTipoContribuyente.value == "3") {
 
-             tipoPersonaNatural.style.display = "block";
-             tipoPersonaJuridica.style.display = "none";
-             tipoPersonaJuridicaRuc.style.display = "none";
+            tipoPersonaNatural.style.display = "block";
+            tipoPersonaJuridica.style.display = "none";
+            tipoPersonaJuridicaRuc.style.display = "none";
 
             //tipoPersonaNatural.style.display = "block";
             //tipoPersonaJuridicaRuc.style.display = "block";
@@ -886,7 +918,7 @@ function mostrarEliminar(rpta) {
         var mensaje = mensajeResul[1];
         grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, null, botones, 38, false, null);
 
-        
+
 
         if (tipo == 'A') {
             Swal.fire({
@@ -1016,4 +1048,70 @@ function listarSubCuentaItem() {
     if (cbo != null) {
         cbo.innerHTML = contenido;
     }
+}
+
+/*Importar EXCEL*/
+function importarExcel(divForm, divLista, dataCab, dataDeta) {
+    document.getElementById(divForm).style.display = "none";
+    operacion = "1";
+    var cabeceras = "";
+    var detalles = "";
+    var totales = "";
+    var file = fupExcel.files[0];
+    var reader = new FileReader();
+    reader.onload = function (e) {
+        var data = new Uint8Array(reader.result);
+        var libro = XLSX.read(data, { type: 'array' });
+        var nhojas = libro.SheetNames.length;
+        var nombreHoja = libro.SheetNames[0];
+        var hoja = libro.Sheets[nombreHoja];
+        var range = XLSX.utils.decode_range(hoja['!ref']);
+        var contenido = "<table>";
+        contenido += "<tr style='background-color:lightgray;text-align:center'>";
+        contenido += "<td></td>";
+        for (var j = range.s.c; j <= range.e.c; j++) {
+            contenido += "<th>";
+            contenido += String.fromCharCode(65 + j);
+            contenido += "</th>";
+        }
+        contenido += "</tr>";
+        /*Detalle de la importacion*/
+        for (var i = range.s.r; i <= range.e.r; i++) {
+            contenido += "<tr style='background-color:white;text-align:left'>";
+            contenido += "<th style='width:50px;background-color:lightgray'>";
+            contenido += i + 1;
+            contenido += "</th>";
+            //alert(celda.v)
+            for (var j = range.s.c; j <= range.e.c; j++) {
+                contenido += "<td>";
+                var direccion = XLSX.utils.encode_cell({ c: j, r: i });
+                var celda = hoja[direccion];
+                if (celda != null) {
+                    contenido += celda.v;
+                    if (i == 3) {
+                        dataCab += celda.v;
+                        dataCab += "|";
+                    }
+                    if (i > 3) {
+                        dataDeta += celda.v;
+                        dataDeta += "|";
+                    }
+                }
+                contenido += "</td>";
+            }
+            if (i > 0) {
+                dataCab = dataCab.substr(0, dataCab.length - 1);
+                dataCab += "¬";
+                dataDeta = dataDeta.substr(0, dataDeta.length - 1);
+                dataDeta += "¬";
+            }
+            contenido += "</tr>";
+        }
+        dataCab = dataCab.substr(0, dataCab.length - 1);
+        dataDeta = dataDeta.substr(0, dataDeta.length - 1);
+        dataImport = dataCab + '¯' + dataDeta;
+        contenido += "<table>";
+        document.getElementById(divLista).innerHTML = contenido;
+    }
+    reader.readAsArrayBuffer(file);
 }
