@@ -1252,3 +1252,4 @@ function GrillaScroll(lista, divGrilla, registrosPagina, paginasBloque, tabla, c
         return fila;
     }
 }
+

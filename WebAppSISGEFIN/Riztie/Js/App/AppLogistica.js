@@ -1157,7 +1157,7 @@ function configurarBotones() {
         }
         else if (vista == "Asigpre") {
             if (cboFteFto.value == "") {
-                mostrarMensaje("Seleccione Fuente Financiamiento", "error");
+                mostrarMensaje("Seleccione Plan de Salud", "error");
             }
             else {
                 validar = true;
@@ -4819,7 +4819,7 @@ function validarOrdenCompra() {
 
     }
     else if (idFteFto == "") {
-        mostrarMensaje("Seleccione Fuente Financimiento", "error");
+        mostrarMensaje("Seleccione Plan de Salud", "error");
         cboFteFto.focus();
         return false;
 
@@ -5115,7 +5115,7 @@ function seleccionarFilaItem(fila, id) {
     }
     else if (idFteFto == "") {
         cboFteFto.focus();
-        mostrarMensaje("Seleccione Fuente Financimiento", "error");
+        mostrarMensaje("Seleccione Plan de Salud", "error");
         return false;
     }
     else {
@@ -5163,7 +5163,7 @@ function grabarPeriodo() {
     }
     else if (idFteFto == "") {
         cboFteFto.focus();
-        mostrarMensaje("Seleccione Fuente Financimiento", "error");
+        mostrarMensaje("Seleccione Plan de Salud", "error");
         return false;
     }
     var data = "";
