@@ -142,6 +142,16 @@ function mostrarlistas(rpta) {
             crearCombo(listaEstado, "cboEstado", "Seleccione");
             crearCombo(listaEntidad, "cboEntidadFinanciera", "Seleccione");
         }
+        else if (vista == "Recaudacion") {
+            var listaEntidad = listas[1].split("¬");
+            var listaEstado = listas[2].split("¬");
+            var listaTotal = listas[3].split("¬");
+            grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
+            crearCombo(listaEntidad, "cboEntidadFinanciera", "Seleccione");
+            crearCombo(listaEstado, "cboEstado", "Seleccione");
+            spnTotalRecaudacion.innerText = formatoNumeroDecimal(listaTotal[0]);
+        }
+
         else {
             grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
         }
@@ -178,6 +188,12 @@ function grabarDatos() {
     var frm = new FormData();
     data = obtenerDatosGrabar("Popup");
     if (vista == "Recaudacion") {
+
+        var txtAnio = document.getElementById("txtAnio");
+        if (txtAnio != null) {
+            dataImport += "¯" + txtAnio.value;
+        }
+
         frm.append("data", dataImport);
         Http.post("General/guardar/?tbl=" + controller + vista, mostrarGrabar, frm);
     }
@@ -244,6 +260,10 @@ function mostrarGrabar(rpta) {
         divPopupContainer.style.display = 'none';
         grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
 
+        if (vista == "Recaudacion") {
+            var listaTotal = listas[2].split("¬");
+            spnTotalRecaudacion.innerText = formatoNumeroDecimal(listaTotal[0]);
+        }
 
         if (tipo == 'A') {
             Swal.fire({
@@ -414,6 +434,33 @@ function mostrarRegistro(rpta) {
             cboEstado.value = campos[6];
         }
 
+        else if (vista == "Recaudacion") {
+            console.log(rpta)
+            //divListaExcel
+            
+            importarDataExcel.style.display = 'none';
+            btnGuardar.style.display = 'none';
+            vizualizar.style.display = 'block';
+            divListaExcel.innerHTML = "";
+            titleModal.innerText = "Vizualizar Recaudación";
+            var listas = rpta.split("¯");
+            var lista = listas[1].split("¬");
+            var campos = listas[0].split("|");
+
+            grillaItemLista = new GrillaScroll(lista, "divListaExcel", 100, 6, vista, controller, null, null, true, null, 38, false, null);
+
+            txtIdRegistro.value = campos[0];
+            txtAnioEjecucion.value = campos[1];
+            cboEntidadFinanciera.value = campos[2];
+            txtCodigo.value = campos[3];
+            txtTotal.value = campos[4];
+            txtArchivo.value = campos[5];
+            txtFechaAbono.value = campos[6];
+            cboEstado.value = campos[7];
+            console.log(campos[7], campos[6]);
+           
+        }
+
 
         var divPopupContainer = document.getElementById("divPopupContainer");
         if (divPopupContainer != null) { divPopupContainer.style.display = 'block'; };
@@ -494,7 +541,12 @@ function listarSelect2Item(lista, idCombo) {
 function configurarBotones() {
     var btnCargarArchivo = document.getElementById("btnCargarArchivo");
     if (btnCargarArchivo != null) btnCargarArchivo.onclick = function () {
+        titleModal.innerText = "Importar Archivo Excel";
         divPopupContainer.style.display = 'block';
+        importarDataExcel.style.display = 'block';
+        btnGuardar.style.display = 'block';
+        vizualizar.style.display = 'none';
+        divListaExcel.innerHTML = "";
         spanPendiente.innerHTML = "";
     }
 
@@ -688,6 +740,51 @@ function configurarBotones() {
     var btnConsultar = document.getElementById("btnConsultar");
     if (btnConsultar != null) btnConsultar.onclick = function () {
         getListar();
+    }
+
+    var btnAprobar = document.getElementById("btnAprobar");
+    if (btnAprobar != null) btnAprobar.onclick = function () {
+        let validar = false;
+        var data = "";
+        if (vista == "Recaudacion") {
+            if (txtIdRegistro.value == "") {
+                mostrarMensaje("Seleccione una recaudación Valida", "error");
+            }
+            else {
+                validar = true;
+                data = txtIdRegistro.value;
+            }
+        }
+
+        if (validar == true) {
+            
+            var txtAnio = document.getElementById("txtAnio");
+            if (txtAnio != null) {
+                data += '|' + txtAnio.value;
+            }
+
+            var frm = new FormData();
+            frm.append("data", data);
+
+            Swal.fire({
+                title: '¿Desea aprobar recaudación?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Si',
+                cancelButtonText: 'No'
+            }).then((result) => {
+                if (result.value) {
+                    Http.post("General/guardar/?tbl=" + controller + vista+'Aprobar', mostrarGrabar, frm);
+                }
+            })
+
+        }
+
+
+        //divPopupContainerForm1.style.display = 'block';
+        //fupExcel.value = "";
     }
 }
 
@@ -927,7 +1024,10 @@ function mostrarEliminar(rpta) {
         var mensaje = mensajeResul[1];
         grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, null, botones, 38, false, null);
 
-
+        if (vista == "Recaudacion") {
+            var listaTotal = listas[2].split("¬");
+            spnTotalRecaudacion.innerText = formatoNumeroDecimal(listaTotal[0]);
+        }
 
         if (tipo == 'A') {
             Swal.fire({
@@ -1070,11 +1170,15 @@ function importarExcel(divForm, divLista, dataCab, dataDeta) {
     var reader = new FileReader();
     reader.onload = function (e) {
         var data = new Uint8Array(reader.result);
-        var libro = XLSX.read(data, { type: 'array' });
+       // var libro = XLSX.read(data, { type: 'array', cellDates: false });
+        var libro = XLSX.read(data, { type: 'array',cellDates: true,dateNF:'dd/mm/yyyy' });
         var nhojas = libro.SheetNames.length;
         var nombreHoja = libro.SheetNames[0];
         var hoja = libro.Sheets[nombreHoja];
         var range = XLSX.utils.decode_range(hoja['!ref']);
+        //*************
+    
+        console.log(hoja);
         var contenido = "<table>";
         contenido += "<tr style='background-color:lightgray;text-align:center'>";
         contenido += "<td></td>";
@@ -1085,6 +1189,7 @@ function importarExcel(divForm, divLista, dataCab, dataDeta) {
         }
         contenido += "</tr>";
         /*Detalle de la importacion*/
+        //e:{ c: 37, r: 9 }
         for (var i = range.s.r; i <= range.e.r; i++) {
             contenido += "<tr style='background-color:white;text-align:left'>";
             contenido += "<th style='width:50px;background-color:lightgray'>";
@@ -1094,16 +1199,43 @@ function importarExcel(divForm, divLista, dataCab, dataDeta) {
             for (var j = range.s.c; j <= range.e.c; j++) {
                 contenido += "<td>";
                 var direccion = XLSX.utils.encode_cell({ c: j, r: i });
+                let direc = direccion.charAt(0);
                 var celda = hoja[direccion];
+                
                 if (celda != null) {
-                    contenido += celda.v;
+                   // contenido += celda.v;
+                    if (i < 3) {
+                        contenido += celda.v;
+                    }
+
                     if (i == 3) {
-                        dataCab += celda.v;
-                        dataCab += "|";
+                        if (direc == "D" || direc == "S" || direc == "Z") {
+                            dataCab += celda.w;
+                            dataCab += "|";
+                           //imprimir contenido
+                            contenido += celda.w;
+                        }
+                        else {
+                            dataCab += celda.v;
+                            dataCab += "|";
+                           //imprimir contenido
+                            contenido += celda.v;
+                        }
                     }
                     if (i > 3) {
-                        dataDeta += celda.v;
-                        dataDeta += "|";
+                        
+                        if (direc == "D" || direc == "S" || direc == "Z") {
+                            dataDeta += celda.w;
+                            dataDeta += "|";
+                            //imprimir contenido
+                            contenido += celda.w;
+                        }
+                        else {
+                            dataDeta += celda.v;
+                            dataDeta += "|";
+                            //imprimir contenido
+                            contenido += celda.v;
+                        }
                     }
                 }
                 contenido += "</td>";
@@ -1116,11 +1248,32 @@ function importarExcel(divForm, divLista, dataCab, dataDeta) {
             }
             contenido += "</tr>";
         }
+        //****** dataDebe Eliminar ultimo caracter
         dataCab = dataCab.substr(0, dataCab.length - 1);
+        dataCab = dataCab.slice(1, -1);
+         //****** dataHaber Eliminar ultimo y primer  caracter
         dataDeta = dataDeta.substr(0, dataDeta.length - 1);
-        dataImport = dataCab + '¯' + dataDeta;
+        dataDeta = dataDeta.slice(1, -1);
+    
+        dataImport = dataCab + '¯' + dataDeta + '¯' + file.name;
         contenido += "<table>";
         document.getElementById(divLista).innerHTML = contenido;
     }
     reader.readAsArrayBuffer(file);
+}
+
+function numeroAFecha(numeroDeDias, esExcel = false) {
+    var diasDesde1900 = esExcel ? 25567 + 1 : 25567;
+    // 86400 es el número de segundos en un día, luego multiplicamos por 1000 para obtener milisegundos.
+   /* return new Date((numeroDeDias - diasDesde1900) * 86400 * 1000);*/
+    let date= new Date((numeroDeDias - diasDesde1900) * 86400 * 1000);
+    //result = date.toLocaleString();
+    //return result;
+    //let formatted_date = date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear()
+    let dia = ("0" + date.getDate()).slice(-2);
+    let mes = ("0" + (date.getMonth() + 1)).slice(-2);
+    let anio = date.getFullYear();
+    let  formatted_date = dia + "/" + mes + "/" + anio;
+    console.log(formatted_date);
+     return formatted_date;
 }

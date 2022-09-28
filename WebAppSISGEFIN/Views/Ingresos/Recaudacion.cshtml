@@ -13,14 +13,16 @@
                     <div class="row">
                         <div class="form-group col-sm-3">
                             <label class="control-label">Periodo</label>
-                            <input type="number" id="txtPeriodoCons" class="control-form PopupCons" value="@ViewBag.Anio">
+                            <input type="number" id="txtAnio" class="control-form PopupCons" value="@ViewBag.Anio">
                         </div>
-                        <div class="form-group col-sm-5 m-2">
+                        <div class="form-group col-sm-3 m-2">
                             <button class="input-group-inverse btn btn-inverse" id="btnConsultar" data-toggle="tooltip" data-placement="bottom" title="Consultar"><i class="fa fa-search fa-lg" aria-hidden="true"></i></button>
                             <button class="btn btn-out waves-effect waves-light btn-primary btn-square" id="btnCargarArchivo" data-toggle="tooltip" data-placement="bottom" title="Subir archivo Excel"><i class="fa fa-cloud-upload fa-lg" aria-hidden="true"></i> Cargar Excel</button>
                         </div>
-                        <div class="form-group col-sm-3">
-                            <label class="control-label">Total</label>
+                        <div class="row col-sm-1" style="text-align:left">
+                            <span style="color: black; font-weight: bold; font-size: 17px;margin-top: 10px;">Total S/.</span>
+                        </div>
+                        <div class="row col-sm-4">
                             <span id="spnTotalRecaudacion" style="color:red;font-weight:bold;font-size:30px;text-align:right"></span>
                         </div>
                     </div>
@@ -34,10 +36,10 @@
                             <div class="modal-dialog modal-xl bg-personalizado" id="divPopupWindow">
                                 <div class="modal-content">
                                     <div id="divBarra" class="modal-header bg-personalizado" style="cursor:move;">
-                                        <h5 class="modal-title">Importar Archivo Excel</h5>
+                                        <h5 id="titleModal" class="modal-title">Importar Archivo Excel</h5>
                                     </div>
                                     <div id="divCuerpo" class="modal-body">
-                                        <div class="form-row">
+                                        <div class="form-row" id="importarDataExcel">
                                             <div class="col-sm-12">
                                                 <button class="btn btn-warning" id="btnLimpiar" title="Limpiar"><i class="fa fa-paint-brush" aria-hidden="true"></i>&nbsp;Limpiar</button>
                                                 <button class="btn btn-info" id="btnCargarCXC" title="Cargar"><i class="fa fa-upload" aria-hidden="true"></i>&nbsp;Cargar</button>
@@ -45,9 +47,55 @@
                                             </div>
                                         </div>
                                         <br />
-                                        <div class="form-row" style="height:500px;overflow-y:auto;">
+
+                                        <div id="vizualizar">
+                                            <div class="row">
+                                                <div class="form-group col-sm-2">
+                                                    <input type="hidden" class="control-form" id="txtIdRegistro">
+                                                    <label class="control-label">Año Fiscal</label>
+                                                    <input type="number" class="control-form" id="txtAnioEjecucion">
+                                                </div>
+
+                                                <div class="form-group col-sm-4">
+                                                    <label class="control-label">Entidad Financiera</label>
+                                                    <select id="cboEntidadFinanciera" class="control-form"></select>
+                                                </div>
+                                                <div class="form-group col-sm-2">
+                                                    <label class="control-label">Codigo</label>
+                                                    <input type="number" class="control-form" id="txtCodigo">
+                                                </div>
+                                                <div class="form-group col-sm-2">
+                                                    <label class="control-label">Fecha Abono</label>
+                                                    <input type="date" id="txtFechaAbono" autocomplete="off" class="control-form" />
+                                                </div>
+
+                                                <div class="form-group col-sm-2">
+                                                    <button class="btn btn-out waves-effect waves-light btn-success btn-square" id="btnAprobar" data-toggle="tooltip" data-placement="bottom" title="Aprobar Recaudación"><i class="fa fa-thumbs-up fa-lg" aria-hidden="true"></i>Aprobar</button>
+                                                </div>
+
+                                            </div>
+                                            <div class="row">
+                                                <div class="form-group col-sm-3">
+                                                    <label class="control-label">Total</label>
+                                                    <input type="text" class="control-form" id="txtTotal">
+                                                </div>
+                                                <div class="form-group col-sm-3">
+                                                    <label class="control-label">Estado</label>
+                                                    <select id="cboEstado" class="control-form"></select>
+                                                </div>
+                                                <div class="form-group col-sm-4">
+                                                    <label class="control-label">Nombre de Archivo</label>
+                                                    <input type="text" class="control-form" id="txtArchivo">
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="form-row" style="height:350px;overflow-y:auto;">
                                             <div class="table-responsive" id="divListaExcel"></div>
                                         </div>
+
+
                                     </div>
                                     <div class="modal-footer">
                                         <button class="btnCancelarForm" id="btnCancelar" title="Cancelar"><i class="fa fa-undo" aria-hidden="true"></i>&nbsp;Cancelar</button>
