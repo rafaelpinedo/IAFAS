@@ -151,6 +151,21 @@ function mostrarlistas(rpta) {
             crearCombo(listaEstado, "cboEstado", "Seleccione");
             spnTotalRecaudacion.innerText = formatoNumeroDecimal(listaTotal[0]);
         }
+        else if (vista == "ReciboIngreso") {
+            var listaFormatoDoc = listas[1].split("¬");
+            var listaLineaIngre = listas[2].split("¬");
+            var listaEntidadFin = listas[3].split("¬");
+            var listaMoneda = listas[4].split("¬");
+            var listaEstado = listas[5].split("¬");
+            var listaTotal = listas[6].split("¬");
+            grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
+            crearCombo(listaFormatoDoc, "cboFormatoDoc", "Seleccione");
+            crearCombo(listaLineaIngre, "cboLineaIngreso", "Seleccione");
+            crearCombo(listaEntidadFin, "cboEntidadFinanciera", "Seleccione");
+            crearCombo(listaMoneda, "cboMoneda", "Seleccione");
+            crearCombo(listaEstado, "cboEstado", "Seleccione");
+            spnTotalIngresos.innerText = formatoNumeroDecimal(listaTotal[0]);
+        }
 
         else {
             grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
@@ -263,6 +278,10 @@ function mostrarGrabar(rpta) {
         if (vista == "Recaudacion") {
             var listaTotal = listas[2].split("¬");
             spnTotalRecaudacion.innerText = formatoNumeroDecimal(listaTotal[0]);
+        }
+        else if (vista == "ReciboIngreso") {
+            var listaTotal = listas[2].split("¬");
+            spnTotalIngresos.innerText = formatoNumeroDecimal(listaTotal[0]);
         }
 
         if (tipo == 'A') {
@@ -592,6 +611,15 @@ function configurarBotones() {
             cboEntidad.disabled = true;
         }
 
+        var cboFormatoDoc = document.getElementById("cboFormatoDoc");
+        if (cboFormatoDoc != null) {
+            cboFormatoDoc.value = 9;
+        }
+        var cboMoneda = document.getElementById("cboMoneda");
+        if (cboMoneda != null) {
+            cboMoneda.value = 1;
+        }
+
 
 
         var select2cboPais = document.getElementById("select2-cboPais-container");
@@ -658,6 +686,12 @@ function configurarBotones() {
         if (txtAnofiscal != null) {
             var anio = txtAnofiscal.getAttribute('value');
             txtAnofiscal.value = anio;
+        }
+
+        var dttFechaEmision = document.getElementById("dttFechaEmision");
+        if (dttFechaEmision != null) {
+            var fechaHoy = dttFechaEmision.getAttribute('value');
+            dttFechaEmision.value = fechaHoy;
         }
     }
 
@@ -781,11 +815,60 @@ function configurarBotones() {
             })
 
         }
-
-
-        //divPopupContainerForm1.style.display = 'block';
-        //fupExcel.value = "";
     }
+
+    var btnPendiente = document.getElementById("btnPendiente");
+    if (btnPendiente != null) btnPendiente.onclick = function () {
+        if (vista == "ReciboIngreso") {
+            spnLoadData.style.display = "block";
+            listaLoadItem.style.display = 'none';
+            let data = '';
+            Http.get("General/listarTabla?tbl=" + controller + vista + "Pendientes" + "&data=" + data, function (response) {
+                if (response) {
+                    console.log(response);
+                    var listas = response.split("¯");
+                    var lista = listas[0].split("¬");
+                    grillaItem = new GrillaScroll(lista, "divListaRecaudacion", 100, 6, vista, controller, null, null, true, null, 38, false, null);
+                    spnLoadData.style.display = "none";
+                    listaLoadItem.style.display = 'block';
+                }
+            });
+            divPopupContainerForm1.style.display = 'block';
+        } 
+    }
+
+    var btnGenerarRI = document.getElementById("btnGenerarRI");
+    if (btnGenerarRI != null) btnGenerarRI.onclick = function () {
+        let data = "";
+        if (vista == "ReciboIngreso") {
+            if (idRegistro == "") {
+                mostrarMensaje("Seleccione registro de la lista", "error");
+            }
+            else {
+                console.log(idRegistro);
+                data = idRegistro + '¯' + txtFechaInicio.value + '|' + txtFechaFinal.value;
+                var frm = new FormData();
+                frm.append("data", data);
+
+                Swal.fire({
+                    title: '¿Desea generar recibo de ingreso?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Si',
+                    cancelButtonText: 'No'
+                }).then((result) => {
+                    if (result.value) {
+                        divPopupContainerForm1.style.display="none";
+                        Http.post("General/guardar/?tbl=" + controller + vista + 'Pendientes', mostrarGrabar, frm);
+                    }
+                })
+            }
+        }
+    }
+
+    
 }
 
 function configurarConsultas() {
@@ -1204,7 +1287,7 @@ function importarExcel(divForm, divLista, dataCab, dataDeta) {
                 
                 if (celda != null) {
                    // contenido += celda.v;
-                    if (i < 3) {
+                    if (i == 0 || i==2) {
                         contenido += celda.v;
                     }
 

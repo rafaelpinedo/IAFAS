@@ -24,7 +24,7 @@
                             <label class="control-label">Fecha Final</label>
                             <input type="date" id="txtFechaFinal" class="control-form" value="@ViewBag.Fecha">
                         </div>
-                        <div class="form-group col-md-4 m-3">
+                        <div class="form-group col-sm-4 m-3">
                             <button class="input-group-inverse btn btn-inverse" id="btnConsultar" data-toggle="tooltip" data-placement="bottom" title="Consultar"><i class="fa fa-search fa-lg" aria-hidden="true"></i></button>
                             <button class="input-group-inverse btn btn-primary" id="btnNuevo" data-toggle="tooltip" data-placement="bottom" title="Nuevo"><i class="fa fa-plus-circle fa-lg" aria-hidden="true"></i></button>
                             <button class="btn btn-out waves-effect waves-light btn-primary btn-square" id="btnPendiente" data-toggle="tooltip" data-placement="bottom" title="Recibo de Caja pendientes"><i class="fa fa-paypal fa-lg" aria-hidden="true"></i></button>
@@ -32,33 +32,133 @@
                             <button class="btn btn-out waves-effect waves-light btn-success btn-square" id="btnAprobar" data-toggle="tooltip" data-placement="bottom" title="Aprobar Recibo Ingreso"><i class="fa fa-thumbs-up fa-lg" aria-hidden="true"></i></button>
                             <button class="btn btn-out waves-effect waves-light btn-danger btn-square" id="btnEliminarRecibo" data-toggle="tooltip" data-placement="bottom" title="Eliminar Recibo de Ingreso"><i class="fa fa-trash fa-lg" aria-hidden="true"></i></button>
                         </div>
-                        <div class="form-group col-lg-3">
+                        <div class="form-group col-sm-3">
                             <span style="color:black;font-weight:bold;font-size:30px;text-align:right">Total: </span>
                             <span id="spnTotalIngresos" style="color:red;font-weight:bold;font-size:30px;text-align:right"></span>
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group col-md-12">
-                            <div class="table-responsive dt-responsive" id="lista" style="height: 400px;overflow-y: auto;"></div>
+                            <div class="table-responsive dt-responsive" id="divLista" @*style="height: 400px;overflow-y: auto;"*@></div>
                         </div>
                     </div>
-                    @*<div class="form-row">
-                            <div class="form-group col-sm-6">
-                                <strong> <span id="spnTotalRegistros">Nro. Registros: 0</span></strong>
+
+                    <div class="form-row">
+                        <div class="modal custom-modal" tabindex="-1" role="dialog" aria-hidden="true" id="divPopupContainer" style="overflow-y:auto;">
+                            <div class="modal-dialog modal-xl bg-personalizado" id="divPopupWindow" style="margin-top:30px;">
+                                <div class="modal-content">
+                                    <div id="divBarra" class="modal-header bg-personalizado" style="cursor:move">
+                                        <h5 class="modal-title" id="tituloModal">Nuevo Registro</h5>
+                                    </div>
+                                    <div class="modal-body">
+                                        <fieldset class="fieldset">
+                                            <div class="row">
+                                                <div class="form-group col-sm-4">
+                                                    <input type="hidden" class="control-form Popup" id="txtIdRegistro">
+                                                    <label class="control-label">Formato de Documento</label>
+                                                    <select id="cboFormatoDoc" class="control-form Reque Popup"></select>
+                                                </div>
+                                                <div class="form-group col-sm-2">
+                                                    <label class="control-label">Numero</label>
+                                                    <input type="text" autocomplete="off" class="control-lectura Popup" maxlength="30" id="txtNumero">
+                                                </div>
+                                                <div class="form-group col-sm-2">
+                                                    <label class="control-label">Fecha Emisión</label>
+                                                    <input type="date" id="dttFechaEmision" class="control-form" value="@ViewBag.Fecha">
+                                                </div>
+                                                <div class="form-group col-sm-3">
+                                                    <label class="control-label">Total</label>
+                                                    <input type="text" autocomplete="off" class="control-lectura Popup" maxlength="30" id="txtTotal">
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="form-group col-sm-4">
+                                                    <label class="control-label">Linea de Ingreso</label>
+                                                    <select id="cboLineaIngreso" class="control-form Reque Popup"></select>
+                                                </div>
+                                                <div class="form-group col-sm-4">
+                                                    <label class="control-label">Entidad Finaciera</label>
+                                                    <select id="cboEntidadFinanciera" class="control-form Reque Popup"></select>
+                                                </div>
+                                                <div class="form-group col-sm-2">
+                                                    <label class="control-label">Moneda</label>
+                                                    <select id="cboMoneda" class="control-form Reque Popup"></select>
+                                                </div>
+                                                 
+                                                <div class="form-group col-sm-2">
+                                                    <label class="control-label">Estado</label>
+                                                    <select id="cboEstado" class="control-lectura Reque Popup"></select>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="form-group col-sm-8">
+                                                    <label class="control-label">Concepto</label>
+                                                    <input type="text" autocomplete="off" class="control-form Reque Popup" maxlength="30" id="txtConcepto">
+                                                </div>
+                                                <div class="form-group col-sm-2">
+                                                    <label class="control-label">Importe</label>
+                                                    <input type="text" autocomplete="off" class="control-form Reque Popup text-center" maxlength="30" id="txtImporte" onkeypress="return doubleCheck(event, this)">
+                                                </div>
+                                                @*<div class="form-group col-sm-1">
+            <label class="control-label">&nbsp;&nbsp;&nbsp;</label>
+            <button class="input-group-inverse btn btn-primary btn-sm" id="btnAgregarItem" data-toggle="tooltip" data-placement="bottom" title="Agregar Item"><i class="fa fa-plus-circle fa-lg" aria-hidden="true"></i></button>
+        </div>*@
+                                            </div>
+                                            <hr style="margin-bottom: 1px;margin-top: 1px;">
+                                            <div class="row">
+                                                <div class="form-group col-sm-2">
+                                                    <label class="control-label">DNI</label>
+                                                    <input type="text" autocomplete="off" class="control-form Reque Popup" maxlength="15" id="txtDni">
+                                                </div>
+                                                <div class="form-group col-sm-6">
+                                                    <label class="control-label">Nombre Completo</label>
+                                                    <input type="text" autocomplete="off" class="control-form Reque Popup" maxlength="30" id="txtNombreCompleto">
+                                                </div>
+                                            </div>
+
+                                        </fieldset>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button id="btnCancelar" class="btnCancelarForm" title="Cancelar"><i class="fa fa-undo" aria-hidden="true"></i>&nbsp;Cancelar</button>
+                                        <button id="btnGuardar" class="btnGuardarForm bg-customer" title="Guardar datos"><span class="fa fa-save"></span>&nbsp;Grabar</button>
+                                    </div>
+                                </div>
                             </div>
-                        </div>*@
-                    <div class="form-row">
-                        <div class="form-group col-md-6">
-                            <hr />
-                            <h4>CUADRO RESUMEN</h4>
-                            <hr />
                         </div>
                     </div>
+
                     <div class="form-row">
-                        <div class="form-group col-md-6">
-                            <div class="table-responsive" id="listaResumen"></div>
+                        <div class="modal custom-modal" tabindex="-1" role="dialog" aria-hidden="true" id="divPopupContainerForm1" style="overflow-y:auto;">
+                            <div class="modal-dialog modal-lg bg-personalizado" id="divPopupWindowForm1" style="margin-top:30px;">
+                                <div class="modal-content">
+                                    <div id="divBarraForm1" class="modal-header bg-personalizado" style="cursor:move">
+                                        <h5 class="modal-title" id="nombreComision">Recibo de Recaudación</h5>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="row">
+                                            <div class="form-group col-md-12 text-center" id="spnLoadData" style="display:none">
+                                                <span style="color: #ff5252; border-color: black; font-weight: bold; ">
+                                                    <b>Procesando información  ..</b>
+                                                    <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
+                                                </span>
+                                            </div>
+                                            <div class="form-group col-sm-12" id="listaLoadItem" style="display:none">
+                                                <div class="table-responsive dt-responsive" id="divListaRecaudacion" style="height: 400px;overflow-y: auto;"></div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button id="btnCancelarForm1" class="btnCancelarForm" title="Cancelar"><i class="fa fa-undo" aria-hidden="true"></i>&nbsp;Cancelar</button>
+                                        <button class="btnGuardarForm bg-customer" id="btnGenerarRI" title="Guardar"><span class="fa fa-money"></span>&nbsp;Generar RI</button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
+
                     <div class="form-row">
                         <div class="modal custom-modal" tabindex="-1" role="dialog" aria-hidden="true" id="divPopupContainerPendientes" style="overflow-y:auto;">
                             <div class="modal-dialog modal-xl bg-personalizado" id="divPopupWindowPendientes">
@@ -86,6 +186,7 @@
                                 </div>
                             </div>
                         </div>
+
                         <div class="modal custom-modal" tabindex="-1" role="dialog" aria-hidden="true" id="divPopupContainerImportar" style="overflow-y:auto;">
                             <div class="modal-dialog bg-personalizado" id="divPopupWindowImportar">
                                 <div class="modal-content">
@@ -96,7 +197,7 @@
                                     <div id="divCuerpo" class="modal-body">
                                         <div class="form-row">
                                             <div class="col-sm-12" style="text-align:center">
-                                                <input type="file" id="fupExcel" class="inputfile inputfile-5 Popup Requerido" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel,text/comma-separated-values, text/csv, application/csv,text/plain" data-msg="Archivo a importar" data-multiple-caption="{count} files selected" multiple />
+                                                <input type="file" id="fupExcel" class="inputfile inputfile-5 Requerido" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel,text/comma-separated-values, text/csv, application/csv,text/plain" data-msg="Archivo a importar" data-multiple-caption="{count} files selected" multiple />
                                                 <label for="fupExcel">
                                                     <figure><svg xmlns="http://www.w3.org/2000/svg" width="20" height="17" viewBox="0 0 20 17"><path d="M10 0l-5.2 4.9h3.3v5.1h3.8v-5.1h3.3l-5.2-4.9zm9.3 11.5l-3.2-2.1h-2l3.4 2.6h-3.5c-.1 0-.2.1-.2.1l-.8 2.3h-6l-.8-2.2c-.1-.1-.1-.2-.2-.2h-3.6l3.4-2.6h-2l-3.2 2.1c-.4.3-.7 1-.6 1.5l.6 3.1c.1.5.7.9 1.2.9h16.3c.6 0 1.1-.4 1.3-.9l.6-3.1c.1-.5-.2-1.2-.7-1.5z" /></svg></figure>
                                                     <span id="snpnombrearchivo">Seleccione archivo&hellip;</span>
