@@ -952,6 +952,22 @@ function configurarBotones() {
             divPopupContainerForm2.style.display = 'none';
         }
     }
+
+    var btnImprimir = document.getElementById("btnImprimir");
+    if (btnImprimir != null) btnImprimir.onclick = function () {
+        if (idRegistro == "") {
+            mostrarMensaje("Seleccione registro de la lista", "error");
+        }
+        else {
+            console.log(idRegistro);
+            divPopupContainerForm3.style.display = "block";
+          //  getReporte(idRegistro);
+        }
+    }
+}
+
+function getReporte(id) {
+    Http.get("General/obtenerReporteId/?tbl=" + controller + vista + '&id=' + id, mostrarReporte);
 }
 
 function configurarConsultas() {
