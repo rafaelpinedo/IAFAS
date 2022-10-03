@@ -184,6 +184,23 @@ function validarNumeros(clase) {
 function navegar(url) {
     var urlBase = window.localStorage.getItem("urlBase");
     window.location.href = urlBase + url;
+
+    //Http.get("General/consultaTipoCambioSunat/?data=datos", function (response) {
+    //    if (response) {
+    //        localStorage.setItem("tipoCambio", response);
+    //        //var campos = response.split("|");
+    //        //var tipoComp = document.getElementById("tipoComp");
+    //        //var tipoVenta = document.getElementById("tipoVenta");
+    //        //if (tipoComp != null) {
+    //        //    tipoComp.innerText = "Tipo Compra :" + campos[1];
+    //        //}
+
+    //        //if (tipoVenta != null) {
+    //        //    tipoVenta.innerText = "Tipo Venta :" + campos[2];
+    //        //}
+    //        //mostarTipoCambio(response);
+    //    }
+    //});
 }
 
 function obtenerVista(control, vista, controller) {
@@ -397,6 +414,59 @@ function getConfigMn() {
 
     var subme = window.sessionStorage.getItem("subme");
     document.getElementById(subme).classList.add("active");
+    //consulta sunat
+    Http.get("General/consultaTipoCambioSunat/?data=datos", mostarTipoCambio);
+}
+
+function mostarTipoCambio(rpta) {
+    if (rpta) {
+        var tipoCambioSunat = window.localStorage.getItem("tipoCambio");
+      
+        var data = "";
+        var frm = new FormData();
+
+        var camposAnterior = tipoCambioSunat.split("|");
+        var campos = rpta.split("|");
+
+        var tipoComp = document.getElementById("tipoComp");
+        var tipoVenta = document.getElementById("tipoVenta");
+      
+        if (tipoComp != null) {
+            tipoComp.innerText = "Tipo Compra :" + campos[1];
+        }
+        if (tipoVenta != null) {
+            tipoVenta.innerText = "Tipo Venta :" + campos[2];
+        }
+
+
+        if (camposAnterior[0] == campos[0]) {
+            if (camposAnterior[1] != campos[1]) {
+                //insert bd
+                frm.append("data", rpta);
+                Http.post("General/guardar/?tbl=" + "TipoCambioSunat", actualizarTipoCambio, frm);
+            }
+            else if (camposAnterior[2] != campos[2]) {
+                //insertar bd
+                frm.append("data", rpta);
+                Http.post("General/guardar/?tbl=" + "TipoCambioSunat", actualizarTipoCambio, frm);
+            }
+        }
+        else {
+            //insertar
+            frm.append("data", rpta);
+            Http.post("General/guardar/?tbl=" + "TipoCambioSunat", actualizarTipoCambio, frm);
+        }
+        //console.log(tipoCambioSunat);
+        //console.log(rpta);
+      //  localStorage.setItem("tipoCambio", rpta);
+    }
+}
+
+function actualizarTipoCambio(rpta) {
+    if (rpta) {
+        localStorage.setItem("tipoCambio", rpta);
+        console.log(rpta);
+    }
 }
 
 //function getConfigMn() {

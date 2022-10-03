@@ -28,7 +28,10 @@ function mostrarValidar(rpta) {
         if (campos[1] != null) {
             localStorage.setItem("Cliente", campos[2]);
             localStorage.setItem("Foto", campos[6]);
+            localStorage.setItem("tipoCambio", "||");
             navegar("General/Inicio");
+
+            
         }
         else {
             mostrarMensaje(rpta, "error");

@@ -169,6 +169,10 @@ function mostrarlistas(rpta) {
             crearCombo(listaMoneda, "cboMoneda", "Seleccione");
             crearCombo(listaEstado, "cboEstado", "Seleccione");
             spnTotalIngresos.innerText = formatoNumeroDecimal(listaTotal[0]);
+
+            //Http.get("General/consultaTipoCambioSunat/?data=data1", reqListener);
+            //Http.get("General/consultaTipoCambioSunat/?data=hols", reqListener);
+
         }
 
         else {
@@ -177,6 +181,9 @@ function mostrarlistas(rpta) {
     }
 }
 
+//function reqListener(rpta) {
+//    console.log(rpta);
+//}
 
 function listarOficinaItem() {
     var idEntidad = cboEntidad.value;

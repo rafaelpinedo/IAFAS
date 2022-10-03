@@ -14,6 +14,7 @@ using System.Net.Http.Headers;
 using System.Net;
 using WebAppSISGEFIN.Filtros;
 using WebAppSISGEFIN.Models;
+using System.Configuration;
 
 namespace WebAppTurnera.Controllers
 {
@@ -418,6 +419,18 @@ namespace WebAppTurnera.Controllers
             //}
 
             //  rpta = listas[0];
+            return rpta;
+        }
+
+        
+        public async Task<string> consultaTipoCambioSunat(string data)
+        {
+            string url = ConfigurationManager.AppSettings["TipoCambioSunat"];
+            string rpta = "";
+            using (var client = new HttpClient())
+            {
+                rpta= await client.GetStringAsync(url);
+            }
             return rpta;
         }
     }
