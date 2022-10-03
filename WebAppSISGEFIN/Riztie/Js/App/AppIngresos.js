@@ -62,7 +62,6 @@ function doubleCheck(e, field) {
         regexp = /^[0-9]+$/
         return regexp.test(field.value)
     }
-
     return false
 }
 
@@ -71,6 +70,9 @@ function getListar() {
     var txtAnio = document.getElementById("txtAnio");
     if (txtAnio != null) {
         data = txtAnio.value;
+    }
+    if (vista == "ReciboIngreso") {
+        data = txtFechaInicio.value + '|' + txtFechaFinal.value;
     }
 
     Http.get("General/listarTabla?tbl=" + controller + vista + "&data=" + data, mostrarlistas);
@@ -147,9 +149,26 @@ function mostrarlistas(rpta) {
             var listaEstado = listas[2].split("¬");
             var listaTotal = listas[3].split("¬");
             grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
+            
             crearCombo(listaEntidad, "cboEntidadFinanciera", "Seleccione");
+            crearCombo(listaEntidad, "cboEntidadFinancieraCarga", "Seleccione");
             crearCombo(listaEstado, "cboEstado", "Seleccione");
             spnTotalRecaudacion.innerText = formatoNumeroDecimal(listaTotal[0]);
+        }
+        else if (vista == "ReciboIngreso") {
+            var listaFormatoDoc = listas[1].split("¬");
+            var listaLineaIngre = listas[2].split("¬");
+            var listaEntidadFin = listas[3].split("¬");
+            var listaMoneda = listas[4].split("¬");
+            var listaEstado = listas[5].split("¬");
+            var listaTotal = listas[6].split("¬");
+            grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
+            crearCombo(listaFormatoDoc, "cboFormatoDoc", "Seleccione");
+            crearCombo(listaLineaIngre, "cboLineaIngreso", "Seleccione");
+            crearCombo(listaEntidadFin, "cboEntidadFinanciera", "Seleccione");
+            crearCombo(listaMoneda, "cboMoneda", "Seleccione");
+            crearCombo(listaEstado, "cboEstado", "Seleccione");
+            spnTotalIngresos.innerText = formatoNumeroDecimal(listaTotal[0]);
         }
 
         else {
@@ -194,7 +213,17 @@ function grabarDatos() {
             dataImport += "¯" + txtAnio.value;
         }
 
+        var cboEntidad = document.getElementById("cboEntidadFinancieraCarga");
+        if (cboEntidad != null) {
+            dataImport += "¯" + cboEntidad.value;
+        }
+
         frm.append("data", dataImport);
+        Http.post("General/guardar/?tbl=" + controller + vista, mostrarGrabar, frm);
+    }
+    else if (vista == "ReciboIngreso") {
+        data += "¯" + txtFechaInicio.value + '|' + txtFechaFinal.value;
+        frm.append("data", data);
         Http.post("General/guardar/?tbl=" + controller + vista, mostrarGrabar, frm);
     }
     else {
@@ -264,6 +293,10 @@ function mostrarGrabar(rpta) {
             var listaTotal = listas[2].split("¬");
             spnTotalRecaudacion.innerText = formatoNumeroDecimal(listaTotal[0]);
         }
+        else if (vista == "ReciboIngreso") {
+            var listaTotal = listas[2].split("¬");
+            spnTotalIngresos.innerText = formatoNumeroDecimal(listaTotal[0]);
+        }
 
         if (tipo == 'A') {
             Swal.fire({
@@ -319,6 +352,9 @@ function eliminarRegistro(id) {
     var txtAnio = document.getElementById("txtAnio");
     if (txtAnio != null) {
         data += '|' + txtAnio.value;
+    }
+    else if (vista == "ReciboIngreso") {
+        data += '|' + txtFechaInicio.value + '|' + txtFechaFinal.value;
     }
     var frm = new FormData();
     frm.append("data", data);
@@ -435,9 +471,7 @@ function mostrarRegistro(rpta) {
         }
 
         else if (vista == "Recaudacion") {
-            console.log(rpta)
-            //divListaExcel
-            
+            console.log(rpta);
             importarDataExcel.style.display = 'none';
             btnGuardar.style.display = 'none';
             vizualizar.style.display = 'block';
@@ -457,8 +491,22 @@ function mostrarRegistro(rpta) {
             txtArchivo.value = campos[5];
             txtFechaAbono.value = campos[6];
             cboEstado.value = campos[7];
-            console.log(campos[7], campos[6]);
-           
+        }
+        else if (vista == "ReciboIngreso") {
+            console.log(rpta);
+            txtIdRegistro.value = campos[0];
+            cboEntidadFinanciera.value = campos[1];
+            txtFechaEmision.value = campos[2];
+            cboEstado.value = campos[3];
+            cboFormatoDoc.value = campos[4];
+            txtNumero.value = campos[5];
+            cboLineaIngreso.value = campos[6];
+            cboMoneda.value = campos[7];
+            txtImporte.value = campos[8];
+            txtDni.value = campos[9];
+            txtNombreCompleto.value = campos[10];
+            txtConcepto.value = campos[11];
+            editConcepto.style.display = "block";
         }
 
 
@@ -548,10 +596,27 @@ function configurarBotones() {
         vizualizar.style.display = 'none';
         divListaExcel.innerHTML = "";
         spanPendiente.innerHTML = "";
+        cboEntidadFinancieraCarga.value = "";
+        cboTipoRecaudacion.value = "0";
     }
 
     var btnCargarCXC = document.getElementById("btnCargarCXC");
     if (btnCargarCXC != null) btnCargarCXC.onclick = function () {
+
+        let entidad = cboEntidadFinancieraCarga.value;
+        let TipoRecaudacion = cboTipoRecaudacion.value
+        if (TipoRecaudacion == "0") {
+            mostrarMensaje("Seleccionar Tipo Recaudación", "error")
+            return;
+        }
+       else if (entidad == "") {
+            mostrarMensaje("Seleccionar Entidad Financiera", "error")
+            return;
+        }
+
+        
+        
+
         divPopupContainerForm1.style.display = 'block';
         fupExcel.value = "";
         snpnombrearchivo.innerHTML = "Seleccione archivo&hellip;";
@@ -564,10 +629,8 @@ function configurarBotones() {
     if (btnImportarExcel != null) btnImportarExcel.onclick = function () {
         vista = window.sessionStorage.getItem("Vista");
         /* if (validarDatos()) {*/
-
         importarExcel("divPopupContainerForm1", "divListaExcel", dataCab, dataDeta);
         //btnGrabarExterno.style.display = 'block';
-
         //}
     }
 
@@ -592,7 +655,20 @@ function configurarBotones() {
             cboEntidad.disabled = true;
         }
 
+        var cboFormatoDoc = document.getElementById("cboFormatoDoc");
+        if (cboFormatoDoc != null) {
+            cboFormatoDoc.value = 9;
+        }
 
+        var cboLineaIngreso = document.getElementById("cboLineaIngreso");
+        if (cboLineaIngreso != null) {
+            cboLineaIngreso.value = 4;
+        }
+        
+        var cboMoneda = document.getElementById("cboMoneda");
+        if (cboMoneda != null) {
+            cboMoneda.value = 1;
+        }
 
         var select2cboPais = document.getElementById("select2-cboPais-container");
         if (select2cboPais != null) select2cboPais.innerHTML = "Seleccione";
@@ -659,6 +735,19 @@ function configurarBotones() {
             var anio = txtAnofiscal.getAttribute('value');
             txtAnofiscal.value = anio;
         }
+
+        var txtFechaEmision = document.getElementById("txtFechaEmision");
+        if (txtFechaEmision != null) {
+            var fechaHoy = txtFechaEmision.getAttribute('value');
+            txtFechaEmision.value = fechaHoy;
+        }
+
+        var editConcepto = document.getElementById("editConcepto");
+        if (editConcepto != null) {
+            editConcepto.style.display = "none";
+        }
+
+       
     }
 
 
@@ -691,9 +780,16 @@ function configurarBotones() {
             }
         }
         else if (vista == "Recaudacion") {
+            let entidad = cboEntidadFinancieraCarga.value;
+
             if (fupExcel.value = "") {
                 mostrarMensaje("Seleccione el archivo excel a importar", "error");
+            } 
+            else if (entidad == "") {
+                mostrarMensaje("Seleccionar Entidad Financiera", "error")
+                return;
             }
+            
         }
 
         if (validarInformacion("Reque") == true) {
@@ -735,6 +831,11 @@ function configurarBotones() {
     var btnCancelarForm1 = document.getElementById("btnCancelarForm1");
     if (btnCancelarForm1 != null) btnCancelarForm1.onclick = function () {
         divPopupContainerForm1.style.display = 'none';
+    }
+
+    var btnCancelarForm2 = document.getElementById("btnCancelarForm2");
+    if (btnCancelarForm2 != null) btnCancelarForm2.onclick = function () {
+        divPopupContainerForm2.style.display = 'none';
     }
 
     var btnConsultar = document.getElementById("btnConsultar");
@@ -781,11 +882,106 @@ function configurarBotones() {
             })
 
         }
-
-
-        //divPopupContainerForm1.style.display = 'block';
-        //fupExcel.value = "";
     }
+
+    var btnPendiente = document.getElementById("btnPendiente");
+    if (btnPendiente != null) btnPendiente.onclick = function () {
+        if (vista == "ReciboIngreso") {
+            spnLoadData.style.display = "block";
+            listaLoadItem.style.display = 'none';
+            let data = '';
+            Http.get("General/listarTabla?tbl=" + controller + vista + "Pendientes" + "&data=" + data, function (response) {
+                if (response) {
+                    var listas = response.split("¯");
+                    var lista = listas[0].split("¬");
+                    grillaItem = new GrillaScroll(lista, "divListaRecaudacion", 100, 6, vista, controller, null, null, true, null, 38, false, null);
+                    spnLoadData.style.display = "none";
+                    listaLoadItem.style.display = 'block';
+                }
+            });
+            divPopupContainerForm1.style.display = 'block';
+        } 
+    }
+
+    var btnGenerarRI = document.getElementById("btnGenerarRI");
+    if (btnGenerarRI != null) btnGenerarRI.onclick = function () {
+        let data = "";
+        if (vista == "ReciboIngreso") {
+            if (idRegistro == "") {
+                mostrarMensaje("Seleccione registro de la lista", "error");
+            }
+            else {
+                data = idRegistro + '¯' + txtFechaInicio.value + '|' + txtFechaFinal.value;
+                var frm = new FormData();
+                frm.append("data", data);
+
+                Swal.fire({
+                    title: '¿Desea generar recibo de ingreso?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Si',
+                    cancelButtonText: 'No'
+                }).then((result) => {
+                    if (result.value) {
+                        divPopupContainerForm1.style.display="none";
+                        Http.post("General/guardar/?tbl=" + controller + vista + 'Pendientes', mostrarGrabar, frm);
+                    }
+                })
+            }
+        }
+    }
+
+    var btnAgregarItem = document.getElementById("btnAgregarItem");
+    if (btnAgregarItem != null) btnAgregarItem.onclick = function () {
+        if (vista == "ReciboIngreso") {
+            spnLoadDataAsegurado.style.display = "block";
+            listaLoadAsegurado.style.display = 'none';
+            let data = '';
+            Http.get("General/listarTabla?tbl=" + controller + vista + "Asegurado" + "&data=" + data, function (response) {
+                if (response) {
+                    var listas = response.split("¯");
+                    var lista = listas[0].split("¬");
+                    grillaItem = new GrillaScroll(lista, "divListaAsegurado", 100, 6, vista, controller, null, null, true, null, 38, false, null);
+                    spnLoadDataAsegurado.style.display = "none";
+                    listaLoadAsegurado.style.display = 'block';
+                }
+            });
+            divPopupContainerForm2.style.display = 'block';
+        }
+    }
+
+    var btnSeleccionar = document.getElementById("btnSeleccionar");
+    if (btnSeleccionar != null) btnSeleccionar.onclick = function () {
+        if (vista == "ReciboIngreso") { 
+            if (idRegistro == "") {
+                mostrarMensaje("Seleccione registro de la lista", "error");
+            }
+            else {
+                console.log(idRegistro);
+                txtDni.value = idRegistro.split("¥")[0];
+                txtNombreCompleto.value = idRegistro.split("¥")[1];
+            }
+            divPopupContainerForm2.style.display = 'none';
+        }
+    }
+
+    var btnImprimir = document.getElementById("btnImprimir");
+    if (btnImprimir != null) btnImprimir.onclick = function () {
+        if (idRegistro == "") {
+            mostrarMensaje("Seleccione registro de la lista", "error");
+        }
+        else {
+            console.log(idRegistro);
+            divPopupContainerForm3.style.display = "block";
+          //  getReporte(idRegistro);
+        }
+    }
+}
+
+function getReporte(id) {
+    Http.get("General/obtenerReporteId/?tbl=" + controller + vista + '&id=' + id, mostrarReporte);
 }
 
 function configurarConsultas() {
@@ -1028,6 +1224,10 @@ function mostrarEliminar(rpta) {
             var listaTotal = listas[2].split("¬");
             spnTotalRecaudacion.innerText = formatoNumeroDecimal(listaTotal[0]);
         }
+        else if (vista =="ReciboIngreso") {
+            var listaTotal = listas[2].split("¬");
+            spnTotalIngresos.innerText = formatoNumeroDecimal(listaTotal[0]);
+        }
 
         if (tipo == 'A') {
             Swal.fire({
@@ -1204,7 +1404,7 @@ function importarExcel(divForm, divLista, dataCab, dataDeta) {
                 
                 if (celda != null) {
                    // contenido += celda.v;
-                    if (i < 3) {
+                    if (i == 0 || i==2) {
                         contenido += celda.v;
                     }
 

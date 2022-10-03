@@ -24,41 +24,168 @@
                             <label class="control-label">Fecha Final</label>
                             <input type="date" id="txtFechaFinal" class="control-form" value="@ViewBag.Fecha">
                         </div>
-                        <div class="form-group col-md-4 m-3">
+                        <div class="form-group col-sm-4 m-3">
                             <button class="input-group-inverse btn btn-inverse" id="btnConsultar" data-toggle="tooltip" data-placement="bottom" title="Consultar"><i class="fa fa-search fa-lg" aria-hidden="true"></i></button>
                             <button class="input-group-inverse btn btn-primary" id="btnNuevo" data-toggle="tooltip" data-placement="bottom" title="Nuevo"><i class="fa fa-plus-circle fa-lg" aria-hidden="true"></i></button>
                             <button class="btn btn-out waves-effect waves-light btn-primary btn-square" id="btnPendiente" data-toggle="tooltip" data-placement="bottom" title="Recibo de Caja pendientes"><i class="fa fa-paypal fa-lg" aria-hidden="true"></i></button>
-                            <button class="btn btn-out waves-effect waves-light btn-info btn-square" id="btnRecibo" data-toggle="tooltip" data-placement="bottom" title="Imprimir Recibo Ingreso"><i class="fa fa-print fa-lg" aria-hidden="true"></i></button>
+                            <button class="btn btn-out waves-effect waves-light btn-info btn-square" id="btnImprimir" data-toggle="tooltip" data-placement="bottom" title="Imprimir Recibo Ingreso"><i class="fa fa-print fa-lg" aria-hidden="true"></i></button>
                             <button class="btn btn-out waves-effect waves-light btn-success btn-square" id="btnAprobar" data-toggle="tooltip" data-placement="bottom" title="Aprobar Recibo Ingreso"><i class="fa fa-thumbs-up fa-lg" aria-hidden="true"></i></button>
                             <button class="btn btn-out waves-effect waves-light btn-danger btn-square" id="btnEliminarRecibo" data-toggle="tooltip" data-placement="bottom" title="Eliminar Recibo de Ingreso"><i class="fa fa-trash fa-lg" aria-hidden="true"></i></button>
                         </div>
-                        <div class="form-group col-lg-3">
+                        <div class="form-group col-sm-3">
                             <span style="color:black;font-weight:bold;font-size:30px;text-align:right">Total: </span>
                             <span id="spnTotalIngresos" style="color:red;font-weight:bold;font-size:30px;text-align:right"></span>
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group col-md-12">
-                            <div class="table-responsive dt-responsive" id="lista" style="height: 400px;overflow-y: auto;"></div>
+                            <div class="table-responsive dt-responsive" id="divLista" @*style="height: 400px;overflow-y: auto;"*@></div>
                         </div>
                     </div>
-                    @*<div class="form-row">
-                            <div class="form-group col-sm-6">
-                                <strong> <span id="spnTotalRegistros">Nro. Registros: 0</span></strong>
+
+                    <div class="form-row">
+                        <div class="modal custom-modal" tabindex="-1" role="dialog" aria-hidden="true" id="divPopupContainer" style="overflow-y:auto;">
+                            <div class="modal-dialog modal-lg bg-personalizado" id="divPopupWindow" style="margin-top:30px;">
+                                <div class="modal-content">
+                                    <div id="divBarra" class="modal-header bg-personalizado" style="cursor:move">
+                                        <h5 class="modal-title" id="tituloModal">Nuevo Registro</h5>
+                                    </div>
+                                    <div class="modal-body">
+                                        <fieldset class="fieldset">
+                                            <div class="row">
+                                                <div class="form-group col-sm-6">
+                                                    <input type="hidden" class="control-form Popup" id="txtIdRegistro">
+                                                    <label class="control-label">Entidad Finaciera</label>
+                                                    <select id="cboEntidadFinanciera" class="control-form Reque Popup"></select>
+                                                </div>
+                                                <div class="form-group col-sm-3">
+                                                    <label class="control-label">Fecha Emisión</label>
+                                                    <input type="date" id="txtFechaEmision" class="control-form Reque Popup" value="@ViewBag.Fecha">
+                                                </div>
+                                                <div class="form-group col-sm-3">
+                                                    <label class="control-label">Estado</label>
+                                                    <select id="cboEstado" class="control-lectura Reque Popup"></select>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="form-group col-sm-6">
+                                                    <label class="control-label">Formato de Documento</label>
+                                                    <select id="cboFormatoDoc" class="control-form Reque Popup"></select>
+                                                </div>
+                                                <div class="form-group col-sm-3">
+                                                    <label class="control-label">Número</label>
+                                                    <input type="text" autocomplete="off" class="control-lectura Popup" maxlength="30" id="txtNumero">
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="form-group col-sm-6">
+                                                    <label class="control-label">Linea de Ingreso</label>
+                                                    <select id="cboLineaIngreso" class="control-form Reque Popup"></select>
+                                                </div>
+                                                <div class="form-group col-sm-3">
+                                                    <label class="control-label">Moneda</label>
+                                                    <select id="cboMoneda" class="control-form Reque Popup"></select>
+                                                </div>
+                                                <div class="form-group col-sm-3">
+                                                    <label class="control-label">Importe</label>
+                                                    <input type="text" autocomplete="off" class="control-form Reque Popup text-center" maxlength="30" id="txtImporte" onkeypress="return doubleCheck(event, this)">
+                                                </div>
+                                            </div>
+                                            <hr style="margin-bottom: 1px;margin-top: 1px;">
+                                            <div class="row">
+                                                <div class="form-group col-sm-8">
+                                                    <input type="hidden" autocomplete="off" class="control-form Reque Popup" maxlength="15" id="txtDni">
+                                                    <label class="control-label">Asegurado</label>
+                                                    <input type="text" autocomplete="off" class="control-lectura Reque Popup" maxlength="30" id="txtNombreCompleto">
+                                                </div>
+                                                <div class="form-group col-sm-2">
+                                                    <label class="control-label"> &nbsp;&nbsp;</label>
+                                                    <button class="input-group-inverse btn btn-primary btn-sm" id="btnAgregarItem" data-toggle="tooltip" data-placement="bottom" title="Agregar Asegurado"><i class="fa fa-plus-circle fa-lg" aria-hidden="true"></i></button>
+                                                </div>
+                                            </div>
+                                            <div id="editConcepto" style="display:none">
+                                                <div class="row">
+                                                    <div class="form-group col-sm-10">
+                                                        <label class="control-label">Concepto</label>
+                                                        <textarea class="control-form Popup" placeholder="Escribe Aquí!" id="txtConcepto"></textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+                                        </fieldset>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button id="btnCancelar" class="btnCancelarForm" title="Cancelar"><i class="fa fa-undo" aria-hidden="true"></i>&nbsp;Cancelar</button>
+                                        <button id="btnGuardar" class="btnGuardarForm bg-customer" title="Guardar datos"><span class="fa fa-save"></span>&nbsp;Grabar</button>
+                                    </div>
+                                </div>
                             </div>
-                        </div>*@
-                    <div class="form-row">
-                        <div class="form-group col-md-6">
-                            <hr />
-                            <h4>CUADRO RESUMEN</h4>
-                            <hr />
                         </div>
                     </div>
+
                     <div class="form-row">
-                        <div class="form-group col-md-6">
-                            <div class="table-responsive" id="listaResumen"></div>
+                        <div class="modal custom-modal" tabindex="-1" role="dialog" aria-hidden="true" id="divPopupContainerForm1" style="overflow-y:auto;">
+                            <div class="modal-dialog modal-lg bg-personalizado" id="divPopupWindowForm1" style="margin-top:30px;">
+                                <div class="modal-content">
+                                    <div id="divBarraForm1" class="modal-header bg-personalizado" style="cursor:move">
+                                        <h5 class="modal-title" id="nombreComision">Recibo de Recaudación</h5>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="row">
+                                            <div class="form-group col-md-12 text-center" id="spnLoadData" style="display:none">
+                                                <span style="color: #ff5252; border-color: black; font-weight: bold; ">
+                                                    <b>Procesando información  ..</b>
+                                                    <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
+                                                </span>
+                                            </div>
+                                            <div class="form-group col-sm-12" id="listaLoadItem" style="display:none">
+                                                <div class="table-responsive dt-responsive" id="divListaRecaudacion" style="height: 400px;overflow-y: auto;"></div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button id="btnCancelarForm1" class="btnCancelarForm" title="Cancelar"><i class="fa fa-undo" aria-hidden="true"></i>&nbsp;Cancelar</button>
+                                        <button class="btnGuardarForm bg-customer" id="btnGenerarRI" title="Guardar"><span class="fa fa-money"></span>&nbsp;Generar RI</button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
+
+                    <div class="form-row">
+                        <div class="modal custom-modal" tabindex="-1" role="dialog" aria-hidden="true" id="divPopupContainerForm2" style="overflow-y: auto; display: none;">
+                            @*background: none;*@
+                            <div class="modal-dialog modal-md bg-personalizado" id="divPopupWindowForm2" style="margin-top:30px;">
+                                <div class="modal-content">
+                                    <div id="divBarraForm2" class="modal-header bg-personalizado" style="cursor:move">
+                                        <h5 class="modal-title" id="nombreComision">Listado de Asegurados</h5>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="row">
+                                            <div class="form-group col-md-12 text-center" id="spnLoadDataAsegurado" style="display:none">
+                                                <span style="color: #ff5252; border-color: black; font-weight: bold; ">
+                                                    <b>Procesando información  ..</b>
+                                                    <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
+                                                </span>
+                                            </div>
+                                            <div class="form-group col-sm-12" id="listaLoadAsegurado" style="display:none">
+                                                <div class="table-responsive dt-responsive" id="divListaAsegurado" style="height: 400px;overflow-y: auto;"></div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button id="btnCancelarForm2" class="btnCancelarForm" title="Cancelar"><i class="fa fa-undo" aria-hidden="true"></i>&nbsp;Cancelar</button>
+                                        <button class="btnGuardarForm bg-customer" id="btnSeleccionar" title="Guardar"><i class="fa fa-user" aria-hidden="true"></i>&nbsp;Seleccionar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="form-row">
                         <div class="modal custom-modal" tabindex="-1" role="dialog" aria-hidden="true" id="divPopupContainerPendientes" style="overflow-y:auto;">
                             <div class="modal-dialog modal-xl bg-personalizado" id="divPopupWindowPendientes">
@@ -86,6 +213,7 @@
                                 </div>
                             </div>
                         </div>
+
                         <div class="modal custom-modal" tabindex="-1" role="dialog" aria-hidden="true" id="divPopupContainerImportar" style="overflow-y:auto;">
                             <div class="modal-dialog bg-personalizado" id="divPopupWindowImportar">
                                 <div class="modal-content">
@@ -96,7 +224,7 @@
                                     <div id="divCuerpo" class="modal-body">
                                         <div class="form-row">
                                             <div class="col-sm-12" style="text-align:center">
-                                                <input type="file" id="fupExcel" class="inputfile inputfile-5 Popup Requerido" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel,text/comma-separated-values, text/csv, application/csv,text/plain" data-msg="Archivo a importar" data-multiple-caption="{count} files selected" multiple />
+                                                <input type="file" id="fupExcel" class="inputfile inputfile-5 Requerido" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel,text/comma-separated-values, text/csv, application/csv,text/plain" data-msg="Archivo a importar" data-multiple-caption="{count} files selected" multiple />
                                                 <label for="fupExcel">
                                                     <figure><svg xmlns="http://www.w3.org/2000/svg" width="20" height="17" viewBox="0 0 20 17"><path d="M10 0l-5.2 4.9h3.3v5.1h3.8v-5.1h3.3l-5.2-4.9zm9.3 11.5l-3.2-2.1h-2l3.4 2.6h-3.5c-.1 0-.2.1-.2.1l-.8 2.3h-6l-.8-2.2c-.1-.1-.1-.2-.2-.2h-3.6l3.4-2.6h-2l-3.2 2.1c-.4.3-.7 1-.6 1.5l.6 3.1c.1.5.7.9 1.2.9h16.3c.6 0 1.1-.4 1.3-.9l.6-3.1c.1-.5-.2-1.2-.7-1.5z" /></svg></figure>
                                                     <span id="snpnombrearchivo">Seleccione archivo&hellip;</span>
@@ -353,12 +481,207 @@
                             </div>
                         </div>
                     </div>
+
+                    @*reporte*@
+                    <div class="form-row">
+                        <div class="modal custom-modal" tabindex="-1" role="dialog" aria-hidden="true" id="divPopupContainerForm3" style="overflow-y: auto; display: none;">
+                            <div class="modal-dialog modal-xl bg-personalizado" id="divPopupWindowForm3" style="margin-top:30px;">
+                                <div class="modal-content">
+                                    <div id="divBarraForm3" class="modal-header bg-personalizado" style="cursor:move">
+                                        <h5 class="modal-title" id="nombreComision">Listado de Asegurados</h5>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="row">
+
+                                            <div style="width:100%;">
+
+                                                <div style="width: 100%; font-family: 'Arial Narrow', Arial, sans-serif; margin-bottom: 0px; text-align: left;">
+                                                    <div style="width: 25%; float: left;">
+                                                        <img src="~/Riztie/Images/user-bg.jpg" alt="IAFAS" width="180" height="160" />
+                                                    </div>
+                                                    <div style="width: 45%; float: left;font-family: 'Arial Narrow', Arial, sans-serif; text-align: center;">
+                                                        <h1 style="font-family: 'Arial Narrow', Arial, sans-serif; margin-bottom: 0px; height:70px;">RECIBO DE INGRESO N° 0004165 </h1>
+                                                    </div>
+                                                    <div style="width: 30%; float: left;">
+                                                        <div>
+                                                            <div style="width:100%; float: left;">
+                                                                <div>
+                                                                    <h5 style="font-family: 'Arial Narrow', Arial, sans-serif; margin-top: 70px; text-align: center; height: 20px;">DIRECCIÓN EJECUTIVA</h5>
+                                                                    <h5 style="font-family: 'Arial Narrow', Arial, sans-serif; text-align: center; height: 70px;">OFICINA DE TESORERIA</h5>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div style="width:100%; float: left;">
+                                                    <div style="width: 70%; float: left; border-left: 1px solid black; border-right: 1px solid black; border-top: 1px solid black; border-bottom: 1px solid black;padding-left: 8px;">
+                                                        <div style="text-align: left; margin-top: 5px;">
+                                                            <label style="margin-bottom: 0px; font-weight: bold;">PLAN 4&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :</label>
+                                                            <label style="margin-bottom: 0px;"> DEDUCIBLES</label>
+                                                        </div>
+                                                        <div style="text-align: left;">
+                                                            <label style="margin-bottom: 0px; font-weight: bold;text-align: left; ">SUB DIARIO &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</label>
+                                                            <label style="margin-bottom: 0px;">0404</label>
+                                                            <label style="margin-bottom: 0px;">ASIENTO DE DIARIO</label>
+                                                        </div>
+                                                        <div style="text-align: left;">
+                                                            <label style="margin-bottom: 0px; font-weight: bold; text-align: left; ">COMPROBANTE &nbsp;&nbsp;:</label>
+                                                            <label style="margin-bottom: 0px;">090005 &nbsp;&nbsp;&nbsp; </label>
+                                                            <label style="margin-bottom: 0px; font-weight: bold; text-align: left; ">FECHA :</label>
+                                                            <label style="margin-bottom: 0px;">21/09/2022</label>
+                                                        </div>
+                                                        <div style="text-align: left; height: 40px">
+                                                            <label style="margin-bottom: 0px; font-weight: bold;">CONCEPTO&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</label>
+                                                            <label style="margin-bottom: 0px;">PROV.RI 0004165 VENTANILLA ABRIL 2022</label>
+                                                        </div>
+                                                    </div>
+
+                                                    <div style="width: 30%; float: left; border-left: 1px solid black; border-right: 1px solid black; border-top: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-left: 8px;">
+                                                        <div style="text-align: left; margin-top: 5px;">
+                                                            <label style="margin-bottom: 0px; font-weight: bold;">MONEDA&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</label>
+                                                            <label style="margin-bottom: 0px;"> DEDUCIBLES</label>
+                                                        </div>
+                                                        <div style="text-align: left;">
+                                                            <label style="margin-bottom: 0px; font-weight: bold;text-align: left; ">CONVERSIÓN &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</label>
+                                                            <label style="margin-bottom: 0px;">0404</label>
+                                                        </div>
+                                                        <div style="text-align: left;">
+                                                            <label style="margin-bottom: 0px; font-weight: bold;text-align: left; ">TIPO CONVERSIÓN :</label>
+                                                            <label style="margin-bottom: 0px;">0404</label>
+                                                        </div>
+                                                        <div style="text-align: left; height: 40px">
+                                                            <label style="margin-bottom: 0px; font-weight: bold;text-align: left; ">TIPO CAMBIO &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</label>
+                                                            <label style="margin-bottom: 0px;">0404</label>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+
+                                                <div style="width: 100%; font-family: 'Arial Narrow', Arial, sans-serif; margin-bottom: 0px; text-align: left;">
+                                                    <div style="width: 100%; float: left;font-family: 'Arial Narrow', Arial, sans-serif; text-align: left;">
+                                                        <table cellpadding="0" width="1100px" cellspacing="0" style="font-family: 'Arial Narrow', Arial, sans-serif; font-size: 12px; border: solid 1px #242828;">
+                                                            <thead>
+                                                                <tr cellpadding="0" width="1100px" cellspacing="0" style="font-family: 'Arial Narrow', Arial, sans-serif; font-size: 12px; border: 1px solid black;text-align:center;font-weight: bold;">
+                                                                    <th colspan="1" rowspan="1" style="font-weight: bold;width: 50px;border:1px solid black;white-space:pre-wrap; ">CUENTA</th>
+                                                                    <th colspan="1" rowspan="1" style="font-weight: bold;width: 90px;border:1px solid black;white-space:pre-wrap;">ANEXO</th>
+                                                                    <th colspan="1" rowspan="1" style="font-weight: bold;width:250px;border:1px solid black;white-space:pre-wrap;">D E S C R I P C I Ó N    D E L   A R T I C U L O</th>
+                                                                    <th colspan="1" rowspan="1" style="font-weight: bold;width: 20px;border:1px solid black;white-space:pre-wrap;">CC.</th>
+                                                                    <th colspan="1" rowspan="1" style="font-weight: bold;width: 20px;border:1px solid black;white-space:pre-wrap;">TP.</th>
+                                                                    <th colspan="1" rowspan="1" style="font-weight: bold;width: 40px;border:1px solid black;white-space:pre-wrap;">DEBE</th>
+                                                                    <th colspan="1" rowspan="1" style="font-weight: bold;width: 40px;border:1px solid black;white-space:pre-wrap;">HABER</th>
+                                                                    <th colspan="1" rowspan="1" style="font-weight: bold;width: 60px;border:1px solid black;white-space:pre-wrap;">DOCUMENTO</th>
+                                                                    <th colspan="1" rowspan="1" style="font-weight: bold;width: 20px;border:1px solid black;white-space:pre-wrap;">FECHA</th>
+                                                                    <th colspan="1" rowspan="1" style="font-weight: bold;width: 20px;border:1px solid black;white-space:pre-wrap;">VENC.</th>
+                                                                    <th colspan="1" rowspan="1" style="font-weight: bold;width: 20px;border:1px solid black;white-space:pre-wrap;">ARE.</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr style="color: black; text-align: center; font-weight: bold; height: 30px;">
+                                                                    <td style="border:1px solid black;white-space:pre-wrap;width: 5px;" bcolspan="1">01</td>
+                                                                    <td style="border:1px solid black;white-space:pre-wrap;width: 20px;" colspan="1">0079</td>
+                                                                    <td style="border: 1px solid black; white-space: pre-wrap; text-align: left;" colspan="1">07</td>
+                                                                    <td style="border: 1px solid black; white-space: pre-wrap; width: 60px;" colspan="1">08</td>
+                                                                    <td style="border: 1px solid black; white-space: pre-wrap; width: 60px;" colspan="1">22</td>
+                                                                    <td style="border: 1px solid black; white-space: pre-wrap; width: 60px;" colspan="1">07</td>
+                                                                    <td style="border: 1px solid black; white-space: pre-wrap;" colspan="1">08</td>
+                                                                    <td style="border: 1px solid black; white-space: pre-wrap;" ;colspan="1">22</td>
+                                                                    <td style="border: 1px solid black; white-space: pre-wrap;" ;colspan="1">22</td>
+                                                                    <td style="border: 1px solid black; white-space: pre-wrap;" ;colspan="1">22</td>
+                                                                    <td style="border: 1px solid black; white-space: pre-wrap;" ;colspan="1">22</td>
+                                                                </tr>
+                                                            </tbody>
+                                                            <tfoot>
+                                                                <tr>
+                                                                    <td colspan="3" style="border: 1px solid black; text-align: right; color: #080707; font-weight: bold;">Total  </td>
+                                                                    <td colspan="2" style="border: 1px solid black; text-align: center; color: #080707; font-weight: bold;">Soles</td>
+                                                                    <td colspan="1" style="border: 1px solid black; text-align: center; color: #080707; font-weight: bold;">120</td>
+                                                                    <td colspan="1" style="border: 1px solid black; text-align: center; color: #080707; font-weight: bold;">120</td>
+                                                                    <td colspan="4" style="border: 1px solid black; text-align: right; color: #080707; font-weight: bold;" id="tdTotalNEA"></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td colspan="12" style="border: 1px solid black; text-align: right; color: #ffffff; font-weight: bold;">Total : S/. </td>
+                                                                </tr>
+                                                            </tfoot>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                                <div style="width:100%; float: left;">
+                                                    <div style="width: 60%; float: left; border-left: 1px solid black; border-right: 1px solid black; border-top: 1px solid black; border-bottom: 1px solid black; text-align: center;">
+                                                        <label style="margin-bottom: 0px; font-weight: bold; ">AUTORIZACIÓN</label>
+                                                    </div>
+                                                    <div style="width: 40%; float: left; border-left: 1px solid black; border-right: 1px solid black; border-top: 1px solid black; border-bottom: 1px solid black; text-align: center;">
+                                                        <label style="margin-bottom: 0px; font-weight: bold; ">RECIBÍ CONFORME</label>
+                                                    </div>
+                                                </div>
+                                                <div style="width:100%; float: left;">
+                                                    <div style="width: 60%; float: left; border-left: 1px solid black; border-right: 1px solid black; border-top: 1px solid black; border-bottom: 1px solid black; text-align: center;">
+                                                        <div style="text-align: left; margin-top: 70px; width: 50%; float: left;">
+                                                            <div style="text-align: center; margin-top: 25px;height:80px;">
+                                                                <label style="margin-bottom: 0px;">__________________________________________</label>
+                                                                <h6>DIRECCTOR EJECUTIVO</h6>
+                                                            </div>
+                                                            <div style="text-align: center; margin-top: 43px;height:80px;">
+                                                                <label style="margin-bottom: 0px;">__________________________________________</label>
+                                                                <h6>TESORERIA</h6>
+                                                            </div>
+                                                        </div>
+                                                        <div style="text-align: left; margin-top: 70px; width: 50%; float: left;">
+                                                            <div style="text-align: center; margin-top: 25px;height:80px;">
+                                                                <label style="margin-bottom: 0px;">__________________________________________</label>
+                                                                <h6>SUB DIRECCTOR EJECUTIVO</h6>
+                                                            </div>
+                                                            <div style="text-align: center; margin-top: 43px;height:80px;">
+                                                                <label style="margin-bottom: 0px;">__________________________________________</label>
+                                                                <h6>CONTABILIDAD</h6>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div style="width: 40%; float: left; border-left: 1px solid black; border-right: 1px solid black; border-top: 1px solid black; border-bottom: 1px solid black;padding-left: 8px;">
+
+                                                        <div style="text-align: left; margin-top: 18px;">
+                                                            <label style="margin-bottom: 0px; font-weight: bold;">Nombre&nbsp;&nbsp;&nbsp; :</label>
+                                                            <label style="margin-bottom: 0px;">______________________________________________________</label>
+                                                        </div>
+                                                        <div style="text-align: left;">
+                                                            <label style="margin-bottom: 0px; font-weight: bold; margin-top: 18px; text-align: left; ">Doc.Iden. :</label>
+                                                            <label style="margin-bottom: 0px;">______________________________________________________</label>
+                                                        </div>
+                                                        <div style="text-align: left;">
+                                                            <label style="margin-bottom: 0px; font-weight: bold; margin-top: 18px; text-align: left; ">Dirección :</label>
+                                                            <label style="margin-bottom: 0px;">______________________________________________________</label>
+                                                        </div>
+                                                        <div style="text-align: left;">
+                                                            <label style="margin-bottom: 0px; font-weight: bold; margin-top: 18px;">Fecha&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :</label>
+                                                            <label style="margin-bottom: 0px;">______________________________________________________</label>
+                                                        </div>
+                                                        <div style="margin-bottom: 0px; text-align: center; margin-top: 80px; ">
+                                                            <label>______________________________________________________</label>
+                                                        </div>
+                                                        <div style="text-align: center;">
+                                                            <label style="margin-bottom: 0px; font-weight: bold; margin-top: 8px;">FIRMA</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button id="btnCancelarForm2" class="btnCancelarForm" title="Cancelar"><i class="fa fa-undo" aria-hidden="true"></i>&nbsp;Cancelar</button>
+                                        <button class="btnGuardarForm bg-customer" id="btnSeleccionar" title="Guardar"><i class="fa fa-user" aria-hidden="true"></i>&nbsp;Seleccionar</button>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div id="styleSelector">
+            <div id="styleSelector">
+            </div>
         </div>
     </div>
-</div>
-<iframe name="print_frame" width="0" height="0" frameborder="0" src="about:blank"></iframe>
-<script src="~/Riztie/Js/App/AppIngresos.js"></script>
+    <iframe name="print_frame" width="0" height="0" frameborder="0" src="about:blank"></iframe>
+    <script src="~/Riztie/Js/App/AppIngresos.js"></script>
