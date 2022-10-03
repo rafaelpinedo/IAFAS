@@ -11,6 +11,9 @@ var listaUbicaFisica_v = [];
 var listaActivos_v = [];
 var FLAG_INICIAL_INVENTARIO_INICIAL = 1;
 var FLAG_INICIAL_ALTAS = 0;
+var dataImport = "";
+//var dataCab = "";
+var dataDeta = "";
 
 window.onload = function () {
     getConfigMn();
@@ -106,6 +109,45 @@ function mostrarlistas(rpta) {
 }
 
 function configurarBotones() {
+    var btnCargarArchivo = document.getElementById("btnCargarArchivo");
+    if (btnCargarArchivo != null) btnCargarArchivo.onclick = function () {
+        divPopupContainerForm3.style.display = 'block';
+        limpiarImportacionExcel();
+        spanPendiente.innerHTML = "";
+    }
+
+    var btnCargarCXC = document.getElementById("btnCargarCXC");
+    if (btnCargarCXC != null) btnCargarCXC.onclick = function () {
+        divPopupContainerForm4.style.display = 'block';
+        fupExcel.value = "";
+        snpnombrearchivo.innerHTML = "Seleccione archivo&hellip;";
+        btnImportarExcel.disabled = false;
+        btnImportarExcel.style.display = 'block';
+        btnImportarExcel.innerHTML = "<i class='fa fa-upload' aria-hidden='true'></i>&nbsp;Importar";
+    }
+
+    var btnImportarExcel = document.getElementById("btnImportarExcel");
+    if (btnImportarExcel != null) btnImportarExcel.onclick = function () {
+        vista = window.sessionStorage.getItem("Vista");
+
+        importarExcel("divPopupContainerForm4", "divListaExcel", dataDeta);
+    }
+
+    var btnGuardarListaExcel = document.getElementById("btnGuardarListaExcel");
+    if (btnGuardarListaExcel != null) btnGuardarListaExcel.onclick = function () {
+        if (!fupExcel.value) {
+            mostrarMensaje("Seleccione el archivo excel a importar", "error");
+            return;
+        }
+        grabarDatosExcel();
+    }
+
+    var btnLimpiar = document.getElementById("btnLimpiar");
+    if (btnLimpiar != null) btnLimpiar.onclick = function () {
+        limpiarImportacionExcel();
+    }
+
+
     var btnNuevo = document.getElementById("btnNuevo");
     if (btnNuevo != null) btnNuevo.onclick = function () {
         divPopupContainer.style.display = 'block';
@@ -114,6 +156,8 @@ function configurarBotones() {
         if (vista == "InventarioInicial" || vista == "Altas") {
             limpiarForm("PopupValContable");
             limpiarForm("NoPopupValContable");
+            limpiarForm("PopupEspTecnica");
+            limpiarForm("NoPopupEspTecnica");
 
             var txtAnio = document.getElementById("txtAnio");
             if (txtAnio != null) txtAnio.value = new Date().getFullYear();
@@ -153,6 +197,9 @@ function configurarBotones() {
 
             var txtDeprecAcumulada = document.getElementById("txtDeprecAcumulada");
             if (txtDeprecAcumulada != null) txtDeprecAcumulada.value = 0;
+
+            var txtEstadoConservacion = document.getElementById("txtEstadoConservacion");
+            if (txtEstadoConservacion != null) txtEstadoConservacion.value = cboEstadoConserv.options[cboEstadoConserv.selectedIndex].innerText
         }
         if (vista == "Bajas") {
             document.querySelectorAll('.section-nuevo-activo').forEach(function (el) {
@@ -259,6 +306,16 @@ function configurarBotones() {
         divPopupContainerForm2.style.display = 'none';
     }
 
+    var btnCancelarForm3 = document.getElementById("btnCancelarForm3");
+    if (btnCancelarForm3 != null) btnCancelarForm3.onclick = function () {
+        divPopupContainerForm3.style.display = 'none';
+    }
+
+    var btnCancelarForm4 = document.getElementById("btnCancelarForm4");
+    if (btnCancelarForm4 != null) btnCancelarForm4.onclick = function () {
+        divPopupContainerForm4.style.display = 'none';
+    }
+
     var btnConsutarEspecificacionesTecnicas = document.getElementById("btnConsutarEspecificacionesTecnicas");
     if (btnConsutarEspecificacionesTecnicas != null) btnConsutarEspecificacionesTecnicas.onclick = function () {
         mostrarEspecificacionesTecnicas("s");
@@ -302,6 +359,12 @@ function configurarBotones() {
     var btnSeleccionarItems = document.getElementById("btnSeleccionarItems");
     if (btnSeleccionarItems != null) btnSeleccionarItems.onclick = function () {
         var ids = grillaItems.obtenerIdsChecks();
+
+        if (ids.length == 0) {
+            mostrarMensaje("No hay items seleccionados", "error");
+            return;
+        }
+
         var data = "";
 
         for (var i = 0; i < ids.length; i++) {
@@ -381,24 +444,24 @@ function configurarCampos() {
 }
 
 function configurarCheckBoxs() {
-    var selcheckbox = document.getElementsByClassName("selcheckbox");
-    if (selcheckbox && selcheckbox.length > 0) {
-        for (var i = 0; i < selcheckbox.length; i++) {
-            selcheckbox[i].onchange = function (event) {
-                var isCheck = false;
-                var chequeo = tbllistaItem.getElementsByTagName('input');
-                var nroChequeo = chequeo.length;
-                for (var i = 0; i < nroChequeo; i++) {
-                    if (chequeo[i].type == "checkbox" && chequeo[i].checked) {
-                        isCheck = true;
-                        break;
-                    }
-                }
-                if (isCheck) btnSeleccionarItems.disabled = false;
-                else btnSeleccionarItems.disabled = true;
-            }
-        }
-    }
+    //var selcheckbox = document.getElementsByClassName("selcheckbox");
+    //if (selcheckbox && selcheckbox.length > 0) {
+    //    for (var i = 0; i < selcheckbox.length; i++) {
+    //        selcheckbox[i].onchange = function (event) {
+    //            var isCheck = false;
+    //            var chequeo = tbllistaItem.getElementsByTagName('input');
+    //            var nroChequeo = chequeo.length;
+    //            for (var i = 0; i < nroChequeo; i++) {
+    //                if (chequeo[i].type == "checkbox" && chequeo[i].checked) {
+    //                    isCheck = true;
+    //                    break;
+    //                }
+    //            }
+    //            if (isCheck) btnSeleccionarItems.disabled = false;
+    //            else btnSeleccionarItems.disabled = true;
+    //        }
+    //    }
+    //}
 }
 
 function configurarCombos() {
@@ -413,12 +476,19 @@ function configurarCombos() {
             listarUbicaFisica();
         }
 
+        var cboActivos = document.getElementById("cboActivos");
+        if (cboActivos != null) cboActivos.onchange = function () {
+            txtDescripcionMargesi.value = cboActivos.value
+                ? cboActivos.options[cboActivos.selectedIndex].innerText
+                : '';
+        }
+
         var cboEstadoConserv = document.getElementById("cboEstadoConserv");
         if (cboEstadoConserv != null) cboEstadoConserv.onchange = function () {
             var txtEstadoConservacion = document.getElementById("txtEstadoConservacion");
             if (txtEstadoConservacion != null)
                 txtEstadoConservacion.value = cboEstadoConserv.value
-                    ? cboEstadoConserv.options[cboEstadoConserv.value].innerText
+                    ? cboEstadoConserv.options[cboEstadoConserv.selectedIndex].innerText
                     : '';
         }
     }
@@ -475,8 +545,10 @@ function mostrarRegistro(rpta) {
         else if (vista == "InventarioInicial" || vista == "Altas") {
             txtIdRegistro.value = campos[0];
             txtCodigoPatrimonio.value = campos[1];
+            txtCodigoMargesi.value = campos[1];
             txtItem.value = campos[2];
             cboActivos.value = campos[3];
+            txtDescripcionMargesi.value = cboActivos.options[cboActivos.selectedIndex]?.text;
             seleccionarControlSelect2(cboActivos);
             txtDescripcion.value = campos[4];
             cboCentroCosto.value = campos[5];
@@ -523,19 +595,21 @@ function mostrarRegistro(rpta) {
             txtFamCodigo.value = campos[40];
             txtInvCodigo.value = campos[41];
 
-            txtVidaUtil.value = campos[42];
+            ttaObservacionMargesi.value = campos[42];
+
+            txtVidaUtil.value = campos[43];
             dttFechaAltaValContable.value = dttFechaAlta.value;
-            var dFinVidaValContable = campos[43].split("/");
+            var dFinVidaValContable = campos[44].split("/");
             dttFinVidaAltaValContable.value = dFinVidaValContable.length == 3 ? dFinVidaValContable[2] + "-" + dFinVidaValContable[1] + "-" + dFinVidaValContable[0] : '';
-            txtAnio.value = campos[44];
-            cboMes.value = campos[45];
-            txtDepreciacion.value = campos[46];
+            txtAnio.value = campos[45];
+            cboMes.value = campos[46];
+            txtDepreciacion.value = campos[47];
             txtEstadoConservacion.value = cboEstadoConserv.options[cboEstadoConserv.selectedIndex]?.text;
-            txtFactorAjuste.value = campos[47];
-            var dFechaProceso = campos[48].split("/");
+            txtFactorAjuste.value = campos[48];
+            var dFechaProceso = campos[49].split("/");
             dttFechaProceso.value = dFechaProceso.length == 3 ? dFechaProceso[2] + "-" + dFechaProceso[1] + "-" + dFechaProceso[0] : '';
-            txtValor.value = campos[49];
-            txtDeprecAcumulada.value = campos[50];
+            txtValor.value = campos[50];
+            txtDeprecAcumulada.value = campos[51];
             txtValorNeto.value = (txtValor.value || txtDeprecAcumulada.value) ? txtValor.value - txtDeprecAcumulada.value : '';
 
             document.getElementById("divPopupContainer").style.display = 'block';
@@ -633,7 +707,6 @@ function eliminarRegistro(id) {
     data = id;
 
     var frm = new FormData();
-    frm.append("data", data);
 
     Swal.fire({
         title: '¿Desea anular el registro?',
@@ -647,10 +720,12 @@ function eliminarRegistro(id) {
         if (result.value) {
             if (vista == "InventarioInicial" || vista == "Altas" || vista == "Bajas") {
                 var filtroAnio = txtPeriodoCons.value;
-                var data = filtroAnio;
-                Http.post("General/eliminar/?tbl=" + controller + vista + "&data=" + data, mostrarEliminar, frm);
+                data += "|" + filtroAnio;
+                frm.append("data", data);
+                Http.post("General/eliminar/?tbl=" + controller + vista, mostrarEliminar, frm);
             }
             else {
+                frm.append("data", data);
                 Http.post("General/eliminar/?tbl=" + controller + vista, mostrarEliminar, frm);
             }
         }
@@ -741,6 +816,29 @@ function mostrarListadoItems(rpta) {
     }
 }
 
+function grabarDatosExcel() {
+    var data = "";
+    var frm = new FormData();
+
+    var txtPeriodoCons = document.getElementById("txtPeriodoCons");
+    if (txtAnio != null) {
+        data = dataImport + "¯" + txtPeriodoCons.value;
+    }
+
+    frm.append("data", data);
+    Http.post("General/guardar/?tbl=" + controller + vista + "Importar", mostrarGrabar, frm);
+
+    divPopupContainerForm3.style.display = 'none';
+    limpiarImportacionExcel();
+}
+
+function limpiarImportacionExcel() {
+    divListaExcel.innerHTML = '';
+    dataImport = '';
+    fupExcel.value = '';
+    btnGuardarListaExcel.disabled = false;
+}
+
 function grabarBajas() {
     var data = "";
     data = obtenerDatosGrabar("Popup");
@@ -777,8 +875,8 @@ function grabarDatos() {
     data = obtenerDatosGrabar("Popup");
 
     if (vista == "InventarioInicial" || vista == "Altas") {
-        var valoresContables = "";
-        valoresContables = obtenerDatosGrabar("PopupValContable");
+        var valoreseEspecTecnicas = obtenerDatosGrabar("PopupEspTecnica");
+        var valoresContables = obtenerDatosGrabar("PopupValContable");
 
         var dataSplit = data.split("|");
 
@@ -788,8 +886,8 @@ function grabarDatos() {
         data = dataSplit.join('|');
 
         var flagInicial = (vista == "InventarioInicial") ? 1 : 0;
-
         data += '|' + flagInicial;
+        data += '|' + valoreseEspecTecnicas;
         data += '|' + valoresContables;
         data += '|';
 
@@ -880,7 +978,6 @@ function obtenerItems(datos) {
 }
 
 function adicionarItem(datos) {
-    console.log(datos);
     var campos = datos.split('|');
     item = campos[0];
     codigo = campos[1];
@@ -903,54 +1000,56 @@ function adicionarItem(datos) {
             break;
         }
     }
-
-    if (!existe) {
-        var filaDetalle = "<tr>";
-        filaDetalle += "<td style='white-space:pre-wrap;width:50px;display:none'>";
-        filaDetalle += item;
-        filaDetalle += "</td> ";
-        filaDetalle += "<td style='white-space:pre-wrap;width:100px;vertical-align:top;'>";
-        filaDetalle += codigo;
-        filaDetalle += "</td> ";
-        filaDetalle += "<td style='white-space:pre-wrap;width:100px;vertical-align:top;'>";
-        filaDetalle += descripcion;
-        filaDetalle += "</td> ";
-        filaDetalle += "<td style='white-space:pre-wrap;width:100px;vertical-align:top;'>";
-        filaDetalle += marca;
-        filaDetalle += "</td> ";
-        filaDetalle += "<td style='white-space:pre-wrap;width:100px;vertical-align:top;'>";
-        filaDetalle += modelo;
-        filaDetalle += "</td> ";
-        filaDetalle += "<td style='white-space:pre-wrap;width:100px;vertical-align:top;'>";
-        filaDetalle += serie;
-        filaDetalle += "</td> ";
-        filaDetalle += "<td style='white-space:pre-wrap;width:100px;vertical-align:top;'>";
-        filaDetalle += usuarioFinal;
-        filaDetalle += "<td style='white-space:pre-wrap;width:100px;vertical-align:top;'>";
-        filaDetalle += fechaCompra;
-        filaDetalle += "</td> ";
-        filaDetalle += "<td style='white-space:pre-wrap;width:100px;vertical-align:top;'>";
-        filaDetalle += valorCompra;
-        filaDetalle += "</td> ";
-        filaDetalle += "<td style='white-space:pre-wrap;width:100px;vertical-align:top;'>";
-        filaDetalle += fechaAlta;
-        filaDetalle += "</td> ";
-        filaDetalle += "<td style='white-space:pre-wrap;width:100px;vertical-align:top;'>";
-        filaDetalle += valorInicial;
-        filaDetalle += "</td> ";
-        filaDetalle += "<td style='white-space:pre-wrap;width:100px;vertical-align:top;'>";
-        filaDetalle += conservacion;
-        filaDetalle += "</td> ";
-        filaDetalle += "</td> ";
-        filaDetalle += "<td style='white-space:pre-wrap;width:10px;vertical-align:top;'>";
-        filaDetalle += "<i class='fa fa-trash f-16 text-c-red' title='Quitar Item' onclick='retirarItem(this,\"";
-        filaDetalle += item;
-        filaDetalle += "\");'></i>";
-        filaDetalle += "</td> ";
-        filaDetalle += "</tr>";
-        tbDetalleActivos.insertAdjacentHTML("beforeend", filaDetalle);
+    if (existe) {
+        mostrarMensaje("Existen Items ya agregados - verificar", "error");
+        return;
     }
-    else mostrarMensaje("Existen Items ya agregados- verificar", "error");
+
+    var filaDetalle = "<tr>";
+    filaDetalle += "<td style='white-space:pre-wrap;width:50px;display:none'>";
+    filaDetalle += item;
+    filaDetalle += "</td> ";
+    filaDetalle += "<td style='white-space:pre-wrap;width:100px;vertical-align:top;'>";
+    filaDetalle += codigo;
+    filaDetalle += "</td> ";
+    filaDetalle += "<td style='white-space:pre-wrap;width:100px;vertical-align:top;'>";
+    filaDetalle += descripcion;
+    filaDetalle += "</td> ";
+    filaDetalle += "<td style='white-space:pre-wrap;width:100px;vertical-align:top;'>";
+    filaDetalle += marca;
+    filaDetalle += "</td> ";
+    filaDetalle += "<td style='white-space:pre-wrap;width:100px;vertical-align:top;'>";
+    filaDetalle += modelo;
+    filaDetalle += "</td> ";
+    filaDetalle += "<td style='white-space:pre-wrap;width:100px;vertical-align:top;'>";
+    filaDetalle += serie;
+    filaDetalle += "</td> ";
+    filaDetalle += "<td style='white-space:pre-wrap;width:100px;vertical-align:top;'>";
+    filaDetalle += usuarioFinal;
+    filaDetalle += "<td style='white-space:pre-wrap;width:100px;vertical-align:top;'>";
+    filaDetalle += fechaCompra;
+    filaDetalle += "</td> ";
+    filaDetalle += "<td style='white-space:pre-wrap;width:100px;vertical-align:top;'>";
+    filaDetalle += valorCompra;
+    filaDetalle += "</td> ";
+    filaDetalle += "<td style='white-space:pre-wrap;width:100px;vertical-align:top;'>";
+    filaDetalle += fechaAlta;
+    filaDetalle += "</td> ";
+    filaDetalle += "<td style='white-space:pre-wrap;width:100px;vertical-align:top;'>";
+    filaDetalle += valorInicial;
+    filaDetalle += "</td> ";
+    filaDetalle += "<td style='white-space:pre-wrap;width:100px;vertical-align:top;'>";
+    filaDetalle += conservacion;
+    filaDetalle += "</td> ";
+    filaDetalle += "</td> ";
+    filaDetalle += "<td style='white-space:pre-wrap;width:10px;vertical-align:top;'>";
+    filaDetalle += "<i class='fa fa-trash f-16 text-c-red' title='Quitar Item' onclick='retirarItem(this,\"";
+    filaDetalle += item;
+    filaDetalle += "\");'></i>";
+    filaDetalle += "</td> ";
+    filaDetalle += "</tr>";
+    tbDetalleActivos.insertAdjacentHTML("beforeend", filaDetalle);
+
     spnNroItems.innerHTML = "Items: " + (nFilas + 1);
     configurarEnterCantidad(tbDetalleActivos, 8);
 
@@ -1066,6 +1165,18 @@ function listarUbicaFisica() {
     }
 }
 
+function formatearFechaYYYMMDD(fecha) {
+    if (!fecha)
+        return '';
+
+    var dfecha = fecha.split("/");
+    var dia = dfecha[0].padStart("2", "0");
+    var mes = dfecha[1].padStart("2", "0");
+    var anio = dfecha[2];
+
+    return anio + "-" + mes + "-" + dia;
+}
+
 function calcularFechaFin(control, fechaAlta, anios) {
     var dFecha = fechaAlta.split("-");
     var dateFin = new Date(dFecha[0] + "/" + dFecha[1] + "/" + dFecha[2]);
@@ -1160,4 +1271,105 @@ function mostrarGrabar(rpta) {
         btnGuardar.innerHTML = "<i class='fa fa-save'></i> Grabar";
         btnGuardar.disabled = false;
     }
+}
+
+function importarExcel(divForm, divLista, dataDeta) {
+    document.getElementById(divForm).style.display = "none";
+
+    var file = fupExcel.files[0];
+    var reader = new FileReader();
+
+    var camposNea = [7, 8, 9];
+    var camposOC = [10, 11, 12];
+    var camposNull = [19, 20, 21, 22, 29, 30, 31, 32];
+
+    var esArchivoCompleto = true;
+
+    reader.onload = function (e) {
+        var data = new Uint8Array(reader.result);
+        var libro = XLSX.read(data, { type: 'array', cellDates: true, dateNF: 'yyyy-mm-dd' });
+        var nhojas = libro.SheetNames.length;
+        var nombreHoja = libro.SheetNames[0];
+        var hoja = libro.Sheets[nombreHoja];
+        var range = XLSX.utils.decode_range(hoja['!ref']);
+        var contenido = "<table>";
+        contenido += "<tr style='background-color:lightgray;text-align:center'>";
+        contenido += "<td></td>";
+        for (var j = range.s.c; j <= range.e.c; j++) {
+            contenido += "<th>";
+            contenido += String.fromCharCode(65 + j);
+            contenido += "</th>";
+        }
+        contenido += "</tr>";
+
+        /*Detalle de la importacion*/
+        for (var i = range.s.r; i <= range.e.r; i++) {
+            if (i > 0) {
+                contenido += "<tr style='background-color:white;text-align:left'>";
+                contenido += "<th style='width:50px;background-color:lightgray;padding-left: 10px;padding-right: 10px;'>";
+                contenido += i + 1;
+                contenido += "</th>";
+
+                var camposNoObligatorios = [];
+                camposNoObligatorios = camposNoObligatorios.concat(camposNull);
+
+                for (var j = range.s.c; j <= range.e.c; j++) {
+                    contenido += "<td style='padding-left: 10px;padding-right: 10px;padding-top: 5px;padding-bottom: 5px;'>";
+                    var direccion = XLSX.utils.encode_cell({ c: j, r: i });
+                    var celda = hoja[direccion];
+
+                    if (celda != null) {
+                        if (i == 1) {
+                            contenido += '<b>' + celda.v + '</b >';
+                        }
+                        if (i > 1) {
+                            if (j == 9 || j == 12 || j == 14) {//celdas tipo fecha
+                                contenido += celda.v.toLocaleDateString();
+                                dataDeta += formatearFechaYYYMMDD(celda.v.toLocaleDateString());
+                            }
+                            else {
+                                contenido += celda.v;
+                                dataDeta += celda.v;
+                            }
+
+                            var indiceTipoDocAdquisicion = 6;
+                            if (indiceTipoDocAdquisicion == j) {
+                                if (celda.v == 1)
+                                    camposNoObligatorios = camposNoObligatorios.concat(camposOC);
+                                else if (celda.v == 2)
+                                    camposNoObligatorios = camposNoObligatorios.concat(camposNea);
+                            }
+                        }
+                    }
+                    else {
+                        if (camposNoObligatorios.indexOf(j) == -1) {
+                            contenido += '<span style="background-color: red;display: block;">&nbsp</span >';
+                            esArchivoCompleto = false;
+                        }
+                    }
+
+                    if (i > 1) {
+                        dataDeta += "|";
+                    }
+                    contenido += "</td>";
+                }
+                dataDeta = dataDeta.substr(0, dataDeta.length - 1);
+                dataDeta += "¬";
+
+                contenido += "</tr>";
+            }
+        }
+        //****** dataDeta Eliminar primer  caracter "¬"
+        dataDeta = dataDeta.slice(1, -1);
+
+        dataImport = dataDeta
+        contenido += "<table>";
+        document.getElementById(divLista).innerHTML = contenido;
+
+        if (!esArchivoCompleto) {
+            btnGuardarListaExcel.disabled = true;
+            mostrarMensaje("Los campos de rojo son obligatorios", "error");
+        }
+    }
+    reader.readAsArrayBuffer(file);
 }
