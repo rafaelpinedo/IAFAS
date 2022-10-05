@@ -594,6 +594,15 @@ function listarSelect2Item(lista, idCombo) {
 }
 
 function configurarBotones() {
+    var btnObtener = document.getElementById("btnObtener");
+    if (btnObtener != null) btnObtener.onclick = function () {
+        var data = "";
+        tabla = window.sessionStorage.getItem("Form");
+        var txtAnioLectivo = document.getElementById("txtAnioLectivo");
+        if (txtAnioLectivo != null) data = txtAnioLectivo.value;
+        Http.get("General/listarTabla/?tbl=" + controller + vista + "Asegurado&data=" + data, mostrarListadoAsegurado);
+    }
+
     var btnCargarArchivo = document.getElementById("btnCargarArchivo");
     if (btnCargarArchivo != null) btnCargarArchivo.onclick = function () {
         titleModal.innerText = "Importar Archivo Excel";
@@ -1483,4 +1492,12 @@ function numeroAFecha(numeroDeDias, esExcel = false) {
     let  formatted_date = dia + "/" + mes + "/" + anio;
     console.log(formatted_date);
      return formatted_date;
+}
+
+function mostrarListadoAsegurado(rpta) {
+    if (rpta) {
+        var lista = rpta.split("¬");
+        divPopupContainer.style.display = 'block';
+        var grilla = new GrillaScroll(lista, "listaAlumnos", 500, 2, tabla, "Admon", null, null, true, null, 26);
+    }
 }

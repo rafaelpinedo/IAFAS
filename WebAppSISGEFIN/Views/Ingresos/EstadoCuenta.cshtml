@@ -1,0 +1,290 @@
+﻿
+@{
+    ViewBag.Title = "EstadoCuenta";
+    Layout = "~/Views/_LayoutPage.cshtml";
+}
+
+<div class="pcoded-content">
+    <div class="pcoded-inner-content">
+        <div class="main-body">
+            <div class="page-wrapper">
+                <div class="page-body">
+                    <div class="row">
+                        <div class="col-xl-6 col-md-6">
+                            <div class="card ">
+                                <div class="card-block ">
+                                    <div class="form-group row">
+                                        <div class="col-md-4">
+                                            <div class="input-group">
+                                                <input type="number" class="form-control Popup" min="2021" id="txtAnioLectivo" value="@ViewBag.Anio">
+                                                <span class="input-group-append" id="basic-addon3">
+                                                    <button class="input-group-inverse btn btn-inverse" id="btnObtener" title="Estado de cuenta"><i class="fa fa-users fa-lg"></i></button>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <button class="btn btn-out waves-effect waves-light btn-info btn-square" id="btnImprimirEstadoCuenta" disabled data-toggle="tooltip" data-placement="bottom" title="Imprimir Estado Cuenta"><i class="fa fa-print fa-lg" aria-hidden="true"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xl-6 col-md-6">
+                            <div class="card ">
+                                <div class="card-block ">
+                                    <div class="row ">
+                                        <div class="col-sm-12">
+                                            <h4 class="text-left" style="color:#3DB9DC;font-weight:bold" id="spnTitulo">ESTADO DE CUENTA</h4>
+                                            <hr />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-3 control-label">ASEGURADO:</label>
+                                        <div class="col-sm-6">
+                                            <label class="control-label" id="lblAsegurado"></label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-sm-6">
+                                            <div class="row">
+                                                <label class="col-sm-5 control-label">DEUDA VENCIDA:</label>
+                                                <div class="col-sm-6">
+                                                    <label class="control-label" id="lblDeudaVencida"></label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="row">
+                                                <label class="col-sm-5 control-label">TOTAL DEUDA:</label>
+                                                <div class="col-sm-6">
+                                                    <label class="control-label" id="lblDeudaTotal"></label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="card-block">
+                                                <div class="table-responsive" id="listaEstadoCuenta"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="modal custom-modal" tabindex="-1" role="dialog" aria-hidden="true" id="divPopupContainer" style="overflow-y:auto;">
+                        <div class="modal-dialog bg-personalizado" id="divPopupWindow">
+                            <div class="modal-content">
+                                <div id="divBarra" class="modal-header bg-personalizado" style="cursor:move;">
+                                    <h5 class="modal-title"><i class="fa fa-users"></i> Seleccione Asegurado</h5>
+                                    <button type="button" id="btnCerrar" class="close"><span aria-hidden="true">&times;</span><span class="sr-only"></span></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="table-responsive" id="divListaAsegurado"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="divReporte" style="overflow:hidden;width:auto;display:none">
+                        <table width="475" style="font-family: Gotham, Helvetica Neue, Helvetica, Arial,' sans-serif';" cellpadding="0" cellspacing="0">
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <table width="100%" cellpadding="0" cellspacing="0" style="border: 1px solid black">
+                                            <tbody>
+                                                <tr>
+                                                    <td width="17%" style="border: 1px solid black;vertical-align: top;text-align: center">
+                                                        <img width="100px" height="104px" src="~/Riztie/Images/logoiafas.png" />
+                                                    </td>
+                                                    <td width="50%">
+                                                        <table>
+                                                            <tr>
+                                                                <td width="276" style="font-size: 10px;text-align: center">
+                                                                    ESCUELA NACIONAL DE MARINA MERCANTE<br>
+                                                                    "ALMIRANTE MIGUEL GRAU"
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td style="font-size: 10px;text-align: center">Av. Progreso Nº 662- Chucuito-Callao</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td style="font-size: 10px;text-align: center">Teléfono: 429-8210 -Fax: 465-6712</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td style="font-size: 10px;text-align: center">Email: informes@enamm.edu.pe</td>
+                                                            </tr>
+                                                            @*<tr>
+                                                                <td style="vertical-align:top;font-size: 10px;text-align: center">
+                                                                    <img width="25px" height="15px" src="~/Daymeva/Images/bn.png" />
+                                                                    Banco de la Nación
+                                                                </td>
+                                                            </tr>*@
+                                                            @*<tr>
+                                                                <td style="font-size: 10px;text-align: center">Cta.Cte. Nº 00-000-305235</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td style="font-size: 10px;text-align: center">CCI. Nº 01800000000030523504</td>
+                                                            </tr>*@
+                                                        </table>
+                                                    </td>
+                                                    <td width="33%" style="vertical-align: top">
+                                                        <table style="border: 1px solid black">
+                                                            <tr>
+                                                                <td style="font-size: 14px;text-align: center;font-weight: bold">RECIBO DE PAGO</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td style="font-size: 14px;text-align: center;font-weight: bold" id="tdNumeroRecibo"></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td style="font-size: 14px;text-align: center">R.U.C. 20131379430</td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <table width="476" style="border:1px solid black;border-spacing: 0">
+                                            <thead>
+                                                <tr>
+                                                    <th width="89" height="34" style="border-bottom: 1px solid black;font-size: 12px">D.N.I</th>
+                                                    <th width="275" style="border-right: 1px solid black;border-bottom: 1px solid black;font-size: 12px">DATOS DEL ALUMNO</th>
+                                                    <th style="border-bottom: 1px solid black;font-size: 12px">AÑO DE ESTUDIOS/AREA</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td height="30" style="font-size: 12px;text-align: center" id="tdCodigoAlumno"></td>
+                                                    <td style="font-size: 12px;" id="tdNombreAlumno"></td>
+                                                    <td style="font-size: 12px;text-align: center" id="tdAnioArea"></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <table height="350" width="476" cellpadding="0" cellspacing="0" style="border: 1px solid black;">
+                                            <thead>
+                                                <tr>
+                                                    <th colspan="8" height="20" style="border-bottom: 1px solid black;font-size: 12px;text-align:center">DATOS DE LA TRANSACCION</th>
+                                                </tr>
+                                                <tr>
+                                                    <th width="58" height="25" style="border-right: 1px solid black;border-bottom: 1px solid black;font-size: 12px">COD. OP.</th>
+                                                    <th colspan="6" width="356" style="border-right: 1px solid black;border-bottom: 1px solid black;font-size: 12px">CONCEPTO</th>
+                                                    <th width="80" style="border-bottom: 1px solid black;font-size: 12px">MONTO</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td colspan="8" style="vertical-align: top">
+                                                        <table cellpadding="0" cellspacing="0">
+                                                            <tbody id="tbDetalleReporte">
+                                                            </tbody>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                            <tfoot>
+                                                <tr>
+                                                    <td colspan="7" style="font-size: 10px" id="tdMontoLetra"></td>
+                                                    <td>&nbsp;</td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="7" style="font-size: 12px">&nbsp;</td>
+                                                    <td>&nbsp;</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>&nbsp;</td>
+                                                    <td>
+                                                        <table style="border:1px solid black;" cellpadding="0" cellspacing="0">
+                                                            <tr>
+                                                                <td style="border-bottom: 1px solid black;font-size: 12px">Nº Créditos</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td style="font-size: 14px;text-align: center" id="tdCreditos">0</td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                    <td>&nbsp;</td>
+                                                    <td>
+                                                        <table style="border:1px solid black;" cellpadding="0" cellspacing="0">
+                                                            <tr>
+                                                                <td style="border-bottom: 1px solid black;font-size: 14px;text-align: center" id="tdFechaEmision"></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td style="        font-size: 12px;
+        text-align: center
+">
+                                                                    Fecha Emisión
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                    <td>&nbsp;</td>
+                                                    <td>
+                                                        <table style="border:1px solid black;" cellpadding="0" cellspacing="0">
+                                                            <tr>
+                                                                <td style="border-bottom: 1px solid black;font-size: 14px;text-align: center" id="tdFechaVencimiento"></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td style="font-size: 12px;text-align: center">
+                                                                    Fecha Vencimiento
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                    <td>&nbsp;</td>
+                                                    <td style="border-top: 1px solid black;
+        text-align: right;
+        border-left: 1px solid black;
+        font-size: 14px;
+        font-weight: bold" id="tdTotalPagar"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="7"></td>
+                                                    <td style="text-align: right;border-top: 1px solid black;border-left: 1px solid black;font-size: 10px">TOTAL A PAGAR</td>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="8" style="text-align: center"><br>__________________________<br>TESORERIA</td>
+
+                                </tr>
+                                <tr>
+                                    <td colspan="8" style="font-size: 14px"><br>NOTA: RECIBO CANCELADO, SIN DERECHO A DEVOLUCION</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="modal custom-modal" tabindex="-1" role="dialog" aria-hidden="true" id="divPopupContainerPreView" style="overflow-y:auto;">
+                        <div class="modal-dialog modal-xl bg-personalizado" id="divPopupWindowiPreView">
+                            <div class="modal-content">
+                                <div id="divBarraOption" class="modal-header bg-personalizado" style="cursor:move">
+                                    <h5 class="modal-title"><i class="fa fa-search"></i> Vista Previa</h5>
+                                    <button type="button" id="btnCerrarPreView" class="close"><span aria-hidden="true">&times;</span><span class="sr-only"></span></button>
+                                </div>
+                                <div class="modal-body">
+                                    <iframe id="ifrmVistaPrevia" style="width:100%;height:800px"></iframe>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="styleSelector"> </div>
+        </div>
+    </div>
+</div>
+<iframe name="print_frame" width="0" height="0" frameborder="0" src="about:blank"></iframe>
+<script src="~/Riztie/Js/App/AppIngresos.js"></script>
+<script src="~/Riztie/Js/App/MontoLetras.js"></script>

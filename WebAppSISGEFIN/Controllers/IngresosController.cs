@@ -94,5 +94,16 @@ namespace WebAppSISGEFIN.Controllers
             return View();
         }
 
+        [FiltroAutenticacion]
+        public ActionResult EstadoCuenta()
+        {
+            int Anio = DateTime.Now.Year;
+            string[] Data = Session["DataUsuario"].ToString().Split('|');
+            string IdPerfil = Data[3];
+            ViewBag.Menu = new Menu().Listar(IdPerfil);
+            ViewBag.Anio = Anio;
+            return View();
+        }
+
     }
 }
