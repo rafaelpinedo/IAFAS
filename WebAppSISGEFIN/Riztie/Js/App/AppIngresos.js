@@ -20,7 +20,14 @@ window.onload = function () {
     vista = window.sessionStorage.getItem("Vista");
     controller = window.sessionStorage.getItem("Controller");
     mostrarLoading("divLista");
-    getListar();
+    if (vista == "Recaudacion") {
+        getListarRecaudacion('1');
+    }
+    else {
+        getListar();
+    }
+
+   
     configurarBotones();
     configurarCombos();
     configurarConsultas();
@@ -75,6 +82,16 @@ function getListar() {
         data = txtFechaInicio.value + '|' + txtFechaFinal.value;
     }
 
+    Http.get("General/listarTabla?tbl=" + controller + vista + "&data=" + data, mostrarlistas);
+}
+
+function getListarRecaudacion(cuenta) {
+    var data = "";
+    var txtAnio = document.getElementById("txtAnio");
+    if (txtAnio != null) {
+        data = txtAnio.value + '|' + cuenta;
+    }
+      
     Http.get("General/listarTabla?tbl=" + controller + vista + "&data=" + data, mostrarlistas);
 }
 
@@ -220,13 +237,18 @@ function grabarDatos() {
             dataImport += "¯" + txtAnio.value;
         }
 
+        var cboTipoRecaudacion = document.getElementById("cboTipoRecaudacion");
+        if (cboTipoRecaudacion != null) {
+            dataImport += "¯" + cboTipoRecaudacion.value;
+        }
         var cboEntidad = document.getElementById("cboEntidadFinancieraCarga");
         if (cboEntidad != null) {
             dataImport += "¯" + cboEntidad.value;
         }
-
+        //frm.append("data", dataImport);
+        //Http.post("General/guardar/?tbl=" + controller + vista, mostrarGrabar, frm);
         frm.append("data", dataImport);
-        Http.post("General/guardar/?tbl=" + controller + vista, mostrarGrabar, frm);
+        Http.post("General/guardar/?tbl=" + controller + vista +'CxCobrar', mostrarGrabar, frm);
     }
     else if (vista == "ReciboIngreso") {
         data += "¯" + txtFechaInicio.value + '|' + txtFechaFinal.value;
@@ -604,7 +626,7 @@ function configurarBotones() {
         divListaExcel.innerHTML = "";
         spanPendiente.innerHTML = "";
         cboEntidadFinancieraCarga.value = "";
-        cboTipoRecaudacion.value = "0";
+        cboTipoRecaudacion.value = "";
     }
 
     var btnCargarCXC = document.getElementById("btnCargarCXC");
@@ -612,7 +634,7 @@ function configurarBotones() {
 
         let entidad = cboEntidadFinancieraCarga.value;
         let TipoRecaudacion = cboTipoRecaudacion.value
-        if (TipoRecaudacion == "0") {
+        if (TipoRecaudacion == "") {
             mostrarMensaje("Seleccionar Tipo Recaudación", "error")
             return;
         }
@@ -788,10 +810,15 @@ function configurarBotones() {
         }
         else if (vista == "Recaudacion") {
             let entidad = cboEntidadFinancieraCarga.value;
+            let tipoDoc = cboTipoRecaudacion.value;
 
             if (fupExcel.value = "") {
                 mostrarMensaje("Seleccione el archivo excel a importar", "error");
             } 
+            else if (tipoDoc == "") {
+                mostrarMensaje("Seleccionar Tipo documento", "error")
+                return;
+            }
             else if (entidad == "") {
                 mostrarMensaje("Seleccionar Entidad Financiera", "error")
                 return;
@@ -847,7 +874,13 @@ function configurarBotones() {
 
     var btnConsultar = document.getElementById("btnConsultar");
     if (btnConsultar != null) btnConsultar.onclick = function () {
-        getListar();
+        if (vista == "Recaudacion") {
+            getListarRecaudacion('1');
+        }
+        else {
+            getListar();
+        }
+        
     }
 
     var btnAprobar = document.getElementById("btnAprobar");
@@ -984,6 +1017,17 @@ function configurarBotones() {
             divPopupContainerForm3.style.display = "block";
           //  getReporte(idRegistro);
         }
+    }
+
+
+    var tabCuentasxCobrar = document.getElementById("btnCuentasxCobrar");
+    if (tabCuentasxCobrar != null) tabCuentasxCobrar.onclick = function () {
+        getListarRecaudacion('1');
+    }
+
+    var btnRecibosPagados = document.getElementById("btnRecibosPagados");
+    if (btnRecibosPagados != null) btnRecibosPagados.onclick = function () {
+        getListarRecaudacion('0');
     }
 }
 
@@ -1386,6 +1430,7 @@ function importarExcel(divForm, divLista, dataCab, dataDeta) {
         //*************
     
         console.log(hoja);
+
         var contenido = "<table>";
         contenido += "<tr style='background-color:lightgray;text-align:center'>";
         contenido += "<td></td>";
@@ -1429,7 +1474,8 @@ function importarExcel(divForm, divLista, dataCab, dataDeta) {
                             contenido += celda.v;
                         }
                     }
-                    if (i > 3) {
+                    //if (i > 3) {
+                    if (i > 2) {
                         
                         if (direc == "D" || direc == "S" || direc == "Z") {
                             dataDeta += celda.w;
