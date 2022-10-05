@@ -354,6 +354,7 @@
     <Content Include="Views\Ingresos\Recaudacion.cshtml" />
     <Content Include="Views\Ingresos\ReciboIngreso.cshtml" />
     <Content Include="Views\Inventario\CierreAlmacen.cshtml" />
+    <Content Include="Templates\Patrimonio\Template_InventarioInicial.xlsx" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
