@@ -16,9 +16,9 @@
                             <label class="control-label">Periodo</label>
                             <input type="number" id="txtPeriodoCons" class="control-form PopupCons" value="@ViewBag.Anio">
                         </div>
-                        <div class="form-group col-md-2 m-3">
+                        <div class="form-group col-md-4 m-3">
                             <button class="input-group-inverse btn btn-dark" id="btnConsultar" data-toggle="tooltip" data-placement="bottom" title="Consultar"><i class="fa fa-search fa-lg" aria-hidden="true"></i></button>
-                            <button class="input-group-inverse btn btn-primary" id="btnNuevo" data-toggle="tooltip" data-placement="bottom" title="Nuevo"><i class="fa fa-plus-circle fa-lg" aria-hidden="true"></i></button>
+                            <button class="input-group-inverse btn btn-primary" id="btnNuevoMov" data-toggle="tooltip" data-placement="bottom" title="Nuevo">Nuevo <i class="fa fa-plus-circle fa-lg" aria-hidden="true"></i></button>
                         </div>
                     </div>
 
@@ -27,9 +27,91 @@
                             <div class="table-responsive" id="divLista"></div>
                         </div>
                     </div>
-                    <div class="form-row">
+                    @*<div class="form-row">
                         <div class="form-group col-md-12">
                             <div class="table-responsive" id="divListaActivo"></div>
+                        </div>
+                    </div>*@
+                    <div class="form-row">
+                        <div class="modal custom-modal" tabindex="-1" role="dialog" aria-hidden="true" id="divPopupContainerMov" style="overflow-y:auto;">
+                            <div class="modal-dialog modal-xl bg-personalizado" id="divPopupWindowMov">
+                                <div class="modal-content">
+                                    <div id="divBarraMov" class="modal-header bg-personalizado" style="cursor:move">
+                                        <h5 class="modal-title">Registro de Altas</h5>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="row">
+                                            <div class="form-group col-sm-4">
+                                                <label class="control-label">Año</label>
+                                                <input type="number" class="control-lectura RequeMov PopupMov" readonly id="txtAnioCab">
+                                            </div>
+                                            <div class="form-group col-sm-4">
+                                                <label class="control-label">Mes</label>
+                                                <select class="control-lectura RequeMov PopupMov" disabled id="cboMesesCab"></select>
+                                            </div>
+                                            <div class="form-group col-sm-4">
+                                                <label class="control-label">Tipo Movimiento</label>
+                                                <select class="control-form RequeMov PopupMov" id="cboTipoMovCab"></select>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-group col-sm-4">
+                                                <label class="control-label">Nro Movimiento</label>
+                                                <input type="number" class="control-lectura PopupMov" readonly id="txtNroMovCab">
+                                            </div>
+                                            <div class="form-group col-sm-4">
+                                                <label class="control-label">Fecha Movimiento</label>
+                                                <input type="date" class="control-form RequeMov PopupMov" id="dttFechaMovCab">
+                                            </div>
+                                            <div class="form-group col-sm-4">
+                                                <label class="control-label">Estado</label>
+                                                <select class="control-form RequeMov PopupMov" id="cboEstadoCab"></select>
+                                            </div>
+                                        </div>
+                                        <hr />
+                                        <div class="row">
+                                            <div class="form-group col-sm-4">
+                                                <label class="control-label">Causal del Alta</label>
+                                                <select class="control-form RequeMov PopupMov" id="cboCausalAltaCab"></select>
+                                            </div>
+                                            <div class="form-group col-sm-4">
+                                                <label class="control-label">Tipo Doc</label>
+                                                <select class="control-form RequeMov PopupMov" id="cboTipoDocCab"></select>
+                                            </div>
+                                            <div class="form-group col-sm-4">
+                                                <label class="control-label">Nro Orden</label>
+                                                <input type="text" class="control-form RequeMov PopupMov" id="txtNroOrdenCab">
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-group col-sm-6">
+                                                <label class="control-label">Observaciones</label>
+                                                <textarea class="control-form PopupMov" rows="4" id="ttaObservacionCab"></textarea>
+                                            </div>
+                                        </div>
+                                        <div id="detalleActivo" style="display:none">
+                                            <hr />
+                                            <div class="row">
+                                                <div class="form-group col-sm-12 d-flex align-items-center">
+                                                    <label class="control-label pr-4 mb-0">DETALLE DE ACTIVOS</label>
+                                                    <button class="input-group-inverse btn btn-primary" id="btnNuevo" data-toggle="tooltip" data-placement="bottom" title="Nuevo">
+                                                        <i class="fa fa-plus-circle fa-lg" aria-hidden="true"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="form-row">
+                                                <div class="form-group col-md-12">
+                                                    <div class="table-responsive" id="divListaActivo"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button id="btnCancelarMov" class="btnCancelarForm" title="Cancelar"><i class="fa fa-undo" aria-hidden="true"></i>&nbsp;Cancelar</button>
+                                        <button id="btnGuardarMov" class="btnGuardarForm bg-customer" title="Guardar datos"><span class="fa fa-save"></span>&nbsp;Grabar</button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="form-row">
@@ -275,7 +357,7 @@
                                     </div>
                                     <div class="modal-footer">
                                         <button id="btnCancelar" class="btnCancelarForm" title="Cancelar"><i class="fa fa-undo" aria-hidden="true"></i>&nbsp;Cancelar</button>
-                                        <button id="btnGuardar" class="btnGuardarForm bg-customer" title="Guardar datos"><span class="fa fa-save"></span>&nbsp;Grabar</button>
+                                        <button id="btnAgregar" class="btnGuardarForm bg-customer" title="Guardar datos"><span class="fa fa-save"></span>&nbsp;Grabar</button>
                                     </div>
                                 </div>
                             </div>
@@ -315,7 +397,6 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="form-row">
                         <div class="modal custom-modal" tabindex="-1" role="dialog" aria-hidden="true" id="divPopupContainerForm2" style="overflow-y:auto;">
                             <div class="modal-dialog modal-xl bg-personalizado" id="divPopupWindowForm2">
