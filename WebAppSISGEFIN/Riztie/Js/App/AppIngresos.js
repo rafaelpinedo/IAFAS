@@ -170,7 +170,7 @@ function mostrarlistas(rpta) {
             crearCombo(listaEntidad, "cboEntidadFinanciera", "Seleccione");
             crearCombo(listaEntidad, "cboEntidadFinancieraCarga", "Seleccione");
             crearCombo(listaEstado, "cboEstado", "Seleccione");
-            spnTotalRecaudacion.innerText = formatoNumeroDecimal(listaTotal[0]);
+           // spnTotalRecaudacion.innerText = formatoNumeroDecimal(listaTotal[0]);
         }
         else if (vista == "ReciboIngreso") {
             var listaFormatoDoc = listas[1].split("¬");
@@ -1022,8 +1022,8 @@ function configurarBotones() {
             mostrarMensaje("Seleccione registro de la lista", "error");
         }
         else {
-            console.log(idRegistro);
-            divPopupContainerForm3.style.display = "block";
+            alert('imprimir RI')
+           // divPopupContainerForm3.style.display = "block";
           //  getReporte(idRegistro);
         }
     }
@@ -1536,7 +1536,7 @@ function numeroAFecha(numeroDeDias, esExcel = false) {
     let mes = ("0" + (date.getMonth() + 1)).slice(-2);
     let anio = date.getFullYear();
     let  formatted_date = dia + "/" + mes + "/" + anio;
-    console.log(formatted_date);
+    //console.log(formatted_date);
      return formatted_date;
 }
 

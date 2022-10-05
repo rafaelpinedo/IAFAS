@@ -355,6 +355,7 @@
     <Content Include="Views\Ingresos\ReciboIngreso.cshtml" />
     <Content Include="Views\Inventario\CierreAlmacen.cshtml" />
     <Content Include="Views\Ingresos\EstadoCuenta.cshtml" />
+    <Content Include="Views\Ingresos\Reporte.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

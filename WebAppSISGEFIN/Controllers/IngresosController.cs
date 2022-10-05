@@ -77,6 +77,8 @@ namespace WebAppSISGEFIN.Controllers
             return View();
         }
 
+
+
         [FiltroAutenticacion]
         public ActionResult ReciboIngreso()
         {
@@ -100,6 +102,20 @@ namespace WebAppSISGEFIN.Controllers
             int Anio = DateTime.Now.Year;
             string[] Data = Session["DataUsuario"].ToString().Split('|');
             string IdPerfil = Data[3];
+            ViewBag.Menu = new Menu().Listar(IdPerfil);
+            ViewBag.Anio = Anio;
+            return View();
+        }
+
+        [FiltroAutenticacion]
+        public ActionResult Reporte()
+        {
+            int Anio = DateTime.Now.Year;
+            string[] Data = Session["DataUsuario"].ToString().Split('|');
+            string IdPerfil = Data[3];
+            string Fecha = DateTime.Now.ToShortDateString();
+            ViewBag.FechaInicial = DateTime.Now.Year + "-01-01";
+            ViewBag.Fecha = Convert.ToDateTime(Fecha).ToString("yyyy-MM-dd");
             ViewBag.Menu = new Menu().Listar(IdPerfil);
             ViewBag.Anio = Anio;
             return View();
