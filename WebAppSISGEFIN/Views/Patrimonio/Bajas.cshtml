@@ -17,9 +17,9 @@
                             <label class="control-label">Periodo</label>
                             <input type="number" id="txtPeriodoCons" class="control-form PopupCons" value="@ViewBag.Anio">
                         </div>
-                        <div class="form-group col-md-2 m-3">
+                        <div class="form-group col-md-4 m-3">
                             <button class="input-group-inverse btn btn-dark" id="btnConsultar" data-toggle="tooltip" data-placement="bottom" title="Consultar"><i class="fa fa-search fa-lg" aria-hidden="true"></i></button>
-                            <button class="input-group-inverse btn btn-primary" id="btnNuevo" data-toggle="tooltip" data-placement="bottom" title="Nuevo"><i class="fa fa-plus-circle fa-lg" aria-hidden="true"></i></button>
+                            <button class="input-group-inverse btn btn-primary" id="btnNuevo" data-toggle="tooltip" data-placement="bottom" title="Nuevo">Nuevo <i class="fa fa-plus-circle fa-lg" aria-hidden="true"></i></button>
                         </div>
                     </div>
                     <div class="form-row">
@@ -29,7 +29,7 @@
                     </div>
                     <div class="form-row">
                         <div class="modal custom-modal" tabindex="-1" role="dialog" aria-hidden="true" id="divPopupContainer" style="overflow-y:auto;">
-                            <div class="modal-dialog modal-lg bg-personalizado" id="divPopupWindow" style="margin-top:30px;">
+                            <div class="modal-dialog modal-xl bg-personalizado" id="divPopupWindow" style="margin-top:30px;">
                                 <div class="modal-content">
                                     <div id="divBarra" class="modal-header bg-personalizado" style="cursor:move">
                                         <h5 class="modal-title" id="tituloModal">Nuevo Activo Baja</h5>
@@ -37,28 +37,56 @@
                                     <div class="modal-body">
                                         <div class="row">
                                             <div class="form-group col-sm-4">
-                                                <input type="hidden" class="control-lectura Popup" id="txtIdRegistro" />
+                                                <label class="control-label">Año</label>
+                                                <input type="number" class="control-lectura RequeMov PopupMov" readonly id="txtAnioCab">
+                                            </div>
+                                            <div class="form-group col-sm-4">
+                                                <label class="control-label">Mes</label>
+                                                <select class="control-lectura RequeMov PopupMov" disabled id="cboMesesCab"></select>
+                                            </div>
+                                            <div class="form-group col-sm-4">
+                                                <label class="control-label">Tipo Movimiento</label>
+                                                <select class="control-form RequeMov PopupMov" id="cboTipoMovCab"></select>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-group col-sm-4">
+                                                <label class="control-label">Nro Movimiento</label>
+                                                <input type="number" class="control-lectura PopupMov" readonly id="txtNroMovCab">
+                                            </div>
+                                            <div class="form-group col-sm-4">
+                                                <label class="control-label">Fecha Movimiento</label>
+                                                <input type="date" class="control-form RequeMov PopupMov" id="dttFechaMovCab">
+                                            </div>
+                                            <div class="form-group col-sm-4">
+                                                <label class="control-label">Estado</label>
+                                                <select class="control-form RequeMov PopupMov" id="cboEstadoCab"></select>
+                                            </div>
+                                        </div>
+                                        <hr />
+                                        <div class="row">
+                                            <div class="form-group col-sm-4">
+                                                @*<input type="hidden" class="control-lectura Popup" id="txtIdRegistro" />*@
                                                 <label class="control-label">Nro Resolución</label>
-                                                <input type="number" class="control-form Reque Popup" id="txtNroResolucion">
+                                                <input type="number" class="control-form RequeMov PopupMov" id="txtNroResolucion">
+                                            </div>
+                                            <div class="form-group col-sm-4">
+                                                <label class="control-label">Fecha</label>
+                                                <input type="date" class="control-form RequeMov PopupMov" id="dttFechaResolucion">
                                             </div>
                                             <div class="form-group col-sm-4">
                                                 <label class="control-label">Causal Baja</label>
-                                                <select class="control-form Reque Popup" id="cboCausalBaja"></select>
-                                            </div>
-                                            <div class="form-group col-sm-4">
-                                                <label class="control-label">Fecha Baja</label>
-                                                <input type="date" class="control-form Reque Popup" id="dttFechaBaja">
+                                                <select class="control-form RequeMov PopupMov" id="cboCausalBaja"></select>
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="form-group col-sm-5">
                                                 <label class="control-label">Observaciones</label>
-                                                <textarea class="control-form Popup" rows="2" id="ttaObservacion"></textarea>
+                                                <textarea class="control-form PopupMov" rows="2" id="ttaObservacionCab"></textarea>
                                             </div>
-                                            <div class="form-group col-sm-3">
-                                                <label class="control-label">Estado</label>
-                                                <select class="control-form Reque Popup" id="cboEstado"></select>
-                                            </div>
+                                        </div>
+                                        <hr />
+                                        <div class="row">
                                             <div class="form-group col-sm-2 section-nuevo-activo">
                                                 <label class="control-label">Periodo</label>
                                                 <input type="number" id="txtPeriodoItemsCons" class="control-form PopupCons" value="@ViewBag.Anio">
@@ -67,11 +95,10 @@
                                                 <button class="btn btn-out waves-effect waves-light btn-info btn-square" id="btnConsutarItems"><i class="fa fa-search-plus" aria-hidden="true"></i></button>
                                             </div>
                                         </div>
-                                        <hr />
-                                        <div class="row m-2 section-nuevo-activo">
+                                        <div class="row mt-2 section-nuevo-activo">
                                             <div class="form-group col-sm-12">
                                                 <div class="table-responsive" style="height:315px;">
-                                                    <table class='grilla bordered' style="width:1000px">
+                                                    <table class='grilla bordered' style="width:100%">
                                                         <thead>
                                                             <tr class="FilaHead">
                                                                 <th style="white-space:pre-wrap;width:70px;display:none">idx</th>
