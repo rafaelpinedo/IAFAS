@@ -12,11 +12,16 @@ var listaActivos_v = [];
 var FLAG_INICIAL_INVENTARIO_INICIAL = 1;
 var FLAG_INICIAL_ALTAS = 0;
 var dataImport = "";
-//var dataCab = "";
 var dataDeta = "";
 var anioFiscal = "";
 var periodo = "";
-var tabActivo = "";
+var tabGeneral = "";
+var EST_APROBADO = 2;
+var esOrdenAprobado = false;
+
+var idTabActivo = 'tabAltas';
+var TIPO_ALTAS = 1;
+var TIPO_BAJAS = 2;
 
 window.onload = function () {
     getConfigMn();
@@ -27,8 +32,12 @@ window.onload = function () {
     configurarBotones();
     configurarCombos();
     configurarCampos();
+    configurarTabs();
 }
 
+var botonInventarioGeneral = [
+    { "cabecera": "Editar", "clase": "fa fa-search btn btn-info btnCirculo", "id": "Editar" },
+];
 
 function getListar() {
     var data = "";
@@ -49,6 +58,11 @@ function getListar() {
         var anioConsulta = document.getElementById('txtPeriodoCons')?.value;
         data = anioConsulta;
     }
+    if (vista == "General") {
+        var anioConsulta = document.getElementById('txtPeriodoCons')?.value;
+        var idTab = (idTabActivo == "tabAltas" ? TIPO_ALTAS : TIPO_BAJAS);
+        data = idTab + '|' + anioConsulta;
+    }
 
     if (vista == "Altas") {
         Http.get("General/listarTabla?tbl=" + controller + vista + "Mov&data=" + data, mostrarlistas);
@@ -58,9 +72,12 @@ function getListar() {
     }
 }
 
-function getListarActivos(data) {
+function getListarMovActivos(data) {
     if (vista == "Altas") {
         Http.get("General/listarTabla?tbl=" + controller + vista + "ActivosMov&data=" + data, mostrarlistasActivos);
+    }
+    else if (vista == "Bajas") {
+        Http.get("General/listarTabla?tbl=" + controller + vista + "Activos&data=" + data, adicionarLista);
     }
 }
 
@@ -132,17 +149,77 @@ function mostrarlistas(rpta) {
             }
         }
         else if (vista == "Bajas") {
-            var listaCausalBajas = listas[1].split("¬");
-            var listaEstado = listas[2].split("¬");
+            anioFiscal = listas[1].split("|")[0];
+            periodo = listas[1].split("|")[1];
+
+            var listaMeses = listas[2].split("¬");
+            var listaTipoMov = listas[3].split("¬");
+            var listaCausalBajas = listas[4].split("¬");
+            var listaEstadoMov = listas[5].split("¬");
 
             grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
 
+            crearCombo(listaMeses, "cboMesesCab", "Seleccione");
+            crearCombo(listaTipoMov, "cboTipoMovCab", "Seleccione");
             crearCombo(listaCausalBajas, "cboCausalBaja", "Seleccione");
-            crearCombo(listaEstado, "cboEstado", "Seleccione");
+            crearCombo(listaEstadoMov, "cboEstadoCab", "Seleccione");
+        }
+        else if (vista == "General") {
+            listaUbicaFisica_v = listas[1].split("¬");
+            listaActivos_v = listas[4].split("¬");
+
+            var listaResponsable = listas[2].split("¬");
+            var listaOficina = listas[3].split("¬");
+            var listaActivos = listas[4].split("¬");
+            var listaCentroCosto = listas[5].split("¬");
+            var listaEstadoConserv = listas[6].split("¬");
+            var listaMarcas = listas[7].split("¬");
+            var listaPais = listas[8].split("¬");
+            var listaEstadoTipo = listas[9].split("¬");
+            var listaProveedor = listas[10].split("¬");
+            var listaTipoDoc = listas[11].split("¬");
+            var listaMeses = listas[12].split("¬");
+
+
+            crearCombo(listaCentroCosto, "cboCentroCostoCons", "Ninguno");
+            crearCombo(listaOficina, "cboOficinaCons", "Ninguno");
+
+            crearCombo(listaResponsable, "cboResponsable", "Seleccione");
+            crearCombo(listaResponsable, "cboUsuarioFinal", "Seleccione");
+            crearCombo(listaOficina, "cboOficina", "Ninguno");
+            crearCombo(listaActivos, "cboActivos", "Seleccione");
+            crearCombo(listaCentroCosto, "cboCentroCosto", "Seleccione");
+            crearCombo(listaEstadoConserv, "cboEstadoConserv", "Seleccione");
+            crearCombo(listaMarcas, "cboMarcas", "Seleccione");
+            crearCombo(listaPais, "cboPaisProcedencia", "Seleccione");
+            crearCombo(listaEstadoTipo, "cboEstadoTipo", "Seleccione");
+            crearCombo(listaProveedor, "cboProveedor", "Seleccione");
+            crearCombo(listaTipoDoc, "cboTipoDoc", "Seleccionar");
+            crearCombo(listaMeses, "cboMes", "Seleccione");
+
+            grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botonInventarioGeneral, 38, false, null);
         }
         else {
             grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
         }
+    }
+}
+function configurarTabs() {
+
+    var tabAltas = document.getElementById("tabAltas");
+    if (tabAltas != null) tabAltas.onclick = function () {
+        document.getElementById("divLista").innerHTML = "";
+
+        idTabActivo = "tabAltas";
+        getListar();
+    }
+
+    var tabBajas = document.getElementById("tabBajas");
+    if (tabBajas != null) tabBajas.onclick = function () {
+        document.getElementById("divLista").innerHTML = "";
+
+        idTabActivo = "tabBajas";
+        getListar();
     }
 }
 
@@ -208,6 +285,15 @@ function configurarBotones() {
 
             var cboMesesCab = document.getElementById("cboMesesCab");
             if (cboMesesCab != null) cboMesesCab.value = periodo;
+
+            var cboEstadoCab = document.getElementById("cboEstadoCab");
+            if (cboEstadoCab != null) cboEstadoCab.value = 1; // 1: PENDIENTE, 2:APROBADO
+
+            var cboCausalAltaCab = document.getElementById("cboCausalAltaCab");
+            if (cboCausalAltaCab != null) cboCausalAltaCab.value = 1; // 1: COMPRAS
+
+            var dttFechaMovCab = document.getElementById("dttFechaMovCab");
+            if (dttFechaMovCab != null) dttFechaMovCab.value = obtenerFechaActualYYYMMDD();
         }
     }
 
@@ -254,8 +340,7 @@ function configurarBotones() {
 
             var dttFechaProceso = document.getElementById("dttFechaProceso");
             if (dttFechaProceso != null) {
-                var date = new Date();
-                dttFechaProceso.value = date.getFullYear() + "-" + (date.getMonth() + 1).toString().padStart(2, "0") + "-" + date.getDate().toString().padStart(2, "0");
+                dttFechaProceso.value = obtenerFechaActualYYYMMDD();
             };
 
             var txtDeprecAcumulada = document.getElementById("txtDeprecAcumulada");
@@ -265,6 +350,9 @@ function configurarBotones() {
             if (txtEstadoConservacion != null) txtEstadoConservacion.value = cboEstadoConserv.options[cboEstadoConserv.selectedIndex].innerText
         }
         if (vista == "Bajas") {
+            limpiarForm("PopupMov");
+            limpiarForm("NoPopupMov");
+
             document.querySelectorAll('.section-nuevo-activo').forEach(function (el) {
                 el.style.display = 'block';
             });
@@ -273,6 +361,21 @@ function configurarBotones() {
             spnNroItems.innerHTML = "Items: 0";
             txtPeriodoItemsCons.value = new Date().getFullYear();
 
+            var txtAnioCab = document.getElementById("txtAnioCab");
+            if (txtAnioCab != null) txtAnioCab.value = anioFiscal;
+
+            var cboMesesCab = document.getElementById("cboMesesCab");
+            if (cboMesesCab != null) cboMesesCab.value = periodo;
+
+            var cboEstadoCab = document.getElementById("cboEstadoCab");
+            if (cboEstadoCab != null) cboEstadoCab.value = 1; // 1: PENDIENTE, 2:APROBADO
+
+            var dttFechaMovCab = document.getElementById("dttFechaMovCab");
+            if (dttFechaMovCab != null) dttFechaMovCab.value = obtenerFechaActualYYYMMDD();
+
+            var dttFechaResolucion = document.getElementById("dttFechaResolucion");
+            if (dttFechaResolucion != null) dttFechaResolucion.value = obtenerFechaActualYYYMMDD();
+
             btnGuardarBajas.innerHTML = "<i class='fa fa-save'></i> Grabar";
             btnGuardarBajas.disabled = false;
         }
@@ -280,19 +383,8 @@ function configurarBotones() {
 
     var btnGuardarBajas = document.getElementById("btnGuardarBajas");
     if (btnGuardarBajas != null) btnGuardarBajas.onclick = function () {
-        var validar = false;
-        var esNuevaBaja = !txtIdRegistro.value;
 
-        if (esNuevaBaja) {
-            if (validarBajas())
-                validar = true;
-        }
-        else {
-            if (validarInformacion("Reque") == true)
-                validar = true;
-        }
-
-        if (validar == true) {
+        if (esBajasValido()) {
             Swal.fire({
                 title: '¿Desea grabar la información?',
                 icon: 'warning',
@@ -303,10 +395,7 @@ function configurarBotones() {
                 cancelButtonText: 'No'
             }).then((result) => {
                 if (result.value) {
-                    if (esNuevaBaja)
-                        grabarBajas();
-                    else
-                        grabarDatos();
+                    grabarBajas();
 
                     Swal.fire({
                         title: 'Procesando...',
@@ -546,7 +635,7 @@ function configurarCampos() {
 }
 
 function configurarCombos() {
-    if (vista == "InventarioInicial" || vista == "Altas") {
+    if (vista == "InventarioInicial" || vista == "Altas" || vista == "General") {
         //var cboActivos = document.getElementById("cboActivos");
         //if (cboActivos != null) cboActivos.onchange = function () {
         //    asignarValoresActivo(this.value);
@@ -639,8 +728,9 @@ function mostrarRegistroMov(rpta) {
             txtNroOrdenCab.value = campos[9];
 
             document.getElementById("divPopupContainerMov").style.display = 'block';
+            getListarMovActivos(campos[0]);
 
-            getListarActivos(campos[0]);
+            actualizarBotones(campos[5])
         }
     }
     else {
@@ -659,7 +749,9 @@ function mostrarRegistro(rpta) {
             cboResponsable.value = campos[3];
             cboEstado.value = campos[4];
         }
-        else if (vista == "InventarioInicial" || vista == "Altas") {
+        else if (vista == "InventarioInicial" || vista == "Altas" || vista == "General") {
+            document.getElementById("divPopupContainer").style.display = 'block';
+
             txtIdRegistro.value = campos[0];
             txtCodigoPatrimonio.value = campos[1];
             txtCodigoMargesi.value = campos[1];
@@ -728,23 +820,26 @@ function mostrarRegistro(rpta) {
             txtValor.value = campos[50];
             txtDeprecAcumulada.value = campos[51];
             txtValorNeto.value = (txtValor.value || txtDeprecAcumulada.value) ? txtValor.value - txtDeprecAcumulada.value : '';
-
-            document.getElementById("divPopupContainer").style.display = 'block';
         }
         else if (vista == "Bajas") {
             document.getElementById("divPopupContainer").style.display = 'block';
 
-            document.querySelectorAll('.section-nuevo-activo').forEach(function (el) {
-                el.style.display = 'none';
-            });
+            //document.querySelectorAll('.section-nuevo-activo').forEach(function (el) {
+            //    el.style.display = 'none';
+            //});
 
-            txtIdRegistro.value = campos[0];
-            cboCausalBaja.value = campos[1];
+            txtNroMovCab.value = campos[0];
+            txtAnioCab.value = campos[1];
+            cboMesesCab.value = campos[2];
+            dttFechaMovCab.value = formatearFechaYYYMMDD(campos[3]);
+            txtNroResolucion.value = campos[4];
+            dttFechaResolucion.value = formatearFechaYYYMMDD(campos[5]);
+            ttaObservacionCab.value = campos[6];
+            cboEstadoCab.value = campos[7];
+            cboTipoMovCab.value = campos[8];
+            cboCausalBaja.value = campos[9];
 
-            var dFechaBaja = campos[2].split("/");
-            dttFechaBaja.value = dFechaBaja.length == 3 ? dFechaBaja[2] + "-" + dFechaBaja[1] + "-" + dFechaBaja[0] : '';
-
-            ttaObservacion.value = campos[3];
+            getListarMovActivos(campos[0]);
         }
         else {
             var divPopupContainer = document.getElementById("divPopupContainer");
@@ -801,6 +896,11 @@ function eliminarRegistroActivo(id) {
     var data = "";
     data = id;
 
+    if (vista == 'Altas') {
+        var codigoMov = txtNroMovCab.value;
+        data += "|" + codigoMov;
+    }
+
     var frm = new FormData();
     frm.append("data", data);
 
@@ -814,7 +914,12 @@ function eliminarRegistroActivo(id) {
         cancelButtonText: 'No'
     }).then((result) => {
         if (result.value) {
-            Http.post("General/eliminar/?tbl=" + controller + vista + "Activos", mostrarEliminar, frm);
+            if (vista == 'Altas') {
+                Http.post("General/eliminar/?tbl=" + controller + vista + "ActivosMov", mostrarEliminar, frm);
+            }
+            else {
+                Http.post("General/eliminar/?tbl=" + controller + vista + "Activos", mostrarEliminar, frm);
+            }
         }
     })
 }
@@ -865,9 +970,12 @@ function mostrarEliminar(rpta) {
             crearCombo(listaPadre, "cboPadre", "Ninguno");
         }
 
-        if (vista == "InventarioInicial" || vista == "Altas") {
+        if (vista == "InventarioInicial" /*|| vista == "Altas"*/) {
             limpiarListaActivos();
             getListar();
+        }
+        else if (vista == 'Altas') {
+            grillaItem = new GrillaScroll(lista, "divListaActivo", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
         }
         else {
             grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
@@ -914,14 +1022,20 @@ function seleccionarFila(fila, id, prefijo) {
 }
 
 function mostrarlistasActivos(rpta) {
+    var divLista = 'divListaActivo'
     if (vista == "Altas") {
         document.getElementById("detalleActivo").style.display = 'block';
+        var divLista = 'divListaActivo'
     }
 
+    if (vista == "Bajas") {
+        divLista = 'tbDetalleActivos'
+    }
     if (rpta) {
         var listas = rpta.split("¯");
         var lista = listas[0].split("¬");
-        grillaItem = new GrillaScroll(lista, "divListaActivo", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
+        console.log(lista);
+        grillaItem = new GrillaScroll(lista, divLista, 100, 6, vista, controller, null, null, true, botones, 38, false, null);
     }
 }
 
@@ -933,7 +1047,7 @@ function mostrarListadoItems(rpta) {
         var listas = rpta.split('¯');
         lista = listas[0].split("¬");
         grillaItems = new GrillaScroll(lista, "listaItem", 1000, 6, "listaItems", "Admon", null, null, null, null, 25, false, true);
-    //    configurarCheckBoxs();
+        //    configurarCheckBoxs();
     }
 }
 
@@ -962,10 +1076,11 @@ function limpiarImportacionExcel() {
 
 function grabarBajas() {
     var data = "";
-    data = obtenerDatosGrabar("Popup");
+    data = obtenerDatosGrabar("PopupMov");
 
     data += "|";
 
+    data += "¯";
     var nfilas = tbDetalleActivos.rows.length;
     var fila;
     for (var i = 0; i < nfilas; i++) {
@@ -978,12 +1093,12 @@ function grabarBajas() {
 
     var filtroAnio = txtPeriodoCons.value;
 
-    data += "|" + filtroAnio;
-    data += "|";
+    data += "¯" + filtroAnio;
 
     var frm = new FormData();
     frm.append("data", data);
 
+    console.log(data);
     Http.post("General/guardar?tbl=" + controller + vista, mostrarGrabar, frm);
 
     btnGuardarBajas.innerHTML = "Guardando <i class='fa fa-circle-o-notch fa-spin' style='color:white'></i>";
@@ -1034,6 +1149,11 @@ function grabarDatos() {
         data += '|' + valoresContables;
         data += '|';
 
+        if (vista == "Altas") {
+            var codigoMov = txtNroMovCab.value;
+            data += '¯' + codigoMov;
+        }
+
         frm.append("data", data);
     }
     else if (vista == "Bajas") {
@@ -1049,7 +1169,16 @@ function grabarDatos() {
     else {
         frm.append("data", data);
     }
-    Http.post("General/guardar/?tbl=" + controller + vista, mostrarGrabar, frm);
+
+    if (vista == "Altas") {
+        Http.post("General/guardar/?tbl=" + controller + vista + "ActivosMov", mostrarGrabarActivosMov, frm);
+    }
+    else if (vista == "InventarioInicial")
+        Http.post("General/guardar/?tbl=" + controller + vista, mostrarGrabar, frm);
+
+    else {
+        Http.post("General/guardar/?tbl=" + controller + vista, mostrarlistasActivos, frm);
+    }
 }
 
 function obtenerDatosGrabar(clase) {
@@ -1120,6 +1249,26 @@ function obtenerItems(datos) {
     }
 }
 
+
+function adicionarLista(datos) {
+    document.querySelectorAll('.section-nuevo-activo').forEach(function (el) {
+        el.style.display = 'block';
+    });
+
+    tbDetalleActivos.innerHTML = "";
+    spnNroItems.innerHTML = "Items: 0";
+    txtPeriodoItemsCons.value = new Date().getFullYear();
+
+    var lista = datos.split('¬');
+
+    lista = lista.slice(3, lista.length); //obtener desde el primer registro de data
+
+    for (var i = 0; i < lista.length; i++) {
+        if (lista[i])
+            adicionarItem(lista[i]);
+    }
+}
+
 function adicionarItem(datos) {
     var campos = datos.split('|');
     item = campos[0];
@@ -1186,7 +1335,7 @@ function adicionarItem(datos) {
     filaDetalle += "</td> ";
     filaDetalle += "</td> ";
     filaDetalle += "<td style='white-space:pre-wrap;width:10px;vertical-align:top;'>";
-    filaDetalle += "<i class='fa fa-trash f-16 text-c-red' title='Quitar Item' onclick='retirarItem(this,\"";
+    filaDetalle += "<i class='fa fa-trash f-20 text-c-red p-2' title='Quitar Item' onclick='retirarItem(this,\"";
     filaDetalle += item;
     filaDetalle += "\");'></i>";
     filaDetalle += "</td> ";
@@ -1220,10 +1369,10 @@ function retirarItem(col, id) {
     spnNroItems.innerHTML = "Items: " + (nFilas);
 }
 
-function validarBajas() {
+function esBajasValido() {
     var nfilas = tbDetalleActivos.rows.length;
 
-    if (!validarInformacion("Reque")) {
+    if (!validarInformacion("RequeMov")) {
         return false;
     }
 
@@ -1308,6 +1457,11 @@ function listarUbicaFisica() {
     }
 }
 
+function obtenerFechaActualYYYMMDD() {
+    var date = new Date();
+    return date.getFullYear() + "-" + (date.getMonth() + 1).toString().padStart(2, "0") + "-" + date.getDate().toString().padStart(2, "0");
+}
+
 function formatearFechaYYYMMDD(fecha) {
     if (!fecha)
         return '';
@@ -1334,7 +1488,6 @@ function calcularFechaFin(control, fechaAlta, anios) {
     control.value = (anio + "-" + mes + "-" + dia);
 }
 
-
 function calcularTazaDepreciacion(anios) {
     var txtDepreciacion = document.getElementById("txtDepreciacion");
     if (txtDepreciacion) txtDepreciacion.value = (100 / anios).toFixed(2);
@@ -1360,6 +1513,51 @@ function seleccionarControlSelect2(control) {
         cboControlSelect.innerHTML = selected;
     }
 }
+function mostrarGrabarActivosMov(rpta) {
+    var mensajeResul = [];
+    if (rpta) {
+        listas = rpta.split("¯")
+        lista = listas[0].split("¬");
+        mensajeResul = listas[1].split("|");
+        var tipo = mensajeResul[0];
+        var mensaje = mensajeResul[1];
+        divPopupContainer.style.display = 'none';
+
+        grillaItem = new GrillaScroll(lista, "divListaActivo", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
+
+        if (tipo == 'A') {
+            Swal.fire({
+                title: 'Finalizado!',
+                text: mensaje,
+                icon: 'success',
+                showConfirmButton: true,
+                timer: 2000
+            })
+            alerta = 'success';
+        }
+        else {
+            Swal.fire({
+                title: 'Error!',
+                text: mensaje,
+                icon: 'error',
+                showConfirmButton: true,
+                timer: 2000
+            })
+        }
+    }
+    else {
+        mostrarMensaje("No se realizó el registro", "error")
+    }
+
+    if (vista == "Bajas") {
+        btnGuardarBajas.innerHTML = "<i class='fa fa-save'></i> Grabar";
+        btnGuardarBajas.disabled = false;
+    }
+    else {
+        btnGuardar.innerHTML = "<i class='fa fa-save'></i> Grabar";
+        btnGuardar.disabled = false;
+    }
+}
 
 function mostrarGrabarMov(rpta) {
     var mensajeResul = [];
@@ -1369,7 +1567,7 @@ function mostrarGrabarMov(rpta) {
         mensajeResul = listas[1].split("|");
         var tipo = mensajeResul[0];
         var mensaje = mensajeResul[1];
-        divPopupContainer.style.display = 'none';
+        divPopupContainerMov.style.display = 'none';
 
         grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
 
@@ -1407,6 +1605,22 @@ function mostrarGrabarMov(rpta) {
     }
 }
 
+function actualizarBotones(idEstado) {
+    var esAprobado = (idEstado == EST_APROBADO)
+    if (vista == "Altas") {
+        if (esAprobado) {
+            btnGuardarMov.style.display = 'none';
+            btnNuevo.style.display = 'none';
+            btnGuardar.style.display = 'none';
+        }
+        else {
+            btnGuardarMov.style.display = 'block';
+            btnNuevo.style.display = 'block';
+            btnGuardar.style.display = 'block';
+        }
+    }
+}
+
 function mostrarGrabar(rpta) {
     var mensajeResul = [];
     if (rpta) {
@@ -1419,9 +1633,6 @@ function mostrarGrabar(rpta) {
 
         if (vista == "InventarioInicial" || vista == "Altas") {
             limpiarListaActivos();
-            getListar();
-        }
-        else if (vista == "Bajas") {
             getListar();
         }
         else {
