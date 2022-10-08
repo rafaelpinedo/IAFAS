@@ -355,6 +355,7 @@
     <Content Include="Views\Ingresos\ReciboIngreso.cshtml" />
     <Content Include="Views\Inventario\CierreAlmacen.cshtml" />
     <Content Include="Templates\Patrimonio\Template_InventarioInicial.xlsx" />
+    <Content Include="Views\Patrimonio\General.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -365,8 +366,10 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Content\" />
     <Folder Include="Riztie\Files\" />
     <Folder Include="Riztie\Manual\" />
+    <Folder Include="Views\Shared\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
