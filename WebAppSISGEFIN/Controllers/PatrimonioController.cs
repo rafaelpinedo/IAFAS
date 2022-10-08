@@ -89,6 +89,23 @@ namespace WebAppSISGEFIN.Controllers
         }
 
         [FiltroAutenticacion]
+        public ActionResult General()
+        {
+            //string Mes = fechaActual.ToString("MMMM").ToUpper();
+            int Anio = DateTime.Now.Year;
+            string[] Data = Session["DataUsuario"].ToString().Split('|');
+            string IdPerfil = Data[3];
+            ViewBag.Menu = new Menu().Listar(IdPerfil);
+            string Fecha = DateTime.Now.ToShortDateString();
+            ViewBag.FechaInicial = DateTime.Now.Year - 1 + "-01-01";
+            ViewBag.Fecha = Convert.ToDateTime(Fecha).ToString("yyyy-MM-dd");
+            DateTime nuevaFecha = Convert.ToDateTime(Fecha);
+            ViewBag.Anio = Anio;
+            // ViewBag.Mes = Mes;
+            return View();
+        }
+
+        [FiltroAutenticacion]
         public ActionResult Altas()
         {
             DateTime fechaActual = DateTime.Now;

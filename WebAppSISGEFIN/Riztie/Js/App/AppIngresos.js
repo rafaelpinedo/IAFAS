@@ -26,8 +26,7 @@ window.onload = function () {
     else {
         getListar();
     }
-
-   
+       
     configurarBotones();
     configurarCombos();
     configurarConsultas();
@@ -185,7 +184,7 @@ function mostrarlistas(rpta) {
             crearCombo(listaEntidadFin, "cboEntidadFinanciera", "Seleccione");
             crearCombo(listaMoneda, "cboMoneda", "Seleccione");
             crearCombo(listaEstado, "cboEstado", "Seleccione");
-            spnTotalIngresos.innerText = formatoNumeroDecimal(listaTotal[0]);
+            //spnTotalIngresos.innerText = formatoNumeroDecimal(listaTotal[0]);
 
             //Http.get("General/consultaTipoCambioSunat/?data=data1", reqListener);
             //Http.get("General/consultaTipoCambioSunat/?data=hols", reqListener);
@@ -237,16 +236,15 @@ function grabarDatos() {
             dataImport += "¯" + txtAnio.value;
         }
 
-        var cboTipoRecaudacion = document.getElementById("cboTipoRecaudacion");
-        if (cboTipoRecaudacion != null) {
-            dataImport += "¯" + cboTipoRecaudacion.value;
-        }
+        //var cboTipoRecaudacion = document.getElementById("cboTipoRecaudacion");
+        //if (cboTipoRecaudacion != null) {
+        //    dataImport += "¯" + cboTipoRecaudacion.value;
+        //}
         var cboEntidad = document.getElementById("cboEntidadFinancieraCarga");
         if (cboEntidad != null) {
             dataImport += "¯" + cboEntidad.value;
         }
-        //frm.append("data", dataImport);
-        //Http.post("General/guardar/?tbl=" + controller + vista, mostrarGrabar, frm);
+        
         frm.append("data", dataImport);
         Http.post("General/guardar/?tbl=" + controller + vista +'CxCobrar', mostrarGrabar, frm);
     }
@@ -324,7 +322,7 @@ function mostrarGrabar(rpta) {
         }
         else if (vista == "ReciboIngreso") {
             var listaTotal = listas[2].split("¬");
-            spnTotalIngresos.innerText = formatoNumeroDecimal(listaTotal[0]);
+            //spnTotalIngresos.innerText = formatoNumeroDecimal(listaTotal[0]);
         }
 
         if (tipo == 'A') {
@@ -635,25 +633,23 @@ function configurarBotones() {
         divListaExcel.innerHTML = "";
         spanPendiente.innerHTML = "";
         cboEntidadFinancieraCarga.value = "";
-        cboTipoRecaudacion.value = "";
+     //   cboTipoRecaudacion.value = "";
     }
 
     var btnCargarCXC = document.getElementById("btnCargarCXC");
     if (btnCargarCXC != null) btnCargarCXC.onclick = function () {
 
         let entidad = cboEntidadFinancieraCarga.value;
-        let TipoRecaudacion = cboTipoRecaudacion.value
-        if (TipoRecaudacion == "") {
-            mostrarMensaje("Seleccionar Tipo Recaudación", "error")
-            return;
-        }
-       else if (entidad == "") {
+        //let TipoRecaudacion = cboTipoRecaudacion.value
+        //if (TipoRecaudacion == "") {
+        //    mostrarMensaje("Seleccionar Tipo Recaudación", "error")
+        //    return;
+        //}
+        //else
+            if (entidad == "") {
             mostrarMensaje("Seleccionar Entidad Financiera", "error")
             return;
         }
-
-        
-        
 
         divPopupContainerForm1.style.display = 'block';
         fupExcel.value = "";
@@ -784,10 +780,7 @@ function configurarBotones() {
         if (editConcepto != null) {
             editConcepto.style.display = "none";
         }
-
-       
     }
-
 
     var btnGuardar = document.getElementById("btnGuardar");
     if (btnGuardar != null) btnGuardar.onclick = function () {
@@ -819,15 +812,15 @@ function configurarBotones() {
         }
         else if (vista == "Recaudacion") {
             let entidad = cboEntidadFinancieraCarga.value;
-            let tipoDoc = cboTipoRecaudacion.value;
+            //let tipoDoc = cboTipoRecaudacion.value;
 
             if (fupExcel.value = "") {
                 mostrarMensaje("Seleccione el archivo excel a importar", "error");
             } 
-            else if (tipoDoc == "") {
-                mostrarMensaje("Seleccionar Tipo documento", "error")
-                return;
-            }
+            //else if (tipoDoc == "") {
+            //    mostrarMensaje("Seleccionar Tipo documento", "error")
+            //    return;
+            //}
             else if (entidad == "") {
                 mostrarMensaje("Seleccionar Entidad Financiera", "error")
                 return;
@@ -943,7 +936,7 @@ function configurarBotones() {
                 if (response) {
                     var listas = response.split("¯");
                     var lista = listas[0].split("¬");
-                    grillaItem = new GrillaScroll(lista, "divListaRecaudacion", 100, 6, vista, controller, null, null, true, null, 38, false, null);
+                    grillaItem = new GrillaScroll(lista, "divListaRecaudacion", 100, 6, vista, controller, null, false, false, null, 24, false, null);
                     spnLoadData.style.display = "none";
                     listaLoadItem.style.display = 'block';
                 }
@@ -1286,7 +1279,7 @@ function mostrarEliminar(rpta) {
         }
         else if (vista =="ReciboIngreso") {
             var listaTotal = listas[2].split("¬");
-            spnTotalIngresos.innerText = formatoNumeroDecimal(listaTotal[0]);
+            //spnTotalIngresos.innerText = formatoNumeroDecimal(listaTotal[0]);
         }
 
         if (tipo == 'A') {
@@ -1430,16 +1423,12 @@ function importarExcel(divForm, divLista, dataCab, dataDeta) {
     var reader = new FileReader();
     reader.onload = function (e) {
         var data = new Uint8Array(reader.result);
-       // var libro = XLSX.read(data, { type: 'array', cellDates: false });
         var libro = XLSX.read(data, { type: 'array',cellDates: true,dateNF:'dd/mm/yyyy' });
         var nhojas = libro.SheetNames.length;
         var nombreHoja = libro.SheetNames[0];
         var hoja = libro.Sheets[nombreHoja];
         var range = XLSX.utils.decode_range(hoja['!ref']);
         //*************
-    
-        console.log(hoja);
-
         var contenido = "<table>";
         contenido += "<tr style='background-color:lightgray;text-align:center'>";
         contenido += "<td></td>";
