@@ -596,8 +596,7 @@ function configurarBotones() {
             getListarPlanCta(tipoPlanCta);
         }
         else if (vista == "FamiliaCuenta") {
-            let filtro = txtAnio.value + '||||1';
-            Http.get("General/listarTabla?tbl=" + controller + vista + "Estado" + "&data=" + filtro, mostarlistaActualizarEstado );
+            Http.get("General/listarTabla?tbl=" + controller + vista  + "&data=" , mostarlistaActualizarEstado );
         }
         else {
             getListar();
@@ -613,13 +612,13 @@ function configurarBotones() {
     if (btnListado != null) btnListado.onclick = function () {
         var data = "";
         if (vista == "FamiliaCuenta") {
-            //limpiarForm("PopupInact");
-            cboTipoUsoInact.value = 2;
-            cboTipoBienInact.value = "B";
+            limpiarForm("PopupInact");
+            //cboTipoUsoInact.value = 2;
+            //cboTipoBienInact.value = "B";
             spnLoadData.style.display = "block";
             listaInactivo.style.display = 'none';
-            data= txtAnioPeridoInact.value + '|' + cboTipoUsoInact.value + '|' + cboTipoBienInact.value + '||2';
-            Http.get("General/listarTabla?tbl=" + controller + vista + "Estado" + "&data=" + data, function (response) {
+            //data= txtAnioPeridoInact.value + '|' + cboTipoUsoInact.value + '|' + cboTipoBienInact.value + '||2';
+            Http.get("General/listarTabla?tbl=" + controller + vista + "Estado" + "&data=", function (response) {
                 if (response) {
                     var listas = response.split("¯");
                     var lista = listas[0].split("¬");
@@ -712,7 +711,6 @@ function configurarBotones() {
             var frm = new FormData();
             frm.append("data", datos);
             Http.post("General/guardar/?tbl=" + controller + vista + 'ActualizarEstado', mostarlistaActualizarEstado, frm);
-            console.log(data);
             divPopupContainerForm1.style.display = 'none';
             return;
         }

@@ -1555,6 +1555,7 @@ function configurarBotones() {
     if (btnListado != null) btnListado.onclick = function () {
         var data = "";
         if (vista == "Articulo") {
+            spnArticulo.innerHTML = "";
             limpiarForm("PopupInact");
             var container = document.querySelector('#mytab');
             let tabs = Array.prototype.slice.apply(container.querySelectorAll('.nav-tabs .active'));
@@ -2131,8 +2132,11 @@ function seleccionarFila(fila, id, prefijo) {
     if (window["fila" + prefijo] != null) window["fila" + prefijo].className = "FilaDatos";
     fila.className = "FilaSeleccionada";
     window["fila" + prefijo] = fila;
-
-    if (vista == "PedidoCompra") {
+    
+    if (vista == "Articulo") {
+        spnArticulo.innerHTML = fila.childNodes[4].innerHTML;
+    }
+    else if (vista == "PedidoCompra") {
         estadoTabla = fila.childNodes[7].innerHTML;
         (estadoTabla == "GENERADA") ? btnAprobar.disabled = false : btnAprobar.disabled = true;
         if (estadoTabla == "APROBADA") {

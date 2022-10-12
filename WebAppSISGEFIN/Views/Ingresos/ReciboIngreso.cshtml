@@ -28,17 +28,17 @@
                             <button class="input-group-inverse btn btn-inverse" id="btnConsultar" data-toggle="tooltip" data-placement="bottom" title="Consultar"><i class="fa fa-search fa-lg" aria-hidden="true"></i></button>
                             <button class="input-group-inverse btn btn-primary" id="btnNuevo" data-toggle="tooltip" data-placement="bottom" title="Nuevo"><i class="fa fa-plus-circle fa-lg" aria-hidden="true"></i></button>
                             <button class="btn btn-out waves-effect waves-light btn-primary btn-square" id="btnPendiente" data-toggle="tooltip" data-placement="bottom" title="Recaudación pendiente"><i class="fa fa-paypal fa-lg" aria-hidden="true"></i></button>
-                            <button class="btn btn-out waves-effect waves-light btn-info btn-square"  id="btnImprimir" data-toggle="tooltip" data-placement="bottom" title="Imprimir Recibo Ingreso"><i class="fa fa-print fa-lg" aria-hidden="true"></i></button>
+                            <button class="btn btn-out waves-effect waves-light btn-info btn-square" id="btnImprimir" data-toggle="tooltip" data-placement="bottom" title="Imprimir Recibo Ingreso"><i class="fa fa-print fa-lg" aria-hidden="true"></i></button>
                             @*<button class="btn btn-out waves-effect waves-light btn-success btn-square" id="btnAprobar" data-toggle="tooltip" data-placement="bottom" title="Aprobar Recibo Ingreso"><i class="fa fa-thumbs-up fa-lg" aria-hidden="true"></i></button>*@
                         </div>
                         @*<div class="form-group col-sm-3">
-                            <span style="color:black;font-weight:bold;font-size:30px;text-align:right">Total: </span>
-                            <span id="spnTotalIngresos" style="color:red;font-weight:bold;font-size:30px;text-align:right"></span>
-                        </div>*@
+                <span style="color:black;font-weight:bold;font-size:30px;text-align:right">Total: </span>
+                <span id="spnTotalIngresos" style="color:red;font-weight:bold;font-size:30px;text-align:right"></span>
+            </div>*@
                     </div>
                     <div class="form-row">
                         <div class="form-group col-md-12">
-                            <div class="table-responsive dt-responsive" id="divLista" @*style="height: 400px;overflow-y: auto;"*@></div>
+                            <div class="table-responsive dt-responsive" id="divLista"></div>
                         </div>
                     </div>
 
@@ -238,7 +238,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="modal custom-modal" tabindex="-1" role="dialog" aria-hidden="true" id="divPopupContainerPreView" style="overflow-y:auto;">
+                        @*<div class="modal custom-modal" tabindex="-1" role="dialog" aria-hidden="true" id="divPopupContainerPreView" style="overflow-y:auto;">
                             <div class="modal-dialog modal-lg bg-personalizado" id="divPopupWindowiPreView">
                                 <div class="modal-content">
                                     <div id="divBarraOption" class="modal-header bg-personalizado" style="cursor:move">
@@ -452,7 +452,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div>*@
                         <div class="modal custom-modal" tabindex="-1" role="dialog" aria-hidden="true" id="divPopupContainerAprobar" style="overflow-y:auto;">
                             <div class="modal-dialog modal-sm bg-personalizado" id="divPopupWindowAprobar">
                                 <div class="modal-content">
@@ -483,199 +483,398 @@
 
                     @*reporte*@
                     <div class="form-row">
-                        <div class="modal custom-modal" tabindex="-1" role="dialog" aria-hidden="true" id="divPopupContainerForm3" style="overflow-y: auto; display: none;">
-                            <div class="modal-dialog modal-xl bg-personalizado" id="divPopupWindowForm3" style="margin-top:30px;">
-                                <div class="modal-content">
-                                    <div id="divBarraForm3" class="modal-header bg-personalizado" style="cursor:move">
-                                        <h5 class="modal-title" id="nombreComision">Listado de Asegurados</h5>
-                                    </div>
-                                    <div class="modal-body">
-                                        <div class="row">
+                        <div class="form-group col-lg-12">
+                            <div id="divReporte" style="overflow:hidden;width:auto;display:none">
+                                <table style="font-family: Gotham, Helvetica Neue, Helvetica, Arial,' sans-serif'">
+                                    <tbody>
+                                        <tr>
+                                            <td colspan="8" style="font-size: 14px;height:90px">
+                                                IAFAS DE LA MARINA DE GUERRA DEL PERU<br>
+                                            </td>
+                                            @*<td colspan="4">
+                                                <span id="spnEtiquetaEstado" style="font-size: 24px;color:red;font-weight:bold">PENDIENTE APROBACION</span><br>
+                                            </td>*@
+                                        </tr>
+                                        <tr>
+                                            <td colspan="4">
+                                                <table style="border:1px solid black;width: 180px">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td align="center" id="tdLineaIngreso"></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </td>
+                                            <td colspan="4" align="center">
+                                                <table>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td style="font-size: 15px;font-weight: bold;width: 474px;text-align:center">RECIBO DE INGRESO</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </td>
+                                            <td width="534" colspan="4" align="right">
+                                                <table style="border:1px solid black;width: 180px">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td style="font-size: 24px;text-align: center;font-weight: bold" id="tdNumeroRecibo"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-size: 14px;text-align: center;" id="tdFecha"></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="12">
+                                                <span id="spnGlosa" style="font-size: 14px;"></span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="12">
+                                                <table style="border-collapse: collapse;border: 1px solid black;width: 100%;height: 440px">
+                                                    <thead>
+                                                        <tr>
+                                                            <th width="130" rowspan="2" style="border: 1px solid black;text-align: center">CLASIFICADOR</th>
+                                                            <th width="810" rowspan="2" style="border: 1px solid black;text-align: center">CONCEPTO</th>
+                                                            <th colspan="2" style="border: 1px solid black;text-align: center">IMPORTE</th>
+                                                        </tr>
+                                                        <tr>
+                                                            <th width="130" style="border: 1px solid black;text-align: center">PARCIAL</th>
+                                                            <th width="150" style="border: 1px solid black;text-align: center">TOTAL</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td colspan="4" style="border-collapse: collapse;width: 100%;vertical-align: top">
+                                                                <table cellpadding="0" cellspacing="0">
+                                                                    <tbody id="tbDetalleReporte">
+                                                                    </tbody>
+                                                                </table>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                    <tfoot>
+                                                        <tr>
+                                                            <td colspan="3" style="border: 1px solid black;text-align: right;font-weight: bold;height: 50px">TOTAL</td>
+                                                            <td style="border: 1px solid black;text-align: right;font-weight: bold" id="tdTotal"></td>
+                                                        </tr>
+                                                    </tfoot>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="12" style="font-size:13px " align="center">
+                                                <br>
+                                                CÓDIGO DE LA CONTABILIDAD PRESUPUESTAL Y CODIFICACION PROGRAMATICA DEL GASTO PUBLICO<br>
+                                                <br>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3">
+                                                <table width="100" style="border: 1px solid black" cellpadding="0" cellspacing="0">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td colspan="2" style="font-size:10px;border: 1px solid black" align="center">CUENTA MAYOR</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td align="center" style="border: 1px solid black">Debe</td>
+                                                            <td align="center" style="border: 1px solid black">Haber</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="border: 1px solid black">&nbsp;</td>
+                                                            <td style="border: 1px solid black">&nbsp;</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </td>
+                                            <td>&nbsp;</td>
+                                            <td colspan="7" valign="top">
+                                                <table cellpadding="0" cellspacing="0" style="border: 1px solid black">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td align="center" rowspan="2" style="font-size:10px;border: 1px solid black">Sector</td>
+                                                            <td align="center" rowspan="2" style="font-size:10px;border: 1px solid black">Pliego</td>
+                                                            <td align="center" rowspan="2" style="font-size:10px;border: 1px solid black">Función</td>
+                                                            <td align="center" rowspan="2" style="font-size:10px;border: 1px solid black">Programa</td>
+                                                            <td align="center" rowspan="2" style="font-size:10px;border: 1px solid black">Sub Programa</td>
+                                                            <td align="center" rowspan="2" style="font-size:10px;border: 1px solid black">Actividad y/o Proyecto</td>
+                                                            <td align="center" rowspan="2" style="font-size:10px;border: 1px solid black">Componente</td>
+                                                            <td align="center" rowspan="2" style="font-size:10px;border: 1px solid black">Meta</td>
+                                                            <td align="center" rowspan="2" style="font-size:10px;border: 1px solid black">F.Financ.</td>
+                                                        </tr>
+                                                        <tr></tr>
+                                                        <tr>
+                                                            <td height="38px" style="font-size:10px;border: 1px solid black;text-align:center"></td>
+                                                            <td style="font-size: 10px;border: 1px solid black;text-align: center"></td>
+                                                            <td style="font-size:10px;border: 1px solid black">&nbsp;</td>
+                                                            <td style="font-size:10px;border: 1px solid black">&nbsp;</td>
+                                                            <td style="font-size:10px;border: 1px solid black">&nbsp;</td>
+                                                            <td style="font-size:10px;border: 1px solid black">&nbsp;</td>
+                                                            <td style="font-size:10px;border: 1px solid black">&nbsp;</td>
+                                                            <td style="font-size:10px;border: 1px solid black">&nbsp;</td>
+                                                            <td style="font-size: 10px;border: 1px solid black;text-align: center"></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </td>
 
-                                            <div style="width:100%;">
-
-                                                <div style="width: 100%; font-family: 'Arial Narrow', Arial, sans-serif; margin-bottom: 0px; text-align: left;">
-                                                    <div style="width: 25%; float: left;">
-                                                        <img src="~/Riztie/Images/user-bg.jpg" alt="IAFAS" width="180" height="160" />
-                                                    </div>
-                                                    <div style="width: 45%; float: left;font-family: 'Arial Narrow', Arial, sans-serif; text-align: center;">
-                                                        <h1 style="font-family: 'Arial Narrow', Arial, sans-serif; margin-bottom: 0px; height:70px;">RECIBO DE INGRESO N° 0004165 </h1>
-                                                    </div>
-                                                    <div style="width: 30%; float: left;">
-                                                        <div>
-                                                            <div style="width:100%; float: left;">
-                                                                <div>
-                                                                    <h5 style="font-family: 'Arial Narrow', Arial, sans-serif; margin-top: 70px; text-align: center; height: 20px;">DIRECCIÓN EJECUTIVA</h5>
-                                                                    <h5 style="font-family: 'Arial Narrow', Arial, sans-serif; text-align: center; height: 70px;">OFICINA DE TESORERIA</h5>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div style="width:100%; float: left;">
-                                                    <div style="width: 70%; float: left; border-left: 1px solid black; border-right: 1px solid black; border-top: 1px solid black; border-bottom: 1px solid black;padding-left: 8px;">
-                                                        <div style="text-align: left; margin-top: 5px;">
-                                                            <label style="margin-bottom: 0px; font-weight: bold;">PLAN 4&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :</label>
-                                                            <label style="margin-bottom: 0px;"> DEDUCIBLES</label>
-                                                        </div>
-                                                        <div style="text-align: left;">
-                                                            <label style="margin-bottom: 0px; font-weight: bold;text-align: left; ">SUB DIARIO &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</label>
-                                                            <label style="margin-bottom: 0px;">0404</label>
-                                                            <label style="margin-bottom: 0px;">ASIENTO DE DIARIO</label>
-                                                        </div>
-                                                        <div style="text-align: left;">
-                                                            <label style="margin-bottom: 0px; font-weight: bold; text-align: left; ">COMPROBANTE &nbsp;&nbsp;:</label>
-                                                            <label style="margin-bottom: 0px;">090005 &nbsp;&nbsp;&nbsp; </label>
-                                                            <label style="margin-bottom: 0px; font-weight: bold; text-align: left; ">FECHA :</label>
-                                                            <label style="margin-bottom: 0px;">21/09/2022</label>
-                                                        </div>
-                                                        <div style="text-align: left; height: 40px">
-                                                            <label style="margin-bottom: 0px; font-weight: bold;">CONCEPTO&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</label>
-                                                            <label style="margin-bottom: 0px;">PROV.RI 0004165 VENTANILLA ABRIL 2022</label>
-                                                        </div>
-                                                    </div>
-
-                                                    <div style="width: 30%; float: left; border-left: 1px solid black; border-right: 1px solid black; border-top: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-left: 8px;">
-                                                        <div style="text-align: left; margin-top: 5px;">
-                                                            <label style="margin-bottom: 0px; font-weight: bold;">MONEDA&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</label>
-                                                            <label style="margin-bottom: 0px;"> DEDUCIBLES</label>
-                                                        </div>
-                                                        <div style="text-align: left;">
-                                                            <label style="margin-bottom: 0px; font-weight: bold;text-align: left; ">CONVERSIÓN &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</label>
-                                                            <label style="margin-bottom: 0px;">0404</label>
-                                                        </div>
-                                                        <div style="text-align: left;">
-                                                            <label style="margin-bottom: 0px; font-weight: bold;text-align: left; ">TIPO CONVERSIÓN :</label>
-                                                            <label style="margin-bottom: 0px;">0404</label>
-                                                        </div>
-                                                        <div style="text-align: left; height: 40px">
-                                                            <label style="margin-bottom: 0px; font-weight: bold;text-align: left; ">TIPO CAMBIO &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</label>
-                                                            <label style="margin-bottom: 0px;">0404</label>
-                                                        </div>
-                                                    </div>
-
-                                                </div>
-
-                                                <div style="width: 100%; font-family: 'Arial Narrow', Arial, sans-serif; margin-bottom: 0px; text-align: left;">
-                                                    <div style="width: 100%; float: left;font-family: 'Arial Narrow', Arial, sans-serif; text-align: left;">
-                                                        <table cellpadding="0" width="1100px" cellspacing="0" style="font-family: 'Arial Narrow', Arial, sans-serif; font-size: 12px; border: solid 1px #242828;">
-                                                            <thead>
-                                                                <tr cellpadding="0" width="1100px" cellspacing="0" style="font-family: 'Arial Narrow', Arial, sans-serif; font-size: 12px; border: 1px solid black;text-align:center;font-weight: bold;">
-                                                                    <th colspan="1" rowspan="1" style="font-weight: bold;width: 50px;border:1px solid black;white-space:pre-wrap; ">CUENTA</th>
-                                                                    <th colspan="1" rowspan="1" style="font-weight: bold;width: 90px;border:1px solid black;white-space:pre-wrap;">ANEXO</th>
-                                                                    <th colspan="1" rowspan="1" style="font-weight: bold;width:250px;border:1px solid black;white-space:pre-wrap;">D E S C R I P C I Ó N    D E L   A R T I C U L O</th>
-                                                                    <th colspan="1" rowspan="1" style="font-weight: bold;width: 20px;border:1px solid black;white-space:pre-wrap;">CC.</th>
-                                                                    <th colspan="1" rowspan="1" style="font-weight: bold;width: 20px;border:1px solid black;white-space:pre-wrap;">TP.</th>
-                                                                    <th colspan="1" rowspan="1" style="font-weight: bold;width: 40px;border:1px solid black;white-space:pre-wrap;">DEBE</th>
-                                                                    <th colspan="1" rowspan="1" style="font-weight: bold;width: 40px;border:1px solid black;white-space:pre-wrap;">HABER</th>
-                                                                    <th colspan="1" rowspan="1" style="font-weight: bold;width: 60px;border:1px solid black;white-space:pre-wrap;">DOCUMENTO</th>
-                                                                    <th colspan="1" rowspan="1" style="font-weight: bold;width: 20px;border:1px solid black;white-space:pre-wrap;">FECHA</th>
-                                                                    <th colspan="1" rowspan="1" style="font-weight: bold;width: 20px;border:1px solid black;white-space:pre-wrap;">VENC.</th>
-                                                                    <th colspan="1" rowspan="1" style="font-weight: bold;width: 20px;border:1px solid black;white-space:pre-wrap;">ARE.</th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                                <tr style="color: black; text-align: center; font-weight: bold; height: 30px;">
-                                                                    <td style="border:1px solid black;white-space:pre-wrap;width: 5px;" bcolspan="1">01</td>
-                                                                    <td style="border:1px solid black;white-space:pre-wrap;width: 20px;" colspan="1">0079</td>
-                                                                    <td style="border: 1px solid black; white-space: pre-wrap; text-align: left;" colspan="1">07</td>
-                                                                    <td style="border: 1px solid black; white-space: pre-wrap; width: 60px;" colspan="1">08</td>
-                                                                    <td style="border: 1px solid black; white-space: pre-wrap; width: 60px;" colspan="1">22</td>
-                                                                    <td style="border: 1px solid black; white-space: pre-wrap; width: 60px;" colspan="1">07</td>
-                                                                    <td style="border: 1px solid black; white-space: pre-wrap;" colspan="1">08</td>
-                                                                    <td style="border: 1px solid black; white-space: pre-wrap;" ;colspan="1">22</td>
-                                                                    <td style="border: 1px solid black; white-space: pre-wrap;" ;colspan="1">22</td>
-                                                                    <td style="border: 1px solid black; white-space: pre-wrap;" ;colspan="1">22</td>
-                                                                    <td style="border: 1px solid black; white-space: pre-wrap;" ;colspan="1">22</td>
-                                                                </tr>
-                                                            </tbody>
-                                                            <tfoot>
-                                                                <tr>
-                                                                    <td colspan="3" style="border: 1px solid black; text-align: right; color: #080707; font-weight: bold;">Total  </td>
-                                                                    <td colspan="2" style="border: 1px solid black; text-align: center; color: #080707; font-weight: bold;">Soles</td>
-                                                                    <td colspan="1" style="border: 1px solid black; text-align: center; color: #080707; font-weight: bold;">120</td>
-                                                                    <td colspan="1" style="border: 1px solid black; text-align: center; color: #080707; font-weight: bold;">120</td>
-                                                                    <td colspan="4" style="border: 1px solid black; text-align: right; color: #080707; font-weight: bold;" id="tdTotalNEA"></td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td colspan="12" style="border: 1px solid black; text-align: right; color: #ffffff; font-weight: bold;">Total : S/. </td>
-                                                                </tr>
-                                                            </tfoot>
-                                                        </table>
-                                                    </div>
-                                                </div>
-                                                <div style="width:100%; float: left;">
-                                                    <div style="width: 60%; float: left; border-left: 1px solid black; border-right: 1px solid black; border-top: 1px solid black; border-bottom: 1px solid black; text-align: center;">
-                                                        <label style="margin-bottom: 0px; font-weight: bold; ">AUTORIZACIÓN</label>
-                                                    </div>
-                                                    <div style="width: 40%; float: left; border-left: 1px solid black; border-right: 1px solid black; border-top: 1px solid black; border-bottom: 1px solid black; text-align: center;">
-                                                        <label style="margin-bottom: 0px; font-weight: bold; ">RECIBÍ CONFORME</label>
-                                                    </div>
-                                                </div>
-                                                <div style="width:100%; float: left;">
-                                                    <div style="width: 60%; float: left; border-left: 1px solid black; border-right: 1px solid black; border-top: 1px solid black; border-bottom: 1px solid black; text-align: center;">
-                                                        <div style="text-align: left; margin-top: 70px; width: 50%; float: left;">
-                                                            <div style="text-align: center; margin-top: 25px;height:80px;">
-                                                                <label style="margin-bottom: 0px;">__________________________________________</label>
-                                                                <h6>DIRECCTOR EJECUTIVO</h6>
-                                                            </div>
-                                                            <div style="text-align: center; margin-top: 43px;height:80px;">
-                                                                <label style="margin-bottom: 0px;">__________________________________________</label>
-                                                                <h6>TESORERIA</h6>
-                                                            </div>
-                                                        </div>
-                                                        <div style="text-align: left; margin-top: 70px; width: 50%; float: left;">
-                                                            <div style="text-align: center; margin-top: 25px;height:80px;">
-                                                                <label style="margin-bottom: 0px;">__________________________________________</label>
-                                                                <h6>SUB DIRECCTOR EJECUTIVO</h6>
-                                                            </div>
-                                                            <div style="text-align: center; margin-top: 43px;height:80px;">
-                                                                <label style="margin-bottom: 0px;">__________________________________________</label>
-                                                                <h6>CONTABILIDAD</h6>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div style="width: 40%; float: left; border-left: 1px solid black; border-right: 1px solid black; border-top: 1px solid black; border-bottom: 1px solid black;padding-left: 8px;">
-
-                                                        <div style="text-align: left; margin-top: 18px;">
-                                                            <label style="margin-bottom: 0px; font-weight: bold;">Nombre&nbsp;&nbsp;&nbsp; :</label>
-                                                            <label style="margin-bottom: 0px;">______________________________________________________</label>
-                                                        </div>
-                                                        <div style="text-align: left;">
-                                                            <label style="margin-bottom: 0px; font-weight: bold; margin-top: 18px; text-align: left; ">Doc.Iden. :</label>
-                                                            <label style="margin-bottom: 0px;">______________________________________________________</label>
-                                                        </div>
-                                                        <div style="text-align: left;">
-                                                            <label style="margin-bottom: 0px; font-weight: bold; margin-top: 18px; text-align: left; ">Dirección :</label>
-                                                            <label style="margin-bottom: 0px;">______________________________________________________</label>
-                                                        </div>
-                                                        <div style="text-align: left;">
-                                                            <label style="margin-bottom: 0px; font-weight: bold; margin-top: 18px;">Fecha&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :</label>
-                                                            <label style="margin-bottom: 0px;">______________________________________________________</label>
-                                                        </div>
-                                                        <div style="margin-bottom: 0px; text-align: center; margin-top: 80px; ">
-                                                            <label>______________________________________________________</label>
-                                                        </div>
-                                                        <div style="text-align: center;">
-                                                            <label style="margin-bottom: 0px; font-weight: bold; margin-top: 8px;">FIRMA</label>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-
-                                        </div>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button id="btnCancelarForm2" class="btnCancelarForm" title="Cancelar"><i class="fa fa-undo" aria-hidden="true"></i>&nbsp;Cancelar</button>
-                                        <button class="btnGuardarForm bg-customer" id="btnSeleccionar" title="Guardar"><i class="fa fa-user" aria-hidden="true"></i>&nbsp;Seleccionar</button>
-                                    </div>
-
-                                </div>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="12" style="font-size:11px " align="center">&nbsp;</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="5" valign="top">
+                                                <table width="400" cellpadding="0" cellspacing="0" style="border: 1px solid black">
+                                                    <thead>
+                                                        <tr>
+                                                            <td colspan="3" align="center" style="border: 1px solid black">CONTABILIDAD PATRIMONIAL</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="73" align="center" style="border: 1px solid black">Cuenta</td>
+                                                            <td width="148" align="center" style="border: 1px solid black">Importe Debe</td>
+                                                            <td width="140" align="center" style="border: 1px solid black">Importe Haber</td>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="tblResumenContable"></tbody>
+                                                </table>
+                                            </td>
+                                            <td>&nbsp;</td>
+                                          
+                                        </tr>
+                                        <tr>
+                                            <td colspan="12">
+                                                <table cellpadding="0" cellspacing="0" style="border: 1px solid black;">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td height="80" width="700" style="border: 1px solid black">&nbsp;</td>
+                                                            <td height="80" width="700" style="border: 1px solid black">&nbsp;</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td height="40" align="center" style="font-size:11px;border: 1px solid black ">
+                                                                TESORERIA
+                                                            </td>
+                                                            <td height="40" align="center" style="font-size:11px;border: 1px solid black ">
+                                                                GESTION FINANCIERA
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td height="80" width="700" style="border: 1px solid black">&nbsp;</td>
+                                                            <td height="80" width="700" style="border: 1px solid black">&nbsp;</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td height="40" align="center" style="font-size:11px;border: 1px solid black ">
+                                                                CONTABILIDAD
+                                                            </td>
+                                                            <td height="40" align="center" style="font-size:11px;border: 1px solid black ">
+                                                                DIRECTOR EJECUTIVO
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
+                    @*<div class="form-row">
+            <div class="modal custom-modal" tabindex="-1" role="dialog" aria-hidden="true" id="divPopupContainerForm3" style="overflow-y: auto; display: none;">
+                <div class="modal-dialog modal-xl bg-personalizado" id="divPopupWindowForm3" style="margin-top:30px;">
+                    <div class="modal-content">
+                        <div id="divBarraForm3" class="modal-header bg-personalizado" style="cursor:move">
+                            <h5 class="modal-title" id="nombreComision">Listado de Asegurados</h5>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+
+                                <div style="width:100%;">
+
+                                    <div style="width: 100%; font-family: 'Arial Narrow', Arial, sans-serif; margin-bottom: 0px; text-align: left;">
+                                        <div style="width: 25%; float: left;">
+                                            <img src="~/Riztie/Images/user-bg.jpg" alt="IAFAS" width="180" height="160" />
+                                        </div>
+                                        <div style="width: 45%; float: left;font-family: 'Arial Narrow', Arial, sans-serif; text-align: center;">
+                                            <h1 style="font-family: 'Arial Narrow', Arial, sans-serif; margin-bottom: 0px; height:70px;">RECIBO DE INGRESO N° 0004165 </h1>
+                                        </div>
+                                        <div style="width: 30%; float: left;">
+                                            <div>
+                                                <div style="width:100%; float: left;">
+                                                    <div>
+                                                        <h5 style="font-family: 'Arial Narrow', Arial, sans-serif; margin-top: 70px; text-align: center; height: 20px;">DIRECCIÓN EJECUTIVA</h5>
+                                                        <h5 style="font-family: 'Arial Narrow', Arial, sans-serif; text-align: center; height: 70px;">OFICINA DE TESORERIA</h5>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div style="width:100%; float: left;">
+                                        <div style="width: 70%; float: left; border-left: 1px solid black; border-right: 1px solid black; border-top: 1px solid black; border-bottom: 1px solid black;padding-left: 8px;">
+                                            <div style="text-align: left; margin-top: 5px;">
+                                                <label style="margin-bottom: 0px; font-weight: bold;">PLAN 4&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :</label>
+                                                <label style="margin-bottom: 0px;"> DEDUCIBLES</label>
+                                            </div>
+                                            <div style="text-align: left;">
+                                                <label style="margin-bottom: 0px; font-weight: bold;text-align: left; ">SUB DIARIO &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</label>
+                                                <label style="margin-bottom: 0px;">0404</label>
+                                                <label style="margin-bottom: 0px;">ASIENTO DE DIARIO</label>
+                                            </div>
+                                            <div style="text-align: left;">
+                                                <label style="margin-bottom: 0px; font-weight: bold; text-align: left; ">COMPROBANTE &nbsp;&nbsp;:</label>
+                                                <label style="margin-bottom: 0px;">090005 &nbsp;&nbsp;&nbsp; </label>
+                                                <label style="margin-bottom: 0px; font-weight: bold; text-align: left; ">FECHA :</label>
+                                                <label style="margin-bottom: 0px;">21/09/2022</label>
+                                            </div>
+                                            <div style="text-align: left; height: 40px">
+                                                <label style="margin-bottom: 0px; font-weight: bold;">CONCEPTO&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</label>
+                                                <label style="margin-bottom: 0px;">PROV.RI 0004165 VENTANILLA ABRIL 2022</label>
+                                            </div>
+                                        </div>
+
+                                        <div style="width: 30%; float: left; border-left: 1px solid black; border-right: 1px solid black; border-top: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-left: 8px;">
+                                            <div style="text-align: left; margin-top: 5px;">
+                                                <label style="margin-bottom: 0px; font-weight: bold;">MONEDA&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</label>
+                                                <label style="margin-bottom: 0px;"> DEDUCIBLES</label>
+                                            </div>
+                                            <div style="text-align: left;">
+                                                <label style="margin-bottom: 0px; font-weight: bold;text-align: left; ">CONVERSIÓN &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</label>
+                                                <label style="margin-bottom: 0px;">0404</label>
+                                            </div>
+                                            <div style="text-align: left;">
+                                                <label style="margin-bottom: 0px; font-weight: bold;text-align: left; ">TIPO CONVERSIÓN :</label>
+                                                <label style="margin-bottom: 0px;">0404</label>
+                                            </div>
+                                            <div style="text-align: left; height: 40px">
+                                                <label style="margin-bottom: 0px; font-weight: bold;text-align: left; ">TIPO CAMBIO &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</label>
+                                                <label style="margin-bottom: 0px;">0404</label>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <div style="width: 100%; font-family: 'Arial Narrow', Arial, sans-serif; margin-bottom: 0px; text-align: left;">
+                                        <div style="width: 100%; float: left;font-family: 'Arial Narrow', Arial, sans-serif; text-align: left;">
+                                            <table cellpadding="0" width="1100px" cellspacing="0" style="font-family: 'Arial Narrow', Arial, sans-serif; font-size: 12px; border: solid 1px #242828;">
+                                                <thead>
+                                                    <tr cellpadding="0" width="1100px" cellspacing="0" style="font-family: 'Arial Narrow', Arial, sans-serif; font-size: 12px; border: 1px solid black;text-align:center;font-weight: bold;">
+                                                        <th colspan="1" rowspan="1" style="font-weight: bold;width: 50px;border:1px solid black;white-space:pre-wrap; ">CUENTA</th>
+                                                        <th colspan="1" rowspan="1" style="font-weight: bold;width: 90px;border:1px solid black;white-space:pre-wrap;">ANEXO</th>
+                                                        <th colspan="1" rowspan="1" style="font-weight: bold;width:250px;border:1px solid black;white-space:pre-wrap;">D E S C R I P C I Ó N    D E L   A R T I C U L O</th>
+                                                        <th colspan="1" rowspan="1" style="font-weight: bold;width: 20px;border:1px solid black;white-space:pre-wrap;">CC.</th>
+                                                        <th colspan="1" rowspan="1" style="font-weight: bold;width: 20px;border:1px solid black;white-space:pre-wrap;">TP.</th>
+                                                        <th colspan="1" rowspan="1" style="font-weight: bold;width: 40px;border:1px solid black;white-space:pre-wrap;">DEBE</th>
+                                                        <th colspan="1" rowspan="1" style="font-weight: bold;width: 40px;border:1px solid black;white-space:pre-wrap;">HABER</th>
+                                                        <th colspan="1" rowspan="1" style="font-weight: bold;width: 60px;border:1px solid black;white-space:pre-wrap;">DOCUMENTO</th>
+                                                        <th colspan="1" rowspan="1" style="font-weight: bold;width: 20px;border:1px solid black;white-space:pre-wrap;">FECHA</th>
+                                                        <th colspan="1" rowspan="1" style="font-weight: bold;width: 20px;border:1px solid black;white-space:pre-wrap;">VENC.</th>
+                                                        <th colspan="1" rowspan="1" style="font-weight: bold;width: 20px;border:1px solid black;white-space:pre-wrap;">ARE.</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr style="color: black; text-align: center; font-weight: bold; height: 30px;">
+                                                        <td style="border:1px solid black;white-space:pre-wrap;width: 5px;" bcolspan="1">01</td>
+                                                        <td style="border:1px solid black;white-space:pre-wrap;width: 20px;" colspan="1">0079</td>
+                                                        <td style="border: 1px solid black; white-space: pre-wrap; text-align: left;" colspan="1">07</td>
+                                                        <td style="border: 1px solid black; white-space: pre-wrap; width: 60px;" colspan="1">08</td>
+                                                        <td style="border: 1px solid black; white-space: pre-wrap; width: 60px;" colspan="1">22</td>
+                                                        <td style="border: 1px solid black; white-space: pre-wrap; width: 60px;" colspan="1">07</td>
+                                                        <td style="border: 1px solid black; white-space: pre-wrap;" colspan="1">08</td>
+                                                        <td style="border: 1px solid black; white-space: pre-wrap;" ;colspan="1">22</td>
+                                                        <td style="border: 1px solid black; white-space: pre-wrap;" ;colspan="1">22</td>
+                                                        <td style="border: 1px solid black; white-space: pre-wrap;" ;colspan="1">22</td>
+                                                        <td style="border: 1px solid black; white-space: pre-wrap;" ;colspan="1">22</td>
+                                                    </tr>
+                                                </tbody>
+                                                <tfoot>
+                                                    <tr>
+                                                        <td colspan="3" style="border: 1px solid black; text-align: right; color: #080707; font-weight: bold;">Total  </td>
+                                                        <td colspan="2" style="border: 1px solid black; text-align: center; color: #080707; font-weight: bold;">Soles</td>
+                                                        <td colspan="1" style="border: 1px solid black; text-align: center; color: #080707; font-weight: bold;">120</td>
+                                                        <td colspan="1" style="border: 1px solid black; text-align: center; color: #080707; font-weight: bold;">120</td>
+                                                        <td colspan="4" style="border: 1px solid black; text-align: right; color: #080707; font-weight: bold;" id="tdTotalNEA"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="12" style="border: 1px solid black; text-align: right; color: #ffffff; font-weight: bold;">Total : S/. </td>
+                                                    </tr>
+                                                </tfoot>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div style="width:100%; float: left;">
+                                        <div style="width: 60%; float: left; border-left: 1px solid black; border-right: 1px solid black; border-top: 1px solid black; border-bottom: 1px solid black; text-align: center;">
+                                            <label style="margin-bottom: 0px; font-weight: bold; ">AUTORIZACIÓN</label>
+                                        </div>
+                                        <div style="width: 40%; float: left; border-left: 1px solid black; border-right: 1px solid black; border-top: 1px solid black; border-bottom: 1px solid black; text-align: center;">
+                                            <label style="margin-bottom: 0px; font-weight: bold; ">RECIBÍ CONFORME</label>
+                                        </div>
+                                    </div>
+                                    <div style="width:100%; float: left;">
+                                        <div style="width: 60%; float: left; border-left: 1px solid black; border-right: 1px solid black; border-top: 1px solid black; border-bottom: 1px solid black; text-align: center;">
+                                            <div style="text-align: left; margin-top: 70px; width: 50%; float: left;">
+                                                <div style="text-align: center; margin-top: 25px;height:80px;">
+                                                    <label style="margin-bottom: 0px;">__________________________________________</label>
+                                                    <h6>DIRECCTOR EJECUTIVO</h6>
+                                                </div>
+                                                <div style="text-align: center; margin-top: 43px;height:80px;">
+                                                    <label style="margin-bottom: 0px;">__________________________________________</label>
+                                                    <h6>TESORERIA</h6>
+                                                </div>
+                                            </div>
+                                            <div style="text-align: left; margin-top: 70px; width: 50%; float: left;">
+                                                <div style="text-align: center; margin-top: 25px;height:80px;">
+                                                    <label style="margin-bottom: 0px;">__________________________________________</label>
+                                                    <h6>SUB DIRECCTOR EJECUTIVO</h6>
+                                                </div>
+                                                <div style="text-align: center; margin-top: 43px;height:80px;">
+                                                    <label style="margin-bottom: 0px;">__________________________________________</label>
+                                                    <h6>CONTABILIDAD</h6>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div style="width: 40%; float: left; border-left: 1px solid black; border-right: 1px solid black; border-top: 1px solid black; border-bottom: 1px solid black;padding-left: 8px;">
+
+                                            <div style="text-align: left; margin-top: 18px;">
+                                                <label style="margin-bottom: 0px; font-weight: bold;">Nombre&nbsp;&nbsp;&nbsp; :</label>
+                                                <label style="margin-bottom: 0px;">______________________________________________________</label>
+                                            </div>
+                                            <div style="text-align: left;">
+                                                <label style="margin-bottom: 0px; font-weight: bold; margin-top: 18px; text-align: left; ">Doc.Iden. :</label>
+                                                <label style="margin-bottom: 0px;">______________________________________________________</label>
+                                            </div>
+                                            <div style="text-align: left;">
+                                                <label style="margin-bottom: 0px; font-weight: bold; margin-top: 18px; text-align: left; ">Dirección :</label>
+                                                <label style="margin-bottom: 0px;">______________________________________________________</label>
+                                            </div>
+                                            <div style="text-align: left;">
+                                                <label style="margin-bottom: 0px; font-weight: bold; margin-top: 18px;">Fecha&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :</label>
+                                                <label style="margin-bottom: 0px;">______________________________________________________</label>
+                                            </div>
+                                            <div style="margin-bottom: 0px; text-align: center; margin-top: 80px; ">
+                                                <label>______________________________________________________</label>
+                                            </div>
+                                            <div style="text-align: center;">
+                                                <label style="margin-bottom: 0px; font-weight: bold; margin-top: 8px;">FIRMA</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button id="btnCancelarForm2" class="btnCancelarForm" title="Cancelar"><i class="fa fa-undo" aria-hidden="true"></i>&nbsp;Cancelar</button>
+                            <button class="btnGuardarForm bg-customer" id="btnSeleccionar" title="Guardar"><i class="fa fa-user" aria-hidden="true"></i>&nbsp;Seleccionar</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>*@
                 </div>
             </div>
             <div id="styleSelector">
