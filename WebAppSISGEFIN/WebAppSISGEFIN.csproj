@@ -141,6 +141,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\Site.css" />
     <Content Include="Global.asax" />
     <Content Include="Riztie\Css\all.min.css" />
     <Content Include="Riztie\Css\bootstrap-toggle.min.css" />
@@ -337,7 +338,7 @@
     <Content Include="Views\Patrimonio\Bajas.cshtml" />
     <Content Include="Views\Patrimonio\Devoluciones.cshtml" />
     <Content Include="Views\Patrimonio\CausalBaja.cshtml" />
-    <Content Include="Views\Patrimonio\TipoPatrimonio.cshtml" />
+    <Content Include="Views\Patrimonio\TiposPatrimonio.cshtml" />
     <Content Include="Views\Inventario\GenerarNP.cshtml" />
     <Content Include="Views\Patrimonio\UbicaFisica.cshtml" />
     <Content Include="Views\RRHH\Personal.cshtml" />
@@ -356,6 +357,9 @@
     <Content Include="Views\Inventario\CierreAlmacen.cshtml" />
     <Content Include="Templates\Patrimonio\Template_InventarioInicial.xlsx" />
     <Content Include="Views\Patrimonio\General.cshtml" />
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Patrimonio\TasaUIT.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -366,10 +370,8 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Content\" />
     <Folder Include="Riztie\Files\" />
     <Folder Include="Riztie\Manual\" />
-    <Folder Include="Views\Shared\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
