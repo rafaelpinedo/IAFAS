@@ -46,7 +46,7 @@
                                             </div>
                                             <div class="form-group col-sm-4">
                                                 <label class="control-label">Tipo Movimiento</label>
-                                                <select class="control-form RequeMov PopupMov" id="cboTipoMovCab"></select>
+                                                <select class="control-lectura RequeMov PopupMov" disabled id="cboTipoMovCab"></select>
                                             </div>
                                         </div>
                                         <div class="row">
@@ -98,18 +98,15 @@
                                         <div class="row mt-2 section-nuevo-activo">
                                             <div class="form-group col-sm-12">
                                                 <div class="table-responsive" style="height:315px;">
-                                                    <table class='grilla bordered' style="width:100%">
+                                                    <table class='grilla bordered' style="width:100%;min-width:1100px">
                                                         <thead>
                                                             <tr class="FilaHead">
                                                                 <th style="white-space:pre-wrap;width:70px;display:none">idx</th>
                                                                 <th style="white-space:pre-wrap;width:100px">Código Patrimonio</th>
                                                                 <th style="white-space:pre-wrap;width:300px">Descripción</th>
                                                                 <th style="white-space:pre-wrap;width:100px">Marca</th>
-                                                                @*<th style="white-space:pre-wrap;width:100px">Modelo</th>*@
                                                                 <th style="white-space:pre-wrap;width:100px">Serie</th>
-                                                                @*<th style="white-space:pre-wrap;width:150px">Usuario Final</th>*@
                                                                 <th style="white-space:pre-wrap;width:100px">Fecha Compra</th>
-                                                                @*<th style="white-space:pre-wrap;width:100px">Valor Compra</th>*@
                                                                 <th style="white-space:pre-wrap;width:100px">Fecha Alta</th>
                                                                 <th style="white-space:pre-wrap;width:100px">Valor Inicial</th>
                                                                 <th style="white-space:pre-wrap;width:100px">Valor Depreciación</th>
@@ -381,7 +378,8 @@
                                                     <div class="row">
                                                         <div class="form-group col-sm-12">
                                                             <label class="control-label">Cta Contable</label>
-                                                            <input type="text" class="control-lectura Popup" readonly id="txtCtaContable">
+                                                            <input type="text" class="control-lectura NoPopup" readonly id="txtCtaContable">
+                                                            <input type="hidden" class="control-lectura Popup" readonly id="txtMayorSubCtaClasificador">
                                                             <input type="hidden" class="control-form Reque Popup" id="txtTbCodigo" />
                                                             <input type="hidden" class="control-form Reque Popup" id="txtGruCodigo" />
                                                             <input type="hidden" class="control-form Reque Popup" id="txtClaCodigo" />

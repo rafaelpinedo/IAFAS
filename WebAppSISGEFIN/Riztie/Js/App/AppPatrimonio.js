@@ -60,16 +60,11 @@ function getIniciarConfiguracion() {
 }
 
 function getListar() {
-    console.log("asd");
     var data = "";
 
     if (vista == "InventarioInicial") {
         var anioConsulta = document.getElementById('txtPeriodoCons')?.value;
         data = FLAG_INICIAL_INVENTARIO_INICIAL + '|' + anioConsulta;
-    }
-    if (vista == "TiposPatrimonio") {
-        var anioConsulta = document.getElementById('txtPeriodoCons')?.value;
-        data = anioConsulta;
     }
     if (vista == "Altas") {
         var anioConsulta = document.getElementById('txtPeriodoCons')?.value;
@@ -319,12 +314,13 @@ function configurarBotones() {
     var btnNuevoMov = document.getElementById("btnNuevoMov");
     if (btnNuevoMov != null) btnNuevoMov.onclick = function () {
         divPopupContainerMov.style.display = 'block'
-        document.getElementById("detalleActivo").style.display = 'none';
 
         limpiarForm("PopupMov");
         limpiarForm("NoPopupMov");
 
         if (vista == "Altas") {
+            document.getElementById("detalleActivo").style.display = 'none';
+
             var txtAnioCab = document.getElementById("txtAnioCab");
             if (txtAnioCab != null) txtAnioCab.value = anioFiscal;
 
@@ -341,7 +337,6 @@ function configurarBotones() {
             if (dttFechaMovCab != null) dttFechaMovCab.value = obtenerFechaActualYYYMMDD();
         }
         if (vista == "Bajas") {
-
             document.querySelectorAll('.section-nuevo-activo').forEach(function (el) {
                 el.style.display = 'block';
             });
@@ -355,6 +350,9 @@ function configurarBotones() {
 
             var cboMesesCab = document.getElementById("cboMesesCab");
             if (cboMesesCab != null) cboMesesCab.value = periodo;
+
+            var cboTipoMovCab = document.getElementById("cboTipoMovCab");
+            if (cboTipoMovCab != null) cboTipoMovCab.value = 2; //2: BAJA
 
             var cboEstadoCab = document.getElementById("cboEstadoCab");
             if (cboEstadoCab != null) cboEstadoCab.value = 1; // 1: PENDIENTE, 2:APROBADO
@@ -723,6 +721,7 @@ function configurarCombos() {
 
 function seleccionarBoton(idGrilla, idRegistro, idBoton) {
     limpiarForm('Popup')
+    limpiarForm("PopupMov");
 
     if (idGrilla == "divLista") {
         if (idBoton == "Editar") {
@@ -837,7 +836,8 @@ function mostrarRegistroActivo(rpta, container) {
         txtNumeroDoc.value = campos[34];
         var dFechaAlta = campos[35].split("/");
         dttFechaAlta.value = dFechaAlta.length == 3 ? dFechaAlta[2] + "-" + dFechaAlta[1] + "-" + dFechaAlta[0] : '';
-        txtCtaContable.value = campos[36];
+
+        setCuentaContable(campos[36]);
 
         txtTbCodigo.value = campos[37];
         txtGruCodigo.value = campos[38];
@@ -1077,7 +1077,6 @@ function seleccionarFila(fila, id, prefijo) {
         Http.get("General/listarTabla?tbl=" + controller + vista + "Activos&data=" + data, mostrarlistasActivos);
     }
     if ((vista == "TiposPatrimonio") && prefijo != "divListaActivo") {
-        var periodoCons = txtPeriodoCons.value;
         var data = idRegistro;
 
         Http.get("General/listarTabla?tbl=" + controller + vista + "SubTipos&data=" + data, mostrarlistaSubTipos);
@@ -1410,7 +1409,7 @@ function adicionarItem(datos) {
     filaDetalle += "<i class='fa fa-search btn btn-info btnCirculo' title='Ver Item' onclick='editarRegistroActivo("
     filaDetalle += item;
     filaDetalle += ");'></i>";
-    filaDetalle += "<i class='fa fa-trash ml-1 btn-danger btnCirculo' title='Quitar Item' onclick='retirarItem(this,\"";
+    filaDetalle += "<i class='fa fa-trash ml-1 btn-danger btnCirculo' style='width: 30px;height: 26px;' title='Quitar Item' onclick='retirarItem(this,\"";
     filaDetalle += item;
     filaDetalle += "\");'></i>";
     filaDetalle += "</td> ";
@@ -1459,13 +1458,29 @@ function esBajasValido() {
     return true;
 }
 
+function setCuentaContable(cuentaContable) {
+    if (cuentaContable) {
+        var cuenta = cuentaContable.split(';')
+        var mayor = cuenta?.[0];
+        var subcuenta = cuenta?.[1];
+        var clasificador = cuenta?.[2];
+        var descripcionCtaContable = cuenta?.[3];
+
+        if (!(mayor && subcuenta))
+            return;
+
+        txtCtaContable.value = mayor + '.' + subcuenta + ' - ' + descripcionCtaContable;
+        txtMayorSubCtaClasificador.value = mayor + ';' + subcuenta + ';' + clasificador;
+    }
+}
+
 function asignarCuentaContable(idItem) {
     var cuentasContables = [];
     txtCtaContable.value = "";
     txtMayorSubCtaClasificador.value = "";
 
     for (var i = 0; i < listaCuentaContables_v.length; i++) {
-        var ctaContable = listaCuentaContables_v[i].split(';');
+        var ctaContable = listaCuentaContables_v[i].split('|');
         if (ctaContable[0] == idItem) {
             cuentasContables.push(ctaContable);
         }
@@ -1473,16 +1488,16 @@ function asignarCuentaContable(idItem) {
 
     if (cuentasContables && cuentasContables.length == 1) {
         var cuenta = cuentasContables[0];
-        var mayor = cuenta?.[2];
-        var subcuenta = cuenta?.[3];
-        var clasificador = cuenta?.[4];
-        var descripcionCtaContable = cuenta?.[5];
+        var mayor = cuenta?.[1];
+        var subcuenta = cuenta?.[2];
+        var clasificador = cuenta?.[3];
+        var descripcionCtaContable = cuenta?.[4];
 
         if (!(mayor && subcuenta))
             return;
 
         txtCtaContable.value = mayor + '.' + subcuenta + ' - ' + descripcionCtaContable;
-        txtMayorSubCtaClasificador.value = mayor + '|' + subcuenta + '|' + clasificador;
+        txtMayorSubCtaClasificador.value = mayor + ';' + subcuenta + ';' + clasificador;
     }
 
     if (cuentasContables && cuentasContables.length > 1) {
@@ -1642,7 +1657,6 @@ function desahabilitarControles(controles) {
         tipo = control.id.substr(0, 3);
 
         if (tipo == "txt" || tipo == "num" || tipo == "tta" || tipo == "tim") {
-            console.log("txt")
             control.classList.remove('control-form');
             control.classList.add('control-lectura');
         }
@@ -1818,6 +1832,8 @@ function mostrarGrabar(rpta) {
     }
 
     if (vista == "Bajas") {
+        divPopupContainerMov.style.display = 'none'
+
         btnGuardarBajas.innerHTML = "<i class='fa fa-save'></i> Grabar";
         btnGuardarBajas.disabled = false;
     }
