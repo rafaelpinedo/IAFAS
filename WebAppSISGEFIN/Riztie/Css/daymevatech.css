@@ -3194,3 +3194,16 @@ input[type=number]::-webkit-outer-spin-button {
 }
 
 
+.filaPersonalizada {
+    background-color: #448AFF;
+    color: white;
+    text-align: center;
+    font-weight: bold;
+}
+
+.filaSecundaria {
+    background-color: #F29713;
+    color: white;
+    text-align: center;
+    font-weight: bold;
+}

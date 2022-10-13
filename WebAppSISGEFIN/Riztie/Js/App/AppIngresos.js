@@ -23,6 +23,9 @@ window.onload = function () {
     if (vista == "Recaudacion") {
         getListarRecaudacion('1');
     }
+    else if (vista == "EstadoCuenta") {
+       
+    }
     else {
         getListar();
     }
@@ -1372,8 +1375,148 @@ function seleccionarFila(fila, id, prefijo) {
     if (window["fila" + prefijo] != null) window["fila" + prefijo].className = "FilaDatos";
     fila.className = "FilaSeleccionada";
     window["fila" + prefijo] = fila;
+
+    if (vista == "EstadoCuenta") {
+        lblAsegurado.innerHTML = fila.childNodes[2].innerHTML;
+        lblAsegurado.setAttribute("data-id", idRegistro);
+        divPopupContainer.style.display = 'none';
+        getObtenerEStadoCuenta(idRegistro);
+    }
 }
 
+function getObtenerEStadoCuenta(idAsegurado) {
+    var data = "";
+    var anioLectivo = txtAnioLectivo.value;
+    data = idAsegurado + '|' + anioLectivo;
+    Http.get("General/listarTabla/?tbl=" + controller + vista + "&data=" + data, mostrarEstadoCuenta);
+}
+
+function mostrarEstadoCuenta(rpta) {
+    if (rpta) {
+      //  btnImprimirEstadoCuenta.disabled = false;
+
+        var listas = rpta.split("¯");
+        var listaEstadoCuenta = listas[0].split("¬");
+        var ingresos = listas[1];
+        var deuda = listas[2];
+        lblAporteTotal.innerHTML = 'S/. ' + formatoNumeroDecimal(ingresos);
+        lblDeudaTotal.innerHTML = 'S/. ' + formatoNumeroDecimal(deuda);
+        generarEstadoCuenta(listaEstadoCuenta, "listaEstadoCuenta", 0, "tblEstadoCuenta", "filaPersonalizada");
+    }
+}
+
+
+function generarEstadoCuenta(lista, nombreDiv, indicadorPie, idTabla, bgcolor) {
+    var campos = lista[0].split("|");
+    var anchos = lista[1].split("|");
+    var tipos = lista[2].split("|");
+    var nRegistros = lista.length;
+    var nCampos = campos.length;
+    var contenido = "<table id='";
+    contenido += idTabla
+    contenido += "' class='grilla bordered Tabla'>";
+    contenido += "<thead>";
+    contenido += "<tr class='";
+    contenido += bgcolor;
+    contenido += "'>";
+    for (var z = 0; z < nCampos; z++) {
+        if (z == 0) {
+            contenido += "<th style='display:none' width='";
+            contenido += anchos[z];
+            contenido += "'>";
+            contenido += campos[z];
+            contenido += "</th>";
+        }
+        else {
+            contenido += "<th width='";
+            contenido += anchos[z];
+            contenido += "'>";
+            contenido += campos[z];
+            contenido += "</th>";
+        }
+    }
+    contenido += "<th>";
+    contenido += "Acción";
+    contenido += "</th>";
+    contenido += "</tr>";
+    contenido += "</thead>";
+    contenido += "<tbody>";
+    if (lista[3].length > 0) {
+        for (var i = 3; i < nRegistros; i++) {
+            campos = lista[i].split("|");
+            contenido += "<tr style='border: 1px solid black;'>";
+            for (var j = 0; j < nCampos; j++) {
+                if (j == 0) {
+                    contenido += "<td style='display:none'>";
+                    contenido += campos[j];
+                    contenido += "</td>";
+                }
+                else {
+                    contenido += "<td style='text-align:";
+                    switch (tipos[j]) {
+                        case "Int32":
+                            contenido += "right";
+                            valor = campos[j];
+                            break;
+                        case "Int64":
+                            contenido += "right";
+                            valor = campos[j];
+                            break;
+                        case "Decimal":
+                            contenido += "right";
+                            valor = formatoNumeroDecimal(campos[j]);
+                            break;
+                        case "String":
+                            contenido += "left";
+                            valor = campos[j];
+                            break;
+                        case "DateTime":
+                            contenido += "center";
+                            valor = campos[j];
+                            break;
+                    }
+                    contenido += "'>";
+                    contenido += valor;
+                    contenido += "</td>";
+                }
+            }
+            contenido += "<td>";
+            contenido += "<i class='fa fa-print fa-2x' aria-hidden='true' style='color:green' title='Imprimir Recibo Pago' onclick='getReporte(";
+            contenido += campos[0];
+            contenido += ");'></i>";
+            contenido += "</td>";
+            contenido += "</tr>";
+        }
+    }
+    else {
+        contenido += "<td style='text-align:center;font-weight:bold' colSpan='";
+        contenido += nCampos;
+        contenido += "'>";
+        contenido += "No tiene recibo de pago";
+        contenido += "</td>";
+    }
+    contenido += "</tbody>";
+    if (indicadorPie == 1) {
+        contenido += "<tfoot>";
+        contenido += "<tr style='background: #d0dafd; color: #2193F6; text-align:right;font-weight: bold;' ><td colspan='4'>TOTAL</td>";
+        contenido += "<td style='text-align:right'>";
+        contenido += formatoNumeroDecimal(totalCargo);
+        contenido += "</td>";
+        contenido += "<td style='text-align:right'>";
+        contenido += formatoNumeroDecimal(totalAbono);
+        contenido += "</td>";
+        contenido += "<td style='text-align:right'>";
+        contenido += formatoNumeroDecimal(totalCargo - totalAbono);
+        contenido += "</td>";
+        contenido += "</tr >";
+        contenido += "</tfoot>";
+    }
+    else {
+        contenido += "</table> ";
+    }
+    var div = document.getElementById(nombreDiv);
+    div.innerHTML = contenido;
+}
 
 function listarDepartamentos() {
     var nRegistros = listaUbigeo.length;
@@ -1594,6 +1737,6 @@ function mostrarListadoAsegurado(rpta) {
     if (rpta) {
         var lista = rpta.split("¬");
         divPopupContainer.style.display = 'block';
-        var grilla = new GrillaScroll(lista, "listaAlumnos", 500, 2, tabla, "Admon", null, null, true, null, 26);
+        var grilla = new GrillaScroll(lista, "divListaAsegurado", 500, 2, vista, "Ingresos", null, null, null, null, 26);
     }
 }

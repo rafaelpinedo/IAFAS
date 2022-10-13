@@ -360,6 +360,7 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Patrimonio\TasaUIT.cshtml" />
+    <Content Include="Views\Ingresos\EstadoCuenta.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
