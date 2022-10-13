@@ -9,6 +9,7 @@ var controller = "";
 var idRegistro = "";
 var listaUbicaFisica_v = [];
 var listaActivos_v = [];
+var listaCuentaContables_v = [];
 var FLAG_INICIAL_INVENTARIO_INICIAL = 1;
 var FLAG_INICIAL_ALTAS = 0;
 var dataImport = "";
@@ -29,6 +30,7 @@ window.onload = function () {
     controller = window.sessionStorage.getItem("Controller");
     mostrarLoading("divLista");
     getListar();
+    getIniciarConfiguracion();
     configurarBotones();
     configurarCombos();
     configurarCampos();
@@ -39,17 +41,36 @@ var botonInventarioGeneral = [
     { "cabecera": "Editar", "clase": "fa fa-search btn btn-info btnCirculo", "id": "Editar" },
 ];
 
+var botonTiposPatrimonio = [
+    { "cabecera": "Editar", "clase": "fa fa-search btn btn-info btnCirculo", "id": "Editar" },
+];
+
+function getIniciarConfiguracion() {
+    var data = ""
+    if (vista == "Bajas" || vista == "General") {
+        Http.get("General/listarTabla?tbl=" + controller + vista + "Configuracion&data=" + data, configurarValores);
+        var controlesPopup = document.getElementsByClassName("Popup");
+        var controlesPopupValContable = document.getElementsByClassName("PopupValContable");
+        var controlesPopupEspTecnica = document.getElementsByClassName("PopupEspTecnica");
+
+        desahabilitarControles(controlesPopup);
+        desahabilitarControles(controlesPopupValContable);
+        desahabilitarControles(controlesPopupEspTecnica);
+    }
+}
+
 function getListar() {
+    console.log("asd");
     var data = "";
 
     if (vista == "InventarioInicial") {
         var anioConsulta = document.getElementById('txtPeriodoCons')?.value;
         data = FLAG_INICIAL_INVENTARIO_INICIAL + '|' + anioConsulta;
     }
-    //if (vista == "Altas") {
-    //    var anioConsulta = document.getElementById('txtPeriodoCons')?.value;
-    //    data = FLAG_INICIAL_ALTAS + '|' + anioConsulta;
-    //}
+    if (vista == "TiposPatrimonio") {
+        var anioConsulta = document.getElementById('txtPeriodoCons')?.value;
+        data = anioConsulta;
+    }
     if (vista == "Altas") {
         var anioConsulta = document.getElementById('txtPeriodoCons')?.value;
         data = anioConsulta;
@@ -63,6 +84,7 @@ function getListar() {
         var idTab = (idTabActivo == "tabAltas" ? TIPO_ALTAS : TIPO_BAJAS);
         data = idTab + '|' + anioConsulta;
     }
+
 
     if (vista == "Altas") {
         Http.get("General/listarTabla?tbl=" + controller + vista + "Mov&data=" + data, mostrarlistas);
@@ -81,6 +103,41 @@ function getListarMovActivos(data) {
     }
 }
 
+function configurarValores(rpta) {
+    if (rpta) {
+        var listas = rpta.split("¯");
+        listaUbicaFisica_v = listas[1].split("¬");
+        listaActivos_v = listas[4].split("¬");
+
+        var listaResponsable = listas[2].split("¬");
+        var listaOficina = listas[3].split("¬");
+        var listaActivos = listas[4].split("¬");
+        var listaCentroCosto = listas[5].split("¬");
+        var listaEstadoConserv = listas[6].split("¬");
+        var listaMarcas = listas[7].split("¬");
+        var listaPais = listas[8].split("¬");
+        var listaEstadoTipo = listas[9].split("¬");
+        var listaProveedor = listas[10].split("¬");
+        var listaTipoDoc = listas[11].split("¬");
+        var listaMeses = listas[12].split("¬");
+
+        crearCombo(listaCentroCosto, "cboCentroCostoCons", "Ninguno");
+        crearCombo(listaOficina, "cboOficinaCons", "Ninguno");
+
+        crearCombo(listaResponsable, "cboResponsable", "Seleccione");
+        crearCombo(listaResponsable, "cboUsuarioFinal", "Seleccione");
+        crearCombo(listaOficina, "cboOficina", "Ninguno");
+        crearCombo(listaActivos, "cboActivos", "Seleccione");
+        crearCombo(listaCentroCosto, "cboCentroCosto", "Seleccione");
+        crearCombo(listaEstadoConserv, "cboEstadoConserv", "Seleccione");
+        crearCombo(listaMarcas, "cboMarcas", "Seleccione");
+        crearCombo(listaPais, "cboPaisProcedencia", "Seleccione");
+        crearCombo(listaEstadoTipo, "cboEstadoTipo", "Seleccione");
+        crearCombo(listaProveedor, "cboProveedor", "Seleccione");
+        crearCombo(listaTipoDoc, "cboTipoDoc", "Seleccionar");
+        crearCombo(listaMeses, "cboMes", "Seleccione");
+    }
+}
 function mostrarlistas(rpta) {
     if (rpta) {
         var listas = rpta.split("¯");
@@ -111,6 +168,7 @@ function mostrarlistas(rpta) {
             var listaTipoDoc = listas[11].split("¬");
             var listaMeses = listas[12].split("¬");
 
+            listaCuentaContables_v = listas[13].split("¬");
 
             crearCombo(listaCentroCosto, "cboCentroCostoCons", "Ninguno");
             crearCombo(listaOficina, "cboOficinaCons", "Ninguno");
@@ -165,39 +223,26 @@ function mostrarlistas(rpta) {
             crearCombo(listaEstadoMov, "cboEstadoCab", "Seleccione");
         }
         else if (vista == "General") {
-            listaUbicaFisica_v = listas[1].split("¬");
-            listaActivos_v = listas[4].split("¬");
-
-            var listaResponsable = listas[2].split("¬");
-            var listaOficina = listas[3].split("¬");
-            var listaActivos = listas[4].split("¬");
-            var listaCentroCosto = listas[5].split("¬");
-            var listaEstadoConserv = listas[6].split("¬");
-            var listaMarcas = listas[7].split("¬");
-            var listaPais = listas[8].split("¬");
-            var listaEstadoTipo = listas[9].split("¬");
-            var listaProveedor = listas[10].split("¬");
-            var listaTipoDoc = listas[11].split("¬");
-            var listaMeses = listas[12].split("¬");
-
-
-            crearCombo(listaCentroCosto, "cboCentroCostoCons", "Ninguno");
-            crearCombo(listaOficina, "cboOficinaCons", "Ninguno");
-
-            crearCombo(listaResponsable, "cboResponsable", "Seleccione");
-            crearCombo(listaResponsable, "cboUsuarioFinal", "Seleccione");
-            crearCombo(listaOficina, "cboOficina", "Ninguno");
-            crearCombo(listaActivos, "cboActivos", "Seleccione");
-            crearCombo(listaCentroCosto, "cboCentroCosto", "Seleccione");
-            crearCombo(listaEstadoConserv, "cboEstadoConserv", "Seleccione");
-            crearCombo(listaMarcas, "cboMarcas", "Seleccione");
-            crearCombo(listaPais, "cboPaisProcedencia", "Seleccione");
-            crearCombo(listaEstadoTipo, "cboEstadoTipo", "Seleccione");
-            crearCombo(listaProveedor, "cboProveedor", "Seleccione");
-            crearCombo(listaTipoDoc, "cboTipoDoc", "Seleccionar");
-            crearCombo(listaMeses, "cboMes", "Seleccione");
-
             grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botonInventarioGeneral, 38, false, null);
+        }
+        else if (vista == "TiposPatrimonio") {
+            grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, null, 38, false, null);
+        }
+        else if (vista == "TasaUIT") {
+            var tituloTasa = listas[0].split("¬");
+            var tituloValorUnidad = listas[1].split("¬");
+
+            var listaTasa = listas[2].split("¬");
+            var listaValorUnidad = listas[3].split("¬");
+
+            var lblTituloTasa = document.getElementById("lblTituloTasa");
+            if (lblTituloTasa != null) lblTituloTasa.innerText = tituloTasa;
+
+            var lblTituloValorUnidad = document.getElementById("lblTituloValorUnidad");
+            if (lblTituloValorUnidad != null) lblTituloValorUnidad.innerText = tituloValorUnidad;
+
+            grillaItem = new GrillaScroll(listaTasa, "divListaTasa", 100, 6, vista, controller, null, null, true, null, 38, false, null);
+            grillaItem = new GrillaScroll(listaValorUnidad, "divListaValorUnidad", 100, 6, vista, controller, null, null, true, null, 38, false, null);
         }
         else {
             grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, botones, 38, false, null);
@@ -295,12 +340,42 @@ function configurarBotones() {
             var dttFechaMovCab = document.getElementById("dttFechaMovCab");
             if (dttFechaMovCab != null) dttFechaMovCab.value = obtenerFechaActualYYYMMDD();
         }
+        if (vista == "Bajas") {
+
+            document.querySelectorAll('.section-nuevo-activo').forEach(function (el) {
+                el.style.display = 'block';
+            });
+
+            tbDetalleActivos.innerHTML = "";
+            spnNroItems.innerHTML = "Items: 0";
+            txtPeriodoItemsCons.value = new Date().getFullYear();
+
+            var txtAnioCab = document.getElementById("txtAnioCab");
+            if (txtAnioCab != null) txtAnioCab.value = anioFiscal;
+
+            var cboMesesCab = document.getElementById("cboMesesCab");
+            if (cboMesesCab != null) cboMesesCab.value = periodo;
+
+            var cboEstadoCab = document.getElementById("cboEstadoCab");
+            if (cboEstadoCab != null) cboEstadoCab.value = 1; // 1: PENDIENTE, 2:APROBADO
+
+            var dttFechaMovCab = document.getElementById("dttFechaMovCab");
+            if (dttFechaMovCab != null) dttFechaMovCab.value = obtenerFechaActualYYYMMDD();
+
+            var dttFechaResolucion = document.getElementById("dttFechaResolucion");
+            if (dttFechaResolucion != null) dttFechaResolucion.value = obtenerFechaActualYYYMMDD();
+
+            btnGuardarBajas.innerHTML = "<i class='fa fa-save'></i> Grabar";
+            btnGuardarBajas.disabled = false;
+        }
+
     }
 
     var btnNuevo = document.getElementById("btnNuevo");
     if (btnNuevo != null) btnNuevo.onclick = function () {
         divPopupContainer.style.display = 'block';
         limpiarForm("Popup");
+        limpiarForm("NoPopup");
 
         if (vista == "InventarioInicial" || vista == "Altas") {
             limpiarForm("PopupValContable");
@@ -348,36 +423,6 @@ function configurarBotones() {
 
             var txtEstadoConservacion = document.getElementById("txtEstadoConservacion");
             if (txtEstadoConservacion != null) txtEstadoConservacion.value = cboEstadoConserv.options[cboEstadoConserv.selectedIndex].innerText
-        }
-        if (vista == "Bajas") {
-            limpiarForm("PopupMov");
-            limpiarForm("NoPopupMov");
-
-            document.querySelectorAll('.section-nuevo-activo').forEach(function (el) {
-                el.style.display = 'block';
-            });
-
-            tbDetalleActivos.innerHTML = "";
-            spnNroItems.innerHTML = "Items: 0";
-            txtPeriodoItemsCons.value = new Date().getFullYear();
-
-            var txtAnioCab = document.getElementById("txtAnioCab");
-            if (txtAnioCab != null) txtAnioCab.value = anioFiscal;
-
-            var cboMesesCab = document.getElementById("cboMesesCab");
-            if (cboMesesCab != null) cboMesesCab.value = periodo;
-
-            var cboEstadoCab = document.getElementById("cboEstadoCab");
-            if (cboEstadoCab != null) cboEstadoCab.value = 1; // 1: PENDIENTE, 2:APROBADO
-
-            var dttFechaMovCab = document.getElementById("dttFechaMovCab");
-            if (dttFechaMovCab != null) dttFechaMovCab.value = obtenerFechaActualYYYMMDD();
-
-            var dttFechaResolucion = document.getElementById("dttFechaResolucion");
-            if (dttFechaResolucion != null) dttFechaResolucion.value = obtenerFechaActualYYYMMDD();
-
-            btnGuardarBajas.innerHTML = "<i class='fa fa-save'></i> Grabar";
-            btnGuardarBajas.disabled = false;
         }
     }
 
@@ -487,6 +532,11 @@ function configurarBotones() {
         divPopupContainer.style.display = 'none';
     }
 
+    var btnCancelarListadoItemsForm = document.getElementById("btnCancelarListadoItemsForm");
+    if (btnCancelarListadoItemsForm != null) btnCancelarListadoItemsForm.onclick = function () {
+        divPopupContainerListadoItemsForm.style.display = 'none';
+    }
+
     var btnCancelarForm1 = document.getElementById("btnCancelarForm1");
     if (btnCancelarForm1 != null) btnCancelarForm1.onclick = function () {
         divPopupContainerForm1.style.display = 'none';
@@ -594,8 +644,8 @@ function configurarCampos() {
                 var dttFechaAltaValContable = document.getElementById('dttFechaAltaValContable');
                 if (dttFechaAltaValContable) dttFechaAltaValContable.value = this.value;
                 if (txtVidaUtil && dttFinVidaAltaValContable) {
-                    var anios = txtVidaUtil.value ? parseInt(txtVidaUtil.value) : 0;
-                    calcularFechaFin(dttFinVidaAltaValContable, dttFechaAlta.value, anios);
+                    var anios = txtVidaUtil.value ? parseFloat(txtVidaUtil.value).toFixed(2) : 0;
+                    calcularFechaFin(dttFinVidaAltaValContable, dttFechaAlta.value, parseInt(anios));
                     calcularTazaDepreciacion(anios);
                 }
             }
@@ -605,8 +655,8 @@ function configurarCampos() {
             txtVidaUtil.onkeyup = function (event) {
                 if (dttFechaAlta && dttFechaAlta.value) {
                     if (txtVidaUtil && dttFinVidaAltaValContable) {
-                        var anios = txtVidaUtil.value ? parseInt(txtVidaUtil.value) : 0;
-                        calcularFechaFin(dttFinVidaAltaValContable, dttFechaAlta.value, anios);
+                        var anios = txtVidaUtil.value ? parseFloat(txtVidaUtil.value).toFixed(2) : 0;
+                        calcularFechaFin(dttFinVidaAltaValContable, dttFechaAlta.value, parseInt(anios));
                         calcularTazaDepreciacion(anios);
                     }
                 }
@@ -649,6 +699,7 @@ function configurarCombos() {
         var cboActivos = document.getElementById("cboActivos");
         if (cboActivos != null) cboActivos.onchange = function () {
             asignarValoresActivo(this.value);
+            asignarCuentaContable(this.value);
 
             txtDescripcion.value = cboActivos.value
                 ? cboActivos.options[cboActivos.selectedIndex].innerText
@@ -700,7 +751,7 @@ function seleccionarBoton(idGrilla, idRegistro, idBoton) {
 }
 
 function editarRegistroActivo(id) {
-    Http.get("General/obtenerTabla/?tbl=" + controller + vista + 'Activos&id=' + id, mostrarRegistro);
+    Http.get("General/obtenerTabla/?tbl=" + controller + vista + 'Activos&id=' + id, mostrarRegistroActivo);
 }
 
 function editarRegistro(id) {
@@ -737,6 +788,85 @@ function mostrarRegistroMov(rpta) {
         mostrarMensaje('No se encontró información', 'error');
     }
 }
+function mostrarRegistroActivo(rpta, container) {
+    if (rpta) {
+        var campos = rpta.split("|");
+        document.getElementById(container ? container : "divPopupContainer").style.display = 'block';
+
+        txtIdRegistro.value = campos[0];
+        txtCodigoPatrimonio.value = campos[1];
+        txtCodigoMargesi.value = campos[1];
+        txtItem.value = campos[2];
+        cboActivos.value = campos[3];
+        txtDescripcionMargesi.value = cboActivos.options[cboActivos.selectedIndex]?.text;
+        seleccionarControlSelect2(cboActivos);
+        txtDescripcion.value = campos[4];
+        cboCentroCosto.value = campos[5];
+        cboOficina.value = campos[6];
+        listarUbicaFisica();
+        cboUbicaFisica.value = campos[7];
+        cboResponsable.value = campos[8];
+        cboUsuarioFinal.value = campos[9];
+        txtNroSerie.value = campos[10];
+        cboEstadoConserv.value = campos[11];
+        cboMarcas.value = campos[12];
+        seleccionarControlSelect2(cboMarcas);
+        txtModelo.value = campos[13];
+        txtMedida.value = campos[14];
+        ttaCaracteristica.value = campos[15];
+        ttaObservacion.value = campos[16];
+        cboPaisProcedencia.value = campos[17];
+        cboEstadoTipo.value = campos[18];
+        chkEsSBN.checked = campos[19] == "S" ? true : false;
+        chkEsActivoDepreciable.checked = campos[20] == "1" ? true : false;
+        chkEsVerificacionFisica.checked = campos[21] == "1" ? true : false;
+
+        optOC.checked = campos[22] == "2" ? true : false;
+        optNEA.checked = campos[22] == "1" ? true : false;
+        txtNumeroIngresoBien.value = campos[22] == "2" ? campos[23] : campos[26];
+        var dFechaIngresoBien = campos[22] == "2" ? campos[24].split("/") : campos[27].split("/");
+        dttFechaIngresoBien.value = dFechaIngresoBien.length == 3 ? dFechaIngresoBien[2] + "-" + dFechaIngresoBien[1] + "-" + dFechaIngresoBien[0] : '';
+        txtValorCompra.value = campos[22] == "2" ? campos[25] : campos[28];
+
+        cboProveedor.value = campos[29];
+        chkEsGarantia.checked = campos[30] == "1" ? true : false;
+        var dFechaGarantia = campos[31].split("/");
+        dttFechaGarantia.value = dFechaGarantia.length == 3 ? dFechaGarantia[2] + "-" + dFechaGarantia[1] + "-" + dFechaGarantia[0] : '';
+        txtNroContrato.value = campos[32];
+        cboTipoDoc.value = campos[33];
+        txtNumeroDoc.value = campos[34];
+        var dFechaAlta = campos[35].split("/");
+        dttFechaAlta.value = dFechaAlta.length == 3 ? dFechaAlta[2] + "-" + dFechaAlta[1] + "-" + dFechaAlta[0] : '';
+        txtCtaContable.value = campos[36];
+
+        txtTbCodigo.value = campos[37];
+        txtGruCodigo.value = campos[38];
+        txtClaCodigo.value = campos[39];
+        txtFamCodigo.value = campos[40];
+        txtInvCodigo.value = campos[41];
+
+        ttaObservacionMargesi.value = campos[42];
+
+        txtVidaUtil.value = campos[43];
+        dttFechaAltaValContable.value = dttFechaAlta.value;
+        var dFinVidaValContable = campos[44].split("/");
+        dttFinVidaAltaValContable.value = dFinVidaValContable.length == 3 ? dFinVidaValContable[2] + "-" + dFinVidaValContable[1] + "-" + dFinVidaValContable[0] : '';
+        txtAnio.value = campos[45];
+        cboMes.value = campos[46];
+        txtDepreciacion.value = campos[47];
+        txtEstadoConservacion.value = cboEstadoConserv.options[cboEstadoConserv.selectedIndex]?.text;
+        txtFactorAjuste.value = campos[48];
+        var dFechaProceso = campos[49].split("/");
+        dttFechaProceso.value = dFechaProceso.length == 3 ? dFechaProceso[2] + "-" + dFechaProceso[1] + "-" + dFechaProceso[0] : '';
+        txtValor.value = campos[50];
+        txtDeprecAcumulada.value = campos[51];
+        txtValorNeto.value = (txtValor.value || txtDeprecAcumulada.value) ? txtValor.value - txtDeprecAcumulada.value : '';
+
+    }
+    else {
+        mostrarMensaje('No se encontró información', 'error');
+    }
+}
 
 function mostrarRegistro(rpta) {
     if (rpta) {
@@ -749,84 +879,11 @@ function mostrarRegistro(rpta) {
             cboResponsable.value = campos[3];
             cboEstado.value = campos[4];
         }
-        else if (vista == "InventarioInicial" || vista == "Altas" || vista == "General") {
-            document.getElementById("divPopupContainer").style.display = 'block';
-
-            txtIdRegistro.value = campos[0];
-            txtCodigoPatrimonio.value = campos[1];
-            txtCodigoMargesi.value = campos[1];
-            txtItem.value = campos[2];
-            cboActivos.value = campos[3];
-            txtDescripcionMargesi.value = cboActivos.options[cboActivos.selectedIndex]?.text;
-            seleccionarControlSelect2(cboActivos);
-            txtDescripcion.value = campos[4];
-            cboCentroCosto.value = campos[5];
-            cboOficina.value = campos[6];
-            listarUbicaFisica();
-            cboUbicaFisica.value = campos[7];
-            cboResponsable.value = campos[8];
-            cboUsuarioFinal.value = campos[9];
-            txtNroSerie.value = campos[10];
-            cboEstadoConserv.value = campos[11];
-            cboMarcas.value = campos[12];
-            seleccionarControlSelect2(cboMarcas);
-            txtModelo.value = campos[13];
-            txtMedida.value = campos[14];
-            ttaCaracteristica.value = campos[15];
-            ttaObservacion.value = campos[16];
-            cboPaisProcedencia.value = campos[17];
-            cboEstadoTipo.value = campos[18];
-            chkEsSBN.checked = campos[19] == "S" ? true : false;
-            chkEsActivoDepreciable.checked = campos[20] == "1" ? true : false;
-            chkEsVerificacionFisica.checked = campos[21] == "1" ? true : false;
-
-            optOC.checked = campos[22] == "2" ? true : false;
-            optNEA.checked = campos[22] == "1" ? true : false;
-            txtNumeroIngresoBien.value = campos[22] == "2" ? campos[23] : campos[26];
-            var dFechaIngresoBien = campos[22] == "2" ? campos[24].split("/") : campos[27].split("/");
-            dttFechaIngresoBien.value = dFechaIngresoBien.length == 3 ? dFechaIngresoBien[2] + "-" + dFechaIngresoBien[1] + "-" + dFechaIngresoBien[0] : '';
-            txtValorCompra.value = campos[22] == "2" ? campos[25] : campos[28];
-
-            cboProveedor.value = campos[29];
-            chkEsGarantia.checked = campos[30] == "1" ? true : false;
-            var dFechaGarantia = campos[31].split("/");
-            dttFechaGarantia.value = dFechaGarantia.length == 3 ? dFechaGarantia[2] + "-" + dFechaGarantia[1] + "-" + dFechaGarantia[0] : '';
-            txtNroContrato.value = campos[32];
-            cboTipoDoc.value = campos[33];
-            txtNumeroDoc.value = campos[34];
-            var dFechaAlta = campos[35].split("/");
-            dttFechaAlta.value = dFechaAlta.length == 3 ? dFechaAlta[2] + "-" + dFechaAlta[1] + "-" + dFechaAlta[0] : '';
-            txtCtaContable.value = campos[36];
-
-            txtTbCodigo.value = campos[37];
-            txtGruCodigo.value = campos[38];
-            txtClaCodigo.value = campos[39];
-            txtFamCodigo.value = campos[40];
-            txtInvCodigo.value = campos[41];
-
-            ttaObservacionMargesi.value = campos[42];
-
-            txtVidaUtil.value = campos[43];
-            dttFechaAltaValContable.value = dttFechaAlta.value;
-            var dFinVidaValContable = campos[44].split("/");
-            dttFinVidaAltaValContable.value = dFinVidaValContable.length == 3 ? dFinVidaValContable[2] + "-" + dFinVidaValContable[1] + "-" + dFinVidaValContable[0] : '';
-            txtAnio.value = campos[45];
-            cboMes.value = campos[46];
-            txtDepreciacion.value = campos[47];
-            txtEstadoConservacion.value = cboEstadoConserv.options[cboEstadoConserv.selectedIndex]?.text;
-            txtFactorAjuste.value = campos[48];
-            var dFechaProceso = campos[49].split("/");
-            dttFechaProceso.value = dFechaProceso.length == 3 ? dFechaProceso[2] + "-" + dFechaProceso[1] + "-" + dFechaProceso[0] : '';
-            txtValor.value = campos[50];
-            txtDeprecAcumulada.value = campos[51];
-            txtValorNeto.value = (txtValor.value || txtDeprecAcumulada.value) ? txtValor.value - txtDeprecAcumulada.value : '';
+        else if (vista == "General") {
+            mostrarRegistroActivo(rpta);
         }
         else if (vista == "Bajas") {
-            document.getElementById("divPopupContainer").style.display = 'block';
-
-            //document.querySelectorAll('.section-nuevo-activo').forEach(function (el) {
-            //    el.style.display = 'none';
-            //});
+            document.getElementById("divPopupContainerMov").style.display = 'block';
 
             txtNroMovCab.value = campos[0];
             txtAnioCab.value = campos[1];
@@ -1012,12 +1069,26 @@ function seleccionarFila(fila, id, prefijo) {
     fila.className = "FilaSeleccionada";
     window["fila" + prefijo] = fila;
 
-    if ((vista == "InventarioInicial" /*|| vista == "Altas"*/) && prefijo != "divListaActivo") {
+    if ((vista == "InventarioInicial") && prefijo != "divListaActivo") {
         var periodoCons = txtPeriodoCons.value;
         var flagInicial = vista == "InventarioInicial" ? FLAG_INICIAL_INVENTARIO_INICIAL : FLAG_INICIAL_ALTAS;
         var data = periodoCons + '-' + idRegistro + '-' + flagInicial;
 
         Http.get("General/listarTabla?tbl=" + controller + vista + "Activos&data=" + data, mostrarlistasActivos);
+    }
+    if ((vista == "TiposPatrimonio") && prefijo != "divListaActivo") {
+        var periodoCons = txtPeriodoCons.value;
+        var data = idRegistro;
+
+        Http.get("General/listarTabla?tbl=" + controller + vista + "SubTipos&data=" + data, mostrarlistaSubTipos);
+    }
+}
+
+function mostrarlistaSubTipos(rpta) {
+    if (rpta) {
+        var listas = rpta.split("¯");
+        var lista = listas[0].split("¬");
+        grillaItem = new GrillaScroll(lista, "divListaActivo", 100, 6, vista, controller, null, null, true, null, 38, false, null);
     }
 }
 
@@ -1034,7 +1105,6 @@ function mostrarlistasActivos(rpta) {
     if (rpta) {
         var listas = rpta.split("¯");
         var lista = listas[0].split("¬");
-        console.log(lista);
         grillaItem = new GrillaScroll(lista, divLista, 100, 6, vista, controller, null, null, true, botones, 38, false, null);
     }
 }
@@ -1042,7 +1112,7 @@ function mostrarlistasActivos(rpta) {
 function mostrarListadoItems(rpta) {
     if (rpta) {
         //spnLoad.style.display = 'none';
-        divPopupContainerForm1.style.display = 'block';
+        divPopupContainerListadoItemsForm.style.display = 'block';
 
         var listas = rpta.split('¯');
         lista = listas[0].split("¬");
@@ -1098,7 +1168,6 @@ function grabarBajas() {
     var frm = new FormData();
     frm.append("data", data);
 
-    console.log(data);
     Http.post("General/guardar?tbl=" + controller + vista, mostrarGrabar, frm);
 
     btnGuardarBajas.innerHTML = "Guardando <i class='fa fa-circle-o-notch fa-spin' style='color:white'></i>";
@@ -1310,32 +1379,38 @@ function adicionarItem(datos) {
     filaDetalle += "<td style='white-space:pre-wrap;width:100px;vertical-align:top;'>";
     filaDetalle += marca;
     filaDetalle += "</td> ";
-    filaDetalle += "<td style='white-space:pre-wrap;width:100px;vertical-align:top;'>";
-    filaDetalle += modelo;
-    filaDetalle += "</td> ";
+    //filaDetalle += "<td style='white-space:pre-wrap;width:100px;vertical-align:top;'>";
+    //filaDetalle += modelo;
+    //filaDetalle += "</td> ";
     filaDetalle += "<td style='white-space:pre-wrap;width:100px;vertical-align:top;'>";
     filaDetalle += serie;
     filaDetalle += "</td> ";
-    filaDetalle += "<td style='white-space:pre-wrap;width:100px;vertical-align:top;'>";
-    filaDetalle += usuarioFinal;
+    //filaDetalle += "<td style='white-space:pre-wrap;width:100px;vertical-align:top;'>";
+    //filaDetalle += usuarioFinal;
+    //filaDetalle += "</td> ";
     filaDetalle += "<td style='white-space:pre-wrap;width:100px;vertical-align:top;'>";
     filaDetalle += fechaCompra;
     filaDetalle += "</td> ";
-    filaDetalle += "<td style='white-space:pre-wrap;width:100px;vertical-align:top;'>";
-    filaDetalle += valorCompra;
-    filaDetalle += "</td> ";
+    //filaDetalle += "<td style='white-space:pre-wrap;width:100px;vertical-align:top;'>";
+    //filaDetalle += valorCompra;
+    //filaDetalle += "</td> ";
     filaDetalle += "<td style='white-space:pre-wrap;width:100px;vertical-align:top;'>";
     filaDetalle += fechaAlta;
     filaDetalle += "</td> ";
     filaDetalle += "<td style='white-space:pre-wrap;width:100px;vertical-align:top;'>";
     filaDetalle += valorInicial;
     filaDetalle += "</td> ";
+    //filaDetalle += "<td style='white-space:pre-wrap;width:100px;vertical-align:top;'>";
+    //filaDetalle += conservacion;
+    //filaDetalle += "</td> ";
     filaDetalle += "<td style='white-space:pre-wrap;width:100px;vertical-align:top;'>";
-    filaDetalle += conservacion;
-    filaDetalle += "</td> ";
+    filaDetalle += 0.00;
     filaDetalle += "</td> ";
     filaDetalle += "<td style='white-space:pre-wrap;width:10px;vertical-align:top;'>";
-    filaDetalle += "<i class='fa fa-trash f-20 text-c-red p-2' title='Quitar Item' onclick='retirarItem(this,\"";
+    filaDetalle += "<i class='fa fa-search btn btn-info btnCirculo' title='Ver Item' onclick='editarRegistroActivo("
+    filaDetalle += item;
+    filaDetalle += ");'></i>";
+    filaDetalle += "<i class='fa fa-trash ml-1 btn-danger btnCirculo' title='Quitar Item' onclick='retirarItem(this,\"";
     filaDetalle += item;
     filaDetalle += "\");'></i>";
     filaDetalle += "</td> ";
@@ -1345,7 +1420,7 @@ function adicionarItem(datos) {
     spnNroItems.innerHTML = "Items: " + (nFilas + 1);
     configurarEnterCantidad(tbDetalleActivos, 8);
 
-    divPopupContainerForm1.style.display = 'none';
+    divPopupContainerListadoItemsForm.style.display = 'none';
 }
 
 function configurarEnterCantidad(tbody, celda) {
@@ -1384,8 +1459,48 @@ function esBajasValido() {
     return true;
 }
 
+function asignarCuentaContable(idItem) {
+    var cuentasContables = [];
+    txtCtaContable.value = "";
+    txtMayorSubCtaClasificador.value = "";
+
+    for (var i = 0; i < listaCuentaContables_v.length; i++) {
+        var ctaContable = listaCuentaContables_v[i].split(';');
+        if (ctaContable[0] == idItem) {
+            cuentasContables.push(ctaContable);
+        }
+    }
+
+    if (cuentasContables && cuentasContables.length == 1) {
+        var cuenta = cuentasContables[0];
+        var mayor = cuenta?.[2];
+        var subcuenta = cuenta?.[3];
+        var clasificador = cuenta?.[4];
+        var descripcionCtaContable = cuenta?.[5];
+
+        if (!(mayor && subcuenta))
+            return;
+
+        txtCtaContable.value = mayor + '.' + subcuenta + ' - ' + descripcionCtaContable;
+        txtMayorSubCtaClasificador.value = mayor + '|' + subcuenta + '|' + clasificador;
+    }
+
+    if (cuentasContables && cuentasContables.length > 1) {
+        cboActivos.value = "";
+        seleccionarControlSelect2(cboActivos);
+
+        Swal.fire({
+            title: 'Warning!',
+            text: 'El Activo tiene mas de una Cta Contable asociada',
+            icon: 'warning',
+            showConfirmButton: true,
+        })
+    }
+}
+
 function asignarValoresActivo(idItem) {
     var activo = obtenerActivoSeleccionado(idItem);
+
     if (activo) {
         var txtDescripcion = document.getElementById('txtDescripcion');
         if (txtDescripcion) txtDescripcion.value = activo[1];
@@ -1396,6 +1511,8 @@ function asignarValoresActivo(idItem) {
         var claseCodigo = activo[5];
         var familiaCodigo = activo[6];
         var inventarioCodigo = activo[7];
+        var tasaDeprec = activo[8];
+
         var codigoItem = grupoCodigo + claseCodigo + familiaCodigo + inventarioCodigo;
 
         var chkEsSBN = document.getElementById('chkEsSBN');
@@ -1418,12 +1535,25 @@ function asignarValoresActivo(idItem) {
 
         var txtInvCodigo = document.getElementById('txtInvCodigo');
         if (txtInvCodigo) txtInvCodigo.value = inventarioCodigo;
+
+        var txtDepreciacion = document.getElementById('txtDepreciacion');
+        if (txtDepreciacion) txtDepreciacion.value = tasaDeprec;
+
+        var txtVidaUtil = document.getElementById('txtVidaUtil');
+        if (txtVidaUtil) txtVidaUtil.value = tasaDeprec > 0 ? (100 / tasaDeprec).toFixed(2) : '';
+
+        if (dttFechaAlta && dttFechaAlta.value) {
+            if (txtVidaUtil && dttFinVidaAltaValContable) {
+                var anios = txtVidaUtil.value ? parseFloat(txtVidaUtil.value).toFixed(2) : 0;
+                calcularFechaFin(dttFinVidaAltaValContable, dttFechaAlta.value, parseInt(anios));
+            }
+        }
+
     }
 }
 
 function obtenerActivoSeleccionado(idItem) {
     var activo;
-
     for (var i = 0; i < listaActivos_v.length; i++) {
         activo = listaActivos_v[i].split('|');
         if (activo[0] == idItem) {
@@ -1505,6 +1635,30 @@ function limpiarListaActivos() {
     if (divListaActivo) divListaActivo.innerHTML = '';
 }
 
+function desahabilitarControles(controles) {
+    for (var j = 0; j < controles.length; j++) {
+        control = controles[j];
+        control.style.borderColor = ""
+        tipo = control.id.substr(0, 3);
+
+        if (tipo == "txt" || tipo == "num" || tipo == "tta" || tipo == "tim") {
+            console.log("txt")
+            control.classList.remove('control-form');
+            control.classList.add('control-lectura');
+        }
+        else if (tipo == "dtt") {
+            control.classList.remove('control-form');
+            control.classList.add('control-lectura');
+        }
+        else if (tipo == "cbo") {
+            control.classList.remove('control-form');
+            control.classList.add('control-lectura');
+        }
+        else if (tipo == "chk" || tipo == "opt") {
+            control.setAttribute("disabled", "");
+        }
+    }
+}
 function seleccionarControlSelect2(control) {
     var controlSelect = 'select2-' + control.id + '-container';
     var cboControlSelect = document.getElementById(controlSelect);
@@ -1674,6 +1828,8 @@ function mostrarGrabar(rpta) {
 }
 
 function importarExcel(divForm, divLista, dataDeta) {
+    btnGuardarListaExcel.disabled = false;
+
     document.getElementById(divForm).style.display = "none";
 
     var file = fupExcel.files[0];
@@ -1681,7 +1837,7 @@ function importarExcel(divForm, divLista, dataDeta) {
 
     var camposNea = [7, 8, 9];
     var camposOC = [10, 11, 12];
-    var camposNull = [19, 20, 21, 22, 29, 30, 31, 32];
+    var camposNull = [19, 20, 21, 22, 30, 31, 32, 33];
 
     var esArchivoCompleto = true;
 
