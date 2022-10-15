@@ -77,8 +77,6 @@ namespace WebAppSISGEFIN.Controllers
             return View();
         }
 
-
-
         [FiltroAutenticacion]
         public ActionResult ReciboIngreso()
         {

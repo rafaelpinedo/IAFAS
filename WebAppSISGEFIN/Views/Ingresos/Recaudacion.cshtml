@@ -19,12 +19,6 @@
                             <button class="input-group-inverse btn btn-inverse" id="btnConsultar" data-toggle="tooltip" data-placement="bottom" title="Consultar"><i class="fa fa-search fa-lg" aria-hidden="true"></i></button>
                             <button class="btn btn-out waves-effect waves-light btn-primary btn-square" id="btnCargarArchivo" data-toggle="tooltip" data-placement="bottom" title="Subir archivo Excel"><i class="fa fa-cloud-upload fa-lg" aria-hidden="true"></i> Cargar Excel</button>
                         </div>
-                        @*<div class="row col-sm-1" style="text-align:left">
-                            <span style="color: black; font-weight: bold; font-size: 17px;margin-top: 10px;">Total S/.</span>
-                        </div>*@
-                        @*<div class="row col-sm-4">
-                            <span id="spnTotalRecaudacion" style="color:red;font-weight:bold;font-size:30px;text-align:right"></span>
-                        </div>*@
                     </div>
 
                     <div class="row">
@@ -68,15 +62,19 @@
                                     <div id="divCuerpo" class="modal-body">
                                         <div id="importarDataExcel">
                                             <div class="row">
+                                                <div class="form-group col-sm-5">
+                                                    <label class="control-label">Entidad Financiera</label>
+                                                    <select id="cboEntidadFinancieraCarga" class="control-form"></select>
+                                                </div>
                                                 <div class="form-group col-sm-3" style="margin-top: 15px;margin-bottom: 2px;">
                                                     <button class="btn btn-out waves-effect waves-light btn-warning btn-square" id="btnLimpiar" data-toggle="tooltip" data-placement="bottom" title="Limpiar Registro"><i class="fa fa-paint-brush fa-lg" aria-hidden="true"></i>Limpiar</button>
                                                     &nbsp;&nbsp;&nbsp;
                                                     <button class="btn btn-out waves-effect waves-light btn-info btn-square" id="btnCargarCXC" data-toggle="tooltip" data-placement="bottom" title="Cargar Archivo"><i class="fa fa-upload fa-lg" aria-hidden="true"></i>Cargar</button>
                                                     <h4 id="spanPendiente" style="color:red"></h4>
                                                 </div>
-                                                <div class="form-group col-sm-6">
-                                                    <label class="control-label">Entidad Financiera</label>
-                                                    <select id="cboEntidadFinancieraCarga" class="control-form"></select>
+                                                <div class="form-group col-sm-4">
+                                                    <label class="control-label">&nbsp;</label>
+                                                    <label class="control-label" id="lblTipoArchivo" style="color:red;font-size:16px">RECIBOS POR COBRAR</label>
                                                 </div>
                                             </div>
                                         </div>
@@ -120,13 +118,9 @@
                                                 </div>
                                             </div>
                                         </div>
-
-
                                         <div class="form-row" style="height:350px;overflow-y:auto;">
                                             <div class="table-responsive" id="divListaExcel"></div>
                                         </div>
-
-
                                     </div>
                                     <div class="modal-footer">
                                         <button class="btnCancelarForm" id="btnCancelar" title="Cancelar"><i class="fa fa-undo" aria-hidden="true"></i>&nbsp;Cancelar</button>
@@ -158,9 +152,6 @@
                                     <div class="modal-footer">
                                         <button class="btnCancelarForm" id="btnCancelarForm1" title="Cancelar"><i class="fa fa-undo" aria-hidden="true"></i>&nbsp;Cancelar</button>
                                         <button class="btnGuardarForm bg-customer" id="btnImportarExcel" title="Importar"><i class="fa fa-upload" aria-hidden="true"></i>&nbsp;Importar</button>
-                                    </div>
-                                    <div class="Fila">
-                                        <span id="spnValida" class="Valida"></span>
                                     </div>
                                 </div>
                             </div>
