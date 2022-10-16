@@ -19,6 +19,7 @@
                         <div class="form-group col-md-8 m-3">
                             <button class="input-group-inverse btn btn-dark" id="btnConsultar" data-toggle="tooltip" data-placement="bottom" title="Consultar"><i class="fa fa-search fa-lg" aria-hidden="true"></i></button>
                             <button class="input-group-inverse btn btn-primary" id="btnNuevo" data-toggle="tooltip" data-placement="bottom" title="Nuevo"><i class="fa fa-plus-circle fa-lg" aria-hidden="true"></i></button>
+                            <button class="btn btn-out waves-effect waves-light btn-info btn-square" id="btnImprimir" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Imprimir Inventario Inicial"><i class="fa fa-print fa-lg" aria-hidden="true"></i></button>
                             <button class="btn btn-out waves-effect waves-light btn-primary btn-square" id="btnCargarArchivo" data-toggle="tooltip" data-placement="bottom" title="Subir archivo Excel"><i class="fa fa-cloud-upload fa-lg" aria-hidden="true"></i> Cargar Excel</button>
                             <button class="btn btn-out waves-effect waves-light btn-info btn-square" id="btnDescagarArchivo" data-toggle="tooltip" data-placement="bottom" title="Descargar Template Iventario Inicial"><i class="fa fa-cloud-download fa-lg" aria-hidden="true"></i> Descargar Template</button>
                         </div>
@@ -284,6 +285,40 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="form-row">
+                        <div class="modal custom-modal" tabindex="-1" role="dialog" aria-hidden="true" id="divPopupContainerFormNoDepreciable" style="overflow-y:auto;">
+                            <div class="modal-dialog modal-lg bg-personalizado" id="divPopupWindowFormNoDepreciable">
+                                <div class="modal-content">
+                                    <div id="divBarraFormNoDepreciable" class="modal-header bg-personalizado" style="cursor:move">
+                                        <h5 class="modal-title">Valores Contables</h5>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="row">
+                                            <div class="form-group col-sm-6">
+                                                <label class="control-label">Fecha Alta</label>
+                                                <input type="date" class="control-lectura" readonly id="dttFechaAltaValContableNoDepreciable">
+                                            </div>
+                                            <div class="form-group col-sm-6">
+                                                <label class="control-label">Estado de conservación</label>
+                                                <input type="text" autocomplete="off" class="control-lectura" readonly id="txtEstadoConservacionNoDepreciable">
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-group col-sm-6">
+                                                <label class="control-label">Valor</label>
+                                                <input type="text" autocomplete="off" class="control-lectura" readonly id="txtValorNoDepreciable">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button id="btnCancelarForm5" class="btnCancelarForm" title="Cancelar"><i class="fa fa-undo" aria-hidden="true"></i>&nbsp;Atrás</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="form-row">
                         <div class="modal custom-modal" tabindex="-1" role="dialog" aria-hidden="true" id="divPopupContainerForm1" style="overflow-y:auto;">
                             <div class="modal-dialog modal-lg bg-personalizado" id="divPopupWindowForm1">
@@ -597,6 +632,51 @@
                                     <div class="Fila">
                                         <span id="spnValida" class="Valida"></span>
                                     </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal custom-modal" tabindex="-1" role="dialog" aria-hidden="true" id="divPopupContainerOpcionReporte" style="overflow-y:auto;">
+                        <div class="modal-dialog modal-md bg-personalizado" id="divPopupWindowOpcionReporte">
+                            <div class="modal-content">
+                                <div id="divBarraOpcionReporte" class="modal-header bg-personalizado" style="cursor:move;">
+                                    <h5 class="modal-title"><i class="fa fa-users"></i> Reportes</h5>
+                                    <button type="button" id="btnCancelarOpcionReporte" class="close"><span aria-hidden="true">&times;</span><span class="sr-only"></span></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="row">
+                                        <div class="col-sm-12 mb-2">
+                                            <fieldset class="fieldset h-100 p-3">
+                                                <div class="row">
+                                                    <div class="form-group col-sm-12">
+                                                        <label class="control-label">Inventario Inicial Generar por centro de costo</label>
+                                                        <select class="control-form" id="cboCentroCostoReporte"></select>
+                                                    </div>
+                                                </div>
+                                            </fieldset>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button id="btnSeleccionarOpcionReporte" class="btnGuardarForm bg-customer" title="Ver Reporte"><span class="fa fa-search"></span>&nbsp;Ver Reporte</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal custom-modal" tabindex="-1" role="dialog" aria-hidden="true" id="divPopupContainerReporte" style="overflow-y:auto;">
+                        <div class="modal-dialog modal-xl bg-personalizado" id="divPopupWindowReporte">
+                            <div class="modal-content">
+                                <div id="divBarraReporte" class="modal-header bg-personalizado" style="cursor:move">
+                                    <h5 class="modal-title"><i class="fa fa-search"></i> Vista Previa</h5>
+                                    <button type="button" id="btnCancelarReporte" class="close"><span aria-hidden="true">&times;</span><span class="sr-only"></span></button>
+                                </div>
+                                <div class="modal-body">
+                                    <section hidden>
+                                        <div id="ListaReporte"></div>
+                                    </section>
+                                    <iframe id="ifrmVistaPrevia" style="width:100%;height:800px"></iframe>
                                 </div>
                             </div>
                         </div>

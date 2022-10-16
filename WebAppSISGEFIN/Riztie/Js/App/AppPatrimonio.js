@@ -7,11 +7,22 @@ var filaAnterior = null;
 var vista = "";
 var controller = "";
 var idRegistro = "";
+
 var listaUbicaFisica_v = [];
 var listaActivos_v = [];
 var listaCuentaContables_v = [];
+var listaPorcentaje_v = [];
+var listaUIT_v = [];
+
 var FLAG_INICIAL_INVENTARIO_INICIAL = 1;
 var FLAG_INICIAL_ALTAS = 0;
+var MAYOR_NO_DEPRECIABLE = 9105; //DEPRECIABLE
+var MAYOR_DEPRECIABLE = 1503; //NO DEPRECIABLE
+
+var TIPO_ALTAS = 1;
+var TIPO_BAJAS = 2;
+var idTabActivo = 'tabAltas';
+
 var dataImport = "";
 var dataDeta = "";
 var anioFiscal = "";
@@ -19,10 +30,8 @@ var periodo = "";
 var tabGeneral = "";
 var EST_APROBADO = 2;
 var esOrdenAprobado = false;
+var esBienDepreciable = false;
 
-var idTabActivo = 'tabAltas';
-var TIPO_ALTAS = 1;
-var TIPO_BAJAS = 2;
 
 window.onload = function () {
     getConfigMn();
@@ -35,6 +44,9 @@ window.onload = function () {
     configurarCombos();
     configurarCampos();
     configurarTabs();
+    imgToBase64('/Riztie/Images/logoEmpresa.png', function (base64) {
+        base64Img = base64;
+    });
 }
 
 var botonInventarioGeneral = [
@@ -80,13 +92,7 @@ function getListar() {
         data = idTab + '|' + anioConsulta;
     }
 
-
-    if (vista == "Altas") {
-        Http.get("General/listarTabla?tbl=" + controller + vista + "Mov&data=" + data, mostrarlistas);
-    }
-    else {
-        Http.get("General/listarTabla?tbl=" + controller + vista + "&data=" + data, mostrarlistas);
-    }
+    Http.get("General/listarTabla?tbl=" + controller + vista + "&data=" + data, mostrarlistas);
 }
 
 function getListarMovActivos(data) {
@@ -97,6 +103,11 @@ function getListarMovActivos(data) {
         Http.get("General/listarTabla?tbl=" + controller + vista + "Activos&data=" + data, adicionarLista);
     }
 }
+
+function getObtenerReporteCentroCosto(data) {
+    Http.get("General/listarTabla?tbl=" + controller + vista + "ReporteCentroCosto&data=" + data, mostrarPreviewReporte);
+}
+
 
 function configurarValores(rpta) {
     if (rpta) {
@@ -165,6 +176,9 @@ function mostrarlistas(rpta) {
 
             listaCuentaContables_v = listas[13].split("¬");
 
+            setPorcentajes(listas[14]);
+            setUIT(listas[15]);
+
             crearCombo(listaCentroCosto, "cboCentroCostoCons", "Ninguno");
             crearCombo(listaOficina, "cboOficinaCons", "Ninguno");
 
@@ -181,13 +195,16 @@ function mostrarlistas(rpta) {
             crearCombo(listaTipoDoc, "cboTipoDoc", "Seleccionar");
             crearCombo(listaMeses, "cboMes", "Seleccione");
 
-            if (vista == "Altas") {
-                var listaTipoDoc = listas[13].split("¬");
-                var listaTipoMov = listas[14].split("¬");
-                var listaEstadoMov = listas[15].split("¬");
+            if (document.getElementById('cboCentroCostoReporte'))
+                crearCombo(listaCentroCosto, "cboCentroCostoReporte", "Todos");
 
-                anioFiscal = listas[16].split("|")[0];
-                periodo = listas[16].split("|")[1];
+            if (vista == "Altas") {
+                var listaTipoDoc = listas[16].split("¬");
+                var listaTipoMov = listas[17].split("¬");
+                var listaEstadoMov = listas[18].split("¬");
+
+                anioFiscal = listas[19].split("|")[0];
+                periodo = listas[19].split("|")[1];
 
                 crearCombo(listaMeses, "cboMesesCab", "Seleccione");
                 crearCombo(listaTipoDoc, "cboTipoDocCab", "Seleccione");
@@ -492,6 +509,11 @@ function configurarBotones() {
 
     var btnGuardar = document.getElementById("btnGuardar");
     if (btnGuardar != null) btnGuardar.onclick = function () {
+
+        if (vista == "InventarioInicial") {
+            validarActivoDepreciable();
+        }
+
         var validar = false;
 
         if (validarInformacion("Reque") == true) {
@@ -556,6 +578,11 @@ function configurarBotones() {
     var btnCancelarForm4 = document.getElementById("btnCancelarForm4");
     if (btnCancelarForm4 != null) btnCancelarForm4.onclick = function () {
         divPopupContainerForm4.style.display = 'none';
+    }
+
+    var btnCancelarForm5 = document.getElementById("btnCancelarForm5");
+    if (btnCancelarForm5 != null) btnCancelarForm5.onclick = function () {
+        divPopupContainerFormNoDepreciable.style.display = 'none';
     }
 
     var btnConsutarEspecificacionesTecnicas = document.getElementById("btnConsutarEspecificacionesTecnicas");
@@ -632,6 +659,34 @@ function configurarBotones() {
         }
         obtenerItems(data);
     }
+
+    var btnImprimir = document.getElementById("btnImprimir");
+    if (btnImprimir != null) btnImprimir.onclick = function () {
+        divPopupContainerOpcionReporte.style.display = 'block';
+        cboCentroCostoReporte.value = "";
+    }
+
+    var btnCancelarOpcionReporte = document.getElementById("btnCancelarOpcionReporte");
+    if (btnCancelarOpcionReporte != null) btnCancelarOpcionReporte.onclick = function () {
+        divPopupContainerOpcionReporte.style.display = 'none';
+    }
+
+    var btnSeleccionarOpcionReporte = document.getElementById("btnSeleccionarOpcionReporte");
+    if (btnSeleccionarOpcionReporte != null) btnSeleccionarOpcionReporte.onclick = function () {
+        btnSeleccionarOpcionReporte.innerHTML = "Generando <i class='fa fa-circle-o-notch fa-spin' style='color:white'></i>";
+        btnSeleccionarOpcionReporte.disabled = true;
+
+        var centroCosto = cboCentroCostoReporte.value;
+        var filtroAnio = txtPeriodoCons.value;
+        var data = centroCosto + "|" + filtroAnio;
+
+        getObtenerReporteCentroCosto(data);
+    }
+
+    var btnCancelarReporte = document.getElementById("btnCancelarReporte");
+    if (btnCancelarReporte != null) btnCancelarReporte.onclick = function () {
+        divPopupContainerReporte.style.display = 'none';
+    }
 }
 
 function configurarCampos() {
@@ -643,7 +698,11 @@ function configurarCampos() {
         if (dttFechaAlta) {
             dttFechaAlta.onchange = function () {
                 var dttFechaAltaValContable = document.getElementById('dttFechaAltaValContable');
-                if (dttFechaAltaValContable) dttFechaAltaValContable.value = this.value;
+                dttFechaAltaValContable.value = this.value ? this.value : '';
+                dttFechaAltaValContableNoDepreciable.value = this.value ? this.value : '';
+
+                validarActivoDepreciable();
+
                 if (txtVidaUtil && dttFinVidaAltaValContable) {
                     var anios = txtVidaUtil.value ? parseFloat(txtVidaUtil.value).toFixed(2) : 0;
                     calcularFechaFin(dttFinVidaAltaValContable, dttFechaAlta.value, parseInt(anios));
@@ -677,9 +736,19 @@ function configurarCampos() {
         }
 
         var txtValorCompra = document.getElementById("txtValorCompra");
+        var txtValorNoDepreciable = document.getElementById("txtValorNoDepreciable");
+
         if (txtValorCompra) {
             txtValorCompra.onkeyup = function (event) {
                 if (txtValor) txtValor.value = txtValorCompra.value;
+                if (txtValorNoDepreciable) txtValorNoDepreciable.value = txtValorCompra.value;
+            }
+        }
+
+        if (txtValorCompra) {
+            txtValorCompra.onblur = function (event) {
+                txtValorNeto.value = CalcularValorNeto(txtValor, txtDeprecAcumulada);
+                validarActivoDepreciable();
             }
         }
     }
@@ -687,11 +756,6 @@ function configurarCampos() {
 
 function configurarCombos() {
     if (vista == "InventarioInicial" || vista == "Altas" || vista == "General") {
-        //var cboActivos = document.getElementById("cboActivos");
-        //if (cboActivos != null) cboActivos.onchange = function () {
-        //    asignarValoresActivo(this.value);
-        //}
-
         var cboOficina = document.getElementById("cboOficina");
         if (cboOficina != null) cboOficina.onchange = function () {
             listarUbicaFisica();
@@ -700,7 +764,7 @@ function configurarCombos() {
         var cboActivos = document.getElementById("cboActivos");
         if (cboActivos != null) cboActivos.onchange = function () {
             asignarValoresActivo(this.value);
-            asignarCuentaContable(this.value);
+            validarActivoDepreciable();
 
             txtDescripcion.value = cboActivos.value
                 ? cboActivos.options[cboActivos.selectedIndex].innerText
@@ -714,10 +778,16 @@ function configurarCombos() {
         var cboEstadoConserv = document.getElementById("cboEstadoConserv");
         if (cboEstadoConserv != null) cboEstadoConserv.onchange = function () {
             var txtEstadoConservacion = document.getElementById("txtEstadoConservacion");
-            if (txtEstadoConservacion != null)
+            if (txtEstadoConservacion != null) {
                 txtEstadoConservacion.value = cboEstadoConserv.value
                     ? cboEstadoConserv.options[cboEstadoConserv.selectedIndex].innerText
                     : '';
+
+                txtEstadoConservacionNoDepreciable.value = cboEstadoConserv.value
+                    ? cboEstadoConserv.options[cboEstadoConserv.selectedIndex].innerText
+                    : '';
+            }
+
         }
     }
 }
@@ -820,7 +890,12 @@ function mostrarRegistroActivo(rpta, container) {
         cboPaisProcedencia.value = campos[17];
         cboEstadoTipo.value = campos[18];
         chkEsSBN.checked = campos[19] == "S" ? true : false;
-        chkEsActivoDepreciable.checked = campos[20] == "1" ? true : false;
+
+        var esDepreciable = campos[20] == "1" ? true : false;
+
+        chkEsActivoDepreciable.checked = esDepreciable;
+        esBienDepreciable = esDepreciable;
+
         chkEsVerificacionFisica.checked = campos[21] == "1" ? true : false;
 
         optOC.checked = campos[22] == "2" ? true : false;
@@ -829,16 +904,19 @@ function mostrarRegistroActivo(rpta, container) {
         var dFechaIngresoBien = campos[22] == "2" ? campos[24].split("/") : campos[27].split("/");
         dttFechaIngresoBien.value = dFechaIngresoBien.length == 3 ? dFechaIngresoBien[2] + "-" + dFechaIngresoBien[1] + "-" + dFechaIngresoBien[0] : '';
         txtValorCompra.value = campos[22] == "2" ? campos[25] : campos[28];
-
+        txtValorNoDepreciable.value = campos[22] == "2" ? campos[25] : campos[28];
         cboProveedor.value = campos[29];
         chkEsGarantia.checked = campos[30] == "1" ? true : false;
+
         var dFechaGarantia = campos[31].split("/");
         dttFechaGarantia.value = dFechaGarantia.length == 3 ? dFechaGarantia[2] + "-" + dFechaGarantia[1] + "-" + dFechaGarantia[0] : '';
         txtNroContrato.value = campos[32];
         cboTipoDoc.value = campos[33];
         txtNumeroDoc.value = campos[34];
+
         var dFechaAlta = campos[35].split("/");
         dttFechaAlta.value = dFechaAlta.length == 3 ? dFechaAlta[2] + "-" + dFechaAlta[1] + "-" + dFechaAlta[0] : '';
+        dttFechaAltaValContableNoDepreciable.value = dttFechaAlta.value;
 
         setCuentaContable(campos[36]);
 
@@ -858,6 +936,8 @@ function mostrarRegistroActivo(rpta, container) {
         cboMes.value = campos[46];
         txtDepreciacion.value = campos[47];
         txtEstadoConservacion.value = cboEstadoConserv.options[cboEstadoConserv.selectedIndex]?.text;
+        txtEstadoConservacionNoDepreciable.value = cboEstadoConserv.options[cboEstadoConserv.selectedIndex]?.text;
+
         txtFactorAjuste.value = campos[48];
         var dFechaProceso = campos[49].split("/");
         dttFechaProceso.value = dFechaProceso.length == 3 ? dFechaProceso[2] + "-" + dFechaProceso[1] + "-" + dFechaProceso[0] : '';
@@ -1096,6 +1176,80 @@ function seleccionarFila(fila, id, prefijo) {
     }
 }
 
+function mostrarPreviewReporte(rpta) {
+    var divLista = 'ListaReporte';
+
+    if (rpta) {
+        var listas = rpta.split("¯");
+        var lista = listas[0].split("¬");
+        grillaItem = new GrillaScroll(lista, divLista, 100, 6, vista, controller, null, null, true, null, 38, false, null);
+    }
+
+    Http.get("General/getTimeServer", getImprimirPorCentroCosto);
+
+    document.getElementById("divPopupContainerReporte").style.display = 'block';
+
+    btnSeleccionarOpcionReporte.innerHTML = "<i class='fa fa-search'></i> Ver Reporte";
+    btnSeleccionarOpcionReporte.disabled = false;
+}
+
+function getImprimirPorCentroCosto(rpta) {
+    var datos = rpta.split('¯');
+    var fecha = datos[0];
+    var hora = datos[1];
+
+    var doc = new jsPDF("landscape", "mm", "a4")
+    doc.setFontSize(20)
+    doc.setTextColor(40)
+
+    if (base64Img) {
+        doc.addImage(base64Img, 'JPEG', 25, 6, 10, 10)
+    }
+    doc.setFontSize(6);
+    doc.text('IAFAS DE LA MARINA DE GUERRA DEL PERU', 14, 18)
+    doc.text('SISGEFIN', 14, 21)
+    doc.text('Fecha: ' + fecha, 260, 21)
+    doc.text('Usuario: ' + spnUsuario.innerHTML, 14, 23)
+    doc.text('Hora: ' + hora, 260, 23)
+
+    doc.setFontSize(13);
+    doc.text('INVENTARIO INICIAL POR CENTRO DE COSTO', 100, 33)
+    doc.setFontSize(11);
+    //doc.text('AÑO FISCAL: ' + txtAnioLectivo.value, 85, 38)
+    //doc.text('ASEGURADO: ' + lblAsegurado.innerHTML, 14, 45)
+    //doc.text('TOTAL APORTES: ' + lblAporteTotal.innerHTML, 14, 50)
+    //doc.text('TOTAL DEUDA: ' + lblDeudaTotal.innerHTML, 14, 55)
+
+    doc.setFontSize(10);
+    var finalY = doc.lastAutoTable.finalY || 25
+    //doc.text(spnTitulo.innerHTML, 14, finalY + 40)
+    doc.autoTable({
+        startY: finalY + 44,
+        html: '#tblListaReporte',
+        styles: { cellPadding: 0.5, fontSize: 8, halign: 'center' },
+        theme: 'grid',
+        headerStyles: {
+            fillColor: [0, 0, 0],
+            fontSize: 8,
+            halign: 'center',
+        },
+        columnStyles: {
+            //0: { halign: 'center', fontSize: 8 },
+        },
+    })
+
+    doc.setProperties({
+        title: 'SISGEFIN: INVENTARIO INICIAL POR CENTRO DE COSTO',
+        subject: 'IAFAS',
+        author: spnUsuario.innerHTML,
+        keywords: "ESTADO DE CUENTA, IAFAS, SISGEFIN",
+        creator: "SISGEFIN CUENTA CORRIENTE",
+        orientation: "landscape"
+    });
+    divPopupContainerForm1.style.display = 'block';
+    ifrmVistaPrevia.src = doc.output('datauristring');
+}
+
 function mostrarlistaSubTipos(rpta) {
     if (rpta) {
         var listas = rpta.split("¯");
@@ -1318,7 +1472,10 @@ function mostrarEspecificacionesTecnicas(rpta) {
 function mostrarValoresContables(rpta) {
     if (rpta) {
         //spnLoad.style.display = 'none';
-        divPopupContainerForm2.style.display = 'block';
+        if (esBienDepreciable)
+            divPopupContainerForm2.style.display = 'block';
+        else
+            divPopupContainerFormNoDepreciable.style.display = 'block';
     }
 }
 
@@ -1469,6 +1626,49 @@ function esBajasValido() {
     return true;
 }
 
+function setPorcentajes(data) {
+    listaPorcentaje_v = data.split("¬")
+        .map(value => ({
+            year: value.split('|')[0] ? parseInt(value.split('|')[0]) : 0,
+            porcentaje: value.split('|')[1] ? parseFloat(value.split('|')[1]) : 0,
+        }));
+}
+
+function setUIT(data) {
+    listaUIT_v = data.split("¬")
+        .map(value => ({
+            year: value.split('|')[0] ? parseInt(value.split('|')[0]) : 0,
+            valorUIT: value.split('|')[1] ? parseFloat(value.split('|')[1]) : 0,
+        }));
+
+}
+
+function validarActivoDepreciable() {
+    txtCtaContable.value = "";
+    txtMayorSubCtaClasificador.value = "";
+    dttFinVidaAltaValContable.value = "";
+
+    txtDepreciacion.value = "";
+    txtVidaUtil.value = "";
+    chkEsActivoDepreciable.checked = false;
+
+
+    var valorCompra = txtValorCompra?.value;
+    var fechaAlta = dttFechaAlta?.value;
+    var idItem = cboActivos?.value;
+
+    if (!(valorCompra && fechaAlta && idItem))
+        return;
+
+    var esDepreciable = esActivoDepreciable(fechaAlta, valorCompra)
+    esBienDepreciable = esDepreciable;
+
+    if (esDepreciable)
+        asignarValoresDepreciacion(idItem);
+
+    asignarCuentaContable(idItem, esDepreciable);
+}
+
 function setCuentaContable(cuentaContable) {
     if (cuentaContable) {
         var cuenta = cuentaContable.split(';')
@@ -1485,19 +1685,51 @@ function setCuentaContable(cuentaContable) {
     }
 }
 
-function asignarCuentaContable(idItem) {
+function esActivoDepreciable(fechaAlta, valorCompra) {
+    var dFechaAlta = fechaAlta.split("-");
+    var dateFechaAlta = new Date(dFechaAlta[0] + "/" + dFechaAlta[1] + "/" + dFechaAlta[2]);
+    var anioFechaAlta = (dateFechaAlta.getFullYear());
+
+    var uit = listaUIT_v.find(x => anioFechaAlta >= x.year);
+    var porcentaje = listaPorcentaje_v.find(x => anioFechaAlta >= x.year);
+
+    if (!(uit?.valorUIT > 0 && porcentaje?.porcentaje > 0))
+        return false;
+
+    var valorMinimo = uit.valorUIT * porcentaje.porcentaje;
+
+    return valorCompra > valorMinimo;
+}
+
+function asignarCuentaContable(idItem, esDepreciable) {
     var cuentasContables = [];
-    txtCtaContable.value = "";
-    txtMayorSubCtaClasificador.value = "";
 
     for (var i = 0; i < listaCuentaContables_v.length; i++) {
         var ctaContable = listaCuentaContables_v[i].split('|');
         if (ctaContable[0] == idItem) {
-            cuentasContables.push(ctaContable);
+            var mayor = ctaContable?.[1];
+
+            if ((esDepreciable && mayor == MAYOR_DEPRECIABLE) ||
+                !esDepreciable && mayor == MAYOR_NO_DEPRECIABLE)
+                cuentasContables.push(ctaContable);
         }
     }
 
-    if (cuentasContables && cuentasContables.length == 1) {
+    if (cuentasContables.length == 0) {
+        cboActivos.value = "";
+        seleccionarControlSelect2(cboActivos);
+
+        var textoDepreciable = esDepreciable ? "depreciable" : 'no depreciable';
+
+        Swal.fire({
+            title: 'Warning!',
+            html: 'El Activo no tiene una Cta Contable ' + textoDepreciable + ' asociada',
+            icon: 'warning',
+            showConfirmButton: true,
+        })
+    }
+
+    if (cuentasContables.length == 1) {
         var cuenta = cuentasContables[0];
         var mayor = cuenta?.[1];
         var subcuenta = cuenta?.[2];
@@ -1511,7 +1743,7 @@ function asignarCuentaContable(idItem) {
         txtMayorSubCtaClasificador.value = mayor + ';' + subcuenta + ';' + clasificador;
     }
 
-    if (cuentasContables && cuentasContables.length > 1) {
+    if (cuentasContables.length > 1) {
         cboActivos.value = "";
         seleccionarControlSelect2(cboActivos);
 
@@ -1529,6 +1761,31 @@ function asignarCuentaContable(idItem) {
     }
 }
 
+function asignarValoresDepreciacion(idItem) {
+    var activo = obtenerActivoSeleccionado(idItem);
+
+    if (!activo)
+        return;
+
+    var tasaDeprec = activo[8];
+
+    var txtDepreciacion = document.getElementById('txtDepreciacion');
+    if (txtDepreciacion) txtDepreciacion.value = tasaDeprec;
+
+    var txtVidaUtil = document.getElementById('txtVidaUtil');
+    if (txtVidaUtil) txtVidaUtil.value = tasaDeprec > 0 ? (100 / tasaDeprec).toFixed(2) : '';
+
+    var chkEsActivoDepreciable = document.getElementById('chkEsActivoDepreciable');
+    if (chkEsActivoDepreciable) chkEsActivoDepreciable.checked = tasaDeprec > 0;
+
+    if (dttFechaAlta && dttFechaAlta.value) {
+        if (txtVidaUtil && dttFinVidaAltaValContable) {
+            var anios = txtVidaUtil.value ? parseFloat(txtVidaUtil.value).toFixed(2) : 0;
+            calcularFechaFin(dttFinVidaAltaValContable, dttFechaAlta.value, parseInt(anios));
+        }
+    }
+}
+
 function asignarValoresActivo(idItem) {
     var activo = obtenerActivoSeleccionado(idItem);
 
@@ -1542,7 +1799,6 @@ function asignarValoresActivo(idItem) {
         var claseCodigo = activo[5];
         var familiaCodigo = activo[6];
         var inventarioCodigo = activo[7];
-        var tasaDeprec = activo[8];
 
         var codigoItem = grupoCodigo + claseCodigo + familiaCodigo + inventarioCodigo;
 
@@ -1567,21 +1823,7 @@ function asignarValoresActivo(idItem) {
         var txtInvCodigo = document.getElementById('txtInvCodigo');
         if (txtInvCodigo) txtInvCodigo.value = inventarioCodigo;
 
-        var txtDepreciacion = document.getElementById('txtDepreciacion');
-        if (txtDepreciacion) txtDepreciacion.value = tasaDeprec;
-
-        var txtVidaUtil = document.getElementById('txtVidaUtil');
-        if (txtVidaUtil) txtVidaUtil.value = tasaDeprec > 0 ? (100 / tasaDeprec).toFixed(2) : '';
-
-        var chkEsActivoDepreciable = document.getElementById('chkEsActivoDepreciable');
-        if (chkEsActivoDepreciable) chkEsActivoDepreciable.checked = tasaDeprec > 0;
-
-        if (dttFechaAlta && dttFechaAlta.value) {
-            if (txtVidaUtil && dttFinVidaAltaValContable) {
-                var anios = txtVidaUtil.value ? parseFloat(txtVidaUtil.value).toFixed(2) : 0;
-                calcularFechaFin(dttFinVidaAltaValContable, dttFechaAlta.value, parseInt(anios));
-            }
-        }
+        validarActivoDepreciable();
     }
 }
 
@@ -1644,6 +1886,12 @@ function formatearFechaYYYMMDD(fecha) {
 
 function calcularFechaFin(control, fechaAlta, anios) {
     var dFecha = fechaAlta.split("-");
+
+    if (dFecha.length != 3) {
+        control.value = "";
+        return;
+    }
+
     var dateFin = new Date(dFecha[0] + "/" + dFecha[1] + "/" + dFecha[2]);
     dateFin.setFullYear(dateFin.getFullYear() + anios);
 
@@ -1682,14 +1930,17 @@ function desahabilitarControles(controles) {
         if (tipo == "txt" || tipo == "num" || tipo == "tta" || tipo == "tim") {
             control.classList.remove('control-form');
             control.classList.add('control-lectura');
+            control.setAttribute("readonly", "readonly");
         }
         else if (tipo == "dtt") {
             control.classList.remove('control-form');
             control.classList.add('control-lectura');
+            control.setAttribute("readonly", "readonly");
         }
         else if (tipo == "cbo") {
             control.classList.remove('control-form');
             control.classList.add('control-lectura');
+            control.setAttribute("disabled", "disabled");
         }
         else if (tipo == "chk" || tipo == "opt") {
             control.setAttribute("disabled", "");
