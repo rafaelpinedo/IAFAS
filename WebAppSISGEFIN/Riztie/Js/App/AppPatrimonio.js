@@ -104,6 +104,10 @@ function getListarMovActivos(data) {
     }
 }
 
+function getObtenerReporteGeneralAltas(data) {
+    Http.get("General/listarTabla?tbl=" + controller + vista + "Reporte&data=" + data, mostrarPreviewReporte);
+}
+
 function getObtenerReporteCentroCosto(data) {
     Http.get("General/listarTabla?tbl=" + controller + vista + "ReporteCentroCosto&data=" + data, mostrarPreviewReporte);
 }
@@ -663,7 +667,9 @@ function configurarBotones() {
     var btnImprimir = document.getElementById("btnImprimir");
     if (btnImprimir != null) btnImprimir.onclick = function () {
         divPopupContainerOpcionReporte.style.display = 'block';
-        cboCentroCostoReporte.value = "";
+
+        if (vista == "InventarioInicial")
+            cboCentroCostoReporte.value = "";
     }
 
     var btnCancelarOpcionReporte = document.getElementById("btnCancelarOpcionReporte");
@@ -676,11 +682,20 @@ function configurarBotones() {
         btnSeleccionarOpcionReporte.innerHTML = "Generando <i class='fa fa-circle-o-notch fa-spin' style='color:white'></i>";
         btnSeleccionarOpcionReporte.disabled = true;
 
-        var centroCosto = cboCentroCostoReporte.value;
-        var filtroAnio = txtPeriodoCons.value;
-        var data = centroCosto + "|" + filtroAnio;
+        if (vista == 'InventarioInicial') {
+            var centroCosto = cboCentroCostoReporte.value;
+            var filtroAnio = txtPeriodoCons.value;
+            var data = centroCosto + "|" + filtroAnio;
 
-        getObtenerReporteCentroCosto(data);
+            getObtenerReporteCentroCosto(data);
+        }
+
+        if (vista == 'General') {
+            var filtroAnio = txtPeriodoCons.value;
+            var data = filtroAnio;
+
+            getObtenerReporteGeneralAltas(data);
+        }
     }
 
     var btnCancelarReporte = document.getElementById("btnCancelarReporte");
@@ -1180,17 +1195,156 @@ function mostrarPreviewReporte(rpta) {
     var divLista = 'ListaReporte';
 
     if (rpta) {
-        var listas = rpta.split("¯");
-        var lista = listas[0].split("¬");
-        grillaItem = new GrillaScroll(lista, divLista, 100, 6, vista, controller, null, null, true, null, 38, false, null);
+        if (vista == "InventarioInicial") {
+            var listas = rpta.split("¯");
+            var lista = listas[0].split("¬");
+            grillaItem = new GrillaScroll(lista, divLista, 100, 6, vista, controller, null, null, true, null, 38, false, null);
+
+            Http.get("General/getTimeServer", getImprimirPorCentroCosto);
+        }
+
+        if (vista == "General") {
+            var listas = rpta.split("¯");
+            var lista = listas[0].split("¬");
+            var agrupados = listas[1].split("¬");
+
+            var listaAgrupada = obtenerListaAgrupada(lista, agrupados);
+            grillaItem = new GrillaScroll(listaAgrupada, divLista, 100, 6, vista, controller, null, null, true, null, 38, false, null);
+
+            Http.get("General/getTimeServer", getImprimirGeneralAltas);
+        }
     }
-
-    Http.get("General/getTimeServer", getImprimirPorCentroCosto);
-
-    document.getElementById("divPopupContainerReporte").style.display = 'block';
 
     btnSeleccionarOpcionReporte.innerHTML = "<i class='fa fa-search'></i> Ver Reporte";
     btnSeleccionarOpcionReporte.disabled = false;
+}
+function obtenerValoresAgrupados(valoresAgrupados, ctaMayor, subCta) {
+    for (var i = 0; i < valoresAgrupados.length; i++) {
+        var cuenta = valoresAgrupados[i].split("|");
+        var cuentaMayor = cuenta[0].split('-');
+        var subCuenta = cuenta[1].split('-');
+
+        if (cuentaMayor == ctaMayor && subCuenta == subCta) {
+            return valoresAgrupados[i];
+        }
+    }
+}
+
+function obtenerListaAgrupada(lista, valoresAgrupados) {
+    var nRegistros = lista.length;
+    var ctaMayor = null;
+    var subCta = null;
+    var listaAgrupada = [];
+    var total = 0;
+
+    for (var i = 0; i < nRegistros; i++) {
+        if (i > 2) {
+            var cuenta = lista[i].split("|")[0];
+            var cuentaMayor = cuenta.split('-')[0];
+            var subCuenta = cuenta.split('-')[1];
+
+            if (i == 3) {
+                ctaMayor = cuentaMayor;
+                subCta = subCuenta;
+
+                var valorAgrupado = obtenerValoresAgrupados(valoresAgrupados, cuentaMayor, subCuenta).split('|');
+                var ctaContable = valorAgrupado[2];
+                listaAgrupada.push('|Cuenta contable|' + ctaContable + '|||||||');
+                listaAgrupada.push(lista[i]);
+            }
+
+            else if (!(cuentaMayor == ctaMayor && subCuenta == subCta)) {
+                var valorAgrupadoAnterior = obtenerValoresAgrupados(valoresAgrupados, ctaMayor, subCta).split('|');
+                var subTotal = valorAgrupadoAnterior[3];
+                listaAgrupada.push('|||||||SubTotal|' + subTotal + '||');
+
+                var valorAgrupado = obtenerValoresAgrupados(valoresAgrupados, cuentaMayor, subCuenta).split('|');
+                var ctaContable = valorAgrupado[2];
+                listaAgrupada.push('|Cuenta contable|' + ctaContable + '|||||||');
+
+                listaAgrupada.push(lista[i]);
+
+                ctaMayor = cuentaMayor;
+                subCta = subCuenta;
+
+                total = total + parseFloat(subTotal);
+            }
+            else {
+                listaAgrupada.push(lista[i]);
+            }
+        }
+        else {
+            listaAgrupada.push(lista[i]);
+        }
+    }
+
+    var valorAgrupadoAnterior = obtenerValoresAgrupados(valoresAgrupados, ctaMayor, subCta).split('|');
+    var subTotal = valorAgrupadoAnterior[3];
+    listaAgrupada.push('|||||||SubTotal|' + subTotal + '||');
+
+    total = total + parseFloat(subTotal);
+
+    listaAgrupada.push('|||||||Total General|' + total + '||');
+
+    return listaAgrupada;
+}
+
+function getImprimirGeneralAltas(rpta) {
+    var datos = rpta.split('¯');
+    var fecha = datos[0];
+    var hora = datos[1];
+
+    var doc = new jsPDF("landscape", "mm", "a4")
+    doc.setFontSize(20)
+    doc.setTextColor(40)
+
+    if (base64Img) {
+        doc.addImage(base64Img, 'JPEG', 25, 6, 10, 10)
+    }
+    doc.setFontSize(6);
+    doc.text('IAFAS DE LA MARINA DE GUERRA DEL PERU', 14, 18)
+    doc.text('SISGEFIN', 14, 21)
+    doc.text('Fecha: ' + fecha, 260, 21)
+    doc.text('Usuario: ' + spnUsuario.innerHTML, 14, 23)
+    doc.text('Hora: ' + hora, 260, 23)
+
+    doc.setFontSize(13);
+    doc.text('ALTAS INSTITUCIONALES', 120, 33)
+    doc.setFontSize(11);
+    //doc.text('AÑO FISCAL: ' + txtAnioLectivo.value, 85, 38)
+    //doc.text('ASEGURADO: ' + lblAsegurado.innerHTML, 14, 45)
+    //doc.text('TOTAL APORTES: ' + lblAporteTotal.innerHTML, 14, 50)
+    //doc.text('TOTAL DEUDA: ' + lblDeudaTotal.innerHTML, 14, 55)
+
+    doc.setFontSize(10);
+    var finalY = doc.lastAutoTable.finalY || 25
+    //doc.text(spnTitulo.innerHTML, 14, finalY + 40)
+    doc.autoTable({
+        startY: finalY + 18,
+        html: '#tblListaReporte',
+        styles: { cellPadding: 0.5, fontSize: 8, halign: 'center' },
+        theme: 'grid',
+        headerStyles: {
+            fillColor: [0, 0, 0],
+            fontSize: 8,
+            halign: 'center',
+        },
+        columnStyles: {
+            //0: { halign: 'center', fontSize: 8 },
+        },
+    })
+
+    doc.setProperties({
+        title: 'SISGEFIN: INVENTARIO INICIAL POR CENTRO DE COSTO',
+        subject: 'IAFAS',
+        author: spnUsuario.innerHTML,
+        keywords: "ESTADO DE CUENTA, IAFAS, SISGEFIN",
+        creator: "SISGEFIN CUENTA CORRIENTE",
+        orientation: "landscape"
+    });
+
+    document.getElementById("divPopupContainerReporte").style.display = 'block';
+    ifrmVistaPrevia.src = doc.output('datauristring');
 }
 
 function getImprimirPorCentroCosto(rpta) {
@@ -1224,7 +1378,7 @@ function getImprimirPorCentroCosto(rpta) {
     var finalY = doc.lastAutoTable.finalY || 25
     //doc.text(spnTitulo.innerHTML, 14, finalY + 40)
     doc.autoTable({
-        startY: finalY + 44,
+        startY: finalY + 18,
         html: '#tblListaReporte',
         styles: { cellPadding: 0.5, fontSize: 8, halign: 'center' },
         theme: 'grid',
@@ -1246,7 +1400,8 @@ function getImprimirPorCentroCosto(rpta) {
         creator: "SISGEFIN CUENTA CORRIENTE",
         orientation: "landscape"
     });
-    divPopupContainerForm1.style.display = 'block';
+
+    document.getElementById("divPopupContainerReporte").style.display = 'block';
     ifrmVistaPrevia.src = doc.output('datauristring');
 }
 
