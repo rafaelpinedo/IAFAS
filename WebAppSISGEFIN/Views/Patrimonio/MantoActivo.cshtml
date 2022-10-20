@@ -1,0 +1,753 @@
+﻿@{
+    ViewBag.Title = "Mantenimiento de Activos";
+    Layout = "~/Views/_LayoutPage.cshtml";
+}
+
+<div class="pcoded-content">
+    <div class="pcoded-inner-content">
+        <div class="main-body">
+            <div class="card">
+                <div class="card-header bg-primary">
+                    <h3><i class="fa fa-users" aria-hidden="true"></i>MANTENIMIENTO DE ACTIVOS</h3>
+                </div>
+                <div class="card-block">
+                    <div class="form-row">
+                        <div class="form-group col-sm-1">
+                            <label class="control-label">Periodo</label>
+                            <input type="number" id="txtPeriodoCons" class="control-form PopupCons" value="@ViewBag.Anio">
+                        </div>
+                        <div class="form-group col-md-4 m-3">
+                            <button class="input-group-inverse btn btn-dark" id="btnConsultar" data-toggle="tooltip" data-placement="bottom" title="Consultar"><i class="fa fa-search fa-lg" aria-hidden="true"></i></button>
+                            <button class="input-group-inverse btn btn-primary" id="btnNuevoMov" data-toggle="tooltip" data-placement="bottom" title="Nuevo">Nuevo <i class="fa fa-plus-circle fa-lg" aria-hidden="true"></i></button>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <div class="table-responsive" id="divLista"></div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="modal custom-modal" tabindex="-1" role="dialog" aria-hidden="true" id="divPopupContainerMov" style="overflow-y:auto;">
+                            <div class="modal-dialog modal-xl bg-personalizado" id="divPopupWindowMov">
+                                <div class="modal-content">
+                                    <div id="divBarraMov" class="modal-header bg-personalizado" style="cursor:move">
+                                        <h5 class="modal-title">Mantenimiento de Activos</h5>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="row">
+                                            <div class="form-group col-sm-4">
+                                                <label class="control-label">Año</label>
+                                                <input type="number" class="control-lectura RequeMov PopupMov" readonly id="txtAnioCab">
+                                            </div>
+                                            <div class="form-group col-sm-4">
+                                                <label class="control-label">Mes</label>
+                                                <select class="control-lectura RequeMov PopupMov" disabled id="cboMesesCab"></select>
+                                            </div>
+                                            <div class="form-group col-sm-4">
+                                                <label class="control-label">Tipo Movimiento</label>
+                                                <select class="control-lectura RequeMov PopupMov" disabled id="cboTipoMovCab">
+                                                    <option value="3">MANTENIMIENTO</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-group col-sm-4" hidden>
+                                                <label class="control-label">Nro Movimiento</label>
+                                                <input type="hidden" class="control-lectura PopupMov" readonly id="txtNroMovCab">
+                                            </div>
+                                            <div class="form-group col-sm-4">
+                                                <label class="control-label">Fecha Movimiento</label>
+                                                <input type="date" class="control-form RequeMov PopupMov" id="dttFechaMovCab">
+                                            </div>
+                                            <div class="form-group col-sm-4">
+                                                <label class="control-label">Estado</label>
+                                                <select class="control-form RequeMov PopupMov" id="cboEstadoCab"></select>
+                                            </div>
+                                        </div>
+                                        <hr />
+                                        <div class="row">
+                                            <div class="form-group col-sm-3">
+                                                <label class="control-label">Tipo de Mantenimiento</label>
+                                                <select class="control-form RequeMov PopupMov" id="cboTipoMantenimientoCab"></select>
+                                            </div>
+                                            <div class="form-group col-sm-2">
+                                                <input type="hidden" class="control-lectura RequeMov PopupMov" readonly id="txtNroOrdenSecuenciaCab">
+                                                <label class="control-label">Nro O/C</label>
+                                                <input type="text" class="control-lectura RequeMov" readonly id="txtNroOrdenCab">
+                                            </div>
+                                            <div class="form-group col-sm-1 mt-2 section-orden-aprobada">
+                                                <button class="btn btn-secondary" id="btnConsutarOrdenes"><i class="fa fa-search" aria-hidden="true"></i></button>
+                                            </div>
+                                            <div class="form-group col-sm-2">
+                                                <label class="control-label">Nro Contrato</label>
+                                                <input type="text" class="control-form PopupMov" id="txtNroContratoCab">
+                                            </div>
+                                            <div class="form-group col-sm-4">
+                                                <label class="control-label">Proveedor</label>
+                                                <select class="control-lectura RequeMov PopupMov" disabled id="cboProveedorCab"></select>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-group col-sm-4">
+                                                <label class="control-label">Sub Total</label>
+                                                <input type="text" class="control-lectura NoPopupMov" readonly id="txtSubTotalCab">
+                                            </div>
+                                            <div class="form-group col-sm-4">
+                                                <label class="control-label">IGV</label>
+                                                <input type="text" class="control-lectura NoPopupMov" readonly id="txtIGVCab">
+                                            </div>
+                                            <div class="form-group col-sm-4">
+                                                <label class="control-label">Total</label>
+                                                <input type="text" class="control-lectura NoPopupMov" readonly id="txtTotalCab">
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-group col-sm-6">
+                                                <label class="control-label">Glosa</label>
+                                                <textarea class="control-form PopupMov" rows="4" id="ttaGlosaCab"></textarea>
+                                            </div>
+                                        </div>
+                                        <hr />
+                                        <div class="row section-orden-aprobada">
+                                            <div class="form-group col-sm-2 ">
+                                                <label class="control-label">Periodo</label>
+                                                <input type="number" id="txtPeriodoItemsCons" class="control-form PopupCons">
+                                            </div>
+                                            <div class="form-group col-sm-1 mt-3">
+                                                <button class="btn btn-out waves-effect waves-light btn-info btn-square" id="btnConsutarItems"><i class="fa fa-search-plus" aria-hidden="true"></i></button>
+                                            </div>
+                                        </div>
+                                        <div class="row mt-2">
+                                            <div class="form-group col-sm-12">
+                                                <div class="table-responsive" style="height:315px;">
+                                                    <table class='grilla bordered' style="width:100%;min-width:1100px">
+                                                        <thead>
+                                                            <tr class="FilaHead">
+                                                                <th style="white-space:pre-wrap;width:70px;display:none">idx</th>
+                                                                <th style="white-space:pre-wrap;width:100px">Código Patrimonio</th>
+                                                                <th style="white-space:pre-wrap;width:300px">Descripción</th>
+                                                                <th style="white-space:pre-wrap;width:100px">Marca</th>
+                                                                <th style="white-space:pre-wrap;width:100px">Serie</th>
+                                                                <th style="white-space:pre-wrap;width:100px">Monto</th>
+                                                                <th rowspan="2" style="white-space:pre-wrap;width:80px;"></th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody id="tbDetalleActivos"></tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row section-orden-aprobada">
+                                            <div class="form-group col-md-12">
+                                                <span id="spnNroItems" class="control-label">Items: 0</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button id="btnCancelarMov" class="btnCancelarForm" title="Cancelar"><i class="fa fa-undo" aria-hidden="true"></i>&nbsp;Cancelar</button>
+                                        <button id="btnGuardarMov" class="btnGuardarForm bg-customer section-orden-aprobada" title="Guardar datos"><span class="fa fa-save"></span>&nbsp;Grabar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="modal custom-modal" tabindex="-1" role="dialog" aria-hidden="true" id="divPopupContainerListadoOrdenesForm" style="overflow-y:auto;">
+                            <div class="modal-dialog modal-lg bg-personalizado" id="divPopupWindowListadoOrdenesForm">
+                                <div class="modal-content">
+                                    <div id="divBarraListadoOrdenesForm" class="modal-header bg-personalizado" style="cursor:move">
+                                        <h5 class="modal-title">Seleccionar la Orden</h5>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="row">
+                                            <div class="form-group col-md-12">
+                                                <div class="table-responsive" id="listaOrden" style="height:485px"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button class="btnCancelarForm" id="btnCancelarListadoOrdenesForm" title="Cancelar"><i class="fa fa-undo" aria-hidden="true"></i>&nbsp;Cancelar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="modal custom-modal" tabindex="-1" role="dialog" aria-hidden="true" id="divPopupContainerListadoItemsForm" style="overflow-y:auto;">
+                            <div class="modal-dialog modal-lg bg-personalizado" id="divPopupWindowListadoItemsForm">
+                                <div class="modal-content">
+                                    <div id="divBarraListadoItemsForm" class="modal-header bg-personalizado" style="cursor:move">
+                                        <h5 class="modal-title">Seleccionar Items</h5>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="row">
+                                            <div class="form-group col-md-12">
+                                                <div class="table-responsive" id="listaItem" style="height:485px"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button class="btnCancelarForm" id="btnCancelarListadoItemsForm" title="Cancelar"><i class="fa fa-undo" aria-hidden="true"></i>&nbsp;Cancelar</button>
+                                        <button class="btnGuardarForm bg-customer" id="btnSeleccionarItems" title="btn btn-success"><span class="fa fa-hand-o-left"></span>&nbsp;Agregar Items</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="modal custom-modal" tabindex="-1" role="dialog" aria-hidden="true" id="divPopupContainer" style="overflow-y:auto;">
+                            <div class="modal-dialog modal-xl bg-personalizado" id="divPopupWindow" style="margin-top:30px;">
+                                <div class="modal-content">
+                                    <div id="divBarra" class="modal-header bg-personalizado" style="cursor:move">
+                                        <h5 class="modal-title" id="tituloModal">Nuevo Activo</h5>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="row">
+                                            <div class="col-sm-12 col-lg-6 mb-2">
+                                                <fieldset class="fieldset h-100 p-3">
+                                                    <div class="row">
+                                                        <div class="form-group col-sm-6">
+                                                            <input type="hidden" autocomplete="off" class="control-lectura Popup" readonly id="txtIdRegistro">
+                                                            <label class="control-label">Item</label>
+                                                            <input type="text" autocomplete="off" class="control-lectura Popup" readonly id="txtItem">
+                                                        </div>
+                                                        <div class="form-group col-sm-6">
+                                                            <label class="control-label">Patrimonio</label>
+                                                            <input type="text" autocomplete="off" class="control-lectura Popup" readonly id="txtCodigoPatrimonio">
+                                                            <input type="hidden" autocomplete="off" class="control-lectura Reque Popup" readonly id="txtDescripcion">
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="form-group col-sm-12">
+                                                            <label class="control-label">Nombre del Item</label>
+                                                            <select class="SelectSearch control-form Reque Popup" id="cboActivos"></select>
+                                                        </div>
+                                                    </div>
+                                                    <hr />
+                                                    <div class="row">
+                                                        <div class="form-group col-sm-12">
+                                                            <label class="control-label">Centro Costo</label>
+                                                            <select class="control-form Reque Popup" id="cboCentroCosto"></select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="form-group col-sm-12">
+                                                            <label class="control-label">Oficina</label>
+                                                            <select class="control-form Reque Popup" id="cboOficina"></select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="form-group col-sm-12">
+                                                            <label class="control-label">Ubic. Física</label>
+                                                            <select class="control-form Reque Popup" id="cboUbicaFisica"></select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="form-group col-sm-12">
+                                                            <label class="control-label">Responsable</label>
+                                                            <select class="control-form Reque Popup" id="cboResponsable"></select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="form-group col-sm-12">
+                                                            <label class="control-label">Usuario Final</label>
+                                                            <select class="control-form Reque Popup" id="cboUsuarioFinal"></select>
+                                                        </div>
+                                                    </div>
+                                                    <hr />
+                                                    <div class="row">
+                                                        <div class="form-group col-sm-8">
+                                                            <label class="control-label">Nro Serie</label>
+                                                            <input type="text" autocomplete="off" class="control-form Reque Popup" id="txtNroSerie">
+                                                        </div>
+                                                        <div class="form-group col-sm-4">
+                                                            <label class="control-label">Estado Conserv</label>
+                                                            <select class="control-form Reque Popup" id="cboEstadoConserv"></select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="form-group col-sm-12">
+                                                            <label class="control-label">Marca</label>
+                                                            <select class="SelectSearch control-form Reque Popup" id="cboMarcas"></select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="form-group col-sm-12">
+                                                            <label class="control-label">Modelo</label>
+                                                            <input type="text" autocomplete="off" class="control-form Reque Popup" id="txtModelo">
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="form-group col-sm-12">
+                                                            <label class="control-label">Medidas</label>
+                                                            <input type="text" autocomplete="off" class="control-form Popup" id="txtMedida">
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="form-group col-sm-12">
+                                                            <label class="control-label">Características</label>
+                                                            <textarea class="control-form Popup" rows="2" id="ttaCaracteristica"></textarea>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="form-group col-sm-12">
+                                                            <label class="control-label">Observaciones</label>
+                                                            <textarea class="control-form Popup" rows="2" id="ttaObservacion"></textarea>
+                                                        </div>
+                                                    </div>
+                                                </fieldset>
+                                            </div>
+                                            <div class="col-sm-12 col-lg-6 mb-2">
+                                                <fieldset class="fieldset h-100 p-3">
+                                                    <div class="row">
+                                                        <div class="form-group col-sm-6">
+                                                            <label class="control-label">País de Procedencia</label>
+                                                            <select class="control-form Reque Popup" id="cboPaisProcedencia"></select>
+                                                        </div>
+                                                        <div class="form-group col-sm-6">
+                                                            <label class="control-label">Estado</label>
+                                                            <select class="control-form Reque Popup" id="cboEstadoTipo"></select>
+                                                        </div>
+                                                    </div>
+                                                    <hr />
+                                                    <div class="row">
+                                                        <div class="col-sm-12">
+                                                            <div class="form-check form-check-inline">
+                                                                <input class="form-check-input Reque Popup" type="checkbox" id="chkEsSBN">
+                                                                <label class="form-check-label" for="chkEsSbn">SBN</label>
+                                                            </div>
+                                                            <div class="form-check form-check-inline">
+                                                                <input class="form-check-input Reque Popup" type="checkbox" id="chkEsActivoDepreciable">
+                                                                <label class="form-check-label" for="chkEsDeprec">Activo Depreciable</label>
+                                                            </div>
+                                                            <div class="form-check form-check-inline">
+                                                                <input class="form-check-input Reque Popup" type="checkbox" id="chkEsVerificacionFisica">
+                                                                <label class="form-check-label" for="chkEsVerFisica">Verificación Física</label>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                    <hr />
+                                                    <div class="row">
+                                                        <div class="form-group col-sm-12">
+                                                            <fieldset class="fieldset">
+                                                                <legend class="legend">Ingreso del Bien por :</legend>
+                                                                <div class="row">
+                                                                    <div class="form-group col-sm-4">
+                                                                        <div class="row">
+                                                                            <div class="form-check form-check-inline col col-sm-12">
+                                                                                <input class="form-check-input Reque Popup" type="radio" name="ingresoBienRadios" id="optOC">
+                                                                                <label class="form-check-label" for="optOC">
+                                                                                    O/C
+                                                                                </label>
+                                                                            </div>
+                                                                            <div class="form-check form-check-inline col col-sm-12">
+                                                                                <input class="form-check-input Reque Popup" type="radio" name="ingresoBienRadios" id="optNEA">
+                                                                                <label class="form-check-label" for="optNEA">
+                                                                                    NEA
+                                                                                </label>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group col-sm-4">
+                                                                        <label class="control-label">Nro Ingreso Bien</label>
+                                                                        <input type="number" autocomplete="off" class="control-form Reque Popup" id="txtNumeroIngresoBien">
+                                                                    </div>
+                                                                    <div class="form-group col-sm-4">
+                                                                        <label class="control-label">Fecha</label>
+                                                                        <input type="date" class="control-form Reque Popup" id="dttFechaIngresoBien">
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row">
+                                                                    <div class="form-group col-sm-12">
+                                                                        <label class="control-label">Proveedor</label>
+                                                                        <select class="control-form Reque Popup" id="cboProveedor"></select>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row">
+                                                                    <div class="form-group col-sm-6">
+                                                                        <label class="control-label">Valor Compra</label>
+                                                                        <input type="number" autocomplete="off" class="control-form Reque Popup" id="txtValorCompra">
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row">
+                                                                    <div class="form-group col-sm-3 d-flex align-items-center">
+                                                                        <div class="form-check form-check-inline">
+                                                                            <input class="form-check-input Reque Popup" type="checkbox" id="chkEsGarantia">
+                                                                            <label class="form-check-label" for="chkEsGarantia">Garantía</label>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group col-sm-4">
+                                                                        <label class="control-label">Fecha</label>
+                                                                        <input type="date" class="control-form Popup" id="dttFechaGarantia">
+                                                                    </div>
+                                                                    <div class="form-group col-sm-5">
+                                                                        <label class="control-label">N° Contrato</label>
+                                                                        <input type="number" autocomplete="off" class="control-form Popup" id="txtNroContrato">
+                                                                    </div>
+                                                                </div>
+                                                            </fieldset>
+                                                        </div>
+                                                    </div>
+                                                    <hr />
+                                                    <div class="row">
+                                                        <div class="form-group col-sm-12">
+                                                            <fieldset class="fieldset">
+                                                                <legend class="legend">Alta</legend>
+                                                                <div class="row">
+                                                                    <div class="form-group col-sm-12">
+                                                                        <label class="control-label">Tipo Doc</label>
+                                                                        <select class="control-lectura Reque Popup" id="cboTipoDoc" disabled></select>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row">
+                                                                    <div class="form-group col-sm-6">
+                                                                        <label class="control-label">Nro Doc</label>
+                                                                        <input type="number" autocomplete="off" class="control-form Reque Popup" id="txtNumeroDoc">
+                                                                    </div>
+                                                                    <div class="form-group col-sm-6">
+                                                                        <label class="control-label">Fecha</label>
+                                                                        <input type="date" class="control-form Reque Popup" id="dttFechaAlta">
+                                                                    </div>
+                                                                </div>
+                                                            </fieldset>
+                                                        </div>
+                                                    </div>
+                                                    <hr />
+                                                    <div class="row">
+                                                        <div class="form-group col-sm-12">
+                                                            <label class="control-label">Cta Contable</label>
+                                                            <input type="text" class="control-lectura NoPopup" readonly id="txtCtaContable">
+                                                            <input type="hidden" class="control-lectura Popup" readonly id="txtMayorSubCtaClasificador">
+                                                            <input type="hidden" class="control-form Reque Popup" id="txtTbCodigo" />
+                                                            <input type="hidden" class="control-form Reque Popup" id="txtGruCodigo" />
+                                                            <input type="hidden" class="control-form Reque Popup" id="txtClaCodigo" />
+                                                            <input type="hidden" class="control-form Reque Popup" id="txtFamCodigo" />
+                                                            <input type="hidden" class="control-form Reque Popup" id="txtInvCodigo" />
+                                                        </div>
+                                                    </div>
+                                                </fieldset>
+                                            </div>
+                                        </div>
+                                        <div class="row m-0">
+                                            <div class="col-sm-12 text-left p-0">
+                                                <button class="btn waves-effect btn-secondary" id="btnConsutarEspecificacionesTecnicas" title="Especificaciones Técnicas"><i class="fa fa-archive" aria-hidden="true"></i>&nbsp;Especificaciones Técnicas</button>
+                                                <button class="btn waves-effect btn-info" id="btnConsutarValoresContables" title="Valores Contables"><i class="fa fa-search" aria-hidden="true"></i>&nbsp;Valores Contables</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button id="btnCancelar" class="btnCancelarForm" title="Cancelar"><i class="fa fa-undo" aria-hidden="true"></i>&nbsp;Cancelar</button>
+                                        <button id="btnGuardar" class="btnGuardarForm bg-customer" title="Guardar datos"><span class="fa fa-save"></span>&nbsp;Grabar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="modal custom-modal" tabindex="-1" role="dialog" aria-hidden="true" id="divPopupContainerForm1" style="overflow-y:auto;">
+                            <div class="modal-dialog modal-lg bg-personalizado" id="divPopupWindowForm1">
+                                <div class="modal-content">
+                                    <div id="divBarraForm1" class="modal-header bg-personalizado" style="cursor:move">
+                                        <h5 class="modal-title">Especificaciones Técnicas</h5>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="row">
+                                            <div class="form-group col-sm-6">
+                                                <label class="control-label">Patrimonio</label>
+                                                <input type="text" autocomplete="off" class="control-lectura NoPopupEspTecnica" readonly id="txtCodigoMargesi">
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-group col-sm-6">
+                                                <label class="control-label">Item</label>
+                                                <input type="text" autocomplete="off" class="control-lectura NoPopupEspTecnica" readonly id="txtDescripcionMargesi">
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-group col-sm-12">
+                                                <label class="control-label">Observaciones</label>
+                                                <textarea class="control-form PopupEspTecnica" rows="5" id="ttaObservacionMargesi"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button id="btnCancelarForm1" class="btnCancelarForm" title="Cancelar"><i class="fa fa-undo" aria-hidden="true"></i>&nbsp;Cancelar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="modal custom-modal" tabindex="-1" role="dialog" aria-hidden="true" id="divPopupContainerForm2" style="overflow-y:auto;">
+                            <div class="modal-dialog modal-xl bg-personalizado" id="divPopupWindowForm2">
+                                <div class="modal-content">
+                                    <div id="divBarraForm2" class="modal-header bg-personalizado" style="cursor:move">
+                                        <h5 class="modal-title">Valores Contables</h5>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="row">
+                                            <div class="form-group col-sm">
+                                                <label class="control-label">Vida Util en Años</label>
+                                                <input type="number" autocomplete="off" class="control-form PopupValContable" id="txtVidaUtil">
+                                            </div>
+                                            <div class="form-group col-sm">
+                                                <label class="control-label">Fecha Alta</label>
+                                                <input type="date" class="control-lectura NoPopupValContable" readonly id="dttFechaAltaValContable">
+                                            </div>
+                                            <div class="form-group col-sm">
+                                                <label class="control-label">Fin de Vida</label>
+                                                <input type="date" class="control-lectura PopupValContable" readonly id="dttFinVidaAltaValContable">
+                                            </div>
+                                            <div class="form-group col-sm">
+                                                <label class="control-label">Año</label>
+                                                <input type="number" class="control-lectura RequeValContable PopupValContable" readonly id="txtAnio">
+                                            </div>
+                                            <div class="form-group col-sm">
+                                                <label class="control-label">Mes</label>
+                                                <select class="control-lectura RequeValContable PopupValContable" id="cboMes" disabled></select>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-group col-sm-3">
+                                                <label class="control-label">% Depreciación</label>
+                                                <input type="number" autocomplete="off" class="control-form PopupValContable" id="txtDepreciacion">
+                                            </div>
+                                            <div class="form-group col-sm-3">
+                                                <label class="control-label">Estado de Conservación</label>
+                                                <input type="text" class="control-lectura NoPopupValContable" readonly id="txtEstadoConservacion">
+                                            </div>
+                                            <div class="form-group col-sm-3">
+                                                <label class="control-label">Factor Ajuste</label>
+                                                <input type="text" class="control-lectura PopupValContable" readonly id="txtFactorAjuste">
+                                            </div>
+                                            <div class="form-group col-sm-3">
+                                                <label class="control-label">Fecha Proceso</label>
+                                                <input type="date" class="control-lectura PopupValContable" readonly id="dttFechaProceso">
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-group col-sm-12">
+                                                <fieldset class="fieldset">
+                                                    <legend class="legend">Valores Iniciales del Ejercicio</legend>
+                                                    <div class="row">
+                                                        <div class="form-group col-sm-4">
+                                                            <label class="control-label">Valor</label>
+                                                            <input type="number" autocomplete="off" class="control-form PopupValContable" id="txtValor">
+                                                        </div>
+                                                        <div class="form-group col-sm-4">
+                                                            <label class="control-label">Deprec Acumulada</label>
+                                                            <input type="number" autocomplete="off" class="control-form PopupValContable" id="txtDeprecAcumulada">
+                                                        </div>
+                                                        <div class="form-group col-sm-4">
+                                                            <label class="control-label">Valor Neto</label>
+                                                            <input type="text" autocomplete="off" class="control-lectura NoPopupValContable" readonly id="txtValorNeto">
+                                                        </div>
+                                                    </div>
+                                                </fieldset>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-group col-sm-4">
+                                                <fieldset class="fieldset">
+                                                    <legend class="legend">Valores Históricos</legend>
+                                                    <div class="row">
+                                                        <div class="form-group col-sm-12">
+                                                            <label class="control-label">Valor Inicial</label>
+                                                            <input type="number" autocomplete="off" class="control-lectura PopupValContable" readonly id="txtValorHisto">
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="form-group col-sm-12">
+                                                            <label class="control-label">Deprec Inicial</label>
+                                                            <input type="number" autocomplete="off" class="control-lectura PopupValContable" readonly id="txtDeprecInicialHisto">
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="form-group col-sm-12">
+                                                            <label class="control-label">Prov.Defecto / Exceso</label>
+                                                            <input type="number" autocomplete="off" class="control-lectura PopupValContable" readonly id="txtProvHisto">
+                                                        </div>
+                                                    </div>
+                                                    <hr />
+                                                    <div class="row">
+                                                        <div class="form-group col-sm-12">
+                                                            <label class="control-label">Deprec Periodo</label>
+                                                            <input type="number" autocomplete="off" class="control-lectura PopupValContable" readonly id="txtDeprecPeriodoHisto">
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="form-group col-sm-12">
+                                                            <label class="control-label">Deprec Ejercicio</label>
+                                                            <input type="number" autocomplete="off" class="control-lectura PopupValContable" readonly id="txtDeprecEjerHisto">
+                                                        </div>
+                                                    </div>
+                                                    <hr />
+                                                    <div class="row">
+                                                        <div class="form-group col-sm-12">
+                                                            <label class="control-label">Deprec Acumulada</label>
+                                                            <input type="number" autocomplete="off" class="control-lectura PopupValContable" readonly id="txtDeprecAcumHisto">
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="form-group col-sm-12">
+                                                            <label class="control-label">Valor Neto</label>
+                                                            <input type="number" autocomplete="off" class="control-lectura PopupValContable" readonly id="txtValorNetoHisto">
+                                                        </div>
+                                                    </div>
+                                                </fieldset>
+                                            </div>
+                                            <div class="form-group col-sm-4">
+                                                <fieldset class="fieldset">
+                                                    <legend class="legend">ACM</legend>
+                                                    <div class="row">
+                                                        <div class="form-group col-sm-12">
+                                                            <label class="control-label">Valor Inicial</label>
+                                                            <input type="number" autocomplete="off" class="control-lectura PopupValContable" readonly id="txtValorACM">
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="form-group col-sm-12">
+                                                            <label class="control-label">Deprec Inicial</label>
+                                                            <input type="number" autocomplete="off" class="control-lectura PopupValContable" readonly id="txtDeprecInicialACM">
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="form-group col-sm-12">
+                                                            <label class="control-label">Prov.Defecto / Exceso</label>
+                                                            <input type="number" autocomplete="off" class="control-lectura PopupValContable" readonly id="txtProvACM">
+                                                        </div>
+                                                    </div>
+                                                    <hr />
+                                                    <div class="row">
+                                                        <div class="form-group col-sm-12">
+                                                            <label class="control-label">Deprec Periodo</label>
+                                                            <input type="number" autocomplete="off" class="control-lectura PopupValContable" readonly id="txtDeprecPeriodoACM">
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="form-group col-sm-12">
+                                                            <label class="control-label">Deprec Ejercicio</label>
+                                                            <input type="number" autocomplete="off" class="control-lectura PopupValContable" readonly id="txtDeprecEjerACM">
+                                                        </div>
+                                                    </div>
+                                                    <hr />
+                                                    <div class="row">
+                                                        <div class="form-group col-sm-12">
+                                                            <label class="control-label">Deprec Acumulada</label>
+                                                            <input type="number" autocomplete="off" class="control-lectura PopupValContable" readonly id="txtDeprecAcumACM">
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="form-group col-sm-12">
+                                                            <label class="control-label">Valor Neto</label>
+                                                            <input type="number" autocomplete="off" class="control-lectura PopupValContable" readonly id="txtValorNetoACM">
+                                                        </div>
+                                                    </div>
+                                                </fieldset>
+                                            </div>
+                                            <div class="form-group col-sm-4">
+                                                <fieldset class="fieldset">
+                                                    <legend class="legend">Valores Ajustados</legend>
+                                                    <div class="row">
+                                                        <div class="form-group col-sm-12">
+                                                            <label class="control-label">Valor Inicial</label>
+                                                            <input type="number" autocomplete="off" class="control-lectura PopupValContable" readonly id="txtValorAjus">
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="form-group col-sm-12">
+                                                            <label class="control-label">Deprec Inicial</label>
+                                                            <input type="number" autocomplete="off" class="control-lectura PopupValContable" readonly id="txtDeprecInicialAjus">
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="form-group col-sm-12">
+                                                            <label class="control-label">Prov.Defecto / Exceso</label>
+                                                            <input type="number" autocomplete="off" class="control-lectura PopupValContable" readonly id="txtProvAjus">
+                                                        </div>
+                                                    </div>
+                                                    <hr />
+                                                    <div class="row">
+                                                        <div class="form-group col-sm-12">
+                                                            <label class="control-label">Deprec Periodo</label>
+                                                            <input type="number" autocomplete="off" class="control-lectura PopupValContable" readonly id="txtDeprecPeriodoAjus">
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="form-group col-sm-12">
+                                                            <label class="control-label">Deprec Ejercicio</label>
+                                                            <input type="number" autocomplete="off" class="control-lectura PopupValContable" readonly id="txtDeprecEjerAjus">
+                                                        </div>
+                                                    </div>
+                                                    <hr />
+                                                    <div class="row">
+                                                        <div class="form-group col-sm-12">
+                                                            <label class="control-label">Deprec Acumulada</label>
+                                                            <input type="number" autocomplete="off" class="control-lectura PopupValContable" readonly id="txtDeprecAcumAjus">
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="form-group col-sm-12">
+                                                            <label class="control-label">Valor Neto</label>
+                                                            <input type="number" autocomplete="off" class="control-lectura PopupValContable" readonly id="txtValorNetoAjus">
+                                                        </div>
+                                                    </div>
+                                                </fieldset>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button id="btnCancelarForm2" class="btnCancelarForm" title="Atrás"><i class="fa fa-undo" aria-hidden="true"></i>&nbsp;Atrás</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="modal custom-modal" tabindex="-1" role="dialog" aria-hidden="true" id="divPopupContainerFormNoDepreciable" style="overflow-y:auto;">
+                            <div class="modal-dialog modal-lg bg-personalizado" id="divPopupWindowFormNoDepreciable">
+                                <div class="modal-content">
+                                    <div id="divBarraFormNoDepreciable" class="modal-header bg-personalizado" style="cursor:move">
+                                        <h5 class="modal-title">Valores Contables</h5>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="row">
+                                            <div class="form-group col-sm-6">
+                                                <label class="control-label">Fecha Alta</label>
+                                                <input type="date" class="control-lectura" readonly id="dttFechaAltaValContableNoDepreciable">
+                                            </div>
+                                            <div class="form-group col-sm-6">
+                                                <label class="control-label">Estado de conservación</label>
+                                                <input type="text" autocomplete="off" class="control-lectura" readonly id="txtEstadoConservacionNoDepreciable">
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-group col-sm-6">
+                                                <label class="control-label">Valor</label>
+                                                <input type="text" autocomplete="off" class="control-lectura" readonly id="txtValorNoDepreciable">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button id="btnCancelarForm5" class="btnCancelarForm" title="Cancelar"><i class="fa fa-undo" aria-hidden="true"></i>&nbsp;Atrás</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<iframe name="print_frame" width="0" height="0" frameborder="0" src="about:blank"></iframe>
+<script src="~/Riztie/Js/App/AppPatrimonio.js"></script>
+
+
+
