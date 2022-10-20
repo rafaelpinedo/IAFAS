@@ -108,10 +108,9 @@ function getObtenerReporteGeneralAltas(data) {
     Http.get("General/listarTabla?tbl=" + controller + vista + "Reporte&data=" + data, mostrarPreviewReporte);
 }
 
-function getObtenerReporteCentroCosto(data) {
-    Http.get("General/listarTabla?tbl=" + controller + vista + "ReporteCentroCosto&data=" + data, mostrarPreviewReporte);
+function getObtenerReportePorOficina(data) {
+    Http.get("General/listarTabla?tbl=" + controller + vista + "ReporteOficina&data=" + data, mostrarPreviewReporte);
 }
-
 
 function configurarValores(rpta) {
     if (rpta) {
@@ -146,6 +145,12 @@ function configurarValores(rpta) {
         crearCombo(listaProveedor, "cboProveedor", "Seleccione");
         crearCombo(listaTipoDoc, "cboTipoDoc", "Seleccionar");
         crearCombo(listaMeses, "cboMes", "Seleccione");
+
+        if (vista == "General") {
+            crearCombo(listaOficina, "cboOficinaRep", "Todos");
+            crearCombo(listaResponsable, "cboResponsableRep", "Todos");
+            crearCombo(listaResponsable, "cboUsuarioRep", "Todos");
+        }
     }
 }
 function mostrarlistas(rpta) {
@@ -200,8 +205,8 @@ function mostrarlistas(rpta) {
             crearCombo(listaTipoDoc, "cboTipoDoc", "Seleccionar");
             crearCombo(listaMeses, "cboMes", "Seleccione");
 
-            if (document.getElementById('cboCentroCostoReporte'))
-                crearCombo(listaCentroCosto, "cboCentroCostoReporte", "Todos");
+            if (document.getElementById('cboOficinaReporte'))
+                crearCombo(listaOficina, "cboOficinaReporte", "Todos");
 
             if (vista == "Altas") {
                 var listaTipoDoc = listas[16].split("¬");
@@ -220,7 +225,6 @@ function mostrarlistas(rpta) {
             }
             else {
                 grillaItem = new GrillaScroll(lista, "divLista", 100, 6, vista, controller, null, null, true, null, 20, false, null);
-
             }
         }
 
@@ -738,10 +742,18 @@ function configurarBotones() {
 
     var btnImprimir = document.getElementById("btnImprimir");
     if (btnImprimir != null) btnImprimir.onclick = function () {
-        divPopupContainerOpcionReporte.style.display = 'block';
+        if (vista == "General") {
+            txtAnioRep.value = new Date().getFullYear();
+            cboOficinaRep.value = "";
+            cboUbicacionFisicaRep.innerHTML = "";
+            cboResponsableRep.value = "";
+            cboUsuarioRep.value = "";
+        }
 
         if (vista == "InventarioInicial")
-            cboCentroCostoReporte.value = "";
+            cboOficinaReporte.value = "";
+
+        divPopupContainerOpcionReporte.style.display = 'block';
     }
 
     var btnCancelarOpcionReporte = document.getElementById("btnCancelarOpcionReporte");
@@ -755,11 +767,11 @@ function configurarBotones() {
         btnSeleccionarOpcionReporte.disabled = true;
 
         if (vista == 'InventarioInicial') {
-            var centroCosto = cboCentroCostoReporte.value;
+            var oficina = cboOficinaReporte.value;
             var filtroAnio = txtPeriodoCons.value;
-            var data = centroCosto + "|" + filtroAnio;
+            var data = oficina + "|" + filtroAnio;
 
-            getObtenerReporteCentroCosto(data);
+            getObtenerReportePorOficina(data);
         }
 
         if (vista == 'General') {
@@ -845,7 +857,7 @@ function configurarCombos() {
     if (vista == "InventarioInicial" || vista == "Altas" || vista == "General") {
         var cboOficina = document.getElementById("cboOficina");
         if (cboOficina != null) cboOficina.onchange = function () {
-            listarUbicaFisica();
+            listarUbicaFisica("cboOficina", 'cboUbicaFisica');
         }
 
         var cboActivos = document.getElementById("cboActivos");
@@ -876,12 +888,19 @@ function configurarCombos() {
             }
 
         }
+
+        if (vista == "General") {
+            var cboOficinaRep = document.getElementById("cboOficinaRep");
+            if (cboOficinaRep != null) cboOficinaRep.onchange = function () {
+                listarUbicaFisica("cboOficinaRep", 'cboUbicacionFisicaRep', 'Todos');
+            }
+        }
     }
 }
 
 function seleccionarBoton(idGrilla, idRegistro, idBoton) {
     limpiarForm('Popup')
-    limpiarForm("PopupMov");
+    //limpiarForm("PopupMov");
 
     if (idGrilla == "divLista") {
         if (idBoton == "Editar") {
@@ -995,7 +1014,7 @@ function mostrarRegistroActivo(rpta, container) {
         txtDescripcion.value = campos[4];
         cboCentroCosto.value = campos[5];
         cboOficina.value = campos[6];
-        listarUbicaFisica();
+        listarUbicaFisica("cboOficina", 'cboUbicaFisica');
         cboUbicaFisica.value = campos[7];
         cboResponsable.value = campos[8];
         cboUsuarioFinal.value = campos[9];
@@ -1539,9 +1558,10 @@ function mostrarlistasActivos(rpta) {
         var divLista = 'divListaActivo'
     }
 
-    if (vista == "Bajas") {
-        divLista = 'tbDetalleActivos'
-    }
+    //if (vista == "Bajas") {
+    //    console.log("bajas");
+    //    divLista = 'tbDetalleActivos'
+    //}
     if (rpta) {
         var listas = rpta.split("¯");
         var lista = listas[0].split("¬");
@@ -2176,11 +2196,11 @@ function obtenerActivoSeleccionado(idItem) {
     }
 }
 
-function listarUbicaFisica() {
-    var cboOficina = document.getElementById("cboOficina");
+function listarUbicaFisica(valueOficina, idControl, texto) {
+    var cboOficina = document.getElementById(valueOficina);
     var idOficina = cboOficina.value;
     var nRegistros = listaUbicaFisica_v.length;
-    var contenido = "<option value=''>Seleccione</option>";
+    var contenido = "<option value=''>" + (texto ? texto : "Seleccione") + "</option>";
     var campos, idCodigo, nombre, idxOficina;
     for (var i = 0; i < nRegistros; i++) {
         campos = listaUbicaFisica_v[i].split('|');
@@ -2195,7 +2215,7 @@ function listarUbicaFisica() {
             contenido += "</option>";
         }
     }
-    var cbo = document.getElementById("cboUbicaFisica");
+    var cbo = document.getElementById(idControl);
     if (cbo != null) {
         cbo.innerHTML = contenido;
     }
