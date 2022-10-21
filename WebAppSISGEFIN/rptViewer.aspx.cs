@@ -14,9 +14,8 @@ namespace WebAppSISGEFIN
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            try
-            {
-
+           try
+           {
                 string _FileNm = Request["FileNm"];
 
                 string _SpName = Request["SpName"];
@@ -33,17 +32,17 @@ namespace WebAppSISGEFIN
 
                 _Report.Database.Tables[0].SetDataSource(_Datos);
 
-                _Report.ReadRecords();
+                //_Report.ReadRecords();
 
                 CrystalReportViewer1.ReportSource = _Report;
 
-                CrystalReportViewer1.DataBind();
-
             }
-            catch (Exception ex)
+            catch(Exception ex) 
             {
                 Response.Write(ex.Message);
             }
+
+            CrystalReportViewer1.RefreshReport();
 
         }
 
