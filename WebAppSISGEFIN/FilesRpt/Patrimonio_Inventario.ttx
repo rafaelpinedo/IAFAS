@@ -1,0 +1,14 @@
+Id_Movim	Number
+Id_Detalle	Number
+Id_Secuencia	Number
+Nombre_Mayor	String	150
+Nombre_SubCta	String	150
+Cuenta_Contable	String	30
+Codigo_Patrimon	String	20
+DescripcionMovim	String	200
+DescripcionMarca	String	100
+DescripcionModelo	String	100
+OC_NEA	Number
+FECHA_EA	String	10
+Valor_Compra	Number
+Valor_Inicial	Number

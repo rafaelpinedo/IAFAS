@@ -11,7 +11,8 @@ namespace WebAppSISGEFIN.Filtros
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             string directorio = filterContext.HttpContext.Request.ApplicationPath;
-            if (filterContext.HttpContext.Session["DataUsuario"] == null) filterContext.Result = new RedirectResult("~" + directorio + "Security/Login");
+            if (filterContext.HttpContext.Session["DataUsuario"] == null) 
+                filterContext.Result = new RedirectResult("~" + directorio + "Security/Login");
         }
     }
 }

@@ -46,6 +46,10 @@
     <Reference Include="BouncyCastle.Crypto">
       <HintPath>..\DLL\BouncyCastle.Crypto.dll</HintPath>
     </Reference>
+    <Reference Include="CrystalDecisions.CrystalReports.Engine, Version=13.0.4000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
+    <Reference Include="CrystalDecisions.ReportSource, Version=13.0.4000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
+    <Reference Include="CrystalDecisions.Shared, Version=13.0.4000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
+    <Reference Include="CrystalDecisions.Web, Version=13.0.4000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
     <Reference Include="EPPlus, Version=5.8.7.0, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\DLL\EPPlus.dll</HintPath>
@@ -230,6 +234,7 @@
     <Content Include="Riztie\Js\Design\toastr.min.js" />
     <Content Include="Riztie\Js\Design\vertical-layout.min.js" />
     <Content Include="Riztie\Js\Design\waves.min.js" />
+    <Content Include="rptViewer.aspx" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -247,6 +252,13 @@
     <Compile Include="Controllers\PresupuestoController.cs" />
     <Compile Include="Controllers\RRHHController.cs" />
     <Compile Include="Controllers\SecurityController.cs" />
+    <Compile Include="FilesRpt\Patrimonio_Inventario_Reporte001.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Patrimonio_Inventario_Reporte001.rpt</DependentUpon>
+      <SubType>Component</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
     <Compile Include="Filtros\FiltroAuditoria.cs" />
     <Compile Include="Filtros\FiltroAutenticacion.cs" />
     <Compile Include="Filtros\FiltroCifrado.cs" />
@@ -255,11 +267,21 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Runs.cs" />
+    <Compile Include="Models\Types.cs" />
     <Compile Include="Models\Menu.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="rptViewer.aspx.cs">
+      <DependentUpon>rptViewer.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="rptViewer.aspx.designer.cs">
+      <DependentUpon>rptViewer.aspx</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\web.config" />
+    <Content Include="FilesRpt\Patrimonio_Inventario.ttx" />
     <None Include="packages.config" />
     <Content Include="Riztie\fonts\fontawesome-webfont.eot" />
     <Content Include="Riztie\fonts\fontawesome-webfont.ttf" />
@@ -361,6 +383,7 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Patrimonio\TasaUIT.cshtml" />
     <Content Include="Views\Ingresos\EstadoCuenta.cshtml" />
+    <Content Include="Views\General\PuenteRpt.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -373,6 +396,16 @@
     <Folder Include="App_Data\" />
     <Folder Include="Riztie\Files\" />
     <Folder Include="Riztie\Manual\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="FilesRpt\Patrimonio_Inventario_Reporte001.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>Patrimonio_Inventario_Reporte001.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{C0C07587-41A7-46C8-8FBD-3F9C8EBE2DDC}" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
