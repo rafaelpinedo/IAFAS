@@ -1035,6 +1035,7 @@ function mostrarRegistroActivo(rpta, container) {
         chkEsActivoDepreciable.checked = esDepreciable;
         esBienDepreciable = esDepreciable;
 
+
         chkEsVerificacionFisica.checked = campos[21] == "1" ? true : false;
 
         optOC.checked = campos[22] == "2" ? true : false;
