@@ -253,7 +253,7 @@ namespace WebAppTurnera.Controllers
         public string enviarCorreo(bool grabarBD = false)
         {
             string rpta = "";
-            string contenidoMail = "datos de prueba";
+            //string contenidoMail = "datos de prueba";
             string correo = Request.Form["correo"];
             //string data = Request.Form["data"];
             string idOrden = Request.Form["idx"];
@@ -288,7 +288,7 @@ namespace WebAppTurnera.Controllers
         public string enviarOrden(string tbl)
         {
             string rpta = "";
-            string contenidoMail = "Envio de orden de compra al proveedor";
+            //string contenidoMail = "Envio de orden de compra al proveedor";
             string correo = Request.Form["correo"];
             string idOrden = Request.Form["idx"];
             if (Request.Files.Count > 0)
@@ -434,145 +434,6 @@ namespace WebAppTurnera.Controllers
             return rpta;
         }
 
-        //*****************************************************************
-
-        /// <summary>
-        /// Acción para lanzar reporte RPT
-        /// </summary>
-        /// <param name="area">Patrimonio</param>
-        /// <param name="grp">Inventario</param>
-        /// <param name="act">Reporte_001</param>
-        /// <param name="par">2022|10|18|1</param>
-        /// <returns></returns>
-        public ActionResult ShowRpt(string area, string grp, string act, string par, string t)
-        {
-            string _binDir = ConfigurationManager.AppSettings.Get("BinDir");
-            string _dirRpt = string.Format("{0}\\{1}", _binDir, "filesRpt");
-            ViewBag.FileNm = $"{_dirRpt}\\{area}_{grp}_{act}.rpt";
-            ViewBag.SpName = $"usp_{area}_{grp}_{act}";
-            ViewBag.Params = par;
-            ViewBag.TypeNm = t;
-            return View("PuenteRpt");
-        }
-
-        //[HttpGet]
-        //public ActionResult Show(string fileName, List<QryEnvioBy> parametros)
-        //{
-        //    var _response = new xResponse<dynamic>();
-        //    try
-        //    {
-        //        string _sqlWhere = "";
-
-        //        var _parameters = parametros.Where(q => q.actived == true).ToList();
-
-        //        if (_parameters.Count > 0)
-        //        {
-
-        //            foreach (var _parameter in _parameters)
-        //            {
-        //                if (_parameter.value != null)
-        //                {
-
-        //                    string _sqlItem = "";
-        //                    string _plantilla = "";
-
-        //                    if (_parameter.operat.ToUpper() == "LIKE")
-        //                    {
-        //                        _plantilla = "{0} {1} '{2}%'";
-        //                        goto etiSigue;
-        //                    };
-
-        //                    if (_parameter.operat.ToUpper() == "IN")
-        //                    {
-        //                        _plantilla = "{0} {1} ({2})";
-        //                        goto etiSigue;
-        //                    };
-
-        //                    if (Utiles.IsNumeric(_parameter.value))
-        //                    {
-        //                        _plantilla = "{0} {1} {2}";
-        //                        goto etiSigue;
-        //                    };
-
-        //                    if (Utiles.IsDate(_parameter.value))
-        //                    {
-        //                        _plantilla = "{0} {1} '{2}'";
-        //                        goto etiSigue;
-        //                    };
-
-        //                etiSigue:;
-
-        //                    _sqlItem = string.Format(_plantilla, _parameter.name, _parameter.operat, _parameter.value);
-
-        //                    if (_sqlWhere == "")
-        //                    {
-        //                        _sqlWhere = _sqlItem;
-        //                    }
-        //                    else
-        //                    {
-        //                        _sqlWhere += " AND " + _sqlItem;
-        //                    }
-
-        //                }
-
-        //            }
-
-        //            string _sqlHeader = "Set DateFormat 'YMD'";
-        //            string _sqlFields = "*";
-        //            string _sqlFromTb = "balance.uvw_EnviosRegistrados";
-        //            string _sqlSelect = string.Format("{0}; Select {1} From {2} Where {3};", _sqlHeader, _sqlFields, _sqlFromTb, _sqlWhere);
-
-        //            List<vEnvioRegistrado> _rows4Grid = await db.Database.SqlQuery<vEnvioRegistrado>(_sqlSelect).ToListAsync();
-
-        //            var _rows4Grf1 = _rows4Grid.GroupBy(n => new
-        //            {
-        //                Estado = n.NombreEstado,
-        //                Sendo = n.NombreSendo,
-        //                Fecha = n.FechaRegist.Value.ToString("yyyy-MM-dd")
-        //            })
-        //            .OrderBy(o => o.Key.Fecha)
-        //            .Select(g => new
-        //            {
-        //                Estado = g.Key.Estado,
-        //                Sendo = g.Key.Sendo,
-        //                Fecha = g.Key.Fecha,
-        //                Valor = g.Count()
-        //            }).ToList();
-
-        //            dynamic _content = new
-        //            {
-        //                data4Grid = _rows4Grid,
-        //                data4Grf1 = _rows4Grf1
-        //            };
-
-        //            _response.content = _content;
-
-        //            if (_response.content != null)
-        //            {
-        //                _response.message = "Se hallaron " + _response.content.data4Grid.Count + " registros.";
-        //                _response.isOk = true;
-        //            }
-        //            else
-        //            {
-        //                throw new Exception("No se hallaron registros con los criterios especificados.");
-        //            }
-
-        //        }
-        //        else
-        //        {
-        //            throw new Exception("Debe especificar algun criterio de busqueda..");
-        //        }
-
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        _response.message = ex.Message;
-        //        _response.isOk = false;
-        //    }
-
-        //    return Json(_response, JsonRequestBehavior.AllowGet);
-
-        //}
 
     }
 

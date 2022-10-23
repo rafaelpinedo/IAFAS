@@ -1,0 +1,120 @@
+﻿@{
+    Layout = "_LayoutRpt.cshtml";
+}
+
+<input type="hidden" id="FileNm" value='@ViewBag.FileNm' />
+<input type="hidden" id="SpName" value='@ViewBag.SpName' />
+<input type="hidden" id="TypeNm" value='@ViewBag.TypeNm' />
+<input type="hidden" id="Params" value='' />
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="flex-gap marco" >
+
+                <div>
+                    <span>Año</span>
+                    <input type="number" id="txtEjecucion" onchange="ActualizarSel()" class="form-control form-control-sm" min="2000" max="2100" value="2022" />
+                </div>
+
+                <div>
+                    <span>Oficinas</span>
+                    <select id="cboOficinas" onchange="ActualizarSel()" class="form-control form-control-sm"></select>
+                </div>
+
+                <div>
+                    <span>Ubicación</span>
+                    <select id="cboUbicaciones" onchange="ActualizarSel()" class="form-control form-control-sm"></select>
+                </div>
+
+                <div>
+                    <span>Responsable</span>
+                    <input type="number" id="txtResponsable" onchange="ActualizarSel()" class="form-control form-control-sm" />
+                </div>
+
+                <div>
+                    <span>Usuario</span>
+                    <input type="number" id="txtUsuario" onchange="ActualizarSel()" class="form-control form-control-sm" />
+                </div>
+
+                <div>
+                    <input type="button" class="btn btn-sm btn-primary" value="Consultar" onclick="ConsultarSel()" />
+                </div>
+
+            </div>             
+
+            <div>
+                <iframe id="iFrame" src="about://blank" frameborder="0"></iframe>
+            </div>
+            
+
+        </div>
+    </div>
+</div>
+
+<script>
+
+    function ConsultarSel() {
+        mostrarProgreso('Consultando..');
+
+        const _iFrame = document.getElementById("iFrame");
+        _iFrame.style.display = "none";
+
+        const _FileNm = document.getElementById("FileNm").value;
+        const _SpName = document.getElementById("SpName").value;
+        const _TypeNm = document.getElementById("TypeNm").value;
+        const _Params = document.getElementById("Params").value;
+        const _UrlDoc = `/rptViewer.aspx?FileNm=${_FileNm}&SpName=${_SpName}&TypeNm=${_TypeNm}&Params=${_Params}`;
+
+        _iFrame.onload = function () {
+            _iFrame.contentDocument.body.style = "margin: 0px !Important; overflow:hidden !Important; ";
+            _iFrame.contentDocument.cookie = "";
+            _iFrame.style.display = "block";
+            ocultarProgreso();
+        }
+        _iFrame.src = _UrlDoc;
+
+    };
+
+    function ActualizarSel() {
+        const _txtEjecucio = document.getElementById('txtEjecucion');
+        const _cboOficinas = document.getElementById('cboOficinas');
+        const _cboUbicacns = document.getElementById('cboUbicaciones');
+        const _txtRespons = document.getElementById('txtResponsable');
+        const _txtUsuario  = document.getElementById('txtUsuario');
+        const _Params = document.getElementById('Params');
+        _Params.value = _txtEjecucio.value;
+        _Params.value += '|' + _cboOficinas.value;
+        _Params.value += '|' + _cboUbicacns.value;
+        _Params.value += '|' + _txtRespons.value;
+        _Params.value += '|' + _txtUsuario.value;
+    }
+
+    async function CargarCombo(nombre) {
+
+        const _cboName = 'cbo' + nombre;
+        const _actName = 'Get' + nombre;
+
+        var _data = sessionStorage.getItem(_cboName);
+
+        if (_data == null) {
+            const _auxUrl = '@Url.Action("X","Reportes")';
+            const _newUrl = _auxUrl.replace('X', _actName);
+            const response = await fetch(_newUrl);
+            _data = await response.text();
+            sessionStorage.setItem(_cboName, _data);
+        }
+
+        var _lista = _data.split('¬');
+        crearCombo(_lista, _cboName, "")
+
+    }
+
+    window.onload = function ()
+    {
+        CargarCombo('Oficinas');
+        CargarCombo('Ubicaciones');
+        ActualizarSel();
+    }
+
+</script>

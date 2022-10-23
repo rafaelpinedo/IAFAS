@@ -7,14 +7,28 @@ using System.Web;
 namespace WebAppSISGEFIN.Models
 {
 
-    public class xResponse<T>
+    public class rMensaje
     {
-        public bool isOk { get; set; }
-        public string message { get; set; }
-        public T content { get; set; }
+        public string Type { get; set; }
+        public string Image { get; set; }
+        public string Message { get; set; }
     }
 
-    public class rInventario001
+    public class rElemCbo
+    {
+        public string Codigo { get; set; }
+        public string Descrp { get; set; }        
+    }
+
+    public class xResponse<T>
+    {
+        public bool IsOk { get; set; }
+        public string Message { get; set; }
+        public T Content { get; set; }
+        public byte Code { get; set; }
+    }
+
+    public class rInventario1
     {
 
         public int Id_Movim { get; set; }

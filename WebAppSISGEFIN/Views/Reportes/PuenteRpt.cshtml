@@ -1,0 +1,57 @@
+﻿@{
+    Layout = "_LayoutRpt.cshtml";
+}
+
+<style>
+    #iFrame {
+        position: absolute !important;
+        left: 0px !important;
+        top: 0px !important;
+        width: 100% !important;
+        height: 100vh !important;
+        /*overflow: hidden;*/
+    }
+</style>
+
+<input type="hidden" id="FileNm" value='@ViewBag.FileNm' />
+<input type="hidden" id="SpName" value='@ViewBag.SpName' />
+<input type="hidden" id="TypeNm" value='@ViewBag.TypeNm' />
+<input type="hidden" id="Params" value='@ViewBag.Params' />
+
+<body style="overflow: hidden;">
+
+    <iframe id="iFrame" src="about://blank" frameborder="0"></iframe>
+
+</body>
+
+
+<script>
+
+    function Consultar() {
+
+        const _FileNm = document.getElementById("FileNm").value;
+
+        const _SpName = document.getElementById("SpName").value;
+
+        const _TypeNm = document.getElementById("TypeNm").value;
+
+        const _Params = document.getElementById("Params").value;
+
+        const _UrlDoc = `/rptViewer.aspx?FileNm=${_FileNm}&SpName=${_SpName}&TypeNm=${_TypeNm}&Params=${_Params}`;
+
+        const _iFrame = document.getElementById("iFrame");
+
+        _iFrame.onload = function () {
+            _iFrame.contentDocument.body.style = "margin: 0px; overflow: hidden;";
+            _iFrame.contentDocument.cookie = "";
+        }
+
+        _iFrame.src = _UrlDoc;
+
+    };
+
+    window.onload = function () {
+        Consultar();
+    }
+
+</script>

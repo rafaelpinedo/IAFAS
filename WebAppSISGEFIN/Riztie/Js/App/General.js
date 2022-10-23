@@ -2,7 +2,7 @@
     function Http() {
     }
     Http.get = function (url, callBack) {
-        requestServer(url, "get", callBack);
+        requestServer(url, "get", callBack, null);
     }
 
     Http.getDownloadBytes = function (url, callBack) {
@@ -19,7 +19,8 @@
 
     function requestServer(url, metodoHttp, callBack, data, tipoRpta) {
         var xhr = new XMLHttpRequest();
-        xhr.open(metodoHttp, hdfRaiz.value + url);
+        //xhr.open(metodoHttp, hdfRaiz.value + url);
+        xhr.open(metodoHttp, url);
         if (tipoRpta != null) xhr.responseType = tipoRpta;
         xhr.onreadystatechange = function () {
             if (xhr.status == 200 && xhr.readyState == 4) {
@@ -214,6 +215,30 @@ function obtenerVista(control, vista, controller) {
     window.sessionStorage.setItem("subme", subme);
 }
 
+function mostrarProgreso(mensaje) {
+    Swal.fire({
+        title: mensaje,
+        allowEscapeKey: false,
+        allowOutsideClick: false,
+        timer: 2000,
+        onOpen: () => {
+            swal.showLoading();
+        }
+    })
+}
+
+function ocultarProgreso() {
+    Swal.close();
+}
+
+function mostrarListo() {
+    Swal.fire({
+        title: 'Listo!',
+        type: 'success',
+        timer: 1000,
+        showConfirmButton: false
+    })
+}
 
 function mensajeAlerta(mensaje, alerta) {
     if (alerta == "error") {

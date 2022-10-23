@@ -14,37 +14,49 @@ namespace WebAppSISGEFIN
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-           try
-           {
-                string _FileNm = Request["FileNm"];
-
-                string _SpName = Request["SpName"];
-
-                string _Params = Request["Params"];
-
-                string _TypeNm = $"WebAppSISGEFIN.Models.{Request["TypeNm"]}";
-
-                ReportDocument _Report = Runs.OpenDocumRPT(_FileNm);
-
-                Type _Type = Type.GetType(_TypeNm);
-
-                var _Datos = Runs.GetDataForRPT(_SpName, _Params, _Type);
-
-                _Report.Database.Tables[0].SetDataSource(_Datos);
-
-                //_Report.ReadRecords();
-
-                CrystalReportViewer1.ReportSource = _Report;
-
-            }
-            catch(Exception ex) 
+            string _UrlResp = "";
+            try
             {
-                Response.Write(ex.Message);
+                string _TypeNm = $"WebAppSISGEFIN.Models.{Request["TypeNm"]}";
+                Type _Type = Type.GetType(_TypeNm);
+                string _SpName = Request["SpName"];
+                string _Params = Request["Params"];
+                xResponse<dynamic> _rptData = Runs.GetDataForRPT(_SpName, _Params, _Type);
+                if (_rptData.IsOk == true)
+                {
+                    string _FileNm = Request["FileNm"];
+                    ReportDocument _Report = Runs.OpenDocumRPT(_FileNm);
+                    _Report.Database.Tables[0].SetDataSource(_rptData.Content);
+                    CrystalReportViewer1.ReportSource = _Report;
+                    CrystalReportViewer1.RefreshReport();
+                }
+                else
+                {
+                   if (_rptData.Code == 2)
+                   {
+                        _UrlResp = $"~/Reportes/MsgRpt/?msg={_rptData.Message}&e=2";
+                    }
+                   else
+                   {
+                        throw new Exception(_rptData.Message);
+                   }
+                }
             }
+            catch (Exception ex)
+            {
+                _UrlResp = $"~/Reportes/MsgRpt/?msg={ex.Message}&e=3";
+            }
+            finally
+            {
+                if (_UrlResp != "")
+                {
+                    Response.Redirect(_UrlResp);
+                }
 
-            CrystalReportViewer1.RefreshReport();
+            }
 
         }
 
     }
+
 }

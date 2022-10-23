@@ -13,7 +13,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>WebAppSISGEFIN</RootNamespace>
     <AssemblyName>WebAppSISGEFIN</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <UseIISExpress>true</UseIISExpress>
     <Use64BitIISExpress />
     <IISExpressSSLPort />
@@ -23,6 +23,7 @@
     <UseGlobalApplicationHostFile />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -96,6 +97,7 @@
       <HintPath>..\DLL\itext.svg.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Net" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Web.DynamicData" />
@@ -104,16 +106,14 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Web.Extensions" />
-    <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Web.Services" />
     <Reference Include="System.EnterpriseServices" />
+    <Reference Include="System.Xml.Linq" />
     <Reference Include="zxing">
       <HintPath>..\DLL\zxing.dll</HintPath>
     </Reference>
@@ -1277,6 +1277,9 @@
     <Content Include="aspnet_client\system_web\4_0_30319\crystalreportviewers13\urlreporting\appletviewer.js" />
     <Content Include="Content\Site.css" />
     <Content Include="Global.asax" />
+    <Content Include="Images\rpt_info.png" />
+    <Content Include="Images\rpt_error.png" />
+    <Content Include="Images\rpt_alert.png" />
     <Content Include="Riztie\Css\all.min.css" />
     <Content Include="Riztie\Css\bootstrap-toggle.min.css" />
     <Content Include="Riztie\Css\bootstrap.min.css" />
@@ -1380,6 +1383,7 @@
     <Compile Include="Controllers\PatrimonioController.cs" />
     <Compile Include="Controllers\PlaneamientoController.cs" />
     <Compile Include="Controllers\PresupuestoController.cs" />
+    <Compile Include="Controllers\ReportesController.cs" />
     <Compile Include="Controllers\RRHHController.cs" />
     <Compile Include="Controllers\SecurityController.cs" />
     <Compile Include="FilesRpt\Patrimonio_Inventario_Reporte001.cs">
@@ -1513,7 +1517,10 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Patrimonio\TasaUIT.cshtml" />
     <Content Include="Views\Ingresos\EstadoCuenta.cshtml" />
-    <Content Include="Views\General\PuenteRpt.cshtml" />
+    <Content Include="Views\Reportes\PuenteRpt.cshtml" />
+    <Content Include="Views\Reportes\MsgRpt.cshtml" />
+    <Content Include="Views\Reportes\rInventario1.cshtml" />
+    <Content Include="Views\Reportes\_LayoutRpt.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
