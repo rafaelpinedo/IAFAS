@@ -282,13 +282,14 @@ function mostrarGrabar(rpta) {
     }
 
     var btnGuardar = document.getElementById("btnGuardar")
-    if (btnGuardar != null) {  btnGuardar.innerHTML = "<i class='fa fa-save'></i> Grabar";
+    if (btnGuardar != null) {
+        btnGuardar.innerHTML = "<i class='fa fa-save'></i> Grabar";
         btnGuardar.disabled = false;
     }
 
     var btnGenerar = document.getElementById("btnGenerar")
     if (btnGenerar != null) {
-    btnGenerar.innerHTML = "<i class='fa fa-save'></i> Grabar";
+        btnGenerar.innerHTML = "<i class='fa fa-save'></i> Grabar";
         btnGenerar.disabled = false;
     }
 
@@ -486,7 +487,7 @@ function mostrarRegistro(rpta) {
                 lblOficina.innerHTML = cabecera[5];
                 lblEstado.innerHTML = cabecera[6];
                 cboRecepcion.value = cabecera[7];
-                if (cabecera[7] != 0) { 
+                if (cabecera[7] != 0) {
                     document.getElementById('select2-cboRecepcion-container').innerHTML = cboRecepcion.options[cboRecepcion.selectedIndex].text;
                 }
                 if (cabecera[8] == 4) {
@@ -661,7 +662,7 @@ function configurarBotones() {
     var btnTabSalida = document.getElementById("btnTabSalida");
     if (btnTabSalida != null) btnTabSalida.onclick = function () {
         idTabActivo = "Salida";
-       // btnGenerarPCS.disabled = true;
+        // btnGenerarPCS.disabled = true;
         getListarInformacion();
     }
 
@@ -850,6 +851,15 @@ function configurarBotones() {
         else {
             getListar();
         }
+    }
+
+    var btnGenerarAltas = document.getElementById("btnGenerarAltas");
+    if (btnGenerarAltas != null) btnGenerarAltas.onclick = function () {
+        btnGenerarAltas.disabled = true;
+        var data = txtIdRegistro.value;
+        var frm = new FormData();
+        frm.append("data", data);
+        Http.post("General/guardar?tbl=" + controller + vista + "GenerarAlta", mostrarAlerta, frm);
     }
 }
 
@@ -1285,6 +1295,38 @@ function validarCantidadPS(txt) {
     }
 }
 
+function mostrarAlerta(rpta) {
+    var mensajeResul = [];
+    if (rpta) {
+        mensajeResul = rpta.split("|")
+        var tipo = mensajeResul[0];
+        var mensaje = mensajeResul[1];
+
+        if (tipo == 'A') {
+            Swal.fire({
+                title: 'Finalizado!',
+                text: mensaje,
+                icon: 'success',
+                showConfirmButton: true,
+                timer: 2000
+            })
+            alerta = 'success';
+        }
+        else {
+            Swal.fire({
+                title: 'Error!',
+                text: mensaje,
+                icon: 'error',
+                showConfirmButton: true,
+                timer: 2000
+            })
+        }
+    }
+    else {
+        mostrarMensaje("No se realizó el registro", "error")
+    }
+    btnGenerarAltas.disabled = false;
+}
 
 function mostrarRegistroPendiente(rpta) {
     if (rpta) {
@@ -1483,7 +1525,7 @@ function grabarIngreso() {
     data = data + '¯' + txtFechaInicio + '|' + txtFechaFinal
     var frm = new FormData();
     frm.append("data", data);
-    Http.post("General/guardar?tbl=" + controller + vista+ opcionGrabar, mostrarGrabar, frm);
+    Http.post("General/guardar?tbl=" + controller + vista + opcionGrabar, mostrarGrabar, frm);
 }
 
 function grabarSalida() {

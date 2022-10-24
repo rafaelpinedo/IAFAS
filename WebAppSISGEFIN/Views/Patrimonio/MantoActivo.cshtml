@@ -1,5 +1,5 @@
 ﻿@{
-    ViewBag.Title = "InventarioInicial";
+    ViewBag.Title = "Mantenimiento de Activos";
     Layout = "~/Views/_LayoutPage.cshtml";
 }
 
@@ -8,20 +8,17 @@
         <div class="main-body">
             <div class="card">
                 <div class="card-header bg-primary">
-                    <h3><i class="fa fa-users" aria-hidden="true"></i> INVENTARIO INICIAL</h3>
+                    <h3><i class="fa fa-users" aria-hidden="true"></i>MANTENIMIENTO DE ACTIVOS</h3>
                 </div>
                 <div class="card-block">
                     <div class="form-row">
-                        <div class="form-group col-sm-2 col-lg-1">
+                        <div class="form-group col-sm-1">
                             <label class="control-label">Periodo</label>
                             <input type="number" id="txtPeriodoCons" class="control-form PopupCons" value="@ViewBag.Anio">
                         </div>
-                        <div class="form-group col-md-8 m-3">
+                        <div class="form-group col-md-4 m-3">
                             <button class="input-group-inverse btn btn-dark" id="btnConsultar" data-toggle="tooltip" data-placement="bottom" title="Consultar"><i class="fa fa-search fa-lg" aria-hidden="true"></i></button>
-                            <button class="input-group-inverse btn btn-primary" id="btnNuevo" data-toggle="tooltip" data-placement="bottom" title="Nuevo"><i class="fa fa-plus-circle fa-lg" aria-hidden="true"></i></button>
-                            <button class="btn btn-out waves-effect waves-light btn-info btn-square" id="btnImprimir" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Imprimir Inventario Inicial"><i class="fa fa-print fa-lg" aria-hidden="true"></i></button>
-                            <button class="btn btn-out waves-effect waves-light btn-primary btn-square" id="btnCargarArchivo" data-toggle="tooltip" data-placement="bottom" title="Subir archivo Excel"><i class="fa fa-cloud-upload fa-lg" aria-hidden="true"></i> Cargar Excel</button>
-                            <button class="btn btn-out waves-effect waves-light btn-info btn-square" id="btnDescagarArchivo" data-toggle="tooltip" data-placement="bottom" title="Descargar Template Iventario Inicial"><i class="fa fa-cloud-download fa-lg" aria-hidden="true"></i> Descargar Template</button>
+                            <button class="input-group-inverse btn btn-primary" id="btnNuevoMov" data-toggle="tooltip" data-placement="bottom" title="Nuevo">Nuevo <i class="fa fa-plus-circle fa-lg" aria-hidden="true"></i></button>
                         </div>
                     </div>
 
@@ -31,8 +28,173 @@
                         </div>
                     </div>
                     <div class="form-row">
-                        <div class="form-group col-md-12">
-                            <div class="table-responsive" id="divListaActivo"></div>
+                        <div class="modal custom-modal" tabindex="-1" role="dialog" aria-hidden="true" id="divPopupContainerMov" style="overflow-y:auto;">
+                            <div class="modal-dialog modal-xl bg-personalizado" id="divPopupWindowMov">
+                                <div class="modal-content">
+                                    <div id="divBarraMov" class="modal-header bg-personalizado" style="cursor:move">
+                                        <h5 class="modal-title">Mantenimiento de Activos</h5>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="row">
+                                            <div class="form-group col-sm-4">
+                                                <label class="control-label">Año</label>
+                                                <input type="number" class="control-lectura RequeMov PopupMov" readonly id="txtAnioCab">
+                                            </div>
+                                            <div class="form-group col-sm-4">
+                                                <label class="control-label">Mes</label>
+                                                <select class="control-lectura RequeMov PopupMov" disabled id="cboMesesCab"></select>
+                                            </div>
+                                            <div class="form-group col-sm-4">
+                                                <label class="control-label">Tipo Movimiento</label>
+                                                <select class="control-lectura RequeMov PopupMov" disabled id="cboTipoMovCab">
+                                                    <option value="3">MANTENIMIENTO</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-group col-sm-4" hidden>
+                                                <label class="control-label">Nro Movimiento</label>
+                                                <input type="hidden" class="control-lectura PopupMov" readonly id="txtNroMovCab">
+                                            </div>
+                                            <div class="form-group col-sm-4">
+                                                <label class="control-label">Fecha Movimiento</label>
+                                                <input type="date" class="control-form RequeMov PopupMov" id="dttFechaMovCab">
+                                            </div>
+                                            <div class="form-group col-sm-4">
+                                                <label class="control-label">Estado</label>
+                                                <select class="control-form RequeMov PopupMov" id="cboEstadoCab"></select>
+                                            </div>
+                                        </div>
+                                        <hr />
+                                        <div class="row">
+                                            <div class="form-group col-sm-3">
+                                                <label class="control-label">Tipo de Mantenimiento</label>
+                                                <select class="control-form RequeMov PopupMov" id="cboTipoMantenimientoCab"></select>
+                                            </div>
+                                            <div class="form-group col-sm-2">
+                                                <input type="hidden" class="control-lectura RequeMov PopupMov" readonly id="txtNroOrdenSecuenciaCab">
+                                                <label class="control-label">Nro O/C</label>
+                                                <input type="text" class="control-lectura RequeMov" readonly id="txtNroOrdenCab">
+                                            </div>
+                                            <div class="form-group col-sm-1 mt-2 section-orden-aprobada">
+                                                <button class="btn btn-secondary" id="btnConsutarOrdenes"><i class="fa fa-search" aria-hidden="true"></i></button>
+                                            </div>
+                                            <div class="form-group col-sm-2">
+                                                <label class="control-label">Nro Contrato</label>
+                                                <input type="text" class="control-form PopupMov" id="txtNroContratoCab">
+                                            </div>
+                                            <div class="form-group col-sm-4">
+                                                <label class="control-label">Proveedor</label>
+                                                <select class="control-lectura RequeMov PopupMov" disabled id="cboProveedorCab"></select>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-group col-sm-4">
+                                                <label class="control-label">Sub Total</label>
+                                                <input type="text" class="control-lectura NoPopupMov" readonly id="txtSubTotalCab">
+                                            </div>
+                                            <div class="form-group col-sm-4">
+                                                <label class="control-label">IGV</label>
+                                                <input type="text" class="control-lectura NoPopupMov" readonly id="txtIGVCab">
+                                            </div>
+                                            <div class="form-group col-sm-4">
+                                                <label class="control-label">Total</label>
+                                                <input type="text" class="control-lectura NoPopupMov" readonly id="txtTotalCab">
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-group col-sm-6">
+                                                <label class="control-label">Glosa</label>
+                                                <textarea class="control-form PopupMov" rows="4" id="ttaGlosaCab"></textarea>
+                                            </div>
+                                        </div>
+                                        <hr />
+                                        <div class="row section-orden-aprobada">
+                                            <div class="form-group col-sm-2 ">
+                                                <label class="control-label">Periodo</label>
+                                                <input type="number" id="txtPeriodoItemsCons" class="control-form PopupCons">
+                                            </div>
+                                            <div class="form-group col-sm-1 mt-3">
+                                                <button class="btn btn-out waves-effect waves-light btn-info btn-square" id="btnConsutarItems"><i class="fa fa-search-plus" aria-hidden="true"></i></button>
+                                            </div>
+                                        </div>
+                                        <div class="row mt-2">
+                                            <div class="form-group col-sm-12">
+                                                <div class="table-responsive" style="height:315px;">
+                                                    <table class='grilla bordered' style="width:100%;min-width:1100px">
+                                                        <thead>
+                                                            <tr class="FilaHead">
+                                                                <th style="white-space:pre-wrap;width:70px;display:none">idx</th>
+                                                                <th style="white-space:pre-wrap;width:100px">Código Patrimonio</th>
+                                                                <th style="white-space:pre-wrap;width:300px">Descripción</th>
+                                                                <th style="white-space:pre-wrap;width:100px">Marca</th>
+                                                                <th style="white-space:pre-wrap;width:100px">Serie</th>
+                                                                <th style="white-space:pre-wrap;width:100px">Monto</th>
+                                                                <th rowspan="2" style="white-space:pre-wrap;width:80px;"></th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody id="tbDetalleActivos"></tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row section-orden-aprobada">
+                                            <div class="form-group col-md-12">
+                                                <span id="spnNroItems" class="control-label">Items: 0</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button id="btnCancelarMov" class="btnCancelarForm" title="Cancelar"><i class="fa fa-undo" aria-hidden="true"></i>&nbsp;Cancelar</button>
+                                        <button id="btnGuardarMov" class="btnGuardarForm bg-customer section-orden-aprobada" title="Guardar datos"><span class="fa fa-save"></span>&nbsp;Grabar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="modal custom-modal" tabindex="-1" role="dialog" aria-hidden="true" id="divPopupContainerListadoOrdenesForm" style="overflow-y:auto;">
+                            <div class="modal-dialog modal-lg bg-personalizado" id="divPopupWindowListadoOrdenesForm">
+                                <div class="modal-content">
+                                    <div id="divBarraListadoOrdenesForm" class="modal-header bg-personalizado" style="cursor:move">
+                                        <h5 class="modal-title">Seleccionar la Orden</h5>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="row">
+                                            <div class="form-group col-md-12">
+                                                <div class="table-responsive" id="listaOrden" style="height:485px"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button class="btnCancelarForm" id="btnCancelarListadoOrdenesForm" title="Cancelar"><i class="fa fa-undo" aria-hidden="true"></i>&nbsp;Cancelar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="modal custom-modal" tabindex="-1" role="dialog" aria-hidden="true" id="divPopupContainerListadoItemsForm" style="overflow-y:auto;">
+                            <div class="modal-dialog modal-lg bg-personalizado" id="divPopupWindowListadoItemsForm">
+                                <div class="modal-content">
+                                    <div id="divBarraListadoItemsForm" class="modal-header bg-personalizado" style="cursor:move">
+                                        <h5 class="modal-title">Seleccionar Items</h5>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="row">
+                                            <div class="form-group col-md-12">
+                                                <div class="table-responsive" id="listaItem" style="height:485px"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button class="btnCancelarForm" id="btnCancelarListadoItemsForm" title="Cancelar"><i class="fa fa-undo" aria-hidden="true"></i>&nbsp;Cancelar</button>
+                                        <button class="btnGuardarForm bg-customer" id="btnSeleccionarItems" title="btn btn-success"><span class="fa fa-hand-o-left"></span>&nbsp;Agregar Items</button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="form-row">
@@ -99,7 +261,7 @@
                                                     <div class="row">
                                                         <div class="form-group col-sm-8">
                                                             <label class="control-label">Nro Serie</label>
-                                                            <input type="text" autocomplete="off" class="control-form Popup" id="txtNroSerie">
+                                                            <input type="text" autocomplete="off" class="control-form Reque Popup" id="txtNroSerie">
                                                         </div>
                                                         <div class="form-group col-sm-4">
                                                             <label class="control-label">Estado Conserv</label>
@@ -158,7 +320,7 @@
                                                                 <label class="form-check-label" for="chkEsSbn">SBN</label>
                                                             </div>
                                                             <div class="form-check form-check-inline">
-                                                                <input class="form-check-input Reque Popup" type="checkbox" id="chkEsActivoDepreciable" onclick="return false;">
+                                                                <input class="form-check-input Reque Popup" type="checkbox" id="chkEsActivoDepreciable">
                                                                 <label class="form-check-label" for="chkEsDeprec">Activo Depreciable</label>
                                                             </div>
                                                             <div class="form-check form-check-inline">
@@ -177,13 +339,13 @@
                                                                     <div class="form-group col-sm-4">
                                                                         <div class="row">
                                                                             <div class="form-check form-check-inline col col-sm-12">
-                                                                                <input class="form-check-input Popup" type="radio" name="ingresoBienRadios" id="optOC">
+                                                                                <input class="form-check-input Reque Popup" type="radio" name="ingresoBienRadios" id="optOC">
                                                                                 <label class="form-check-label" for="optOC">
                                                                                     O/C
                                                                                 </label>
                                                                             </div>
                                                                             <div class="form-check form-check-inline col col-sm-12">
-                                                                                <input class="form-check-input Popup" type="radio" name="ingresoBienRadios" id="optNEA">
+                                                                                <input class="form-check-input Reque Popup" type="radio" name="ingresoBienRadios" id="optNEA">
                                                                                 <label class="form-check-label" for="optNEA">
                                                                                     NEA
                                                                                 </label>
@@ -192,23 +354,23 @@
                                                                     </div>
                                                                     <div class="form-group col-sm-4">
                                                                         <label class="control-label">Nro Ingreso Bien</label>
-                                                                        <input type="text" autocomplete="off" class="control-form Popup" id="txtNumeroIngresoBien">
+                                                                        <input type="text" autocomplete="off" class="control-form Reque Popup" id="txtNumeroIngresoBien">
                                                                     </div>
                                                                     <div class="form-group col-sm-4">
                                                                         <label class="control-label">Fecha</label>
-                                                                        <input type="date" class="control-form Popup" id="dttFechaIngresoBien">
+                                                                        <input type="date" class="control-form Reque Popup" id="dttFechaIngresoBien">
                                                                     </div>
                                                                 </div>
                                                                 <div class="row">
                                                                     <div class="form-group col-sm-12">
                                                                         <label class="control-label">Proveedor</label>
-                                                                        <select class="control-form Popup" id="cboProveedor"></select>
+                                                                        <select class="control-form Reque Popup" id="cboProveedor"></select>
                                                                     </div>
                                                                 </div>
                                                                 <div class="row">
                                                                     <div class="form-group col-sm-6">
                                                                         <label class="control-label">Valor Compra</label>
-                                                                        <input type="number" autocomplete="off" class="control-form Popup" id="txtValorCompra">
+                                                                        <input type="number" autocomplete="off" class="control-form Reque Popup" id="txtValorCompra">
                                                                     </div>
                                                                 </div>
                                                                 <div class="row">
@@ -244,11 +406,11 @@
                                                                 <div class="row">
                                                                     <div class="form-group col-sm-6">
                                                                         <label class="control-label">Nro Doc</label>
-                                                                        <input type="number" autocomplete="off" class="control-form Popup" id="txtNumeroDoc">
+                                                                        <input type="number" autocomplete="off" class="control-form Reque Popup" id="txtNumeroDoc">
                                                                     </div>
                                                                     <div class="form-group col-sm-6">
                                                                         <label class="control-label">Fecha</label>
-                                                                        <input type="date" class="control-form Popup" id="dttFechaAlta">
+                                                                        <input type="date" class="control-form Reque Popup" id="dttFechaAlta">
                                                                     </div>
                                                                 </div>
                                                             </fieldset>
@@ -277,42 +439,10 @@
                                             </div>
                                         </div>
                                     </div>
+
                                     <div class="modal-footer">
                                         <button id="btnCancelar" class="btnCancelarForm" title="Cancelar"><i class="fa fa-undo" aria-hidden="true"></i>&nbsp;Cancelar</button>
                                         <button id="btnGuardar" class="btnGuardarForm bg-customer" title="Guardar datos"><span class="fa fa-save"></span>&nbsp;Grabar</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="modal custom-modal" tabindex="-1" role="dialog" aria-hidden="true" id="divPopupContainerFormNoDepreciable" style="overflow-y:auto;">
-                            <div class="modal-dialog modal-lg bg-personalizado" id="divPopupWindowFormNoDepreciable">
-                                <div class="modal-content">
-                                    <div id="divBarraFormNoDepreciable" class="modal-header bg-personalizado" style="cursor:move">
-                                        <h5 class="modal-title">Valores Contables</h5>
-                                    </div>
-                                    <div class="modal-body">
-                                        <div class="row">
-                                            <div class="form-group col-sm-6">
-                                                <label class="control-label">Fecha Alta</label>
-                                                <input type="date" class="control-lectura" readonly id="dttFechaAltaValContableNoDepreciable">
-                                            </div>
-                                            <div class="form-group col-sm-6">
-                                                <label class="control-label">Estado de conservación</label>
-                                                <input type="text" autocomplete="off" class="control-lectura" readonly id="txtEstadoConservacionNoDepreciable">
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="form-group col-sm-6">
-                                                <label class="control-label">Valor</label>
-                                                <input type="text" autocomplete="off" class="control-lectura" readonly id="txtValorNoDepreciable">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button id="btnCancelarForm5" class="btnCancelarForm" title="Cancelar"><i class="fa fa-undo" aria-hidden="true"></i>&nbsp;Atrás</button>
                                     </div>
                                 </div>
                             </div>
@@ -347,13 +477,12 @@
                                         </div>
                                     </div>
                                     <div class="modal-footer">
-                                        <button id="btnCancelarForm1" class="btnCancelarForm" title="Cancelar"><i class="fa fa-undo" aria-hidden="true"></i>&nbsp;Atrás</button>
+                                        <button id="btnCancelarForm1" class="btnCancelarForm" title="Cancelar"><i class="fa fa-undo" aria-hidden="true"></i>&nbsp;Cancelar</button>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-
                     <div class="form-row">
                         <div class="modal custom-modal" tabindex="-1" role="dialog" aria-hidden="true" id="divPopupContainerForm2" style="overflow-y:auto;">
                             <div class="modal-dialog modal-xl bg-personalizado" id="divPopupWindowForm2">
@@ -579,104 +708,36 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="modal custom-modal" tabindex="-1" role="dialog" aria-hidden="true" id="divPopupContainerForm3" style="overflow-y:auto;">
-                            <div class="modal-dialog modal-xl bg-personalizado" id="divPopupWindowForm3">
+                    </div>
+
+                    <div class="form-row">
+                        <div class="modal custom-modal" tabindex="-1" role="dialog" aria-hidden="true" id="divPopupContainerFormNoDepreciable" style="overflow-y:auto;">
+                            <div class="modal-dialog modal-lg bg-personalizado" id="divPopupWindowFormNoDepreciable">
                                 <div class="modal-content">
-                                    <div id="divBarraForm3" class="modal-header bg-personalizado" style="cursor:move;">
-                                        <h5 class="modal-title">Importar Archivo Excel</h5>
+                                    <div id="divBarraFormNoDepreciable" class="modal-header bg-personalizado" style="cursor:move">
+                                        <h5 class="modal-title">Valores Contables</h5>
                                     </div>
-                                    <div id="divCuerpo" class="modal-body">
-                                        <div class="form-row">
-                                            <div class="col-sm-12">
-                                                <button class="btn btn-warning" id="btnLimpiar" title="Limpiar"><i class="fa fa-paint-brush" aria-hidden="true"></i>&nbsp;Limpiar</button>
-                                                <button class="btn btn-info" id="btnCargarCXC" title="Cargar"><i class="fa fa-upload" aria-hidden="true"></i>&nbsp;Cargar</button>
-                                                <h4 id="spanPendiente" style="color:red"></h4>
+                                    <div class="modal-body">
+                                        <div class="row">
+                                            <div class="form-group col-sm-6">
+                                                <label class="control-label">Fecha Alta</label>
+                                                <input type="date" class="control-lectura" readonly id="dttFechaAltaValContableNoDepreciable">
+                                            </div>
+                                            <div class="form-group col-sm-6">
+                                                <label class="control-label">Estado de conservación</label>
+                                                <input type="text" autocomplete="off" class="control-lectura" readonly id="txtEstadoConservacionNoDepreciable">
                                             </div>
                                         </div>
-                                        <br />
-                                        <div class="form-row" style="height:500px;overflow-y:auto;">
-                                            <div class="table-responsive" id="divListaExcel"></div>
-                                        </div>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button class="btnCancelarForm" id="btnCancelarForm3" title="Cancelar"><i class="fa fa-undo" aria-hidden="true"></i>&nbsp;Cancelar</button>
-                                        <button class="btnGuardarForm bg-customer" id="btnGuardarListaExcel" title="Guardar"><span class="fa fa-save"></span>&nbsp;Guardar</button>
-                                    </div>
-                                    <div class="Fila">
-                                        <span id="spnValidaGrabar" class="Valida"></span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="modal custom-modal" tabindex="-1" role="dialog" aria-hidden="true" id="divPopupContainerForm4" style="overflow-y:auto;">
-                            <div class="modal-dialog bg-personalizado" id="divPopupWindowForm4">
-                                <div class="modal-content">
-                                    <div id="divBarraForm4" class="modal-header bg-personalizado" style="cursor:move;">
-                                        <h5 class="modal-title">Cargar Archivo</h5>
-                                    </div>
-                                    <div id="divCuerpo" class="modal-body">
-                                        <div class="form-row">
-                                            <div class="col-sm-12" style="text-align:center">
-                                                <input type="file" id="fupExcel" class="inputfile inputfile-5 PopupImportar Requerido" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel,text/comma-separated-values, text/csv, application/csv" data-msg="Archivo a importar" data-multiple-caption="{count} files selected" multiple />
-                                                <label for="fupExcel">
-                                                    <figure><svg xmlns="http://www.w3.org/2000/svg" width="20" height="17" viewBox="0 0 20 17"><path d="M10 0l-5.2 4.9h3.3v5.1h3.8v-5.1h3.3l-5.2-4.9zm9.3 11.5l-3.2-2.1h-2l3.4 2.6h-3.5c-.1 0-.2.1-.2.1l-.8 2.3h-6l-.8-2.2c-.1-.1-.1-.2-.2-.2h-3.6l3.4-2.6h-2l-3.2 2.1c-.4.3-.7 1-.6 1.5l.6 3.1c.1.5.7.9 1.2.9h16.3c.6 0 1.1-.4 1.3-.9l.6-3.1c.1-.5-.2-1.2-.7-1.5z" /></svg></figure>
-                                                    <span id="snpnombrearchivo">Seleccione archivo&hellip;</span>
-                                                </label>
+                                        <div class="row">
+                                            <div class="form-group col-sm-6">
+                                                <label class="control-label">Valor</label>
+                                                <input type="text" autocomplete="off" class="control-lectura" readonly id="txtValorNoDepreciable">
                                             </div>
                                         </div>
                                     </div>
                                     <div class="modal-footer">
-                                        <button class="btnCancelarForm" id="btnCancelarForm4" title="Cancelar"><i class="fa fa-undo" aria-hidden="true"></i>&nbsp;Cancelar</button>
-                                        <button class="btnGuardarForm bg-customer" id="btnImportarExcel" title="Importar"><i class="fa fa-upload" aria-hidden="true"></i>&nbsp;Importar</button>
+                                        <button id="btnCancelarForm5" class="btnCancelarForm" title="Cancelar"><i class="fa fa-undo" aria-hidden="true"></i>&nbsp;Atrás</button>
                                     </div>
-                                    <div class="Fila">
-                                        <span id="spnValida" class="Valida"></span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="modal custom-modal" tabindex="-1" role="dialog" aria-hidden="true" id="divPopupContainerOpcionReporte" style="overflow-y:auto;">
-                        <div class="modal-dialog modal-md bg-personalizado" id="divPopupWindowOpcionReporte">
-                            <div class="modal-content">
-                                <div id="divBarraOpcionReporte" class="modal-header bg-personalizado" style="cursor:move;">
-                                    <h5 class="modal-title"><i class="fa fa-users"></i> Reportes</h5>
-                                    <button type="button" id="btnCancelarOpcionReporte" class="close"><span aria-hidden="true">&times;</span><span class="sr-only"></span></button>
-                                </div>
-                                <div class="modal-body">
-                                    <div class="row">
-                                        <div class="col-sm-12 mb-2">
-                                            <fieldset class="fieldset h-100 p-3">
-                                                <div class="row">
-                                                    <div class="form-group col-sm-12">
-                                                        <label class="control-label">Inventario Inicial Generar por Oficina</label>
-                                                        <select class="control-form" id="cboOficinaReporte"></select>
-                                                    </div>
-                                                </div>
-                                            </fieldset>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="modal-footer">
-                                    <button id="btnSeleccionarOpcionReporte" class="btnGuardarForm bg-customer" title="Ver Reporte"><span class="fa fa-search"></span>&nbsp;Ver Reporte</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="modal custom-modal" tabindex="-1" role="dialog" aria-hidden="true" id="divPopupContainerReporte" style="overflow-y:auto;">
-                        <div class="modal-dialog modal-xl bg-personalizado" id="divPopupWindowReporte">
-                            <div class="modal-content">
-                                <div id="divBarraReporte" class="modal-header bg-personalizado" style="cursor:move">
-                                    <h5 class="modal-title"><i class="fa fa-search"></i> Vista Previa</h5>
-                                    <button type="button" id="btnCancelarReporte" class="close"><span aria-hidden="true">&times;</span><span class="sr-only"></span></button>
-                                </div>
-                                <div class="modal-body">
-                                    <section hidden>
-                                        <div id="ListaReporte"></div>
-                                    </section>
-                                    <iframe id="ifrmVistaPrevia" style="width:100%;height:800px"></iframe>
                                 </div>
                             </div>
                         </div>
