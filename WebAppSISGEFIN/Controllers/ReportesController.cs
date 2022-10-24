@@ -12,13 +12,6 @@ namespace WebAppSISGEFIN.Controllers
     public class ReportesController : Controller
     {
 
-        //public JsonResult GetOficinas()
-        //{
-        //    string _data = "M_OFICINA|OFI_SECUENCIA|OFI_ABREVIATURA|OFI_NOMBRE Like 'OFICINA%'";
-        //    var _rows = Runs.GetRows4Combo<rElemCbo>(_data);
-        //    return Json(_rows, JsonRequestBehavior.AllowGet);
-        //}
-
         [HttpGet]
         public string GetOficinas()
         {
@@ -35,23 +28,25 @@ namespace WebAppSISGEFIN.Controllers
             return _trama;
         }
 
-        public ActionResult ShowRpt(string area, string grp, string act, string par, string t)
+        [HttpGet]
+        public ActionResult ShowRpt(string area, string name, string type, string par, string r)
         {
             string _binDir = ConfigurationManager.AppSettings.Get("BinDir");
             string _dirRpt = string.Format("{0}\\{1}", _binDir, "filesRpt");
-            ViewBag.FileNm = $"{_dirRpt}\\{area}_{grp}_{act}.rpt";
-            ViewBag.SpName = $"usp_{area}_{grp}_{act}";
+            ViewBag.FileNm = $"{_dirRpt}\\{area}{name}.rpt";
+            ViewBag.SpName = $"usp{area}{name}ReporteCsv";
+            ViewBag.Option = r;
             string _vName = "";
-            if (t != null)
+            if (par != null)
             {
-                ViewBag.TypeNm = t;
+                ViewBag.TypeNm = type;
                 ViewBag.Params = par;
-                _vName = "PuenteRpt";
+                _vName = "_PuenteRpt";
             }
             else
             {
-                ViewBag.TypeNm = par; 
-                _vName = par;
+                ViewBag.TypeNm = type;
+                _vName = name;
             }
             return View(_vName);
         }

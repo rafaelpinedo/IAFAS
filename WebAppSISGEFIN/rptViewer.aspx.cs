@@ -1,12 +1,9 @@
-﻿using CrystalDecisions.CrystalReports.Engine;
-using CrystalDecisions.Web;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
+﻿using System;
+using System.IO;
+using System.Net.Mime;
 using WebAppSISGEFIN.Models;
+using CrystalDecisions.Shared;
+using CrystalDecisions.CrystalReports.Engine;
 
 namespace WebAppSISGEFIN
 {
@@ -19,16 +16,39 @@ namespace WebAppSISGEFIN
             {
                 string _TypeNm = $"WebAppSISGEFIN.Models.{Request["TypeNm"]}";
                 Type _Type = Type.GetType(_TypeNm);
+                string _FileNm = Request["FileNm"];
                 string _SpName = Request["SpName"];
                 string _Params = Request["Params"];
+                string _Option = Request["r"];
+
                 xResponse<dynamic> _rptData = Runs.GetDataForRPT(_SpName, _Params, _Type);
+
                 if (_rptData.IsOk == true)
                 {
-                    string _FileNm = Request["FileNm"];
                     ReportDocument _Report = Runs.OpenDocumRPT(_FileNm);
                     _Report.Database.Tables[0].SetDataSource(_rptData.Content);
-                    CrystalReportViewer1.ReportSource = _Report;
-                    CrystalReportViewer1.RefreshReport();
+                    _Report.ReadRecords();
+                    if (_Option == "1")
+                    {
+                        CrystalReportViewer1.ReportSource = _Report;
+                        CrystalReportViewer1.RefreshReport();
+                    }
+                    else
+                    {
+                        string _type = "pdf";
+                        string _fileName = (new FileInfo(_FileNm)).Name.ToLower().Replace("rpt", _type);
+                        string _guidName = "~/Reportes/" + Guid.NewGuid() + "." + _type;
+                        string _fullName = Server.MapPath(_guidName);
+                        _Report.ExportToDisk(ExportFormatType.PortableDocFormat, _fullName);
+                        if (File.Exists(_fullName) == true)
+                        {
+                            _UrlResp = _guidName;
+                        }
+                        else
+                        {
+                            throw new Exception("No se halló el archivo PDF.");
+                        }
+                    }
                 }
                 else
                 {
@@ -52,7 +72,6 @@ namespace WebAppSISGEFIN
                 {
                     Response.Redirect(_UrlResp);
                 }
-
             }
 
         }

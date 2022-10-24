@@ -28,7 +28,10 @@ namespace WebAppSISGEFIN.Models
         public byte Code { get; set; }
     }
 
-    public class rInventario1
+    /// <summary>
+    /// Entidad para el Reporte 1
+    /// </summary>
+    public class rInv1
     {
 
         public int Id_Movim { get; set; }

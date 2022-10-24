@@ -16,14 +16,14 @@ namespace WebAppSISGEFIN.FilesRpt {
     using CrystalDecisions.CrystalReports.Engine;
     
     
-    public class Patrimonio_Inventario_Reporte001 : ReportClass {
+    public class PatrimonioInventario2 : ReportClass {
         
-        public Patrimonio_Inventario_Reporte001() {
+        public PatrimonioInventario2() {
         }
         
         public override string ResourceName {
             get {
-                return "Patrimonio_Inventario_Reporte001.rpt";
+                return "PatrimonioInventario2.rpt";
             }
             set {
                 // Do nothing
@@ -41,7 +41,7 @@ namespace WebAppSISGEFIN.FilesRpt {
         
         public override string FullResourceName {
             get {
-                return "WebAppSISGEFIN.FilesRpt.Patrimonio_Inventario_Reporte001.rpt";
+                return "WebAppSISGEFIN.FilesRpt.PatrimonioInventario2.rpt";
             }
             set {
                 // Do nothing
@@ -106,9 +106,9 @@ namespace WebAppSISGEFIN.FilesRpt {
     }
     
     [System.Drawing.ToolboxBitmapAttribute(typeof(CrystalDecisions.Shared.ExportOptions), "report.bmp")]
-    public class CachedPatrimonio_Inventario_Reporte001 : Component, ICachedReport {
+    public class CachedPatrimonioInventario2 : Component, ICachedReport {
         
-        public CachedPatrimonio_Inventario_Reporte001() {
+        public CachedPatrimonioInventario2() {
         }
         
         [Browsable(false)]
@@ -145,7 +145,7 @@ namespace WebAppSISGEFIN.FilesRpt {
         }
         
         public virtual CrystalDecisions.CrystalReports.Engine.ReportDocument CreateReport() {
-            Patrimonio_Inventario_Reporte001 rpt = new Patrimonio_Inventario_Reporte001();
+            PatrimonioInventario2 rpt = new PatrimonioInventario2();
             rpt.Site = this.Site;
             return rpt;
         }

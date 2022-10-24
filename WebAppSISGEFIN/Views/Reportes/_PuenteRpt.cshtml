@@ -17,6 +17,7 @@
 <input type="hidden" id="SpName" value='@ViewBag.SpName' />
 <input type="hidden" id="TypeNm" value='@ViewBag.TypeNm' />
 <input type="hidden" id="Params" value='@ViewBag.Params' />
+<input type="hidden" id="Option" value='@ViewBag.Option' />
 
 <body style="overflow: hidden;">
 
@@ -30,14 +31,12 @@
     function Consultar() {
 
         const _FileNm = document.getElementById("FileNm").value;
-
         const _SpName = document.getElementById("SpName").value;
-
         const _TypeNm = document.getElementById("TypeNm").value;
-
         const _Params = document.getElementById("Params").value;
+        const _Option = document.getElementById("Option").value;
 
-        const _UrlDoc = `/rptViewer.aspx?FileNm=${_FileNm}&SpName=${_SpName}&TypeNm=${_TypeNm}&Params=${_Params}`;
+        const _UrlDoc = `/rptViewer.aspx?FileNm=${_FileNm}&SpName=${_SpName}&TypeNm=${_TypeNm}&Params=${_Params}&r=${_Option}`;
 
         const _iFrame = document.getElementById("iFrame");
 

@@ -7,6 +7,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data.OleDb;
+using System.IO;
 using System.Linq;
 using System.Runtime.Remoting;
 using System.Runtime.Remoting.Contexts;
@@ -85,6 +86,13 @@ namespace WebAppSISGEFIN.Models
                 _items.Add(_itm);
             }
             return _items;
+        }
+
+        public static byte[] StreamToArray(Stream stream)
+        {
+            var memory = new MemoryStream();
+            memory.CopyTo(stream);
+            return memory.ToArray();
         }
 
         public static xResponse<dynamic> GetDataForRPT(string spName, string param, Type t)

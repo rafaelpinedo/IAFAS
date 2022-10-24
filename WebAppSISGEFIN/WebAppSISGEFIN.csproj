@@ -1386,10 +1386,17 @@
     <Compile Include="Controllers\ReportesController.cs" />
     <Compile Include="Controllers\RRHHController.cs" />
     <Compile Include="Controllers\SecurityController.cs" />
-    <Compile Include="FilesRpt\Patrimonio_Inventario_Reporte001.cs">
+    <Compile Include="FilesRpt\PatrimonioInventario2.cs">
+      <DependentUpon>PatrimonioInventario2.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="FilesRpt\PatrimonioInventario1.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>Patrimonio_Inventario_Reporte001.rpt</DependentUpon>
+      <DependentUpon>PatrimonioInventario1.rpt</DependentUpon>
       <SubType>Component</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
@@ -1415,7 +1422,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\web.config" />
-    <Content Include="FilesRpt\Patrimonio_Inventario.ttx" />
+    <Content Include="FilesRpt\PatrimonioInventario1.ttx" />
     <None Include="packages.config" />
     <Content Include="Riztie\fonts\fontawesome-webfont.eot" />
     <Content Include="Riztie\fonts\fontawesome-webfont.ttf" />
@@ -1517,10 +1524,14 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Patrimonio\TasaUIT.cshtml" />
     <Content Include="Views\Ingresos\EstadoCuenta.cshtml" />
+<<<<<<< Updated upstream
 
     <Content Include="Views\Reportes\PuenteRpt.cshtml" />
+=======
+    <Content Include="Views\Reportes\_PuenteRpt.cshtml" />
+>>>>>>> Stashed changes
     <Content Include="Views\Reportes\MsgRpt.cshtml" />
-    <Content Include="Views\Reportes\rInventario1.cshtml" />
+    <Content Include="Views\Reportes\Inventario1.cshtml" />
     <Content Include="Views\Reportes\_LayoutRpt.cshtml" />
 
     <Content Include="Views\Patrimonio\MantoActivo.cshtml" />
@@ -1535,13 +1546,19 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Reportes\" />
     <Folder Include="Riztie\Files\" />
     <Folder Include="Riztie\Manual\" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="FilesRpt\Patrimonio_Inventario_Reporte001.rpt">
+    <EmbeddedResource Include="FilesRpt\PatrimonioInventario2.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
-      <LastGenOutput>Patrimonio_Inventario_Reporte001.cs</LastGenOutput>
+      <LastGenOutput>PatrimonioInventario2.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FilesRpt\PatrimonioInventario1.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>PatrimonioInventario1.cs</LastGenOutput>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>

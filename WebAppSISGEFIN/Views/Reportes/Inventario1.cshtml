@@ -10,7 +10,7 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-12">
-            <div class="flex-gap marco" >
+            <div class="flex-gap marco">
 
                 <div>
                     <span>Año</span>
@@ -37,6 +37,29 @@
                     <input type="number" id="txtUsuario" onchange="ActualizarSel()" class="form-control form-control-sm" />
                 </div>
 
+                <div style="flex-direction: column;">
+
+                    <table class="table table-sm" style="font-size:12px;" >
+                        <tr>
+                            <td>
+                               <label for="option1">CR</label>
+                            </td>
+                            <td>
+                                <input type="radio" id="option1" name="options" style="height: 15px;" checked class="form-control form-control-sm" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label for="option2">PDF</label>
+                            </td>
+                            <td>
+                                <input type="radio" id="option2" name="options" style="height: 15px;" class="form-control form-control-sm" />
+                            </td>
+                        </tr>
+                    </table>
+
+                </div>
+
                 <div>
                     <input type="button" class="btn btn-sm btn-primary" value="Consultar" onclick="ConsultarSel()" />
                 </div>
@@ -58,13 +81,14 @@
         mostrarProgreso('Consultando..');
 
         const _iFrame = document.getElementById("iFrame");
-        _iFrame.style.display = "none";
 
         const _FileNm = document.getElementById("FileNm").value;
         const _SpName = document.getElementById("SpName").value;
         const _TypeNm = document.getElementById("TypeNm").value;
         const _Params = document.getElementById("Params").value;
-        const _UrlDoc = `/rptViewer.aspx?FileNm=${_FileNm}&SpName=${_SpName}&TypeNm=${_TypeNm}&Params=${_Params}`;
+        const _Option = document.getElementById("option1").checked ? 1 : 2;
+        debugger
+        const _UrlDoc = `/rptViewer.aspx?FileNm=${_FileNm}&SpName=${_SpName}&TypeNm=${_TypeNm}&Params=${_Params}&r=${_Option}`;
 
         _iFrame.onload = function () {
             _iFrame.contentDocument.body.style = "margin: 0px !Important; overflow:hidden !Important; ";
@@ -81,7 +105,7 @@
         const _cboOficinas = document.getElementById('cboOficinas');
         const _cboUbicacns = document.getElementById('cboUbicaciones');
         const _txtRespons = document.getElementById('txtResponsable');
-        const _txtUsuario  = document.getElementById('txtUsuario');
+        const _txtUsuario = document.getElementById('txtUsuario');
         const _Params = document.getElementById('Params');
         _Params.value = _txtEjecucio.value;
         _Params.value += '|' + _cboOficinas.value;
@@ -110,10 +134,10 @@
 
     }
 
-    window.onload = function ()
+    window.onload = async function ()
     {
-        CargarCombo('Oficinas');
-        CargarCombo('Ubicaciones');
+        await CargarCombo('Oficinas');
+        await CargarCombo('Ubicaciones');
         ActualizarSel();
     }
 
